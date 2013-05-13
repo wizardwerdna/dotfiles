@@ -1,0 +1,180 @@
+"use strict";
+
+var Core = require('../covenant').Core
+var assert = require("assert");
+var adapter = {
+  fulfilled: function(value){
+    var p=new Core; 
+    p.resolve(value);
+    return p;
+  }
+,  rejected: function(reason){
+    var p=new Core; 
+    p.reject(reason); 
+    return p;
+  }
+,  pending: function(){ 
+    var p = new Core;
+    return {
+      promise: p
+    , fulfill: p.fulfill
+    , reject: p.reject
+    }
+  }
+}
+global.adapter = adapter
+var thenables = require("../node_modules/promises-aplus-tests/lib/tests/helpers/thenables");
+var reasons = require("../node_modules/promises-aplus-tests/lib/tests/helpers/reasons");
+
+var fulfilled = adapter.fulfilled;
+var rejected = adapter.rejected;
+var pending = adapter.pending;
+
+var dummy = { dummy: "dummy" }; // we fulfill or reject with this when we don't intend to test against it
+var sentinel = { sentinel: "sentinel" }; // a sentinel fulfillment value to test for with strict equality
+var other = { other: "other" }; // a value we don't want to be strict equal to
+var sentinelArray = [sentinel]; // a sentinel fulfillment value to test when we need an array
+
+function testPromiseResolution(xFactory, test) {
+    specify("via return from a fulfilled promise", function (done) {
+        var promise = fulfilled(dummy).then(function onBasePromiseFulfilled() {
+            return xFactory();
+        });
+
+        test(promise, done);
+    });
+
+    specify("via return from a rejected promise", function (done) {
+        var promise = rejected(dummy).then(null, function onBasePromiseRejected() {
+            return xFactory();
+        });
+
+        test(promise, done);
+    });
+}
+
+describe("3.3.2.3.4: If calling `then` throws an exception `e`,", function () {
+    this.timeout(250);
+    describe("3.3.2.3.4.1: If `resolvePromise` or `rejectPromise` have been called, ignore it.", function () {
+        describe("`resolvePromise` was called with a non-thenable", function () {
+            function xFactory() {
+                return {
+                    then: function (resolvePromise) {
+                        resolvePromise(sentinel);
+                        throw other;
+                    }
+                };
+            }
+
+            testPromiseResolution(xFactory, function (promise, done) {
+                promise.then(function (value) {
+                    assert.strictEqual(value, sentinel);
+                    done();
+                });
+            });
+        });
+
+        describe("`resolvePromise` was called with an asynchronously-fulfilled promise", function () {
+            function xFactory() {
+                var tuple = pending();
+                setTimeout(function () {
+                    tuple.fulfill(sentinel);
+                }, 50);
+
+                return {
+                    then: function (resolvePromise) {
+                        resolvePromise(tuple.promise);
+                        throw other;
+                    }
+                };
+            }
+
+            testPromiseResolution(xFactory, function (promise, done) {
+              promise.then(function (value) {
+                    assert.strictEqual(value, sentinel);
+                    done();
+                });
+            });
+        });
+
+        describe("`resolvePromise` was called with an asynchronously-rejected promise", function () {
+            function xFactory() {
+                var tuple = pending();
+                setTimeout(function () {
+                    tuple.reject(sentinel);
+                }, 50);
+
+                return {
+                    then: function (resolvePromise) {
+                        resolvePromise(tuple.promise);
+                        throw other;
+                    }
+                };
+            }
+
+            testPromiseResolution(xFactory, function (promise, done) {
+                promise.then(null, function (reason) {
+                    assert.strictEqual(reason, sentinel);
+                    done();
+                });
+            });
+        });
+
+        describe("`rejectPromise` was called", function () {
+            function xFactory() {
+                return {
+                    then: function (resolvePromise, rejectPromise) {
+                        rejectPromise(sentinel);
+                        throw other;
+                    }
+                };
+            }
+
+            testPromiseResolution(xFactory, function (promise, done) {
+                promise.then(null, function (reason) {
+                    assert.strictEqual(reason, sentinel);
+                    done();
+                });
+            });
+        });
+
+        describe("`resolvePromise` then `rejectPromise` were called", function () {
+            function xFactory() {
+                return {
+                    then: function (resolvePromise, rejectPromise) {
+                        resolvePromise(sentinel);
+                        rejectPromise(other);
+                        throw other;
+                    }
+                };
+            }
+
+            testPromiseResolution(xFactory, function (promise, done) {
+                promise.then(function (value) {
+                    assert.strictEqual(value, sentinel);
+                    done();
+                });
+            });
+        });
+
+        describe("`rejectPromise` then `resolvePromise` were called", function () {
+            function xFactory() {
+                return {
+                    then: function (resolvePromise, rejectPromise) {
+                        rejectPromise(sentinel);
+                        resolvePromise(other);
+                        throw other;
+                    }
+                };
+            }
+
+            testPromiseResolution(xFactory, function (promise, done) {
+                promise.then(null, function (reason) {
+                    assert.strictEqual(reason, sentinel);
+                    done();
+                });
+            });
+        });
+    });
+});
+

@@ -1,0 +1,50 @@
+Given /^I have created a new case$/ do
+    @user = stub
+    @case = stub
+    Issue.destroy_all
+end
+
+Then /^the issues outline for the case will be empty$/ do
+  Issue.outline_for(@case).should be_empty
+end
+
+When /^I create the issues?:$/ do |table|
+  # table is a Cucumber::Ast::Table
+  for line in table.hashes
+    # puts "))) #{line.inspect} ((("
+    Issue.create(case: @case, name: line["name"], parent: nil)
+  end
+end
+
+Then /^the issues outline for the case will be:$/ do |table|
+  # table is a Cucumber::Ast::Table
+  hashes = table.hashes
+  outline = Issue.outline_for(@case)
+  puts hashes.inspect
+  puts outline.map(&:inspect).inspect
+
+  outline.size.should == hashes.size
+  for i in 0..hashes.size-1
+    puts "comparing #{outline[i].inspect} with #{hashes[i].inspect}"
+
+    outline[i].name.should == hashes[i]["name"]
+    (outline[i].parent.try(:name)||"-nil-").should == hashes[i]["parent_name"]
+  end
+end
+
+When /^I move issues as follows:$/ do |table|
+  for line in table.hashes
+    moving_issue = Issue.find_by_case_and_name(@case, line["name"])
+    reference_issue = Issue.find_by_case_and_name(@case, line["of"])
+    moving_issue.move_to reference_issue, line["move"].to_sym
+  end
+end
+
+When /^I create and move the issues as follows:$/ do |table|
+  hashes = table.hashes
+  for line in table
+    moving_issue = Issue.create(case: @case, name: line.name)
+    reference_issue = Issue.find_by_case_and_name(@case, line.of)
+    moving_issue.move_to reference_issue, line.move.to_sym
+  end
+end

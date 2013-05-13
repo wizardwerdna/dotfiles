@@ -1,0 +1,30 @@
+class Guess
+
+  attr_accessor :alphabet, :length
+
+  def initialize alphabet, length
+    self.alphabet = alphabet
+    self.length = length
+  end
+
+  def string_for index
+    oindex = index
+    string = ""
+    length.times do
+      idx = index % alphabet.size 
+      string = alphabet[idx..idx] + string
+      index = index / alphabet.size
+    end
+    puts "string_for(#{oindex}) == #{string.inspect} [#{alphabet.inspect}/#{length}]"
+    string
+  end
+
+  def index_for string
+    index = 0
+    string.each_char do |each|
+      index = alphabet.index(each) + index * length
+    end
+    puts "index_for(#{string.inspect}) == #{index} [#{alphabet.inspect}/#{length}]"
+    index
+  end
+end

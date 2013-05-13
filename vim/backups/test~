@@ -1,0 +1,24 @@
+for i in [0..10]
+  do(i) ->
+    process.nextTick -> console.log "this is #{i}"
+
+process.nextTick ->
+  console.log "trying like mad to repeat the bug"
+  process.nextTick ->
+    console.log "retrying like mad to repeat the bug"
+
+class Moo
+  constructor: -> @times=0
+  foo: ->
+    process.nextTick => 
+      @times+=1
+      process.nextTick => 
+        console.log "can I make this happen or not?"
+        console.log "can I make this happen or not?"
+        console.log "can I make this happen or not?"
+        console.log "can I make this happen or not?"
+        @foo() unless @times>10
+
+p = new Moo
+
+process.nextTick -> p.foo() 

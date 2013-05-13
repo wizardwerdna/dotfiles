@@ -1,0 +1,19 @@
+class SessionsController < ApplicationController
+  def new
+    @session = Session.on(cookies)
+  end
+
+  def create
+    @session = Session.on(cookies)
+    if @session.create(params[:session])
+      redirect_to dashboard_url, :notice => I18n.t('sessions.create.notice')
+    else
+      render 'new'
+    end
+  end
+
+  def destroy
+    Session.on(cookies).destroy_session
+    redirect_to signin_url, :notice => I18n.t('sessions.destroy.notice')
+  end
+end

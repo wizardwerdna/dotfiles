@@ -1,0 +1,29 @@
+require_relative '../src/servicecharge_transaction'
+require 'date'
+
+describe ServicechargeTransaction do
+
+  let(:date){Date.today}
+  let(:subject){ServicechargeTransaction.new(1, 111, date, 1000)}
+  let(:employee){Employee.new(emp_id: 1, name: "Alice", address: "Home")}
+
+  it_should_behave_like "a transaction"
+
+  before :each do
+    employee.affiliation = UnionAffiliation.new(member_id: 111, dues: 100)
+    Repository.configure Employee => MemoryRepos::EmployeeRepo.new
+    Repository.for(Employee).store employee  
+  end
+
+  it "should add a salesreceipt" do
+    subject.execute
+    e = Repository.for(Employee).fetch(employee.emp_id)
+    e.emp_id.should == employee.emp_id
+    e.affiliation.should be_kind_of UnionAffiliation
+    servicecharge = e.affiliation.servicecharges.first
+    servicecharge.member_id.should == 111
+    servicecharge.date.should == date
+    servicecharge.amount.should == 1000
+  end
+  
+ end 

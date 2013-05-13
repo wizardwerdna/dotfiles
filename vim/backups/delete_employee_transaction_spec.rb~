@@ -1,0 +1,15 @@
+require_relative '../src/delete_employee_transaction'
+require_relative '../src/interfaces/transaction_interface'
+
+describe DeleteEmployeeTransaction do
+
+  let(:subject){DeleteEmployeeTransaction.new(1)}
+
+  it_should_behave_like "a transaction"
+  
+  it "should destroy the employee" do
+    Repository.for(Employee).store Employee.new(emp_id: 1, name: "Alice", address: "Home")
+    subject.execute
+    Repository.for(Employee).fetch(1).should == MemoryRepos::IndexedRepo::NoRecord
+  end
+end

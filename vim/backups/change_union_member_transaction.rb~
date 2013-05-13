@@ -1,0 +1,19 @@
+require_relative 'change_affiliation_transaction'
+
+class ChangeUnionMemberTransaction < ChangeAffiliationTransaction
+
+  def initialize emp_id, member_id, dues
+    super emp_id
+    @member_id = member_id
+    @dues = dues
+  end
+
+  def make_new_affiliation
+    UnionAffiliation.new(member_id: @member_id, dues: @dues)
+  end
+
+  def adjust_union_membership
+    Repository.for(UnionMember).store Repository.for(Employee).fetch(@emp_id)
+  end
+end
+

@@ -1,0 +1,72 @@
+Feature: Accounts
+  As a user
+  I would like to authenticate to an account
+  So I can use the system with confidential information
+  
+  Scenario: Root Page -- signed in
+    Given I am not signed in
+    When I visit the root page
+    Then I see the static index page
+
+  Scenario: Root Page -- signed in
+    Given I signin as a typical user
+    And I visit the root page
+    Then I should have rendered the user's dashboard 
+  
+  Scenario: Sign Up
+    When I visit the signup page
+    And  I submit my user signup information
+    Then a secure User record has my information
+    And  a verification link is sent to my email
+    And  I see the email verification page
+    And  I am notified the verification link has been sent
+
+  Scenario: Verify Email
+    Given I sign up
+    When I submit my verification link
+    Then my User record has been verified
+    And  a verification confirmation is sent to my email
+    And  I see the signin page
+    And  I am notified the confirmation email has been sent 
+
+  Scenario: Sign In
+    Given I sign up
+    And  I submit my verification link
+    When I visit the signin page
+    And  I submit my user signin information
+    Then I see the dashboard page 
+    And  I am notified I have been authenticated 
+
+  Scenario: Sign Out
+    Given I sign up
+    And  I submit my verification link 
+    And  I sign in
+    When I visit the signout page
+    Then I see the signin page
+    And  I am notified that I have signed out
+
+  Scenario: Request Password Reset
+    Given I sign up
+    When I visit the request password reset page
+    And  I submit my email
+    Then a reset link is sent to my email
+    And  I see the signin page
+    And  I am notified the reset link has been sent 
+
+  Scenario: Reset Password
+    Given I sign up
+    And  I request a password reset
+    When I visit my password reset page
+    And  I timely submit my password reset information
+    Then a password reset confirmation is sent to my email
+    And  I see the signin page
+    And  I am notified the password has been reset 
+
+  Scenario: Request new verification email
+    Given I sign up
+    When I visit the request verification link page
+    And  I submit my e-mail address
+    Then a verification link is sent to my email
+    And  I see the email verification page
+    And  I am notified the verification link has been sent
+

@@ -1,0 +1,74 @@
+root = (exports ? this)
+
+class Covenant
+  constructor: (@then)->
+  coerce: (value) ->
+    if value instanceof Covenant
+      @
+    else if value = Object(value)
+      new FulfilledState value
+    else
+      try
+        if typeof (valueThen=(value?.then) is 'function'
+          call valueThen, value, @resolve, @reject
+        else
+          @resolve new Fulfilled value
+      catch e
+        @reject e
+  
+          
+class Resolvable extends Covenant
+  constructor: (init=->) ->
+    @_state=new Pending
+    init.call(@, @resolve, @reject)
+    super @then
+  then: (onFulfilled, onRejected) =>
+    new Resolvable (resolve, reject) =>
+      @_state.thenthen(onFulfille, onRejected, resolve, reject)
+  resolve: (value) => @_state = @_state.resolve(value)
+  reject: (reason) => @_state = @_state.reject(reason)
+  promise: -> new Covenant @then
+
+class Pending extends Covenant
+  constructor: (@queue=[])-> super @then
+  resolve: (value) => new FulfilledState value
+  reject: (reason) => new RejectedState reason
+  then: (onFulfilled, onRejected) =>
+    @queue.push (state) =>
+      state.then(onFulfilled, onRejected)
+  thenthen: (onFulfilled, onRejected, resolve, reject) ->
+    queue.push (value) ->
+      value.then(onFulfilled, onRejected).then(resolve, reject)
+
+class Settled extends Covenant
+  constructor: (pendings)->
+    for p in pendings
+      do(p) ->
+        process.nextTick => p(@)
+  resolve: (value) => @
+  reject: (reason) => @
+  thenthen: (onFulfilled, onRejected, resolve, reject) ->
+    setImmediate =>
+      @.then(onFulfilled, onRejected).then(resolve, reject)
+  _runcallback: (value, callback) ->
+    try
+      if typeof callback is 'function'
+        resolve callback(value)
+      else
+        @
+    catch (e)
+      new Rejected e
+
+class Fulfilled extends Settled
+  constructor: (@value)->
+  callback: (p, onFulfilled, onRejected) -> process.nextTick => onFulfilled(@value)
+  then: (onFulfilled, __) ->
+    new Deferred (res,rej)-> process.nextTick =>  _runcallback(@value, onFulfilled)
+
+class Rejected extends Settled
+  constructor: (@reason)->
+  callback: (p, onFulfilled, onRejected) -> process.nextTick => onRejected(@reason)
+  then: (__, onRejected) -> _runcallback(@reason, onRejected)
+
+root.Covenant = Covenant
+root.Deferred = Deferred

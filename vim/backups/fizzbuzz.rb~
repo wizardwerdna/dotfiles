@@ -1,0 +1,32 @@
+Increment = -> x { x + 1 }
+
+ZERO = -> f { -> x { x } }
+INCREMENT = -> n { -> f { ->x { f[n[f][x]] } } }
+
+ONE   = -> f { -> x {     f[x]   } }
+TWO   = -> f { -> x {   f[f[x]]  } }
+THREE = -> f { -> x { f[f[f[x]]] } }
+
+ADD = -> m { -> n { m[INCREMENT][n] } }
+MULTIPLY = -> m { -> n { m[ADD[n]][ZERO] } }
+
+FIVE = ADD[TWO][THREE]
+FIFTEEN = MULTIPLY[THREE][FIVE]
+
+class FizzBuzz
+
+  def self.for array
+    array.map  do |each|
+      each = each[Increment][0]
+      if each % FIFTEEN[Increment][0]  == 0
+        'FizzBuzz'
+      elsif each % THREE[Increment][0] == 0 
+        'Fizz'
+      elsif each % FIVE[Increment][0] == 0
+        'Buzz'
+      else
+        each
+      end 
+    end
+  end 
+end

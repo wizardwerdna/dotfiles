@@ -1,0 +1,26 @@
+class ECBValid
+
+  @@email = nil
+
+  def self.email
+   @@email ||= email_builder 
+  end
+
+  def self.password
+    /^[A-Z0-9]{6,}$/i
+  end
+
+  def self.urlsafe_base64
+    /^[A-Za-z0-9\-_]{22}$/
+  end
+
+private
+
+  def self.email_builder
+   name = '[A-Z0-9_\.%\+\-\']+'
+   domain = '([A-Z0-9\-]+\.)+'
+   tld = '([A-Z]{2,4}|museum|travel)'
+   /^#{name}@#{domain}#{tld}$/i 
+  end
+
+end

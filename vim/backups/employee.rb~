@@ -1,0 +1,72 @@
+require 'ostruct'
+
+class Entity < OpenStruct; end 
+class Value < OpenStruct; end
+
+class Employee < Entity
+  def initialize options={}
+    super options
+    self.affiliation = NoAffiliation.new if affiliation.nil?
+  end
+end
+
+class UnionMember < Entity; end
+
+class Timecard < Entity; end
+class Salesreceipt < Entity; end
+class Servicecharge < Entity; end
+
+class HoldMethod; end
+
+class PaymentSchedule < Value; end
+class BiWeeklySchedule < PaymentSchedule; end
+
+class MonthlySchedule < PaymentSchedule
+  def paydate? today
+    last_day_of_month? today
+  end
+
+  def last_day_of_month? today
+    m1 = today.month
+    m2 = (today + 1.day).month
+    m1 == m2
+  end
+end
+
+class WeeklySchedule < PaymentSchedule; end
+
+class UnionAffiliation < Entity
+  def initialize options={}
+    super options
+    self.servicecharges = []
+  end
+end
+
+class NoAffiliation < Entity; end
+
+class PaymentClassification
+end
+
+class SalariedClassification < PaymentClassification
+  attr_accessor :salary
+  def initialize salary
+    self.salary = salary
+  end
+end
+
+class CommissionedClassification < PaymentClassification
+  attr_accessor :salesreceipts,:salary, :commission, :receipts
+  def initialize salary, commission
+    self.salary = salary
+    self.commission = commission
+    self.salesreceipts = []
+  end
+end
+
+class HourlyClassification < PaymentClassification
+  attr_accessor :timecards, :rate
+  def initialize rate 
+    self.timecards = []
+    self.rate = rate
+  end
+end

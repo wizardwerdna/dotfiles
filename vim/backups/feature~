@@ -1,0 +1,3 @@
+set -e
+
+script/oldcucumber --drb $*

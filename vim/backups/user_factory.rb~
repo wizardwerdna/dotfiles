@@ -1,0 +1,14 @@
+FactoryGirl.define do
+  factory :user do
+    first_name 'Andrew'
+    last_name 'Greenberg'
+    email 'acg@def.ghi'
+    password 'test'
+    
+    factory :unverified_user
+    
+    factory :verified_user do |user|
+      user.after_create { |u| user.verified_at = Time.zone.now; user.save! }
+    end
+  end
+end

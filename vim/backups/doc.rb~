@@ -1,0 +1,104 @@
+Zipper Documentation
+
+Functional hierarchical zipper, with navigation, editing, and enumeration.  See Huet
+
+== EXAMINATION
+
+  # branch?
+  #   Answers true if the node at loc is a branch
+
+  children
+    Answers an Array of the children of node at loc, which must be a branch
+
+  leaf?
+    Answers "loc is a leaf"
+
+  lefts
+    Answers an Array of the left sibling-nodes of this loc
+
+  node
+    Answers the node at loc
+
+  path
+    Answers an Array of nodes leading to this loc
+
+  rights
+    Answers an Array of the right sibling-nodes of this loc
+
+  root
+    zips all the way up and answers the root node, reflecting any changes.
+
+  root?
+    Answers "loc is the root"
+
+  siblings
+    Answers an Array of the sibling-nodes of this loc
+
+== NAVIGATION
+
+  down
+    Answers the loc of the leftmost child of the node at this loc, or nil if no children
+
+  left
+    Answers the loc of the left sibling of the node at this loc, or nil
+
+  leftmost
+    Answers the loc of the leftmost sibling of the node at this loc, or self
+
+  right
+    Answers the loc of the right sibling of the node at this loc, or nil
+
+  rightmost
+    Answers the loc of the rightmost sibling of the node at this loc, or self
+
+  up
+    Answers the loc of the parent of the node at this loc, or nil if at the top
+
+== TRAVERSAL/ENUMERATION
+
+  end?
+    Answers true if loc represents the end of a depth-first walk
+
+  next
+    Moves to the next loc in the hierarchy, depth-first. When reaching the end, answers a distinguished loc detectable via end?. If already at the end, stays there.
+
+  prev
+    Moves to the previous loc in the hierarchy, depth-first. If already at the root, answers nil.
+
+== MUTATION
+
+  append-child 
+    Inserts the item as the rightmost child of the node at this loc, without moving
+
+  edit
+    Replaces the node at this loc with the value of (f node args)
+
+  insert-child
+    Inserts the item as the leftmost child of the node at this loc, without moving
+
+  insert-left
+    Inserts the item as the left sibling of the node at this loc, without moving
+
+  insert-right
+    Inserts the item as the right sibling of the node at this loc, without moving
+
+  make-node
+    Answers a new branch node, given an existing node and new children. The loc is only used to supply the constructor.
+
+  remove
+    Removes the node at loc, returning the loc that would have preceded it in a depth-first walk.
+
+  replace
+    Replaces the node at this loc, without moving
+
+====
+
+seq-zip
+  Answers a zipper for nested sequences, given a root sequence
+
+vector-zip
+  Answers a zipper for nested vectors, given a root vector
+
+xml-zip
+  Answers a zipper for xml elements (as from xml/parse), given a root element
+

@@ -1,0 +1,32 @@
+<% content_for :preheader do %>
+  Thank you for joining our growing ranks of <A href="http://www.ecasebase.com">eCaseBase</A>d Users. 
+<% end %>
+
+<% content_for :sidebar do %>
+Welcome to eCaseBase!  Your e-mail has been verified, and your account is ready for use.  Learn more about how eCaseBase can help you manage:<br>
+
+<%= link_to "issues", page_url(:issues) %><br>
+
+<%= link_to "facts", page_url(:facts) %><br>
+
+<%= link_to "evidence", page_url(:evidence) %><br>
+
+Did you know you can link your eCaseBase data to your dropbox account?
+<% end %>
+
+<h3>Welecome to ECaseBase!</hr>
+
+Thank you for joining our growing ranks of eCaseBase Users.  We believe we offer a simple, elegant solution to the mire that is modern litigation.  It comes down to this:
+
+<ul>
+  <li><b>Lawsuits</b> are determined on the <i><%= link_to "issues", page_url(:issues) %></i>.</li>
+  <li><b>Issues</b> are decided by the <i><%= link_to "facts", page_url(:facts) %></i>.</li>
+  <li><b>Facts</b> are proved with the <i><%= link_to "evidence", page_url(:evidence) %></i>.</li>
+  <li><b>Evidence</b> comprises people, documents and things.</li>
+</ul>
+
+Please join us at <A href="http://www.ecasebase.com">ECaseBase</a> soon and see how this all fits together.
+We hopes to prove the merits of this simple approach to you, and look forward to your comments about eCaseBase.  
+
+Sincerely,
+Andrew C. Greenberg

@@ -1,0 +1,49 @@
+[{
+  "firstDateInPeriod": "2012-07-01T07:00:00.000Z",
+  "lastDateInPeriod": "2012-07-31T07:00:00.000Z",
+  "invoiceDate": "2012-08-13T07:00:00.000Z",
+  "hours": 13.8,
+  "fee": 450
+}, {
+  "firstDateInPeriod": "2012-08-01T07:00:00.000Z",
+  "lastDateInPeriod": "2012-08-31T07:00:00.000Z",
+  "invoiceDate": "2012-09-11T07:00:00.000Z",
+  "hours": 16.1,
+  "fee": 450
+}, {
+  "firstDateInPeriod": "2012-09-01T07:00:00.000Z",
+  "lastDateInPeriod": "2012-09-30T07:00:00.000Z",
+  "invoiceDate": "2012-10-10T07:00:00.000Z",
+  "hours": 16.7,
+  "fee": 450
+}, {
+  "firstDateInPeriod": "2012-10-01T07:00:00.000Z",
+  "lastDateInPeriod": "2012-10-31T07:00:00.000Z",
+  "invoiceDate": "2012-11-13T08:00:00.000Z",
+  "hours": 17.6,
+  "fee": 450
+}, {
+  "firstDateInPeriod": "2012-11-01T07:00:00.000Z",
+  "lastDateInPeriod": "2012-11-30T08:00:00.000Z",
+  "invoiceDate": "2012-12-12T08:00:00.000Z",
+  "hours": 19.9,
+  "fee": 450
+}, {
+  "firstDateInPeriod": "2012-12-01T08:00:00.000Z",
+  "lastDateInPeriod": "2012-12-31T08:00:00.000Z",
+  "invoiceDate": "2013-01-13T08:00:00.000Z",
+  "hours": 18.6,
+  "fee": 450
+}, {
+  "firstDateInPeriod": "2013-01-01T08:00:00.000Z",
+  "lastDateInPeriod": "2013-01-31T08:00:00.000Z",
+  "invoiceDate": "2013-02-12T08:00:00.000Z",
+  "hours": 7.8,
+  "fee": 450
+}, {
+  "firstDateInPeriod": "2013-02-01T08:00:00.000Z",
+  "lastDateInPeriod": "2013-02-28T08:00:00.000Z",
+  "invoiceDate": "2013-03-10T08:00:00.000Z",
+  "hours": 7.7,
+  "fee": 450
+}]

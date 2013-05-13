@@ -1,0 +1,155 @@
+require 'rspec/autorun'
+require 'active_support/all'
+require File.expand_path '../../../app/services/issue.rb', __FILE__
+
+describe Issue do
+
+  let(:alice) { Issue.new('alice') }
+  let(:bob) { Issue.new('bob') }
+  let(:carol) { Issue.new('carol') }
+  let(:don) { Issue.new('don') }
+  let(:estah) { Issue.new('estah') }
+  let(:fil) { Issue.new('fil') }
+
+  it "should have a sentinel non_issue value" do
+    Issue::NoIssue.issue?.should == false
+  end
+
+  context "root" do
+    it "should create a unique identifier for the issue" do
+      alice.should be_respond_to :issue_id
+      alice.issue_id.should be_present
+    end
+
+    it "should permit creation of a root (one not having a parent)" do
+      alice.should be_issue
+      alice.should be_root
+      alice.parent.should == Issue::NoIssue
+      alice.children.should == [] 
+      alice.name.should == 'alice'
+    end
+
+    it "should permit repositioning to root" do
+      alice.position.should be_root
+    end
+
+    it "should answer self to #root" do
+      alice.root.should == alice 
+    end
+
+    it "should answer an empty list to #ancestors and descendants" do
+      alice.ancestors.should == []
+      alice.descendants.should == []
+    end
+  
+  end
+
+  context "two-tier tree with siblings positioned by insertion order" do
+    before :each do
+      bob.position({as_child_of: alice})
+      carol.position({as_child_of: alice})
+      don.position({as_child_of: alice})
+    end
+
+    it "should have the root with all her children" do
+      alice.should be_issue
+      alice.should be_root
+      alice.children.should == [bob, carol, don]
+    end
+
+    it "should have the children in order" do
+      [bob, carol, don].each do |child|
+        child.should be_issue
+        child.should_not be_root
+        child.parent.should == alice
+        child.root.should == alice
+        child.ancestors.should == [alice]
+      end
+      bob.left_sibling.should == Issue::NoIssue
+      bob.right_sibling.should == carol
+      carol.left_sibling.should == bob
+      carol.right_sibling.should == don
+      don.left_sibling.should == carol
+      don.right_sibling.should == Issue::NoIssue
+    end
+  end
+
+  context "two-tier tree positioned by relative sibilng position" do
+    before :each do
+      carol.position({as_child_of: alice})
+      bob.position({as_left_sibling_of: carol})
+      don.position({as_right_sibling_of: carol})
+    end
+
+    it "should have the root with all her children" do
+      alice.should be_issue
+      alice.should be_root
+      alice.children.should == [bob, carol, don]
+    end
+
+    it "should have the children in order" do
+      [bob, carol, don].each do |child|
+        child.should be_issue
+        child.should_not be_root
+        child.parent.should == alice
+        child.children.should == []
+      end
+      bob.left_sibling.should == Issue::NoIssue
+      bob.right_sibling.should == carol
+      carol.left_sibling.should == bob
+      carol.right_sibling.should == don
+      don.left_sibling.should == carol
+      don.right_sibling.should == Issue::NoIssue
+    end
+  end
+
+  context "three-tier tree" do
+    before :each do
+      bob.position({as_child_of: alice})
+      carol.position({as_child_of: alice})
+      don.position({as_child_of: alice})
+      estah.position({as_child_of: bob})
+      fil.position({as_child_of: don})
+    end
+
+    it "should answer descendants in prefix order" do
+      alice.descendants.should == [bob, estah, carol, don, fil]
+      bob.descendants.should == [estah]
+      carol.descendants.should == []
+      don.descendants.should == [fil]
+    end
+
+    it "should have leafs with proper parentage" do
+      bob.children.should == [estah]; estah.parent.should == bob
+      don.children.should == [fil]; fil.parent.should == don
+      [estah, fil].each do |child|
+        child.root.should == alice
+        child.ancestors.should == [alice, child.parent]
+        child.descendants.should == []
+      end
+    end
+
+    it "should correctly handle move estah to child of fil" do
+      estah.position({as_child_of:fil})
+      bob.children.should == [] 
+      fil.children.should == [estah]
+    end
+
+    it "should correctly handle move bob to child of fil" do
+      bob.position({as_child_of:fil})
+      alice.children.should_not include bob
+      fil.children.should == [bob]
+      bob.parent.should == fil
+    end
+
+    it "should compute to_json correctly" do
+      alice.to_json.should == {id: alice.issue_id, name: alice.name, parent: alice.parent_issue_id_or_nil}.to_json
+    end
+
+    it "should compute tree_to_json correctly" do
+      alice.tree_to_json.should == [alice, bob, estah, carol, don, fil].map(&:json_view).to_json
+    end
+
+  end
+
+end

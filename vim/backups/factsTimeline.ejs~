@@ -1,0 +1,27 @@
+<script>
+  $(function(){
+    var data = <%- JSON.stringify(facts) %>;
+    data = data.map(function(e){
+      var start = new Date(e.start); 
+      return({
+        start: new Date(start.getFullYear(), start.getMonth(), start.getDay())
+        , content: e.title
+      });
+    });
+
+    console.log(data[0]);
+
+    // specify options
+    options = {
+      "width":  "100%",
+      "height": "450px",
+      "style": "dot"
+    };
+
+    // Instantiate our timeline object.
+    var timeline = new links.Timeline(document.getElementById('factTimeline'));
+
+    // Draw our timeline with the created data and options
+    timeline.draw(data, options);
+  });
+</script>

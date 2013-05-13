@@ -1,0 +1,75 @@
+require_relative '../../app/models/casebase'
+require 'ostruct'
+
+describe Casebase do
+  let(:casebase) { Casebase.new }
+
+  context "state upon creation of the application" do
+    it "has no users" do
+      casebase.users.should be_empty 
+    end
+    it "has no tickets" do
+      casebase.tickets.should be_empty
+    end
+    it "has no cases" do
+      casebase.tickets.should be_empty
+    end
+  end
+
+  context "creation methods" do
+    context '#new_user' do
+      let(:new_user) { OpenStruct.new }
+      before :each do
+        casebase.user_source = Proc.new{|hash={}| new_user }
+      end
+      it "returns a new user" do
+        casebase.new_user.should == new_user
+      end
+      it "should return a new user with the correct reference" do
+        casebase.new_user.casebase.should == casebase
+      end
+      it "accepts an attribute hash from the subscriber" do
+        casebase.user_source = stub
+        casebase.user_source.should_receive(:call).with(hash).and_return(new_user)
+        casebase.new_user(hash)
+      end
+    end
+
+    context '#new_ticket' do
+      let(:new_ticket) { OpenStruct.new }
+      before :each do
+        casebase.ticket_source = -> { new_ticket }
+      end
+      it "returns a new ticket" do
+        casebase.new_ticket.should == new_ticket
+      end
+      it "should return a new ticket with the correct reference" do
+        casebase.new_ticket.casebase.should == casebase
+      end
+    end
+
+    context '#new_case' do
+      let(:new_case) { OpenStruct.new }
+      before :each do
+        casebase.case_source = -> { new_case }
+      end
+      it "returns a new case" do
+        casebase.new_case.should == new_case
+      end
+      it "should return a new case with the correct reference" do
+        casebase.new_case.casebase.should == casebase
+      end
+    end
+  end
+
+  context "addition methods" do
+    context "#add_user" do
+      it "adds the entry to the casebase" do
+        user = double('user')
+        casebase.add_user user
+        casebase.users.should be_include user
+      end
+    end
+  end
+
+end

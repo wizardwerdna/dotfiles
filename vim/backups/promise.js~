@@ -1,0 +1,14 @@
+require('coffee-script');
+var Promise = require('covenant/promise').Promise;
+
+exports.pending = function () {
+    var deferred = new Promise;
+    return {
+        promise: deferred,
+        fulfill: deferred.fulfill,
+        reject: deferred.reject
+    };
+};
+
+exports.fulfilled = function(value){(new Promise).fulfill(value)};
+exports.rejected = function(reason){(new Promise).reject(reason)}; 

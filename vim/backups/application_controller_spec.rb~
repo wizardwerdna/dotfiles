@@ -1,0 +1,58 @@
+require 'spec_helper'
+
+describe ApplicationController do
+
+  subject{ApplicationController.new}
+
+  context 'current_user' do
+
+    let(:user){stub 'user persistence record'}
+    let(:cookies){Hash.new}
+
+    before :each do
+      subject.stub(:cookies => cookies)
+    end
+
+    it "should operate on the cookies 'hash'" do
+      Session.should_receive(:on).with(cookies).and_return stub(:current_user => stub) 
+      subject.current_user
+    end
+
+    it "should return the user record when there is an active session" do
+      Session.should_receive(:on).with(cookies).and_return stub(:current_user => user) 
+      subject.current_user.should == user 
+    end
+
+    it "should return nil when there is no active session" do
+      Session.should_receive(:on).with(cookies).and_return stub(:current_user => nil)
+      subject.current_user.should be_nil
+    end
+
+  end
+
+  context 'logged_in?' do
+    let(:user){stub 'user persistence record'}
+    let(:cookies){Hash.new}
+
+    before :each do
+      subject.stub(:cookies => cookies)
+    end
+
+    it "should operate on the cookies 'hash'" do
+      Session.should_receive(:on).with(cookies).and_return stub(:current_user => stub) 
+      subject.current_user
+    end
+
+    it "should return the user record when there is an active session" do
+      Session.should_receive(:on).with(cookies).and_return stub(:current_user => user) 
+      subject.should be_logged_in
+    end
+
+    it "should return nil when there is no active session" do
+      Session.should_receive(:on).with(cookies).and_return stub(:current_user => nil)
+      subject.should_not be_logged_in
+    end
+
+  end
+
+end

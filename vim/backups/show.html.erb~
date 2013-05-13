@@ -1,0 +1,5 @@
+<div id="dashbaord">
+  <h1>User Dashboard</h1>
+  <p>This is the dashboard for <%= current_user.first_name %> <%= current_user.last_name %>!</p>
+</div>
+

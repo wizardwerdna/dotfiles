@@ -1,0 +1,19 @@
+class EmailVerificationsController < ApplicationController
+
+  def index
+  end
+
+  def new
+    @email_verification = EmailVerification.new(email:"")
+  end
+
+  def create
+    EmailVerification.new(params[:email_verification]).notify
+    redirect_to email_verifications_url, :notice => I18n.t('email_verifications.create.notice')
+  end
+
+  def show
+    EmailVerification.new(token: params[:id]).verify
+    redirect_to signin_url, :notice => I18n.t('email_verifications.show.notice')
+  end
+end

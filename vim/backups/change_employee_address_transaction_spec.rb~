@@ -1,0 +1,22 @@
+require_relative '../src/change_employee_address_transaction'
+
+describe ChangeEmployeeAddressTransaction do
+  let(:subject){ChangeEmployeeNameTransaction.new(1, "Away")}
+  let(:employee){Employee.new emp_id: 1, address: "Home"}
+
+  it_should_behave_like 'a transaction'
+
+  before :each do
+    Repository.configure Employee => MemoryRepos::EmployeeRepo.new
+  end
+
+  it "should change the employee's name" do
+    Repository.for(Employee).store employee
+    Repository.for(Employee).all.should have(1).item
+    subject.execute
+    Repository.for(Employee).all.should have(1).item
+    e = Repository.for(Employee).fetch employee.emp_id
+    e.emp_id.should == 1
+    e.name.should == "Away!"
+  end
+end

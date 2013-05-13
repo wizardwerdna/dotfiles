@@ -1,0 +1,11 @@
+class CreditCardsController < ApplicationController
+  def index
+    @noodle = modeling_clay do
+      def trump
+        "trump"
+      end
+    end
+    raise @noodle.set_model_name("Trumper").new.trump.inspect
+    @credit_cards = q "CreditCard", name: 'smarmy', number: 'fishy'
+  end
+end

@@ -1,0 +1,31 @@
+require "minitest_helper"
+
+describe "Authentication workflow integration" do
+  before do
+    @andy = Factory(:verified_user)
+    @andy.verified_at = Time.zone.now
+    @andy.save!
+  end
+  after do
+    page.reset!
+    @andy.destroy
+  end
+
+  it "should show the splash public page on root directory if nobody logged in" do
+    logout
+    visit root_path
+    current_path.must_equal root_path
+  end
+  
+  it "should show the dashboard page on root directory if someone logged in" do
+    login_as @andy
+    visit root_path
+    current_path.must_equal dashboard_path
+  end
+
+  it "should show the login page after a logout" do
+    logout
+    current_path.must_equal new_session_path
+  end
+  
+end

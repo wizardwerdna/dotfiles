@@ -1,0 +1,210 @@
+
+require File.expand_path('../../mock_user_helper.rb',__FILE__)
+require File.expand_path('../../../app/services/token_service.rb', __FILE__)
+
+describe TokenService do
+  
+  context "NoRecord" do
+    it "is not a user" do
+      TokenService::NoRecord.should_not be_user
+    end
+  end
+
+  context "naked instance" do
+
+    let(:user_class){stub}
+    let(:service){TokenService.new :token_name, user_class}
+
+    it "should answer #record with NoRecord" do
+      service.record.should == TokenService::NoRecord
+    end
+
+    it "should raise an error for other convenience functions" do
+      lambda{service.email}.should raise_error
+      lambda{service.token}.should raise_error
+    end
+
+    it "should remember the token_name" do
+      service.token_name.should == :token_name
+    end
+
+    it "permit you to set a record of type user_record" do
+      record = stub
+      record.should_receive(:kind_of?).with(user_class).and_return true
+      service.for_record record
+      service.record.should == record
+    end
+
+    it "should not permit you to set a record of the wrong type" do
+      record = stub
+      record.should_receive(:kind_of?).with(user_class).and_return false
+      service.for_record record
+      service.record.should_not be_user
+    end
+
+  end
+
+  context "convenience functions once record is established" do
+
+    let(:user){stub :email => 'abc@def.com', :token_name => 'token', :kind_of? => true}
+    let(:user_class){stub}
+    let(:service){TokenService.new(:token_name, user_class).for_record(user)}
+
+    it "should answer #record" do
+      service.record.should == user
+    end
+
+    it "should answer #email" do
+      service.email.should == 'abc@def.com'
+    end
+
+    it "should answer #token" do
+      service.token.should == 'token'
+    end
+
+    it "should modify token" do
+      user.should_receive(:token_name=).with('new_token').and_return('new_token')
+      user.should_receive(:save).and_return(true)
+      service.token='new_token'
+      service.token.should == 'token'
+    end
+
+  end
+
+  context "searching user_class by e-mail" do
+
+    let(:user){stub :present? => true}
+    let(:user_class){stub}
+    let(:service){TokenService.new :token_name, user_class}
+
+    it "should find an existing record by eeail" do
+      user_class.should_receive(:find_by_email).with('abc@def.com').and_return(user)
+      service.for_email('abc@def.com').record.should == user  
+    end
+
+    it "should not find a non_existing record by email" do
+      user_class.should_receive(:find_by_email).and_return(nil)
+      service.for_email('abc@def.com').record.should_not be_user
+    end
+ 
+  end
+
+  context "searching user_class by token_name" do
+    let(:user){stub :present? => true}
+    let(:user_class){stub}
+    let(:service){TokenService.new :token_name, user_class}
+
+    it "should find an existing record by token_name" do
+      user_class.should_receive(:find_by_token_name).with('token').and_return(user)
+      service.for_token('token').record.should == user
+    end
+
+    it "should not find a non-existing record by token_name" do
+      user_class.should_receive(:find_by_token_name).with('token').and_return(nil)
+      service.for_token('token').record.should_not be_user
+    end
+
+  end
+
+  context "testing" do
+    let(:service){TokenService.new :token_name, stub}
+    it "record? should be true when record is a user record, norecord? opposite" do
+      service.record = stub(:user? => true)
+      service.should be_record
+      service.should_not be_norecord
+    end
+
+    it "record? should be false when record is NoRecord, norecord? opposite" do
+      service.record = stub(:user? => false)
+      service.should_not be_record
+      service.should be_norecord
+    end
+  end
+
+  context "generating a token" do
+    let(:user){double('user')}
+    let(:user_class){double('user_class')}
+    let(:service){TokenService.new :token_name, user_class}
+    before :each do
+      user.stub(:kind_of?).and_return :true
+      user_class.stub(:exists?) do |hash|
+        hash[:token_name] != 'token'
+      end
+    end
+
+    it "should be securely random" do
+      SecureRandom.should_receive(:urlsafe_base64).with(16).and_return('token')
+      user.stub(:token_name= => nil, :save => nil)
+      service.for_record(user).generate 
+    end
+
+    it "should record a unique token" do
+      SecureRandom.should_receive(:urlsafe_base64).with(16).and_return('token')
+      user.should_receive(:send).with(:token_name=, 'token')
+      user.should_receive(:save)
+      service.for_record(user).generate 
+    end
+
+    it "should genereate tokens until a unique one is created" do
+      SecureRandom.should_receive(:urlsafe_base64).with(16).exactly(6).times.
+        and_return( 'exists','exists','exists','exists','exists', 'token')
+      user.should_receive(:send).with(:token_name=, 'token')
+      user.should_receive(:save)
+      service.for_record(user).generate
+    end
+
+    it "should generate a timestamp if the record accepts one" do
+      SecureRandom.should_receive(:urlsafe_base64).with(16).exactly(6).times.
+        and_return( 'exists','exists','exists','exists','exists', 'token')
+      user.should_receive(:send).with(:token_name=, 'token')
+      user.should_receive(:respond_to?).with(:token_name_at=).and_return true
+      user.should_receive(:send).with(:token_name_at=, anything)
+      user.should_receive(:save)
+      service.for_record(user).generate
+    end
+    
+    it "should not generate a timestamp if the record does not accept one" do
+      SecureRandom.should_receive(:urlsafe_base64).with(16).exactly(6).times.
+        and_return( 'exists','exists','exists','exists','exists', 'token')
+      user.should_receive(:respond_to?).with(:token_name_at=).and_return false 
+      user.should_not_receive(:send).with(:token_name_at=, anything)
+      user.should_receive(:save)
+      service.for_record(user).generate
+    end
+
+    it "should assure generation when the token does not exist" do
+      user.stub(token_name: nil)
+      service.should_receive(:generate).once
+      service.for_record(user).assure_generation
+    end
+
+    it "should do nothing when the token does exist" do
+      user.stub(token_name:'token')
+      service.should_receive(:generate).exactly(0).times
+      service.for_record(user).assure_generation
+    end
+
+  end
+
+  context "utility functions" do
+    let(:service){TokenService.new :token_name}
+
+    it "should correctly respond to expired? with a current timestamp" do
+      time = Time.zone.now
+      user = mock_user_by_token('token', :token_name) do |user|
+        user.stub(:respond_to? => true, :present? => true, :token_name_at => time) 
+      end
+      service.for_token('token').should_not be_expired
+    end
+
+    it "should correctly respond to expired? with an old timestamp" do
+      time = Time.zone.now
+      user = mock_user_by_token('token', :token_name) do |user|
+        user.stub(:respond_to? => true, :present? => true, :token_name_at => 5.hours.ago) 
+      end
+      service.for_token('token').should be_expired
+    end
+
+  end
+
+end

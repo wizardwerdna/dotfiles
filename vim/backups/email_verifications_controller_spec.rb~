@@ -1,0 +1,99 @@
+require 'spec_helper'
+describe EmailVerificationsController do
+
+  context 'index' do
+    def doindex
+      get :index
+    end
+    it 'should render the message' do
+      doindex
+      response.should render_template 'index'
+    end
+  end
+
+  context 'new' do
+    let(:email_verification) { stub }
+    before :each do
+      EmailVerification.stub(:new => email_verification)
+    end
+ 
+    def donew
+      get :new
+    end
+ 
+    it 'should assign a naked object' do
+      donew
+      assigns[:email_verification].should == email_verification
+    end
+ 
+    it 'should render the notify form' do
+      donew
+      response.should render_template 'new'
+    end
+ 
+  end
+
+  context 'create' do
+    let(:email) { 'abc@def.com' }
+    let(:evparams) { {"email" =>  email} }
+    let(:email_verification) { stub :notify => user_record }
+    let(:EmailVerification) { stub :new => email_verification }
+    def docreate
+      post :create, :email_verification => evparams
+    end
+    
+    context "with valid or invalid email" do
+      let(:user_record) { stub :user? => true }
+      
+      it "should notify using EmailVerification" do
+        email_verification.should_receive(:notify).and_return user_record
+        EmailVerification.should_receive(:new).with(evparams).and_return(email_verification)
+        docreate
+      end
+    
+      it "should tell the user about the notification" do
+        docreate
+        flash[:notice].should == I18n.t('email_verifications.create.notice')
+      end
+    
+      it "should redirect to the index page" do
+        docreate
+        response.should redirect_to(email_verifications_url)
+      end
+    
+    end
+
+  end
+
+  context 'show' do
+    let(:token) { 'token' }
+    let(:email_verification) { stub :verify => user_record }
+    let(:EmailVerification) { stub :new => email_verification }
+    let(:user_record) { stub :user? => true }
+    def doshow
+      get :show, :id => token
+    end
+    
+    context "with valid or invalid token" do
+
+      it "should notify using EmailVerification" do
+        email_verification.should_receive(:verify).and_return user_record
+        EmailVerification.should_receive(:new).with(token: token).and_return(email_verification)
+        doshow
+      end
+
+      it "should redirect to the signin page" do
+        doshow
+        response.should redirect_to(signin_url)
+      end
+
+      it "should tell the user about the verification" do
+        doshow
+        flash[:notice].should == I18n.t('email_verifications.show.notice')
+      end
+
+    end
+
+  end
+
+end

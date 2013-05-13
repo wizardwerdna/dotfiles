@@ -1,0 +1,5 @@
+Naked = (require '../naked').Naked
+
+describe "Naked", ->
+  it "should know truth", ->
+    true.should.be.true

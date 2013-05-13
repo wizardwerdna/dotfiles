@@ -1,0 +1,8 @@
+(defn fact [x]
+  (cond (zero? x) 1
+        :else (* x (fact (- x 1)))))
+
+(println (fact 4))
+
+(println (fact 10))
+

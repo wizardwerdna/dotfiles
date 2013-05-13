@@ -1,0 +1,14 @@
+require 'ostruct'
+require_relative 'node'
+
+class ZipLoc < Struct.new(:node, :index, :changed)
+
+  def with_changed_child index, value
+    ZipLoc.new(
+      Node.new(1,2), 
+      index, 
+      true)
+  end
+
+end
+

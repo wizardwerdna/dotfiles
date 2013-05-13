@@ -1,0 +1,18 @@
+When /^I signin as a typical user$/ do
+  @user = User.create(
+    last_name: 'User', first_name: 'Typical', email: 'abc@def.com', 
+    password: 'secret', password_confirmation: 'secret')
+  step "I sign in" 
+end
+
+When /^the user has a typical case$/ do
+  @case = @user.cases.create name: 'Typical Case'
+end
+
+Then /^I should see the case listed$/ do
+  page.body.should match 'Typical Case'
+end
+
+Then /^I should see the case page$/ do
+  current_path.should == case_path( @case )
+end

@@ -1,0 +1,5 @@
+class Breaker
+  class NoGuess; end
+  def next_guess; end
+  def guess_score score; end
+end

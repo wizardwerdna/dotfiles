@@ -1,0 +1,35 @@
+#!/bin/sh
+# Parts of this file come from:
+# http://en.wikibooks.org/wiki/Clojure_Programming/Getting_Started#Create_clj_Script 
+
+BREAK_CHARS="\(\){}[],^%$#@\"\";:''|\\"
+CLOJURE_DIR=/usr/local/lib/clojure
+CLOJURE_JAR=$CLOJURE_DIR/clojure.jar
+CLASSPATH="$CLOJURE_DIR/*:$CLOJURE_JAR"
+
+while [ $# -gt 0 ]
+do
+    case "$1" in
+    -cp|-classpath)
+            CLASSPATH="$CLASSPATH:$2"
+    shift ; shift
+    ;;
+-e) tmpfile="/tmp/`basename $0`.$$.tmp"
+    echo "$2" > "$tmpfile"
+    shift ; shift
+    set "$tmpfile" "$@"
+    break # forces any -cp to be before any -e
+    ;;
+*)  break
+    ;;
+esac
+done
+
+if [ $# -eq 0 ]
+then
+  exec #rlwrap --remember -c -b $BREAK_CHARS \
+          java -cp $CLASSPATH clojure.main
+else
+  exec java -cp $CLASSPATH clojure.main $1 -- "$@"
+fi
+

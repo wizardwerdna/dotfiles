@@ -1,0 +1,41 @@
+class MultiMap
+
+  def initialize
+    @hash = {}
+  end
+
+  def get key
+    (@hash[key] || {}).keys
+  end
+
+  def size
+    @hash.keys.size 
+  end
+ 
+  def keys
+    @hash.keys 
+  end
+
+  def num_values
+    array_of_value_list_sizes.reduce(&:+) || 0
+  end
+  
+  def empty?
+    @hash.empty?
+  end
+
+  def put key, value
+    raise ArgumentError.new("key must not be nil") if key.nil?
+    values_hash(key)[value] = nil
+  end
+
+private
+
+  def array_of_value_list_sizes
+    @hash.values.map{|vh| vh.keys.size } 
+  end
+
+  def values_hash key
+    @hash[key] ||= {}
+  end
+end

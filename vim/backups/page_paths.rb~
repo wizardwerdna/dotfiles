@@ -1,0 +1,37 @@
+module PagePaths
+  def to_page page_name
+    case page_name
+    when 'root'
+      '/'
+    when 'all-pages'
+      '/pages'
+    when 'index'
+      '/pages/index'
+    when 'signup'
+      '/signup'
+    when 'signin'
+      '/signin'
+    when 'signout'
+      '/signout'
+    when 'dashboard'
+      '/dashboard'
+    when 'email verification'
+      '/email_verifications'
+    when 'request verification link'
+      '/email_verifications/new'
+    when 'request password reset'
+      '/password_resets/new'
+    when 'password reset'
+      '/password_reset'
+    when 'cases'
+      '/cases'
+    when 'case'
+      "/cases/#{@case.id}"
+    when 'cases'
+      "/cases"
+    else
+      "/pages/#{page_name}"
+    end
+  end
+end
+World(PagePaths)

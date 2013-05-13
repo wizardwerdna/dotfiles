@@ -1,0 +1,4 @@
+root = (this ? window)
+
+Posts = new Meteor.Collection 'posts'
+

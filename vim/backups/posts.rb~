@@ -1,0 +1,15 @@
+require_relative '../lib/interactor.rb'
+module Posts
+
+  class Subscribe < Interactor
+    def execute
+      if r.post.subscribe
+        Response.new(post: r.post)
+      else
+        Response.new(post: r.post, errors: r.post.errors)
+      end
+    end 
+  end
+
+end
+

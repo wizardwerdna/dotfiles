@@ -1,0 +1,2 @@
+if [ "$PS1" -a -r ~/.bashrc ]; then . ~/.bashrc ; fi 
+

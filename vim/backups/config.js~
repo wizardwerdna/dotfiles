@@ -1,0 +1,6 @@
+var config = {
+  db_user: "root",
+  db_password: "",
+  db_name: "hackflowy"
+};
+module.exports = config;

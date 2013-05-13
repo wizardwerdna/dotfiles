@@ -1,0 +1,37 @@
+require_relative '../searcher'
+
+describe Searcher do
+  context "new searcher" do
+    let(:pattern_length){ double "pattern_length" }
+    let(:pattern){ double "pattern", :length => pattern_length } 
+
+    it "should remeber its pattern" do
+      Search.new(pattern).pattern.should == pattern
+    end
+
+    it "should remember the pattern's length" do
+      Search.new(pattern).pattern_length.should == pattern.length
+    end
+
+    it "should permit a shorthand search" do
+      searcher = double "searcher"
+      pattern = double "pattern"
+      string = double "string"
+      result = double "result"
+      Search.should_receive(:new).with(pattern).and_return searcher
+      searcher.should_receive(:run).with(string).and_return result
+      Search[pattern, string].should == result
+    end
+  end
+
+  context "searches should find patterns in string" do
+    # it{Search["",             "whole string"].should == 0}
+    # it{Search["w",            "whole string"].should == 0}
+    # it{Search["wx",           "whole string"].should == nil}
+    # it{Search["whole string", "whole str"].should == nil}
+    # it{Search["whole string", "whole string"].should == 0}
+    # it{Search["whole string", "xxxxxxxxxxxx"].should == nil}
+    # it{Search["str",          "whole string"].should == 6}
+  end
+
+end

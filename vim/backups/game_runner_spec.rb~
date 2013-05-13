@@ -1,0 +1,38 @@
+require_relative '../src/game_runner.rb'
+
+describe GameRunner do
+
+  let(:game_runner) {GameRunner.new(playerA, playerB, console)}
+  let(:playerA) { double "playerA" }
+  let(:playerB) { double "playerB" }
+  let(:console) { double "console" }
+  let(:null_object) { double('null_object').as_null_object }
+
+  context "playerA wins in 3" do
+    before :each do
+      playerA.stub(:next_move).and_return("0","1","2","Z")
+      playerB.stub(:next_move).and_return("3","4","Z")
+    end
+
+    it 'should report the correct final position' do
+      console.should_receive(:current_position).exactly(5).times
+      console.should_receive(:player_move).exactly(5).times
+      console.should_receive(:final_position).with("XXXOO5678")
+      GameRunner.new(playerA, playerB, console).run
+    end
+  end
+
+  context "no player wins, board is full" do
+    before :each do
+      playerA.stub(:next_move).and_return("0","2","7","5","6","Z")
+      playerB.stub(:next_move).and_return("4","1","3","8","Z")
+    end
+
+    it "should report the correct final position" do
+      console.should_receive(:current_position).exactly(9).times
+      console.should_receive(:player_move).exactly(9).times
+      console.should_receive(:final_position).with("XOXOOXXXO")
+      GameRunner.new(playerA, playerB, console).run
+    end
+  end
+end

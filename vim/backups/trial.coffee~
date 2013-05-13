@@ -1,0 +1,17 @@
+#!/usr/bin/env coffee
+console.log "Welcome to the App Outliner!"
+console.log "The app is storied in 'a'"
+
+am = require './src/app'
+exports.a = new am.App
+a = exports.a
+
+a.add 'test1'
+a.add 'test2'
+a.add 'test3'
+a.indent
+a.add 'test4'
+a.outdent
+
+require 'coffee-script/lib/coffee-script/repl'
+

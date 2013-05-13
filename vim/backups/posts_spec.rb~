@@ -1,0 +1,49 @@
+require_relative '../boundaries/interactor_interface'
+require_relative '../../interactors/posts'
+
+describe Posts do
+
+  describe Posts::Subscribe do
+
+    let(:blog){double("blog", kind_of?: true)}
+    let (:subject){Posts::Subscribe.new(request)}
+
+    context "interface" do
+      let(:request){Request.new}
+      it_should_behave_like "an interactor" 
+    end
+
+    context "on execution" do
+      let(:post){ double("post", subscribe: true) }
+      let(:request){ Request.new(post: post) }
+  
+      it "should tell the post to subscribe to its blog" do
+        post.should_receive(:subscribe).and_return true
+        subject.execute
+      end
+
+      it "should succeed" do
+        subject.execute.should be_ok
+      end
+
+    end
+
+    context "alternative 1: subscription fails" do
+  
+      let(:errors){ double "errors" }
+      let(:post){ double("post", subscribe: false, errors: errors) }
+      let(:request){ Request.new(post: post) }
+     
+      it "should fail" do
+        subject.execute.should_not be_ok
+      end
+
+      it "should return the errors" do
+        subject.execute.errors.should == post.errors
+      end
+    
+    end
+ 
+  end
+
+end

@@ -1,0 +1,12 @@
+module Top; def foo; @datum; end; end 
+module Mid1; include Top; end
+module Mid2; include Top; end
+class Bottom
+  include Mid1
+  include Mid2
+  def initialize
+    @datum = 3
+  end
+end
+
+puts Bottom.new.foo

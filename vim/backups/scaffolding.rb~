@@ -1,0 +1,51 @@
+EMPTY_TREE = [:root, []]
+
+ONE_LEVEL_TREE = 
+  [:root, [
+    [:I, []],
+    [:II, []],
+    [:III, []]
+  ]]
+  
+SIMPLE_TWO_LEVEL_TREE = 
+  [:root, [
+    [:I, [
+      [:IIA, []],
+      [:IIB, []],
+      [:IIC, []]
+    ]],
+      [:II, []],
+      [:III, []]
+  ]]
+
+THREE_LEVEL_TREE = 
+  [:root, [
+    [:I, [
+      [:IA, [
+        [:IA1, []],
+        [:IA2, []],
+        [:IA3, []]
+      ]],
+      [:IB, []],
+      [:IC, []]
+    ]],
+    [:II, []],
+    [:III, []]
+  ]]
+
+THREE_LEVEL_TREE_REPLACED = 
+  [:root, [
+    [:I, [
+      [:NEW_PAYLOAD, [
+        [:IA1, []],
+        [:IA2, []],
+        [:IA3, []]
+      ]],
+      [:IB, []],
+      [:IC, []]
+    ]],
+    [:II, []],
+    [:III, []]
+  ]]
+
+

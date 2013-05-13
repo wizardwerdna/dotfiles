@@ -1,0 +1,56 @@
+this["Ember"] = this["Ember"] || {};
+this["Ember"]["TEMPLATES"] = this["Ember"]["TEMPLATES"] || {};
+
+this["Ember"]["TEMPLATES"]["views/templates/appView.hbs"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Ember.Handlebars.helpers; data = data || {};
+  var buffer = '', stack1, hashTypes, escapeExpression=this.escapeExpression, self=this;
+
+function program1(depth0,data) {
+  
+  
+  data.buffer.push("\n<div class=\"navbar navbar-fixed-top\">\n  <div class=\"navbar-inner\">\n    <div class=\"container-fluid\">\n    <!--List of rooms-->\n    </div>\n  </div>\n</div>\n<div class=\"row-fluid\">\n  <div class=\"span2\">\n  <!--Left sidebar containing list of users-->\n  </div>\n  <div class=\"span10\">\n  <!--Main chat window-->\n  </div>\n</div>\n");
+  }
+
+function program3(depth0,data) {
+  
+  var buffer = '', hashTypes;
+  data.buffer.push("\n<div class=\"row-fluid\">\n  <div class=\"offset4 span4 offset4\">\n    <legend>User Name</legend>\n    <label>Enter a user name to start chatting!</label>\n    ");
+  hashTypes = {'placeholder': "STRING"};
+  data.buffer.push(escapeExpression(helpers.view.call(depth0, "view.userNameInput", {hash:{
+    'placeholder': ("Ex. John Doe")
+  },contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n    <div>\n      <button class=\"btn\">Enter Chat Room</button>\n    </div>\n  </div>\n</div>\n");
+  return buffer;
+  }
+
+  hashTypes = {};
+  stack1 = helpers['if'].call(depth0, "Chat.currentUser.user", {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n");
+  return buffer;
+  
+});
+
+this["Ember"]["TEMPLATES"]["views/templates/index.hbs"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Ember.Handlebars.helpers; data = data || {};
+  var buffer = '', hashTypes, escapeExpression=this.escapeExpression;
+
+
+  hashTypes = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "title", {hash:{},contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n");
+  return buffer;
+  
+});
+
+this["Ember"]["TEMPLATES"]["views/templates/layout.hbs"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Ember.Handlebars.helpers; data = data || {};
+  
+
+
+  data.buffer.push("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\"\n\"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">\n\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">\n  <head>\n    <title>Chat App</title>\n    <link rel=\"stylesheet/less\" type=\"text/css\" href=\"stylesheets/less/bootstrap.less\">\n      <script src=\"/javascripts/jquery-2.0.0.min.js\"></script>\n      <script src=\"/javascripts/less-1.3.3.min.js\"></script>\n      <script src=\"/javascripts/bootstrap.min.js\"></script>\n      <script src=\"/javascripts/handlebars.js\"></script>\n      <script src=\"/javascripts/ember-1.0.0-pre.2.min.js\"></script>\n      <script src=\"/javascripts/templates.js\"></script>\n      <script src=\"/javascripts/client.js\"></script>\n    </head>\n    <body>\n    </body>\n  </html>\n");
+  
+});

@@ -1,0 +1,11 @@
+<% include head %>
+<h1>Table of Issues</h1>
+<table class="table">
+  <tr><th>Issue</th><th>Text</th></tr>
+  <% issues.forEach(function(issue){ %>
+  <tr><td><%= issue.id %></td><td><%= issue.text %></td></tr>
+  <% }) %>
+</table>
+<% include footer %>
+
+

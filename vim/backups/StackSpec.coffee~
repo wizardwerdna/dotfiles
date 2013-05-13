@@ -1,0 +1,17 @@
+describe "Stack", ->
+  beforeEach ->
+    @stack = new window.Stack
+
+  it "should be empty when created", ->
+    expect(@stack.isEmpty()).toBeTruthy
+
+  it "should retreive a pushed value with pop", ->
+    expect(@stack.pop(@stack.push(11))).toEqual(11)
+    expect(@stack.pop(@stack.push(12))).toEqual(12)
+
+  it "should retreive multiple pushed values with pop", ->
+    @stack.push(i) for i in [1..10]
+    expect(@stack.pop() for i in [1..10]).toEqual [10..1]
+
+  it "should throw an error when popping an empty stack", ->
+    expect(-> @stack.pop()).toThrow()

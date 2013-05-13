@@ -1,0 +1,13 @@
+class ChangeAffiliationTransaction
+
+  def initialize emp_id
+    @emp_id = emp_id
+  end
+
+  def execute
+    employee = Repository.for(Employee).fetch @emp_id
+    employee.affiliation = UnionAffiliation.new(member_id: @member_id, dues: @dues) 
+    Repository.for(Employee).store employee
+  end 
+end
+

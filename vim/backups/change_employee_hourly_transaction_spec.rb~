@@ -1,0 +1,23 @@
+require_relative '../src/change_employee_hourly_transaction'
+
+describe ChangeEmployeeHourlyTransaction do
+
+  let(:subject){ChangeEmployeeHourlyTransaction.new(1, 10)}
+  let(:employee){Employee.new(emp_id: 1)}
+  
+  it_should_behave_like 'a transaction'
+
+  before :each do
+    Repository.configure Employee => MemoryRepos::EmployeeRepo.new
+    Repository.for(Employee).store Employee.new(emp_id: 1)
+  end
+
+  it "should change the employee to an hourly" do
+    subject.execute
+    e = Repository.for(Employee).fetch employee.emp_id
+    classification = e.classification
+    classification.should be_kind_of HourlyClassification
+    classification.salary.should == 10
+    e.schedule.should be_kind_of WeeklySchedule
+  end    
+end

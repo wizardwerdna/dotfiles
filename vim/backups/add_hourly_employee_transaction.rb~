@@ -1,0 +1,21 @@
+class AddHourlyEmployeeTransaction < AddEmployeeTransaction
+
+  def initialize emp_id, name, address, hourly_rate
+    super emp_id, name, address
+    @hourly_rate = hourly_rate
+  end
+
+private
+
+  def make_classification
+
+  end
+
+  def payment_method
+
+  end
+
+  def make_schedule
+  end
+
+end

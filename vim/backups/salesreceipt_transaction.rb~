@@ -1,0 +1,17 @@
+require_relative 'employee'
+
+class SalesreceiptTransaction
+
+  def initialize emp_id, date, amount
+    @emp_id = emp_id
+    @date = date
+    @amount = amount
+  end
+
+  def execute
+    employee = Repository.for(Employee).fetch @emp_id
+    classification = employee.classification
+    classification.salesreceipt << Salesreceipt.new(emp_id: @emp_id, date: @date, amount: @amount)
+  end
+
+end

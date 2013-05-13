@@ -1,0 +1,5 @@
+require_relative '../src/terminal_console'
+
+describe TerminalConsole do
+
+end

@@ -1,0 +1,14 @@
+require_relative '../node'
+describe Node do
+  subject{Node.new :payload, [] }
+  let(:equiv){Node.new :payload, []}
+  let(:other){Node.new :other, []}
+  it {subject.payload.should == :payload}
+  it {subject.children.should be_empty}
+  it {should == equiv}
+  it {should_not == other}
+  it {should === equiv}
+  it {should be_eql equiv}
+  it {should_not be_eql other}
+  it {subject.hash.should == equiv.hash}
+end

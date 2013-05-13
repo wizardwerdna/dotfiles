@@ -1,0 +1,22 @@
+class RecentFiles
+
+  attr_accessor :files, :limit
+
+  def initialize limit = 15
+    self.files = []
+    self.limit = limit
+  end
+
+  def empty?
+    files.empty?
+  end
+
+  def open filename
+    if idx=files.index(filename)
+      self.files = [filename] + self.files[0..index-1] + self.files[index+1..limit-1]
+    else
+      self.files.unshift filename
+    end
+    self.files = self.files[0..limit-1]
+  end
+end

@@ -1,0 +1,108 @@
+Feature: As a user
+         I want to keep an outline of issues for each case
+         So that I can manage my lawsuit around the features
+
+  Scenario: Empty Outline
+    Given I have created a new case
+    Then the issues outline for the case will be empty
+
+  Scenario: Singleton Issue
+    Given I have created a new case
+    When  I create the issue:
+      | name      |
+      | Singleton |
+    Then  the issues outline for the case will be:
+      | name      | parent_name |
+      | Singleton | -nil-  |
+
+  Scenario: List of Issues is, by Default, in Order of Creation
+    Given I have created a new case
+    When I create the issues:
+      | name   |
+      | First  |
+      | Second |
+      | Third  |
+    Then the issues outline for the case will be:
+      | name   | parent_name |
+      | First  | -nil-  |
+      | Second | -nil-  |
+      | Third  | -nil-  |
+
+  Scenario: Moving to Left and Right in a List 
+    Given I have created a new case
+    When I create the issues:
+      | name   |
+      | Right  |
+      | Middle |
+      | Left   |
+    And I move issues as follows:
+      | name  | Move  | of     |
+      | Left  | left  | Middle |
+      | Right | right | Middle |
+    Then the issues outline for the case will be:
+      | name   | parent_name |
+      | Left   | -nil-  |
+      | Middle | -nil-  |
+      | Right  | -nil-  |
+
+  @wip
+  Scenario: Moving to Descendants 
+    Given I have created a new case
+    When I create the issues:
+      | name   |
+      | Bottom |
+      | Middle |
+      | Top    |
+    And I move issues as follows:
+      | name   | Move  | of     |
+      | Middle | child | Top    |
+      | Bottom | child | Middle |
+    Then the issues outline for the case will be:
+      | name   | parent_name |
+      | Top    | -nil-  |
+      | Middle | Top    |
+      | Bottom | Bottom |
+
+  @wip
+  Scenario: Moving descendants lists children in order
+    Given I have created a new case
+    When I create and move the issues as follows:
+      | name   | Move  | of  |
+      | Top    |       |     |
+      | First  | child | Top |
+      | Second | child | Top |
+      | Third  | child | Top |
+    Then the issues outline for the case will be:
+      | name   | parent_name |
+      | Top    | -nil-  |
+      | First  | Top    |
+      | Second | Top    |
+      | Third  | Top    |
+
+  @wip
+  Scenario: Building a Tree
+    Given I have created a new case
+    When I create and move the issues as follows:
+      | name   | Move  | of     |
+      | Top    |       |        |
+      | First  | child | Top    |
+      | Second | child | Top    |
+      | Third  | child | Top    |
+      | 2.1    | child | Second |
+      | 2.2    | child | Second |
+      | 2.3    | right | 2.2    |
+      | 2.2.1  | child | Top    |
+      | 2.2.3  | right | 2.2.1  |
+      | 2.2.2  | left  | 2.2.3  |
+    Then the issues outline for the case will be:
+      | name   | parent_name |
+      | Top    | -nil-  |
+      | First  | Top    |
+      | Second | Top    |
+      | 2.1    | Second |
+      | 2.2    | Second |
+      | 2.2.1  | 2.2    |
+      | 2.2.2  | 2.2    |
+      | 2.2.3  | 2.2    |
+      | 2.3    | Second |
+      | Third  | Top    |

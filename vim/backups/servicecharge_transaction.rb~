@@ -1,0 +1,19 @@
+require_relative 'employee'
+
+class ServicechargeTransaction
+
+  def initialize emp_id, member_id, date, amount
+    @emp_id = emp_id
+    @member_id = member_id
+    @date = date
+    @amount = amount
+  end
+
+  def execute
+    employee = Repository.for(Employee).fetch @emp_id
+    affiliation = employee.affiliation
+    affiliation.servicecharges << 
+      Servicecharge.new(member_id: @member_id, date: @date, amount: @amount)
+  end
+
+end

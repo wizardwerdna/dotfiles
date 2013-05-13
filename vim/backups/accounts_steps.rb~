@@ -1,0 +1,156 @@
+# SIGNUP STEPS
+
+Given /^I am not signed in$/ do
+  step "I visit the signout page"
+end
+
+Then /^I should have rendered the user's dashboard$/ do
+  page.should have_selector '#dashboard'  
+end
+
+When /^I submit my user signup information$/ do
+  ActionMailer::Base.deliveries = []
+  fill_in "First name", :with => "first name"
+  fill_in "Last name", :with => "last name"
+  fill_in "Email", :with => 'abc@def.com'
+  fill_in "Password", :with => 'secret'
+  fill_in "Password confirmation", :with => 'secret'
+  click_button :submit
+  @user = User.find_by_email!('abc@def.com')
+  @token = TokenService.new(:verify_token).for_email('abc@def.com').token
+end
+
+Then /^a secure User record has my information$/ do
+  @user.should be_present
+  @user.authenticate('secret').should be_present
+end
+
+Then /^a verification link is sent to my email$/ do
+  @token.should_not be_nil
+  ActionMailer::Base.deliveries.last.tap do |verify_notice|
+    verify_notice.should be_present
+    verify_notice.to[0].should == 'abc@def.com'
+    verify_notice.html_part.body.should match /#{@user.verify_token}/ 
+    verify_notice.text_part.body.should match /#{@user.verify_token}/ 
+  end
+end
+
+Then /^I am notified the verification link has been sent$/ do
+  page.body.should match(/email verification link has been sent/) 
+end
+
+When /^I sign up$/ do
+  step "I visit the signup page"
+  step "I submit my user signup information"
+end
+
+# VERIFICATION STEPS
+
+When /^I submit my verification link$/ do
+  @user.should be_present
+  ActionMailer::Base.deliveries = []
+  visit email_verification_url(@token)
+end
+
+Then /^my User record has been verified$/ do
+  @user.reload.should be_email_verified
+end
+
+Then /^a verification confirmation is sent to my email$/ do
+  ActionMailer::Base.deliveries.last.tap do |confirm_notice|
+    confirm_notice.should be_present
+    confirm_notice.to[0].should == 'abc@def.com'
+    confirm_notice.html_part.body.should match /#{@user.verify_token}/ 
+    confirm_notice.text_part.body.should match /#{@user.verify_token}/ 
+  end
+end
+
+Then /^I am notified the confirmation email has been sent$/ do
+  page.body.should match(/mail has been verified/)
+end
+
+# SIGN IN STEPS
+
+When /^I submit my user signin information$/ do
+  fill_in "Email", :with => 'abc@def.com'
+  fill_in "Password", :with => 'secret'
+  click_button :submit
+end
+
+Then /^I am notified I have been authenticated$/ do
+  page.cookies[:session_token].should == User.find_by_email('abc@def.com').session_token
+  page.body.should match(/signed in/)
+  page.body.should match(/Welcome/)
+end
+
+# SIGN OUT STEPS
+
+When /^I sign in$/ do
+  step "I visit the signin page"
+  step "I submit my user signin information"
+end
+
+Then /^I am notified that I have signed out$/ do
+  page.cookies[:session_token].should == nil
+  page.body.should match(/signed out/)
+  page.body.should_not match(/Welcome/)
+end
+
+# REQUEST PASSWORD RESET STEPS
+
+When /^I submit my email$/ do
+  ActionMailer::Base.deliveries = []
+  fill_in "Email", :with => 'abc@def.com'
+  click_button :submit
+  @user = User.find_by_email('abc@def.com')
+end
+
+Then /^a reset link is sent to my email$/ do
+  ActionMailer::Base.deliveries.last.tap do |reset_notice|
+    reset_notice.should be_present
+    reset_notice.to[0].should == 'abc@def.com'
+    reset_notice.text_part.body.should match /#{@user.password_reset_token}/
+    reset_notice.html_part.body.should match /#{@user.password_reset_token}/
+  end
+end
+
+Then /^I am notified the reset link has been sent$/ do
+  page.body.should match(/password reset information has been sent/)
+end
+
+# PASSWORD RESET STEPS
+
+When /^I request a password reset$/ do
+  step "I visit the request password reset page"
+  step "I submit my email"
+end
+
+When /^I visit my password reset page$/ do
+  visit edit_password_reset_url(@user.password_reset_token)
+end
+
+When /^I timely submit my password reset information$/ do
+  ActionMailer::Base.deliveries = []
+  fill_in "Password", :with => 'secret'
+  fill_in "Password confirmation", :with => 'secret'
+  click_button :submit
+end
+
+Then /^a password reset confirmation is sent to my email$/ do
+  ActionMailer::Base.deliveries.last.tap do |reset_confirmation|
+    reset_confirmation.should be_present
+    reset_confirmation.to[0].should == 'abc@def.com'
+  end
+end
+
+Then /^I am notified the password has been reset$/ do
+  page.body.should match(/password has been reset/)
+end
+
+# REQUEST NEW VERIFICATION EMAIL STEPS
+
+When /^I submit my e-mail address$/ do
+  ActionMailer::Base.deliveries = []
+  fill_in "Email", :with => @user.email
+  click_button :submit
+end

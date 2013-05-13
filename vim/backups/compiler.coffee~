@@ -1,0 +1,11 @@
+#!/usr/bin/env coffee
+stitch = require 'stitch'
+fs = require 'fs'
+
+pkg = stitch.createPackage
+  paths: [__dirname + '/../src']
+
+pkg.compile (err, source) ->
+  fs.writeFile 'package.js', source, (err) ->
+    throw err if err
+    console.log('Compiled package.js')

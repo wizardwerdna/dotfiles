@@ -1,0 +1,54 @@
+require_relative '../recent_files'
+
+# If an opened file already exists in the recent file list, it is bumped to the top, not duplicated in the list
+
+describe RecentFiles do
+
+  let(:filename){ double "filename" }
+
+  context "when initially created" do
+
+    it { should be_empty }
+
+    it { subject.files.should be_empty }
+
+    it "should be able to open a file" do
+      subject.open(filename)
+      subject.files.should == [filename]
+    end
+  end
+
+  context "with one file added" do
+    let(:second_filename){ double "second filename" }
+    before :each do
+      subject.open(filename)
+    end
+
+    it "should be open a second file, placing the second one first" do
+      subject.open(second_filename)
+      subject.files.should == [second_filename, filename]
+    end
+  end
+
+  context "with many different files added" do
+    let(:many){20}
+    let(:filenames){ many.times.map{|i| double "filename#{i}" } }
+
+    before :each do
+      filenames.each{|filename| subject.open filename}
+    end
+
+    it "should only have the most recent <limit> files" do
+      subject.files.should == filenames.reverse[0..subject.limit-1]
+    end
+
+    it "should place a duplicated file on the top" do
+      mid_file = subject.limit / 2
+      filename = subject.files[mid_file]
+      subject.open filename
+      subject.files.should == [filename] +
+                              filenames.reverse[0..mid_file-1] +
+                              filenames.reverse[mid_file+1..subject.limit-1] 
+    end
+  end
+end

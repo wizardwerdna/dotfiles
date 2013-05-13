@@ -1,0 +1,8 @@
+require_relative 'game_runner.rb'
+require_relative 'terminal_console.rb'
+
+xPlayer = nil
+oPlayer = nil
+console = TerminalConsole.new
+
+GameRunner.new(xPlayer, oPlayer, console).run

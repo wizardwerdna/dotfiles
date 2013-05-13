@@ -1,0 +1,24 @@
+<html>
+  <head>
+    <title>eCasebase Issue Outliner Demo</title>
+    <style>
+      body{font-size: 14px; font-family: times, "times new roman", serif; line-height: 18px;}
+      .outline{
+        outline: 1pt solid brown; 
+        padding: 1pc 1pc 1pc 1pc;
+        background-color: lightgray;}
+      .node{padding-left: 1pc; background: lightgray;}
+      .node.selected > .tag{outline: 1px solid green}
+      .depth0 .text {font-size: 18px; line-height: 22px; font-weight: bold;}
+      .depth1 .text {font-size: 16px; line-height: 20px; font-weight: bold;}
+      .tag > .open{display:inline-block; width: 0.5pc; text-align: center;}
+      .tag > .prefix{display: inline-block; width: 1.5pc; text-align: right;}
+    </style>
+  </head>
+  <body>
+    <h1><%= root %></h1>
+    <div class="outline">
+      <%= body %> 
+    </div>
+  </body>
+</html>

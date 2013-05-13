@@ -1,0 +1,63 @@
+<HTML>
+  <HEAD>
+    <style type="text/css">
+      body { width: 7.5in; }
+      div.lawyer {
+        font-family: Palatino, serif
+        margin-top: 1pc;
+        text-align: center;
+      }
+      div.lawyer p {
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+      .date { text-align: right; }
+      div.client {
+        margin-top: 1pc;
+        text-align: left;
+      }
+      div.client p {
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+      H3 {text-align: center}
+      .detail P {margin-left: 2pc;}
+      .close {margin-left: 4in;}
+    </style>
+    </HEAD>
+    <BODY>
+
+      <div class="lawyer">
+        <p><b>Andrew Clifford Greenberg</b></p>
+        <p>Patent Lawyer</p>
+        <p>12 Golden Gate Circle</p>
+        <p>Napa, CA 94558</p>
+        <p>(813) 334-6440</p>
+      </div>
+
+      <P class="date"><%= pdate(inv.invoiceDate)%></P>
+
+      <DIV class="client">
+        <p>Barry Cinnamon</p>
+        <p>c/o Westinghouse Solar</p>
+        <p>1475 South Bascom Ave. Suite 101</p>
+        <p>Campbell, CA 95008</p><br>
+        <p>PERSONAL AND PRIVATE</p>
+      </div>
+
+
+      <H3>Re: INVOICE FOR PATENT LAW SERVICES RENDERED</H3>
+
+      <p><b>FOR PERIOD FROM <%= pdate(inv.firstDateInPeriod) %> TO 
+          <%= pdate(inv.lastDateInPeriod) %>:</b></p>
+      <div class="detail">
+        <p><%= inv.hours.toFixed(1) %> hours @ $450/hour</P>
+
+        <P>PLEASE REMIT $ <%= (inv.hours*inv.fee).toFixed(2) %></P>
+      </div>
+      <div class="close">
+        <p>Thank you,</p><br>
+        <p>Andrew C. Greenberg</p>
+      </div>
+  </BODY>
+</HTML>

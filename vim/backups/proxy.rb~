@@ -1,0 +1,36 @@
+class Presenter < BasicObject
+  attr_accessor :object
+  def initialize object
+    @object = object
+  end
+
+  def method_missing method, *args, &block
+    object.send(method, *args, &block)
+  end
+end
+
+class IndividualPresenter < Presenter
+  def my_special_url 
+    puts "http://foo.com/display/#{title}"
+  end
+end
+
+class MuseumPresenter < Presenter
+  def my_special_url
+    puts "http://foo.com/museums/#{museum}/display/#{title}"
+  end
+end
+
+class ActiveRecordThing
+  attr_accessor :title, :museum
+  def initialize(title, museum)
+    @title = title
+    @museum = museum
+  end
+end
+
+module IndividualModule
+  def my_special_url 
+    puts "http://foo.com/display/#{title}"
+  end
+end

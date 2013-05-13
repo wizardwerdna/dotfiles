@@ -1,0 +1,42 @@
+shared_examples_for "a searcher" do
+  context "new searcher" do
+    let(:pattern_length){ 6 }
+    let(:pattern){ "pattern" } 
+
+    it "should remember its pattern" do
+      klass.new(pattern).pattern.should == pattern
+    end
+
+    it "should remember the pattern's length" do
+      klass.new(pattern).pattern_length.should == pattern.length
+    end
+
+    it "should permit a shorthand search" do
+      searcher = double "searcher"
+      pattern = double "pattern"
+      string = double "string"
+      result = double "result"
+      klass.should_receive(:new).with(pattern).and_return searcher
+      searcher.should_receive(:run).with(string).and_return result
+      klass[pattern, string].should == result
+    end
+  end
+
+  context "trivial strings" do
+    it{klass["",  ""].should == 0}
+    it{klass["",  "x"].should == 0}
+    it{klass["a", "x"].should == nil}
+    it{klass["a", "a"].should == 0}
+  end
+
+  context "prefix and partial prefix strings" do
+    it{klass["abc", "abc"].should == 0}
+    it{klass["abc", "abcdef"].should == 0}
+    it{klass["abc", "abx"].should == nil}
+  end
+
+  context "non-prefix matches and failures" do
+    it{klass["abcd", "abc"].should == nil}
+    it{klass["abc", "abxabc"].should == 3}
+  end
+end

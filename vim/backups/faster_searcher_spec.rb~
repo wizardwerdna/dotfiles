@@ -1,0 +1,223 @@
+require_relative '../faster_searcher'
+require_relative 'searcher_examples'
+require 'rspec/expectations'
+
+RSpec::Matchers.define :correctly_shift do |desc, mismatch_spec, pattern, shift_spec|
+  
+  match do |klass|
+    mismatch_spec =~ /(\.*)([^.])/
+    @mismatch = $1.length
+    @mismatch_char = $2
+    shift_spec =~ /(\.*)([^.]*)/
+    @shift_by = $1.length
+    @searcher = klass.new(pattern)
+    @searcher.string = mismatch_spec 
+    @searcher.rightmost_mismatch_in_pattern = @mismatch
+    @result = @searcher.index_of_unchecked_remainder_of_string_after(0)
+    @result.should == @shift_by
+  end
+
+  failure_message_for_should do |klass|
+    "#{desc} matching against #{mismatch_spec}" + 
+    "\nPATTERN:  #{pattern}" +
+    "\nEXPECTED: #{shift_spec} (#{@shift_by})" +
+    "\nGOT:      #{'.'*@result.abs}#{pattern} (#{@result})"
+  end
+
+end
+
+def mismatch_at index
+  ->(searcher){searcher.rightmost_mismatch_in_pattern=index}
+end
+
+describe FasterSearcher do
+
+  let(:klass){FasterSearcher}
+  it_should_behave_like "a searcher"
+
+  context "#pattern_matches_string_at?" do
+
+    def index_rightmost_mismatch_in_pattern pattern, string, k 
+      searcher = klass.new(pattern)
+      searcher.string = string
+      searcher.send(:pattern_matches_string_at?, k).should be_false
+      searcher.rightmost_mismatch_in_pattern
+    end
+
+    it "should correctly compute rightmost mismatches when present" do
+      index_rightmost_mismatch_in_pattern("abc","abx",0).should == 2
+      index_rightmost_mismatch_in_pattern("abc","axc",0).should == 1 
+      index_rightmost_mismatch_in_pattern("abc","xbc",0).should == 0 
+      index_rightmost_mismatch_in_pattern("abc","xabx",1).should == 2 
+      index_rightmost_mismatch_in_pattern("abc","xaxc",1).should == 1 
+      index_rightmost_mismatch_in_pattern("abc","xxbc",1).should == 0 
+    end
+
+  end
+  
+  context "boyer-moore improvements on naive increment" do
+
+    context "bad-character mismatch on last character" do
+      it { klass.should correctly_shift "not in pattern",
+          "......X",
+          "ABCDABC",
+          ".......ABCDABC"
+      } 
+
+      it { klass.should correctly_shift "in pattern once",
+          "......D",
+          "ABCDABC",
+          "...ABCDABC"
+      } 
+
+      it { klass.should correctly_shift "in pattern twice",
+          "......B",
+          "ABCDABC",
+          ".ABCDABC"
+      }      
+    
+    end
+
+    context "bad-character mismatch before last character" do
+      it { klass.should correctly_shift "not in pattern ",
+          ".....YX",
+          "ABCDEXX",
+          "......ABCDEXX"
+      }
+
+      it { klass.should correctly_shift "at left of rightmost mistmatch char",
+          ".....XX",
+          "YYYYYXX",
+          ".YYYYYXX"
+      }
+      it { klass.should correctly_shift "at right of rightmost mistmatch char",
+          ".....EX",
+          "ABCDEXX",
+          ".ABCDEXX"
+      }
+      it { klass.should correctly_shift "at right of rightmost mistmatch char",
+          ".....DX",
+          "ABCDEXX",
+          "..ABCDEXX"
+      }
+      it { klass.should correctly_shift "at right of rightmost mistmatch char",
+          ".....CX",
+          "ABCDEXX",
+          "...ABCDEXX"
+      }
+      it { klass.should correctly_shift "at right of rightmost mistmatch char",
+          ".....BX",
+          "ABCDEXX",
+          "....ABCDEXX"
+      }
+      it { klass.should correctly_shift "at right of rightmost mistmatch char",
+          ".....AX",
+          "ABCDEXX",
+          ".....ABCDEXX"
+      }
+    end
+
+    context "mistmatch on good suffix" do
+
+      context "with plausible mismatches" do
+        it { klass.should correctly_shift "aligns a rightmost plausible match",
+             ".X.",
+             "YXX",
+             ".YXX"
+        }
+       
+        it { klass.should correctly_shift "aligns a rightmost plausible match",
+             "........X...",
+             "::YABC::XABC",
+             "......::YABC::XABC"
+        }
+
+        it { klass.should correctly_shift "rightmost of two plausible matches",
+             "..............X...",
+             "::ZABC::YABC::XABC",
+             "......::ZABC::YABC::XABC"
+        }
+        
+        it {klass.should correctly_shift "ignoring a plausible match beginning with an 'X'",
+            "..............X...",
+            "::YABC::XABC::XABC",
+            "............::YABC::XABC::XABC"
+        }
+      end
+
+      context "with matching suffixes" do
+        
+          it { klass.should correctly_shift "longest prefix that is a suffix",
+            "...X...",
+            "ABCXABC",
+            "....ABCXABC"
+          }
+          it { klass.should correctly_shift "longest prefix that is a suffix",
+            "..X...",
+            "BCXABC",
+            "....BCXABC"
+          } 
+          it { klass.should correctly_shift "longest prefix that is a suffix",
+            ".X...",
+            "CXABC",
+            "....CXABC"
+          } 
+          it { 
+          klass.should correctly_shift "no plausible suffix or suffix prefix",
+            "X...",
+            "XABC",
+            "....XABC"
+          }  
+
+      end
+
+      context "handle's AT-THAT example correctly" do
+        it { klass.should correctly_shift "AT-THAT (6)",
+          "......T",
+          "AT-THAT",
+          ".AT-THAT"
+        }
+
+        it { klass.should correctly_shift "AT-THAT (5)",
+          ".....T.",
+          "AT-THAT",
+          "...AT-THAT"
+        }
+
+        it{ klass.should correctly_shift "AT-THAT (4)",
+          "....T..",
+          "AT-THAT",
+          ".....AT-THAT"
+        }
+
+        it{ klass.should correctly_shift "AT-THAT (3)",
+          "...T...",
+          "AT-THAT",
+          ".....AT-THAT"
+        }
+
+        it { klass.should correctly_shift "AT-THAT (2)",
+          "..T....",
+          "AT-THAT",
+          ".....AT-THAT"
+        }
+
+        it { klass.should correctly_shift "AT-THAT (1)",
+          ".T.....",
+          "AT-THAT",
+          ".....AT-THAT"
+        }
+
+        it { klass.should correctly_shift "AT-THAT (0)",
+          "T......",
+          "AT-THAT",
+          ".....AT-THAT"
+        }
+
+      end
+
+    end
+  
+  end
+
+end

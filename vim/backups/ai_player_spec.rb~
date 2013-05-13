@@ -1,0 +1,9 @@
+require_relative '../src/ai_player'
+
+describe AIPlayer do
+
+  context "#next_move should select lowest number in position" do
+    it { subject.next_move("012345678", "X").should == "0" }
+    it { subject.next_move("XXXXXXXX8", "O").should == "8" }
+  end
+end

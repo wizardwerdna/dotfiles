@@ -1,0 +1,12 @@
+class AuthenticationsController < ApplicationController
+  
+  def index
+    @authentications = current_user.authentications
+  end
+
+  def create
+    render :text =>  "{params[:uid]}: #{params[:oauth_token]} / #{params[:oauth_token_secret]} (#{params.inspect})"  + 
+                      request.env["omniauth.auth"].to_yaml
+  end
+  
+end

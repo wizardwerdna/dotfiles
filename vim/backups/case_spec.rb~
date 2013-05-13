@@ -1,0 +1,29 @@
+require_relative '../case'
+
+describe Case do
+
+  context "when created" do
+    it {should have(0).issues}
+    it {should have(0).facts}
+    it {should have(0).evidence}
+
+  context "issues" do
+
+    it "should allow you to add issues" do
+      subject.issues << (issue = double('issue'))
+      subject.issues == [issue]
+    end
+  end
+
+  context "facts" do
+    it "should allow you to add evidence" do
+      subject.evidence << (evidence = double('evidence'))
+      subject.evidence == [evidence] 
+    end
+  end
+
+  context "evidence" do
+
+  end
+  end
+end

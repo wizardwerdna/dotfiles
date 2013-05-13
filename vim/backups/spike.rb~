@@ -1,0 +1,3 @@
+class ModelyPoo
+  include ActiveModel::Naming
+end

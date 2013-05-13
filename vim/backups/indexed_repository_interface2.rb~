@@ -1,0 +1,69 @@
+shared_examples_for "an indexed repository" do
+  specify {expect {subject}.to_not raise_error}
+  specify {repo.should be_respond_to :all}
+  specify {repo.should be_respond_to :store}
+  specify {repo.should be_respond_to :fetch}
+  
+  context "empty repository" do
+  
+    it "should have no objects" do
+      repo.all.should be_empty
+    end
+ 
+    it "should answer NoRecord on any find" do
+      repo.fetch(666).should == Repository::NoRecord
+    end
+ 
+    it "should store an object without an id and insert an id in the object" do
+      data.send(repo.default_key_assign_message, nil)
+      repo.store data
+      repo.all.should include data
+    end
+
+    it "should assign an unsaved object a unique id and be able to fetch"do
+      data.send(repo.default_key_assign_message, nil)
+      repo.store data
+      data.send(repo.default_key_message).should_not be_nil
+      repo.all.count do |each| 
+        each.send(repo.default_key_message) == data.send(repo.default_key_message)
+      end.should == 1
+      repo.fetch(data.send(repo.default_key_message)).should == data
+    end
+    
+    it "should save an object having a provided id" do
+      data.send(repo.default_key_assign_message, 1)
+      repo.store data
+      data.send(repo.default_key_message).should == 1
+      repo.fetch(data.send(repo.default_key_message)).should == data
+    end
+
+    it "should save two objects having provided ids" do
+      data.send(repo.default_key_assign_message, 1)
+      repo.store data
+      data.send(repo.default_key_assign_message, 2)
+      repo.store data 
+      repo.all.should have(2).items 
+    end
+
+  end
+
+  context "repository with single element" do
+
+    before :each do
+      repo.store data
+      @id = data.send(repo.default_key_message)
+    end
+
+    it "#all should answer a single record" do
+      repo.all.should have(1).items
+    end
+
+    it "#should permit you to replace an item" do
+      repo.store stub(repo.default_key_message => @id)
+      repo.all.should have(1).items
+      repo.fetch(@id).should_not == data
+    end
+    
+  end
+
+end

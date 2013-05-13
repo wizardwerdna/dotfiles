@@ -1,0 +1,5 @@
+class CasebaseController < ApplicationController
+  def index
+    @casebase = Casebase.new
+  end
+end

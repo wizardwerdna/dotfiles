@@ -1,0 +1,10 @@
+Session.set 'tree',
+  {name: 'i loveroonies you', children: [
+    {name: 'inside1', children: [
+      name:'deeply1', children: [],
+      name: 'deeply2', children: []]},
+    {name: 'inside2', children: []},
+    {name: 'inside3', children: []}
+  ]}
+Template.treeDisplay.helpers
+  tree: -> Session.get('tree')

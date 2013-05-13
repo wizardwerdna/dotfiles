@@ -1,0 +1,11 @@
+class Case
+  def issues
+    []
+  end
+  def facts
+    []
+  end
+  def evidence
+    []
+  end
+end

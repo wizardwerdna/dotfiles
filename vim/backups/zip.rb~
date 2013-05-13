@@ -1,0 +1,154 @@
+class Zip
+
+  attr_reader :node
+  include Enumerable
+
+  def initialize node
+    @node = node
+    freeze
+  end
+
+  def == other
+    node == other.node
+  end
+  alias :"eql?" :==
+  alias :=== :==
+
+  def hash
+    node.hash
+  end
+
+  def root
+    node
+  end
+
+  def root_zip
+    self
+  end
+
+  def root?
+    true
+  end
+
+  def children
+    node.children
+  end
+
+  def siblings
+    [node]
+  end
+
+  def lefts
+    []
+  end
+
+  def rights
+    []
+  end
+
+  def path
+    [node]
+  end
+
+  def down
+    downto 0
+  end
+
+  def up
+    nil
+  end
+
+  def left
+    nil
+  end
+
+  def right
+    nil
+  end
+
+  def rightmost
+    self
+  end
+
+  def leftmost
+    self
+  end
+
+  def end?
+    self.next.nil?
+  end 
+
+  def next
+    down || closest_right_sibling
+  end
+
+  def prev
+    nil
+  end
+
+  def each
+    return to_enum unless block_given?
+    zipper = self
+    next_of_bottom_rightmost_node = bottom_rightmost.next && bottom_rightmost.next.node
+    while zipper && zipper.node != next_of_bottom_rightmost_node
+      yield zipper
+      zipper = zipper.next
+    end
+  end
+
+  def reverse_each
+    return enum_for :reverse_each unless block_given?
+    zipper = bottom_rightmost
+    prev_node = prev && prev.node 
+    while zipper && zipper.node != prev_node
+      yield zipper
+      zipper = zipper.prev
+    end
+  end
+  alias :reverse :reverse_each
+
+  def <=> other
+    node.payload <=> other.node.payload
+  end
+
+  def replace new_node 
+    Zip.new new_node
+  end
+
+  def edit f=nil 
+    return self.replace(yield(node)) if block_given?
+    self.replace f[node]
+  end
+
+  def append_child new_node
+    replace Node.new(node.payload, children + [new_node])
+    replace_children children + [new_node]
+  end
+
+  def insert_child new_node
+    replace Node.new(node.payload, [new_node] + children)
+  end
+
+protected
+  
+  def downto index
+    ZipChild.new(children[index], self, index) if index.between? 0, children.size-1 
+  end
+
+  def bottom_rightmost
+    if children.empty?
+      self
+    else
+      down.rightmost.bottom_rightmost
+    end
+  end
+
+  def closest_right_sibling
+    nil
+  end
+  
+  def replace_children children
+    replace Node.new(node.payload, children)
+  end
+
+end

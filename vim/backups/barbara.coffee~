@@ -1,0 +1,49 @@
+# http://studioonmain.smugmug.com/Weddings/Barbara-Lucas/i-gpMhRT8/0/O/DSC_1624.jpg
+# 
+# 
+# 1619
+# 2167
+# 
+# for picnum in [1619..2167]
+#   console.log "http://studioonmain.smugmug.com/Weddings/Barbara-Lucas/i-gpMhRT8/0/O/DSC_1624.jpg"
+#
+cli = require 'cli-color'
+http = require 'http'
+fs = require 'fs'
+codes = require './weddingcodes'
+
+class ProgressReporter extends require('stream').Transform
+  constructor: (@filename, @total) ->
+    @totalWritten = 0
+    @progress = 0
+    super()
+  _transform: (chunk, encoding, callback) ->
+    @totalWritten += chunk.length
+    thisProgress = Math.floor 3 * @totalWritten / @total
+    if thisProgress > @progress
+      @progress = thisProgress
+      console.log cli.yellow "#{@filename}: [#{(new Array 3*@progress+1).join('*')}#{(new Array (3-@progress)*3+1).join(' ')}]"
+    callback(null, chunk)
+  end: ->
+    console.log cli.red "#{@filename}: picture received"
+    super()
+
+fetch = (code)->
+  console.log "fetch(#{code.filename}) called."
+  url = "http://studioonmain.smugmug.com/Weddings/Barbara-Lucas/#{code.code}/0/O/#{code.filename}.jpg"
+  console.log "loading #{url}"
+  http.get url, (res) ->
+    console.log "res.highWatermark = #{res.highWatermark}"
+    console.log cli.green("#{code.filename}: #{res.headers['content-length']} bytes in response")
+    filesize = parseInt(res.headers['content-length'])
+    passthrough = new ProgressReporter(code.filename, filesize)
+    # console.log "passthrough = #{require('util').inspect passthrough, false, null, true}"
+    file = fs.createWriteStream "#{code.filename}.jpg"
+    res.pipe(passthrough).pipe(file)
+ 
+# fileStream.on 'pipe', (stream)->
+#   console.log "#{code.filename}: pipe created for writing to file"
+
+# (do(id) -> fetch(id)) for id in [1619..1629]
+(do(code) -> fetch(code)) for code in codes
+console.log "all triggers triggered!"

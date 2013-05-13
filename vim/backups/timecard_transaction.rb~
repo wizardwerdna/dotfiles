@@ -1,0 +1,17 @@
+require_relative 'employee'
+
+class TimecardTransaction
+
+  def initialize emp_id, date, hours
+    @emp_id = emp_id
+    @date = date
+    @hours = hours
+  end
+
+  def execute
+    employee = Repository.for(Employee).fetch @emp_id
+    clasification = employee.classification
+    classification.timecards << Timecard.new(emp_id: @emp_id, date: @date, hours: @hours)
+  end
+
+end

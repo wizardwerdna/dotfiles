@@ -1,0 +1,17 @@
+class UsersController < ApplicationController
+
+  def new
+    @user = User.new
+  end
+
+  def create
+    @user = User.new(params[:user])
+    if @user.save
+      EmailVerification.new(email: @user.email).notify
+      redirect_to email_verifications_url, :notice => I18n.t('users.create.notice')
+    else
+      flash.now[:alert] = I18n.t('users.create.alert')
+      render 'new'
+    end
+  end
+end

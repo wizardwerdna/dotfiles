@@ -1,0 +1,25 @@
+root = (exports ? this)
+
+stream = require 'stream'
+
+root.createStringStream = -> new StringStream
+
+class StringStream extends stream.Writable
+  @contents: (f) ->
+    stream = new StringStream
+    f(stream)
+    stream.string
+  constructor: ->
+    @string = ""
+    super()
+  put: (items...)->
+    items.map (e)=> @write(e)
+    @
+  nl: -> @put("\n")
+  tab: -> @put("\t")
+  space: -> @put(" ")
+  _write: (chunk, encoding, cb) ->
+    @string += chunk
+    cb(null, chunk)
+
+root.StringStream = StringStream

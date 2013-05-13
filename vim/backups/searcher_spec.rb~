@@ -1,0 +1,7 @@
+require_relative '../searcher'
+require_relative 'searcher_examples'
+
+describe Searcher do
+  let(:klass){Searcher}
+  it_behaves_like "a searcher"
+end

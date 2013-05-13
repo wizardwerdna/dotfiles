@@ -1,0 +1,63 @@
+class Casebase
+  class << self
+    def it= cb
+      @@it = cb
+    end
+    def it
+      @it ||= new.tap do |cb|
+        cb.add_user cb.new_user(first_name: 'Andrew', last_name: 'Greenberg', email: 'wizardwerdna@gmail.com')
+        cb.add_user cb.new_user(first_name: 'William', last_name: 'Greenberg', email: 'ifnspifn@gmail.com')
+      end
+    end
+  end
+
+  attr_accessor :users, :tickets, :cases
+  attr_writer   :user_source
+  attr_writer   :ticket_source
+  attr_writer   :case_source
+
+  def initialize
+    self.users = []
+    self.tickets = []
+    self.cases = []
+
+  end
+
+  #creation methods
+
+  def new_user *args 
+    user_source.call(*args).tap do |user|
+      user.casebase = self
+    end
+  end
+
+  def new_ticket
+    ticket_source.call().tap do |ticket|
+      ticket.casebase = self
+    end
+  end
+
+  def new_case
+    case_source.call().tap do |kase|
+      kase.casebase = self
+    end
+  end
+
+  #addition methods
+  def add_user user
+    users << user
+  end
+  
+  def user_source
+    @user_source ||= User.public_method(:new)
+  end
+
+  def ticket_source
+    @ticket_source ||= Object.public_method(:new)
+  end
+
+  def case_source
+    @case_source ||= Object.public_method(:new)
+  end
+
+end

@@ -1,0 +1,14 @@
+require_relative '../score'
+
+describe Score do
+
+  it "should accept valid parameters" do
+    Score.new( 0, 4, "abcd" ).class.should == Score
+  end
+
+  it "should test equality by equal values" do
+    Score.new( 0, 4, "abcd").should == Score.new( 0, 4, "dcba" )
+    Score.new( 0, 4, "abcd").should_not == Score.new( 0, 3, "abcd" )
+  end
+
+end

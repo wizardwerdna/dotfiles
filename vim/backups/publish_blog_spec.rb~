@@ -1,0 +1,37 @@
+require_relative '../boundaries/interactor_interface'
+require_relative '../../interactors/publish_blog'
+
+describe Interactors do
+
+  describe Interactors::PublishBlog do
+
+    let(:id){ double "id" }
+    let(:title){ double "title" }
+    let(:subtitle){ double "subtitle" }
+    let(:subject){ Interactors::NewBlog.new(request) }
+    let(:request){ Request.new title: title, subtitle: subtitle }
+
+    it_should_behave_like "an interactor"
+
+    before :each do
+      Repo.configure Blog: double("blog_repo", :new => request.to_hash.merge(id: id))
+    end
+
+
+    it "should insert a new Blog in the repository" do
+
+      Repo.for(Blog).
+        should_receive(:new).
+        with(title: title, subtitle: subtitle).
+        and_return request.to_hash.merge(id: id) 
+      response = subject.run
+
+    end
+
+    it "should return the id" do
+      Repo.for(Blog).stub
+    end
+
+  end
+
+end

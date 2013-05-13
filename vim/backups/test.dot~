@@ -1,0 +1,26 @@
+digraph graphname {
+  User [shape=record; label="{User|password_digest\nfirst_name\nlast_name\nsession_token}"]
+  TicketStore [shape=record; label="{TicketStore|user_id\ntype\nvalue\nsecure_token\ncreated_at}"]
+  Issue [shape=record; label="{Issue|user_id\ndescription}"]
+  Fact [shape=record; label="{Fact|user_id\ndate\ndescription}"]
+  Person [shape=record; label="{Person|user_id\ndescription}"]
+  Document [shape=record; label="{Document|user_id\ndescription\nsource_id\npath}"]
+  Source [shape=record; label="{Source|user_id\nservice\noath_token\noath_secret\nuri}"]
+  relationship [shape=record; label="{relationship|first_person\nsecond_person\ndescription}"]
+  issue_fact [shape=record; label="{issue_fact|issue_id\nfact_id}"]
+  fact_evidence [shape=record; label="{fact_evidence|fact_id\nevidence_id\nevidence_type\ncitation}"]
+
+  TicketStore -> User
+  Issue -> User
+  Fact -> User
+  Person -> User
+  Source -> User
+  relationship -> Person
+  Document -> User
+  Document -> Source
+  issue_fact -> Fact
+  issue_fact -> Issue
+  fact_evidence -> Fact
+  fact_evidence -> Document
+  fact_evidence -> Person
+}

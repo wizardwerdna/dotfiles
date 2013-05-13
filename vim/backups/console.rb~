@@ -1,0 +1,30 @@
+require_relative 'score'
+
+class Console
+
+  def initialize
+    puts "Mastermind Online!"
+  end
+
+  def end_after number_guesses, score
+    puts "Game ends after #{number_guesses} tries."
+    puts "Code breaker challenged code maker's scoring." if score ===  Score::NoScore
+  end
+
+  def report_breaker_guess guess
+    if guess == Breaker::NoGuess
+      puts "Code breaker: challenges code maker's scoring"
+    else
+      puts "Code breaker: guesses #{guess}."
+    end
+  end
+
+  def report_maker_score score
+    puts ">>> #{score.inspect}"
+    if score == Score::NoScore
+      puts "Code maker  : concedes the bad scoring"
+    else
+      puts "Code maker  : scores #{score.string} as '#{'+'*score.number_correct_and_in_place}#{'-'*score.number_correct_but_out_of_place}'"
+    end
+  end
+end

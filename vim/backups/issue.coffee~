@@ -1,0 +1,31 @@
+root = (entities ? this)
+Node = (require './node').Node
+MemoryModel = (require './memoryModel').MemoryModel
+
+# class Issue
+#   @issuesHash = {}
+#   @all: -> value for key, value of @issuesHash
+#   @_allIDs: -> key for key, value of @issuesHash
+#   @maxID: -> Math.max(-1, Issue._allIDs()...)
+#   @reset: -> [Issue.issuesHash] = [{}]; @
+#   @find: (id)-> @issuesHash[id]
+#   @createNode: (text, children=[]) -> (new Issue text).toNode(children)
+#   @_exists: (id) -> Issue.issuesHash[id]?
+#   @_persist: (issue) -> Issue.issuesHash[issue.id] = issue
+#   constructor: (@text="New Issue", @id=Issue.maxID()+1) ->
+#     throw @_notUniqueError(id) if Issue._exists(@id)
+#     Issue._persist @
+  # toNode: (children=[]) ->
+  #   new Node({id: @id, text: => Issue.find(@id).text}, children)
+#   destroy: -> delete Issue.issuesHash[@id]
+#   _notUniqueError: (id) -> new Error "Issue id #{id} must be unique."
+
+
+class Issue extends MemoryModel
+  @createNode: (text, children=[]) -> (new @ text).toNode(children)
+  constructor: (@text="New Issue", id) -> super(id)
+  toNode: (children=[]) ->
+    new Node({id: @id, text: => @constructor.find(@id).text}, children)
+  destroy: -> delete @constructor.modelHash[@id]
+
+root.Issue = Issue

@@ -1,0 +1,15 @@
+require_relative 'game_runner'
+require_relative 'automatic_breaker'
+require_relative 'automatic_maker'
+require_relative 'console'
+
+class Main
+  def self.call
+    @console = Console.new 
+    @breaker = AutomaticBreaker.new
+    @maker   = AutomaticMaker.new
+    GameRunner.new(@maker, @breaker, @console).run 
+  end
+end
+
+Main.call

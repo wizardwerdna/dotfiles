@@ -1,0 +1,22 @@
+root = (externals ? this)
+__ = root
+
+__.isArray = Array.isArray ? (obj) -> obj.constructor.name == Array.name
+
+flattenInToOut = (input, output) ->
+  if __.isArray input
+    flattenInToOut(item, output) for item in input
+  else
+    output.push input
+  output
+
+__.flatten = (input...) -> flattenInToOut input, []
+
+applyPathToZip = (path, zip) ->
+  if __.isArray path
+    applyPathToZip(item, zip) for item in path
+  else
+    console.log "zip = zip.downto(%j)", path
+  zip
+
+__.downto = (path...) -> applyPathToZip path, []

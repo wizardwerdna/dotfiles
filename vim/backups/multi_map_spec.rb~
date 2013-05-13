@@ -1,0 +1,76 @@
+require_relative '../multi_map'
+
+# Multi map
+# A map whose values exist in a list. Great initial demo, has actual use in many projects. Similar to Apache Commons but not exactly the same.
+# 
+#   * Map<KeyType, List<KeyType>>
+# * put(key, value)
+# * get returns a list of KeyType objects
+# * throw exception on null key
+# * answers size (# of keys)
+#                 * answers total # of values (across all keys)
+#                 * answers isEmpty
+#
+describe MultiMap do
+  
+  subject{ MultiMap.new }
+  let(:mmap) { subject }
+
+  context "when created" do
+    it { mmap.size.should be_zero }
+    it { should have(0).keys }
+    it { mmap.num_values.should be_zero }
+    it { should be_empty }
+    it { mmap.get(5).should be_empty }
+    it "should complain on put of a null key" do
+      ->{ mmap.put(nil, 4) }.should raise_error ArgumentError
+    end
+  end
+
+  context "with 1 entry having 1 value" do
+    let(:key){ double "key" }
+    let(:value){ double "value" }
+    before :each do
+      mmap.put(key, value)
+    end
+    it { mmap.size.should == 1 }
+    it { mmap.keys.should == [key] }
+    it { mmap.num_values.should == 1 }
+    it { should_not be_empty }
+    it { mmap.get(key).should == [ value ] }
+  end
+
+  context "with several entries, each having 1 value" do
+    let(:keys){ 5.times.map{|each| double "key #{each}"} }
+    let(:value){ double "value" }
+    before :each do
+      keys.each{|key| mmap.put(key, value) }
+    end
+
+    it { mmap.size.should == 5 }
+    it { mmap.keys.should == keys }
+    it { mmap.num_values.should == 5 }
+    it { should_not be_empty }
+    it "should handle get correctly" do
+      keys.each do |key|
+        mmap.get(key).should == [value]
+      end
+    end
+  end
+
+  context "with 1 entry having several values" do
+    let(:key){ double "key" }
+    let(:values){ 5.times.map{|each| double "value #{each}"} }
+    before :each do
+      values.each{|value| mmap.put(key, value) }
+    end
+    it { mmap.size.should == 1 }
+    it { mmap.keys.should == [ key ] }
+    it { mmap.num_values.should == 5 }
+    it { should_not be_empty }
+    it "should handle get correctly" do
+      mmap.get(key).should == values
+    end
+  end
+
+end 

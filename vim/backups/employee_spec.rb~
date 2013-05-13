@@ -1,0 +1,10 @@
+require_relative '../src/employee'
+
+describe Employee do
+end
+
+describe PaymentClassification do
+  employee = Employee.new(1, "Alice", "Home")
+  employee.classification = stub(:calculate_pay => 100)
+  employee.affiliation = stub(:calculate_deductions => 200)
+end

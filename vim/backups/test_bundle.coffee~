@@ -1,0 +1,2 @@
+require './test/covenant.coffee'
+require './test/promise.coffee'

@@ -1,0 +1,55 @@
+class PositionService
+
+  attr_accessor :position
+
+  def initialize position
+    self.position = position
+  end
+ 
+  def has_possible_moves?
+    not no_possible_moves?
+  end
+
+  def apply_move move, marker
+    position.gsub(move, marker)
+  end
+
+private
+
+  def no_possible_moves? 
+    three_in_a_row? ||
+    three_in_a_column? || 
+    three_in_a_diagonal? || 
+    all_positions_taken?
+  end
+
+  def same_marker? first, second, third
+    position[first..first] == position[second..second] &&
+    position[second..second] == position[third..third]
+  end
+
+  def three_in_a_row?
+    same_marker?(0, 1, 2) ||
+    same_marker?(3, 4, 5) ||
+    same_marker?(6, 7, 8)
+  end
+
+  def three_in_a_column?
+    same_marker?(0, 3, 6) ||
+    same_marker?(1, 4, 7) ||
+    same_marker?(2, 5, 8)
+  end
+ 
+  def three_in_a_diagonal?
+    same_marker?(0, 4, 8) ||
+    same_marker?(2, 4, 6)
+  end
+
+  def all_positions_taken?
+    position.index(/[12345678]/).nil?
+  end
+
+ 
+end
+
+

@@ -1,0 +1,5 @@
+connect = require('connect')
+app = connect()
+app.use(connect.static('..'))
+connect.createServer().listen(8080)
+

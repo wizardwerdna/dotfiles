@@ -1,0 +1,87 @@
+require 'spec_helper'
+describe SessionsController do
+
+  context 'new' do
+    def donew
+      get :new
+    end
+
+    it "should assign to a session" do
+      session = stub
+      Session.stub(:on => session)
+      donew
+      assigns[:session].should == session
+    end
+  end
+
+  context 'create' do
+    let(:user) { double('user') }
+    let(:valid_token) { "1234567890ABCDEabcde-_" }
+    let(:valid_email) { "abc@def.com" }
+    let(:valid_password) {"secret"}
+    before :each do
+      user.stub(:user? => true, :session_token => valid_token)
+      User.stub(:find_by_email => user)
+    end
+
+    def docreate
+      post :create, :session => { email: valid_email, password: valid_password}
+    end
+
+    context 'with valid login' do
+      before :each do
+        user.stub(:authenticate => true)
+      end
+      it "should assign to a session" do
+        session = stub.as_null_object
+        Session.stub(:on => session)
+        docreate
+        assigns[:session].should == session
+      end
+      it "should set cookies[:session_token] correctly" do
+        docreate
+        cookies[:session_token].should == user.session_token
+      end
+      it "should redirect to the user dashboard" do
+        docreate
+        response.should redirect_to dashboard_url
+      end
+      it "should notify the user you logged in" do
+        docreate
+        flash[:notice].should == I18n.t('sessions.create.notice')
+      end
+    end
+
+    context 'with invalid login' do
+      before :each do
+        user.stub(:authenticate => nil)
+      end
+      it "should not set cookies[:session_token]" do
+        docreate
+        cookies[:session_token].should_not == user.session_token
+      end
+      it "should re-render the signon template" do
+        docreate
+        response.should render_template 'new'
+      end
+    end
+  end
+
+  context 'destroy' do
+    def dodestroy
+      get :destroy
+    end
+    it "should unset cookies[:session_token]" do
+      dodestroy
+      cookies[:session_token].should be_nil
+    end
+    it "should redirect to the signin page" do
+      dodestroy
+      response.should redirect_to signin_url
+    end
+    it "should notify that user signed out" do
+      dodestroy
+      flash[:notice].should == I18n.t('sessions.destroy.notice')
+    end
+  end
+end

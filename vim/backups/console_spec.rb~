@@ -1,0 +1,5 @@
+require_relative '../console'
+
+describe Console do
+
+end

@@ -1,0 +1,31 @@
+chai = require 'chai'
+chai.should()
+sinon = require 'sinon'
+sinonChai = require 'sinon-chai'
+chai.use(sinonChai)
+
+game_runner = require '../src/game_runner'
+code_maker = require '../src/code_maker'
+code_breaker = require '../src/code_breaker'
+game_console = require '../src/game_console'
+
+maker = new code_maker.CodeMaker
+breaker = new code_breaker.CodeBreaker
+console = new game_console.GameConsole
+
+
+describe "GameRunner", ->
+
+  describe "with maker who matches everything", ->
+
+    beforeEach ->
+      @maker_matching_everything = sinon.stub(maker)
+      @game = new game_runner.GameRunner(
+          @maker_matching_everything,
+          @breaker_guessing_aaaa,
+          @console
+      )
+
+    it "should tell console we have a win in one try", ->
+      @game.should.equal @game
+

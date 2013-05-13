@@ -1,0 +1,11 @@
+root = (exports ? this)
+require("coffee-script")
+require("es6-module-transpiler/lib/require_support").disable()
+require("es6-module-transpiler/lib/require_support").enable()
+
+{Covenant} = require './src/covenant'
+{Promise} = require './src/promise'
+
+root.Covenant = Covenant
+root.enqueue = Covenant.enqueue
+root.Promise = Promise

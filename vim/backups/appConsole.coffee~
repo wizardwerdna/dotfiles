@@ -1,0 +1,140 @@
+cli = require 'cli-color'
+root = (exports ? this)
+Zip = (require '../src/zip').Zip
+
+class root.AppConsole
+  constructor: (@app) ->
+
+  print: ->
+    console.log cli.reset
+    console.log cli.bold.cyan "Andrew's Outline Editor, v0.0"
+    console.log "-----------------------"
+    path = @app.zip.path()
+    displayZip = (new Zip (@mapZip @app.zip, (node) ->
+      node = node.clone()
+      node.tag = cli.yellow(node.tag)
+      node
+    ).root()).downPath path
+    zip = new Zip displayZip.root()
+    while zip?
+      selectedString = if zip.node == displayZip.node then "-->" else "   "
+      tag = zip.node.tag
+      tag = cli.bold(tag) if zip.isRoot()
+      console.log "%s%s %s",
+        selectedString, @_with_prefix(zip), tag
+      zip = zip.next()
+    @_displayAppFlash()
+    console.log "-----------------------"
+    console.log "undo command: ", @app.undoStack[-1..][0]?.command ? "---"
+    console.log "redo command: ", @app.redoStack[-1..][0]?.command ? "---"
+    console.log "   clipboard: ", @app.clipboard?.tag ? "---"
+    console.log "-----------------------"
+    undefined
+
+  mapZip: (originalZip, f) ->
+    zip = new Zip originalZip.node
+    while zip?
+      console.log "applying f to %j", zip.node
+      adjustedZip = zip.replace f(zip.node)
+      zip = adjustedZip.next()
+    originalZip.replace adjustedZip.root()
+
+  printHelp: ->
+    @app.flash "a - add new item after selection"
+    @app.flash "A - add new item before selection"
+    @app.flash "d - remove selected item"
+    @app.flash "e - load outline from file"
+    @app.flash "h - outdent the selected item"
+    @app.flash "j - select the next item"
+    @app.flash "J - select the bottommost item"
+    @app.flash "k - select the previous item"
+    @app.flash "K - select the root"
+    @app.flash "l - indent the selected item"
+    @app.flash "O - rename the outline"
+    @app.flash "p - paste clipboard after selection"
+    @app.flash "P - paste clipboard before selection"
+    @app.flash "r - redo the last command undone"
+    @app.flash "s - elect last sibling"
+    @app.flash "S - select first sibling"
+    @app.flash "u - to undo the last change"
+    @app.flash "v - paste clipboard as child of selection"
+    @app.flash "w - save outline to file"
+    @app.flash "? - to display this list"
+    @app.flash "<C-d> - exit the outliner"
+
+  _displayAppFlash: ->
+    if @app.flashData.length > 0
+      console.log "-----------------------"
+      console.log(@_displayAppFlashItem(line)) for line in @app.flashData
+      @app.flashData = []
+
+  _displayAppFlashItem: (hash) ->
+    switch hash.type
+      when "info"   then cli.green(hash.text)
+      when "notice" then cli.yellow(hash.text)
+      when "warn"   then cli.yellow(hash.text)
+      when "alert"  then cli.bold.yellow(hash.text)
+      when "error"  then cli.red(hash.text)
+
+  _with_prefix: (zip) ->
+    if zip.isRoot()
+      ""
+    else @_rjust @_enumerate(zip), zip.depth * 5
+
+  _enumerate: (zip) ->
+    @_repeatChar('(', (zip.depth-1)/5) +
+    @_format(zip) +
+    @_repeatChar(')', (zip.depth-1)/5) +
+    "."
+    
+  _format: (zip) ->
+     switch (zip.depth-1) % 5
+      when 0 then @_bigRomanEnum(zip.index+1)
+      when 1 then @_bigLetterEnum(zip.index+1)
+      when 2 then "#{zip.index+1}"
+      when 3 then @_bigLetterEnum(zip.index+1).toLowerCase()
+      when 4 then @_bigRomanEnum(zip.index+1).toLowerCase()
+
+
+  CONVERSIONS = [
+    [ 1000,  'M'],
+    [  900, 'CM'],
+    [  500,  'D'],
+    [  400, 'CD'],
+    [  100,  'C'],
+    [   90, 'XC'],
+    [   50,  'L'],
+    [   40, 'XL'],
+    [   10,  'X'],
+    [    9, 'IX'],
+    [    5,  'V'],
+    [    4, 'IV'],
+    [    1,  'I']]
+
+  LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+  _conversionFactorsFor: (int) ->
+      i = 0
+      while int < CONVERSIONS[i][0] then i = i+1
+      CONVERSIONS[i]
+  
+  _bigRomanEnum: (int) -> 
+    if int <= 0
+      ""
+    else
+      [arabic, roman] = @_conversionFactorsFor(int)
+      roman + @_bigRomanEnum int - arabic
+
+  _bigLetterEnum: (int) ->
+    @_repeatChar(
+      LETTERS[(int-1)%LETTERS.length],
+      (int-1)/LETTERS.length + 1)
+
+  _repeatChar: (char, int) ->
+    Array(~~int+1).join char
+ 
+  _rjust: (string, width) ->
+    @_repeatChar(" ", width-string.length) + string
+
+  _ljust: (string, width) ->
+    string + @_repeatChar " ", width-string.length

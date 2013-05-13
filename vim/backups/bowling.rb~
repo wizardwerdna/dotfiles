@@ -1,0 +1,54 @@
+class Bowling
+  attr_accessor :rolls
+  attr_accessor :total_pins
+  attr_accessor :next_roll
+  attr_accessor :frame
+
+  def initialize
+    self.rolls = []
+    self.total_pins = 0
+    self.next_roll = 0 
+  end
+
+  def roll pins
+    self.rolls << pins
+  end
+
+  def score
+    for frame in (1..10)
+      if rolled_a_strike?
+        self.total_pins += pins_next_three_rolls
+        self.next_roll += 1
+
+      elsif rolled_a_spare? 
+        self.total_pins += pins_next_three_rolls 
+        self.next_roll += 2
+      
+      else
+       self.total_pins += pins_next_two_rolls
+       self.next_roll += 2
+      end
+    end
+    
+    self.total_pins
+  end
+
+private
+
+  def rolled_a_strike?
+    rolls[next_roll] == 10
+  end
+
+  def rolled_a_spare?
+    pins_next_two_rolls == 10
+  end
+
+  def pins_next_two_rolls
+    rolls[next_roll] + rolls[next_roll+1]
+  end
+
+  def pins_next_three_rolls
+    pins_next_two_rolls + rolls[next_roll+2]
+  end
+
+end

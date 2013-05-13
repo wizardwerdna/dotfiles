@@ -1,0 +1,5 @@
+((define)-> define (require,exports)->
+  util = require 'util'
+  exports.show = (value) -> console.log util.inspect value
+  exports.yadda = 123
+)(if typeof define=="function" then define else if window? then (factory) => factory((->), window['Covenant']={}) else (factory) -> factory(require, exports, module))

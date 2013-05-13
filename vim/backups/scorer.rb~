@@ -1,0 +1,56 @@
+module Scorer
+  extend self
+  
+  def score guesses, finishes 
+    ScoreComputer.new(guesses, finishes).score
+  end
+
+  class ScoreComputer
+
+    attr_reader :guesses, :finishes, :values_for_hit, :value_for_wrong_place
+
+    VALUES_FOR_HIT = [15, 10, 5, 3, 1]
+    VALUE_FOR_WRONG_PLACE = 1
+
+    def initialize guesses, finishes, 
+      values_for_hit = VALUES_FOR_HIT, 
+      value_for_wrong_place = VALUE_FOR_WRONG_PLACE
+      @guesses = guesses
+      @finishes = finishes
+      @values_for_hit = values_for_hit
+      @value_for_wrong_place = value_for_wrong_place
+    end
+
+    def score
+     for_each_guess_finish_and_value.
+       map{ |g, f, v| score_each_place(g,f,v) }.
+       reduce(&:+)
+    end
+
+  private
+
+    def for_each_guess_finish_and_value
+      guesses.zip(finishes, values_for_hit)
+    end
+
+    def score_each_place guess, finish, value_for_hit
+      if guessed_finish_and_place_correctly guess,finish
+        value_for_hit
+      elsif finished_in_top_5 guess
+        value_for_wrong_place
+      else
+        0
+      end
+    end
+
+    def guessed_finish_and_place_correctly guess, finish
+      guess == finish
+    end
+
+    def finished_in_top_5 guess
+      finishes.include? guess
+    end
+
+  end
+
+end

@@ -1,0 +1,62 @@
+"use strict"
+should = require 'should'
+ins = require('util').inspect
+
+
+# class ChunkyFile
+#   constructor: (@file, @chunksize=512) ->
+#     @fileLength = @file.length
+#     @lastChunkIndex = -1, @lastChunk = ""
+# 
+#   chunk: (i) ->
+#     if i==@lastChunkIndex
+#       @chunk
+#     else
+#       @lastChunkInde = i; @nlCount = null
+#       @lastChunk = file[Math.max(@fileLength-(i+1)*@chunkSize,0)...
+#         Math.max(@fileLength-i*@chunkSize,0)]
+# 
+#   count: (i, ch="\n") ->
+#     if i == @lastChunkIndex and @nlCount?
+#       @lastNlCount
+#     else
+#       @nlCount = @chunk(j).split('').filter((x)->x==ch).length
+# 
+#   chunkWithLine: (N) ->
+#     "INV: chunks(j-1)..chunks(0) have n newlines"
+#     [j, n] = [0,0]
+#     while getChunk.length > 0 and n + nlCount(j, file, chunkSize) < N
+#       [j,n] = [j+1,n+nlCount(j, file, chunkSize)]
+
+
+"return the shortest suffix of chunk having N newlines"
+tailChunk= (chunk, i, p, N=1)->
+  "INV: chunk[j..p-1] has <= n newlines"
+  [j,n] = [p,0]
+  while j isnt 0 and n isnt N
+    j-=1
+    n+=1 if chunk[j] is "\n"
+  "either j==0 or n==N"
+  [chunk[j...p], j, n]
+
+describe.only "tailChunk", ->
+  it "should handle the empty chunk", ->
+    tailChunk("", 0, 0, 2)[0].should.eql ""
+    tailChunk("", 0, 0, 2)[1].should.eql 0
+    tailChunk("", 0, 0, 2)[2].should.eql 0
+  it "should handle the chunk with one empty line", ->
+    tailChunk("\n", 0, 1, 2)[0].should.eql "\n"
+    tailChunk("\n", 0, 1, 2)[1].should.eql 0
+    tailChunk("\n", 0, 1, 2)[2].should.eql 1
+  it "should handle the chunk with one non-empty line", ->
+    tailChunk("abc\n", 0, 4, 2)[0].should.eql "abc\n"
+    tailChunk("abc\n", 0, 4, 2)[1].should.eql 0
+    tailChunk("abc\n", 0, 4, 2)[2].should.eql 1
+  it "should handle the chunk with two lines", ->
+    tailChunk("abc\nabc\n", 0, 8, 2)[0].should.eql "\nabc\n"
+    tailChunk("abc\nabc\n", 0, 8, 2)[1].should.eql 3
+    tailChunk("abc\nabc\n", 0, 8, 2)[2].should.eql 2
+
+  file = (new Array 200).join('abc\n')
+  describe.only "tail", ->
+    tail(file, chunkSize, n)

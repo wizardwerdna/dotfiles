@@ -1,0 +1,11 @@
+require_relative '../console_maker'
+
+describe ConsoleMaker do
+
+  let(maker) { ConsoleMaker.new }
+
+  it "is a subclass of Maker" do
+    maker.should be_kind_of Maker
+  end
+
+end

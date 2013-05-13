@@ -1,0 +1,69 @@
+require 'minitest_helper'
+describe "User verification workflow integration" do
+  before do
+    ActionMailer::Base.deliveries = []
+    @andy = Factory(:unverified_user)
+  end
+  after do
+    @andy.destroy
+  end
+
+  it "should e-mail the user upon creation of the new account" do
+    email = ActionMailer::Base.deliveries.last
+    email.to.must_be :include?, @andy.email
+    email.encoded.must_be :include?, verification_path(@andy.verification_token)
+  end
+
+  it "should direct an unauthenticated user to the root page" do
+    logout
+    visit root_path
+    current_path.must_equal root_path
+  end
+  
+  it "should direct an authenticated and unverified user to the user verification page" do
+    login_as @andy
+    visit root_path
+  end
+  
+  it "should permit an unverified user to get another token" do
+    login_as @andy
+    current_url.must_equal verifications_url
+    @andy.verified_at = nil; @andy.save!
+    ActionMailer::Base.deliveries = []
+    visit new_verification_path
+    fill_in :email, :with => @andy.email
+    click_on "Resend Verification" 
+    current_url.must_equal verifications_url
+    email = ActionMailer::Base.deliveries.last
+    email.must_be :present?
+    email.to.must_be :include?, @andy.email
+    email.encoded.must_be :include?, verification_path(@andy.verification_token)
+  end
+  
+  it "should permit an unverified and unauthenticated user to verify" do
+    logout
+    page.driver.put verification_path(@andy.verification_token)
+    @andy.reload.verified_at.must_be :present?
+    page.driver.browser.follow_redirects!
+    current_url.must_equal login_url
+    page.must_be :has_contents?, "Thank you for verifying #{@andy.email}"
+  end
+
+  it "should permit an unverified and authenticated user to verify" do
+    login_as @andy
+    page.driver.put verification_path(@andy.verification_token)
+    @andy.reload.verified_at.must_be :present?
+    page.driver.browser.follow_redirects!
+    current_url.must_equal dashboard_url
+    page.must_be :has_contents?, "Thank you for verifying #{@andy.email}"
+    # note that this specification doesn't care who is logged in. 
+  end
+  it "should send the 'Welcome to eCaseBase' e-mail to the user upon verification" do
+    logout
+    page.driver.put verification_path(@andy.verification_token)
+    email = ActionMailer::Base.deliveries.last
+    email.must_be :present?
+    email.to.must_be :include?, @andy.email
+    email.encoded.must_be :include?, "Welcome to eCaseBase"
+  end
+end

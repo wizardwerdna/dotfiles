@@ -1,0 +1,7 @@
+#   Publish a new blog, having the specified parameters. Assign the blog an entity-id.  Response(..., blog_id: `<blog-id>`)
+
+module Interactors
+  class PublishBlog < Interactor
+
+  end
+end

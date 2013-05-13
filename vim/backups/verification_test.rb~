@@ -1,0 +1,103 @@
+require "minitest_helper"
+
+class VerificationLintTest < MiniTest::Unit::TestCase
+  include ActiveModel::Lint::Tests
+  def setup
+    @model = Verification.new
+  end
+end
+
+describe User, "for Verification" do
+  before do
+    email = ActionMailer::Base.deliveries = []
+    @andy = Factory(:user)
+  end
+  after do
+    @andy.destroy
+  end
+  
+  it "should create a verification token upon creation of a user, and should not be verified" do
+    @andy.verification_token.must_be :present?
+    @andy.wont_be :verified?
+  end
+  
+  it "should send an e-mail reporting the token upon creation of a user" do
+    email = ActionMailer::Base.deliveries.last
+    email.must_be :present?
+    if email
+      email.to.first.must_equal @andy.email
+      email.encoded.must_match /#{@andy.verification_token}/
+    end
+  end
+end
+
+describe Verification, "class methods" do
+  before do
+    @andy = Factory(:user)
+  end
+  after do
+    @andy.destroy
+  end
+  it "has a find method for email addresses" do
+    verification = Verification.find(@andy.email)
+    verification.email.must_equal @andy.email
+  end
+  it "has a find method for verification tokens" do
+    verification = Verification.find(@andy.verification_token)
+    verification.verification_token.must_equal @andy.verification_token
+    verification.email.must_equal @andy.email
+  end
+  it "has a find method for verification tokens that updates email" do
+    verification = Verification.find(@andy.verification_token)
+    verification.email.must_equal @andy.email
+  end
+  it "should fail without a valid email or verification" do
+    lambda{Verification.find(nil)}.must_raise ActiveRecord::RecordNotFound
+  end
+end
+
+describe Verification do
+  before do
+    @andy = Factory(:user)
+  end
+  after do
+    @andy.destroy
+  end
+
+  it "should be valid if unpersisted and the email address is valid" do
+    Verification.new(email: @andy.email).must_be :valid?
+  end
+
+  it "should not be valid if unpersisted with an invalid email address" do
+    Verification.new(email: @andy.email+"mistake").wont_be :valid?
+  end
+
+  it "should remail the token if unpersisted verification is saved" do
+    email = ActionMailer::Base.deliveries = []
+    Verification.new(email: @andy.email).save!
+    email = ActionMailer::Base.deliveries.last
+    email.must_be :present?
+    if email
+      email.to.first.must_equal @andy.email
+      email.encoded.must_match /#{@andy.verification_token}/
+    end    
+  end
+
+  it "should not be valid if persisted with invalid email" do
+    Verification.new(email: @andy.email+"mistake", verification_token: 'irrelevant').wont_be :valid?
+  end
+
+  it "should not be valid if persisted with invalid id" do
+    Verification.new(email: @andy.email, verification_token: @andy.verification_token+"mistake").wont_be :valid?
+  end
+
+  it "should be valid if persisted with a valid id" do
+    Verification.new(email: @andy.email, verification_token: @andy.verification_token).must_be :valid?
+  end
+
+  it "should verify the user when valid and updated" do
+    @andy.verified_at.wont_be :present?
+    Verification.new(email: @andy.email, verification_token: @andy.verification_token).save
+    @andy.reload.verified_at.must_be :present?
+  end
+end

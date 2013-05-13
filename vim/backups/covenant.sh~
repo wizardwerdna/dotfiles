@@ -1,0 +1,8 @@
+tmux has-session -t development 
+if [ $? != 0 ]
+then
+  tmux new-session -s development -n editor -d
+  tmux send-keys -t development 'cd ~/dev/node/covenant' C-m
+  tmux send-keys -t development 'vi covenant.coffee test/covenant.coffee -O' C-m
+fi
+tmux attach -t development

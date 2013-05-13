@@ -1,0 +1,207 @@
+require 'spec_helper'
+
+describe CasesController do
+
+  let(:current_user) { double 'user' }
+  let(:session_service) { double 'session_service' }
+  let(:cases) { double 'cases' }
+  let(:cases_proxy) { double 'cases_proxy' }
+  let(:kase) { mock_model Case }
+  let(:id) { "123" }
+  let(:hash_from_params) { Hash.new }
+  before :each do
+    current_user.stub(:cases => cases_proxy)
+    cases_proxy.stub(:cases => cases, :find => kase, :new => kase, :create => kase)
+    session_service.stub(:current_user => current_user)
+    Session.stub(:on => session_service)
+  end
+
+  context 'unauthorized use' do
+    before :each do
+      current_user.stub( :present? => false )
+    end
+    after :each do
+      response.should redirect_to signin_url
+      flash[:alert].should == I18n.t('application.unauthorized') 
+    end
+    it {get :index}
+    it {get :show, id: id}
+    it {get :new}
+    it {get :edit, id: id}
+    it {put :create, :case => hash_from_params}
+    it {put :update, id: id, case: hash_from_params}
+    it {put :destroy, id: id}
+  end
+
+  context 'index' do
+    it "should assign cases" do
+      get :index
+      assigns[:cases].should == cases_proxy 
+    end
+
+    it "should render the view" do
+      get :index
+      response.should render_template 'index'
+    end
+  end
+
+  context 'show' do
+    it "should assign case" do
+      cases_proxy.should_receive(:find).with(id)
+      get :show, id: id 
+      assigns[:case].should == kase
+    end
+
+    it "should render the view" do
+      get 'show', id: id
+      response.should render_template 'show'
+    end
+  end
+
+  context 'new' do
+    it "should assign case" do
+      cases_proxy.should_receive(:new)
+      get :new
+      assigns[:case].should == kase
+    end
+
+    it "should render the view" do
+      get :new
+      response.should render_template 'new'
+    end
+  end
+
+  context 'create' do
+    before :each do 
+      kase.stub(:save => stub)
+    end
+
+    def docreate
+      put :create, :case => hash_from_params
+    end
+
+    it "should assign case with parameters" do
+      cases_proxy.should_receive(:new).with(hash_from_params).and_return(kase)
+      docreate
+      assigns[:case].should == kase
+    end
+
+    it "should try to create the new case" do
+      kase.should_receive(:save)
+      docreate
+    end
+
+    context "parameters are valid" do
+      before :each do
+        kase.stub(:save => kase, :id => id)
+      end
+      it "should redirect to :show" do
+        docreate
+        response.should redirect_to case_url(id)
+      end
+      it "should notice successful creation" do
+        docreate
+        flash[:notice].should == I18n.t('cases.create.notice') 
+      end
+    end
+    
+    context "parameters are not valid" do
+      before :each do
+        kase.stub(:save => nil, :id => nil)
+      end
+      it "should render new" do
+        docreate
+        response.should render_template 'new'
+      end
+      it "should alert the errors" do
+        docreate
+        flash[:alert].should == I18n.t('cases.create.alert')
+      end
+    end
+  end
+ 
+  context 'edit' do
+    it "should assign case" do
+      cases_proxy.should_receive(:find).with(id).and_return kase
+      get :edit, id: id
+      assigns[:case].should == kase
+    end
+
+    it "should render the view" do
+      get :edit
+      response.should render_template :edit
+    end
+  end
+
+  context 'update' do
+    before :each do 
+      kase.stub(:update_attributes => stub)
+    end
+
+    def doupdate 
+      post :update, :id => id, :case => hash_from_params
+    end
+
+    it "should assign case" do
+      cases_proxy.should_receive(:find).with(id).and_return(kase)
+      doupdate
+      assigns[:case].should == kase
+    end
+
+    it "should try to update the case" do
+      kase.should_receive(:update_attributes).with(hash_from_params)
+      doupdate
+    end
+
+    context "parameters are valid" do
+      before :each do
+        kase.stub(:update_attributes => true, :id => id)
+      end
+      it "should redirect to :show" do
+        doupdate
+        response.should redirect_to case_url(id)
+      end
+      it "should notice successful creation" do
+        doupdate
+        flash[:notice].should == I18n.t('cases.update.notice')
+      end
+    end
+    
+    context "parameters are not valid" do
+      before :each do
+        kase.stub(:update_attributes => false, :id => nil)
+      end
+      it "should render new" do
+        doupdate
+        response.should render_template 'edit'
+      end
+      it "should alert the errors" do
+        doupdate
+        flash[:alert].should == I18n.t('cases.update.alert') 
+      end
+    end
+  end
+
+  context 'destroy' do
+    before :each do
+      kase.stub(:delete => nil)
+    end
+
+    it "should delete the case" do
+      cases_proxy.should_receive(:find).with(id).and_return(kase)
+      kase.should_receive(:delete)
+      delete :destroy, :id => id
+    end
+
+    it "should redirect to index page" do
+      delete :destroy, :id => id
+      response.should redirect_to cases_url
+    end
+
+    it "should notice successful destruction" do
+      delete :destroy, :id => id
+      flash[:notice].should == I18n.t('cases.destroy.notice') 
+    end
+  end
+
+end

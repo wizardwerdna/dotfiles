@@ -1,0 +1,155 @@
+require 'ostruct'
+require_relative 'scaffolding.rb'
+require_relative '../zip'
+
+describe Node do
+  let(:payload){ double("payload") }
+  let(:children){ double("children") }
+
+  subject{ Node.new(payload, children) } 
+    
+  it {subject.payload.should == payload}
+  it {subject.children.should == children}
+end
+
+describe Zip do
+
+  context "creation" do
+    let(:path){double("path")}
+    it {Zip.new(path).path.should == path}
+  end
+
+  context "examining the tree" do
+    let(:empty_node) { Node.from_array EMPTY_TREE }
+    let(:root){ Zip.new([ZipLoc.new(empty_node, nil)]) }
+    it { root.ancestors.should == [] }
+    it { root.should_not have_children }
+    it { root.payload.should == :root }
+  end
+
+  context "movement on empty zipper" do
+    let(:empty_node) { Node.from_array EMPTY_TREE }
+    let(:root){ Zip.new([ZipLoc.new(empty_node, nil)]) }
+    it { root.down.should == nil }
+    it { root.up.should == nil }
+    it { root.left.should == nil }
+    it { root.right.should == nil }
+    it { root.rightmost.should == root }
+    it { root.leftmost.should == root }
+  end
+
+  context "movement down a three-element zipper" do
+    let(:tree){ Node.from_array THREE_LEVEL_TREE }
+    subject{ Zip.new([ZipLoc.new(tree, nil)]) }
+    let(:down){ subject.down }
+    let(:down2){ subject.down.down }
+    let(:down3){ subject.down.down.down }
+    let(:down4){ subject.down.down.down.down }
+    it { subject.payload.should == :root }
+    it { down.payload.should == :I }
+    it { down2.payload.should == :IA }
+    it { down3.payload.should == :IA1 }
+    it { down4.should be_nil }
+    it { down.here.should == subject.here.children.first }
+    it { down.ancestors.should  == [ subject.here ] }
+    it { down2.here.should == subject.here.children.first.children.first }
+    it { down2.ancestors.should == [ subject.here, subject.here.children.first ] }
+    it { down3.here.should == subject.here.children.first.children.first.children.first }
+    it { down3.ancestors.should == [ subject.here, subject.here.children.first, 
+                                     subject.here.children.first.children.first ] }
+  end
+
+  context "movement back up a three-element-zipper" do
+    let(:tree){ Node.from_array THREE_LEVEL_TREE }
+    let(:root_zip){ Zip.new([ZipLoc.new(tree, nil)]) }
+    let(:down){ root_zip.down }
+    let(:down2){ root_zip.down.down }
+    let(:down3){ root_zip.down.down.down }
+    let(:down4){ root_zip.down.down.down.down }
+    it { down3.up.should == down2 }
+    it { down2.up.should == down }
+    it { down.up.should == root_zip }
+  end
+
+  context "movement right and rightmost" do
+    let(:tree){ Node.from_array THREE_LEVEL_TREE }
+    let(:start_of_row){ Zip.new([ZipLoc.new(tree, nil)]).down }
+    let(:right){ start_of_row.right }
+    let(:right2){ start_of_row.right.right }
+    let(:right3){ start_of_row.right.right.right }
+    it { start_of_row.here.payload.should == :I }
+    it { right.payload.should == :II }
+    it { right2.here.payload.should == :III }
+    it { right3.should be_nil }
+    it { start_of_row.rightmost.should == right2 }
+    it { right2.rightmost.should == right2 }
+  end
+
+  context "movement left and leftmost" do
+    let(:tree){ Node.from_array THREE_LEVEL_TREE }
+    let(:end_of_row){ Zip.new([ZipLoc.new(tree, nil)]).down.right.right }
+    let(:left){ end_of_row.left }
+    let(:left2){ end_of_row.left.left }
+    let(:left3){ end_of_row.left.left.left }
+    it { end_of_row.payload.should == :III }
+    it { left.payload.should == :II }
+    it { left2.payload.should == :I }
+    it { left3.should be_nil }
+    it { end_of_row.leftmost.should == left2 }
+    it { left2.leftmost.should == left2 }
+  end
+  
+  context "rightmost_leaf" do
+    let(:tree){ Node.from_array THREE_LEVEL_TREE }
+    let(:root_zip){ Zip.new([ZipLoc.new(tree, nil)]) }
+    let(:i){ root_zip.down }
+    let(:iA){ root_zip.down.down }
+    let(:iA1){ root_zip.down.down.down }
+    it {root_zip.rightmost_leaf.should == i.rightmost}
+    it {i.rightmost_leaf.should == iA.rightmost}
+    it {iA.rightmost_leaf.should == iA1.rightmost}
+    it {iA1.rightmost_leaf.should == iA1.rightmost_leaf}
+  end
+
+  context "movement next" do
+    let(:tree){ Node.from_array THREE_LEVEL_TREE }
+    let(:root_zip){ Zip.new([ZipLoc.new(tree, nil)]) }
+    let(:i){ root_zip.down }
+    let(:iA){ root_zip.down.down }
+    let(:iA1){ root_zip.down.down.down }
+    it "if possible, should go down" do
+      root_zip.next.should == root_zip.down
+      i.next.should == iA
+      iA.next.should == iA1
+    end
+    it "if can't go down, then if possible, should go right" do
+      iA1.next.should == iA1.right
+    end
+    it "if can't go down or right, go to closes non-rightmost parent, then right" do
+      iA1.rightmost.next.should == iA.right  
+      iA.rightmost.next.should == i.right 
+    end
+    it "should return nil if at a node without child, right brother or non-rightmost ancestor" do
+      root_zip.down.rightmost.next == nil
+    end
+  end
+
+  context "movement prev" do
+    let(:tree){ Node.from_array THREE_LEVEL_TREE }
+    let(:root_zip){ Zip.new([ZipLoc.new(tree, nil)]) }
+    let(:i){ root_zip.down }
+    let(:iA){ root_zip.down.down }
+    let(:iA1){ root_zip.down.down.down }
+    it "should be nil at the root" do
+      root_zip.prev.should == nil
+    end
+    it "if it has a left sibling, should go to leftie's rightmost leaf" do
+      i.right.prev.should == iA.rightmost
+      i.right.right.prev.should == i.right
+    end
+    it "if no left sibling, but not the root, go to the parent" do
+      iA1.prev.should == iA
+    end
+  end
+end
+

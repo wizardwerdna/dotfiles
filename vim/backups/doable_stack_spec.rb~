@@ -1,0 +1,107 @@
+require_relative '../doable_stack'
+
+describe DoableStack do
+
+  let(:return_value){ double "return value" }
+  let(:command_stub_attributes) { { :run => stub, :undo => stub } }
+  let(:command){ double "command", :run  => stub, :undo => stub }
+
+  context "when first created" do
+    it "should raise error when undo attempted" do
+      ->{subject.undo}.should raise_error DoableStackUndoError
+    end
+
+    it "should raise error when redo attempted" do
+      ->{subject.redo}.should raise_error DoableStackRedoError
+    end
+
+    it "should correctly run a command" do
+      command.should_receive(:run).and_return return_value
+      subject.run(command).should == return_value
+    end
+
+  end
+
+  context "when a non-undoable command is executed" do
+    let(:non_undoable_command){ double "non-undoable command", :run => stub }
+    it "should complain if you try to undo it" do
+      subject.run(non_undoable_command)
+      ->{subject.undo}.should raise_error DoableStackUndoError
+    end
+  end
+
+  context "when an undoable command is executed" do
+
+    it "should undo the command with the proper value" do
+      command.should_receive(:undo).and_return return_value
+      subject.run(command)
+      subject.undo.should == return_value
+      ->{subject.undo}.should raise_error DoableStackUndoError
+    end
+
+    it "should be able to redo the command after the undo" do
+      command.should_receive(:run).twice.and_return return_value
+      subject.run(command)
+      subject.undo
+      subject.redo.should == return_value
+      ->{subject.redo}.should raise_error DoableStackRedoError
+    end 
+
+  end
+
+  context "when many commands are run" do
+    let(:many) { 11 }
+    let(:commands) { many.times.map{|i| double "command #{i}", :run => stub, :undo => stub} }
+
+    before :each do
+      commands.each {|c| subject.run(c) }
+    end  
+
+    it "should run the last command on the first undo" do
+      commands.last.should_receive(:undo).and_return(return_value)
+      subject.undo.should == return_value 
+    end
+
+    it "should run the next to last command on the second undo" do
+      subject.undo
+      commands[-2].should_receive(:undo).and_return(return_value)
+      subject.undo.should == return_value
+    end
+
+    it "should run the first command on the many-th undo" do
+      (many-1).times{ subject.undo }
+      commands.first.should_receive(:undo).and_return(return_value)
+      subject.undo.should == return_value
+    end
+
+    context "and then they are all undone" do
+
+      before :each do
+        many.times{ subject.undo }
+      end
+
+      it "should complain if more undos are attempted" do
+        ->{subject.undo}.should raise_error DoableStackUndoError
+        ->{subject.undo}.should raise_error DoableStackUndoError
+      end
+
+      it "should redo the first command on the first redo" do
+        commands.first.should_receive(:run).and_return(return_value)
+        subject.redo.should == return_value
+      end
+
+      it "should redo the second command on the second redo" do
+        subject.redo
+        commands[1].should_receive(:run).and_return(return_value)
+        subject.redo.should == return_value
+      end
+
+      it "should redo the last command after the many-th redo" do
+        (many-1).times{ subject.redo }
+        commands.last.should_receive(:run).and_return(return_value)
+        subject.redo.should == return_value
+      end
+    end
+  end
+
+end

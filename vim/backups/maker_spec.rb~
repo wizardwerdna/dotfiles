@@ -1,0 +1,5 @@
+require_relative '../maker.rb'
+
+describe Maker do
+
+end

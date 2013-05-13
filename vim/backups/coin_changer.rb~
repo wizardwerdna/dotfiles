@@ -1,0 +1,29 @@
+class CoinChanger
+
+  attr_accessor :denominations
+
+  def initialize denominations
+    self.denominations = denominations.sort.reverse
+  end
+
+  def change(amount)
+    return denominations.inject({}) do |hash, denomination|
+      hash[denomination] = amount / denomination if amount > denomination
+      amount %= denomination
+      hash
+    end
+    if amount == 0
+      {}
+    else
+      denomination = largest_denomination_less_than_or_equal_to amount
+      coins = amount / denomination
+      remainder = amount % denomination
+      {denomination => coins}.merge change(remainder)
+    end
+  end
+
+  def largest_denomination_less_than_or_equal_to amount
+    denominations.find{|each| each <= amount}
+  end
+
+end

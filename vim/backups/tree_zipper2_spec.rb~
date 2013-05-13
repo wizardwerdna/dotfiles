@@ -1,0 +1,214 @@
+EMPTY_TREE = [:root, []]
+
+ONE_LEVEL_TREE = 
+  [:root, [
+    [:I, []],
+    [:II, []],
+    [:III, []]
+  ]]
+  
+  SIMPLE_TWO_LEVEL_TREE = 
+    [:root, [
+      [:I, [
+        [:IIA, []],
+        [:IIB, []],
+        [:IIC, []]
+      ]],
+        [:II, []],
+        [:III, []]
+    ]]
+  
+  THREE_LEVEL_TREE = 
+    [:root, [
+      [:I, [
+        [:IA, [
+          [:IA1, []],
+          [:IA2, []],
+          [:IA3, []]
+        ]],
+        [:IB, []],
+        [:IC, []]
+      ]],
+      [:II, []],
+      [:III, []]
+    ]]
+
+require 'ostruct'
+
+class Node < Struct.new(:payload, :children)
+  def self.from_array arr
+    unless arr.empty?
+      Node.new(arr.first, arr.last.map{|each| Node.from_array(each)})
+    end
+  end
+  def to_s
+    "Node(#{payload.inspect}, #{children.map{|each| each.to_s}})"
+  end
+  def to_a
+    [payload, children.map{|each| each.to_a}]
+  end
+  def inspect
+    "Node(#{payload.inspect}, #{children.map{|each| each}}"
+  end
+end
+
+class ZipLoc < Struct.new(:node, :index)
+end
+
+class Zip < Struct.new(:path)
+  
+  def up
+    @up ||= Zip.new(path[0..-2]) if has_parent?
+  end
+  
+  def down
+    @down ||= Zip.new(path + [ZipLoc.new(here.children.first,0)]) if has_children?
+  end
+  
+  def right
+    Zip.new path[0..-2] + [ZipLoc.new( siblings[index+1], index+1 )] if has_right_sibling?
+  end
+ 
+  def left
+    Zip.new path[0..-2] + [ZipLoc.new( siblings[index-1], index-1 )] if has_left_sibling?
+  end
+
+  def here
+    @here ||= path.last.node
+  end
+  alias :node :here
+  
+  def index
+    path.last.index
+  end
+ 
+  def siblings
+    @siblings ||= path[-2].node.children
+  end
+  
+  def payload
+    @payload ||= here.payload
+  end
+  
+  def has_children?
+    @has_children ||= (not here.children.empty?)
+  end
+  
+  def has_parent?
+    @has_parent ||= path.length > 1
+  end
+  
+  def has_right_sibling?
+    has_parent? && sibling_index + 1 < number_of_siblings
+  end
+  
+  def has_left_sibling?
+    has_parent? && sibling_index - 1 >= 0
+  end
+  
+  def sibling_index
+    @sibling_index ||= path.last.index || 0
+  end
+
+  def number_of_siblings
+    return 0 unless path.size > 1 
+    path[-2].node.children.size
+  end
+
+  def ancestors
+    @ancestors ||= path[0..-2].map{|each| each.node}
+  end
+
+end
+
+describe Node do
+  let(:payload){ double("payload") }
+  let(:children){ double("children") }
+
+  subject{ Node.new(payload, children) } 
+    
+  it {subject.payload.should == payload}
+  it {subject.children.should == children}
+end
+
+describe Zip do
+
+  context "creation" do
+    let(:path){double("path")}
+    it {Zip.new(path).path.should == path}
+  end
+
+  context "examining the tree" do
+    let(:empty_node) { Node.from_array EMPTY_TREE }
+    let(:root){ Zip.new([ZipLoc.new(empty_node, nil)]) }
+    it { root.ancestors.should == [] }
+    it { root.should_not have_children }
+    it { root.payload.should == :root }
+  end
+
+  context "movement on empty zipper" do
+    let(:empty_node) { Node.from_array EMPTY_TREE }
+    let(:root){ Zip.new([ZipLoc.new(empty_node, nil)]) }
+    it { root.down.should == nil }
+    it { root.up.should == nil }
+    it { root.left.should == nil }
+    it { root.right.should == nil }
+  end
+
+  context "movement down a three-element zipper" do
+    let(:tree){ Node.from_array THREE_LEVEL_TREE }
+    subject{ Zip.new([ZipLoc.new(tree, nil)]) }
+    let(:down){ subject.down }
+    let(:down2){ subject.down.down }
+    let(:down3){ subject.down.down.down }
+    let(:down4){ subject.down.down.down.down }
+    it { subject.payload.should == :root }
+    it { down.payload.should == :I }
+    it { down2.payload.should == :IA }
+    it { down3.payload.should == :IA1 }
+    it { down4.should be_nil }
+    it { down.here.should == subject.here.children.first }
+    it { down.ancestors.should  == [ subject.here ] }
+    it { down2.here.should == subject.here.children.first.children.first }
+    it { down2.ancestors.should == [ subject.here, subject.here.children.first ] }
+    it { down3.here.should == subject.here.children.first.children.first.children.first }
+    it { down3.ancestors.should == [ subject.here, subject.here.children.first, 
+                                     subject.here.children.first.children.first ] }
+  end
+
+  context "movement back up a three-element-zipper" do
+    let(:tree){ Node.from_array THREE_LEVEL_TREE }
+    let(:root_zip){ Zip.new([ZipLoc.new(tree, nil)]) }
+    let(:down){ root_zip.down }
+    let(:down2){ root_zip.down.down }
+    let(:down3){ root_zip.down.down.down }
+    let(:down4){ root_zip.down.down.down.down }
+    it { down3.up.should == down2 }
+    it { down2.up.should == down }
+    it { down.up.should == root_zip }
+  end
+
+  context "movement right" do
+    let(:tree){ Node.from_array THREE_LEVEL_TREE }
+    let(:start_of_row){ Zip.new([ZipLoc.new(tree, nil)]).down }
+    let(:right){ start_of_row.right }
+    let(:right2){ start_of_row.right.right }
+    let(:right3){ start_of_row.right.right.right }
+    it { start_of_row.here.payload.should == :I }
+    it { right.payload.should == :II }
+    it { right2.here.payload.should == :III }
+    it { right3.should be_nil }
+  end
+
+  context "movement left" do
+    let(:tree){ Node.from_array THREE_LEVEL_TREE }
+    let(:end_of_row){ Zip.new([ZipLoc.new(tree, nil)]).down.right.right }
+    let(:left){ end_of_row.left }
+    let(:left2){ end_of_row.left.left }
+    let(:left3){ end_of_row.left.left.left }
+    it { end_of_row.payload.should == :III }
+    it { left.payload.should == :II }
+    it { left2.payload.should == :I }
+    it { left3.should be_nil }
+  end
+end

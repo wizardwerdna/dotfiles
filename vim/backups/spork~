@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+if [ $@ == 'start' ]
+ then 
+  bundle exec spork &
+  rspec_pid=$!
+  bundle exec spork cucumber &
+  cuke_pid=$!
+  echo "$rspec_pid $cuke_pid" > tmp/spork.pids
+  exit
+fi
+
+if [ $@ == 'kill' ]
+ then kill -9 `cat tmp/spork.pids`
+fi
+
+if [ $@ == 'restart' ]
+ then ./script/spork kill && ./script/spork start
+fi
+
+if [ $@ == 'reup' ]
+ then killall ruby /Users/werdna/.rvm/gems/ruby-1.9.3-p0/bin/spork && ./script/spork start
+fi

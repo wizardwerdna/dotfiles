@@ -1,0 +1,27 @@
+require_relative '../src/add_employee_transaction'
+require_relative '../src/interfaces/transaction_interface'
+
+describe AddEmployeeTransaction do
+
+  let(:subject){AddEmployeeTransaction.new(1, "Alice", "Home")}
+
+  before :each do
+    Repository.configure Employee => MemoryRepos::EmployeeRepo.new
+  end
+
+  it_should_behave_like "a transaction"
+
+  it 'should create an employee' do
+    subject.should_receive(:make_classification).and_return "classification"
+    subject.should_receive(:make_schedule).and_return "schedule"
+    subject.should_receive(:payment_method).and_return "payment method"
+    subject.execute
+    e = Repository.for(Employee).fetch_by_emp_id(1)
+    e.name.should == "Alice"
+    e.address.should == "Home"
+    e.classification.should == "classification"
+    e.schedule.should == "schedule"
+    e.payment_method.should == "payment method"
+  end
+
+end

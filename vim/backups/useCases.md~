@@ -1,0 +1,10 @@
+# Use Cases for Outliner
+
+* Select direction
+
+Select the node in the given direction from the presently selected node, and return a JSON representation of the Node.  Direction may be one of "next," "prev", "first," or "last"
+
+* Move direction
+
+Move the selected node in the given direction, and return a JSON representation of the Node.  Direction may be one of "next," or "prev."
+

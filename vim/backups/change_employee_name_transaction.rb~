@@ -1,0 +1,16 @@
+require_relative 'repository'
+
+class ChangeEmployeeNameTransaction
+
+  def initialize emp_id, new_name
+    @emp_id = emp_id
+    @new_name = new_name
+  end
+
+  def execute
+    e = Repository.for(Employee).fetch @emp_id
+    e.name = @new_name
+    Repository.for(Employee).store e
+  end
+
+end

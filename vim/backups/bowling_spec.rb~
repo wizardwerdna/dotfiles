@@ -1,0 +1,41 @@
+require_relative '../bowling'
+describe Bowling do
+
+  let(:game) {Bowling.new}
+
+  def roll_many(pins, times)
+    (1..times).each {|i| game.roll(pins)}
+  end
+
+  it "should permit you to add rolls" do
+    lambda {game.roll(1)}.should_not raise_error
+  end
+
+  it "should correctly score a gutter game" do
+    roll_many(0, 20)
+    game.score.should be_zero 
+  end
+
+  it "should correctly score a single pin per roll game" do
+    roll_many(1, 20)
+    game.score.should == 20
+  end
+
+  it "should correctly score a spare frame" do
+    game.roll(9); game.roll(1); game.roll(5)
+    (1..17).each { |i|  game.roll(0) }
+    game.score.should == 20
+  end
+
+  it "should correctly score a strike frame" do
+    game.roll(10); game.roll(5); game.roll(5)
+    (1..17).each {|i| game.roll(0)}
+    game.score.should == 30
+  end
+
+  it "should correctly score a perfect game" do
+    (1..22).each {|i| game.roll(10)}
+    game.score.should == 300
+  end
+
+end

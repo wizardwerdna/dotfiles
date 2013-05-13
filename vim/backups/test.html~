@@ -1,0 +1,26 @@
+<head>
+  <title>test</title>
+</head>
+
+<body>
+  <h1>hiya</h1>
+  {{> treeDisplay}}
+</body>
+
+<template name="treeDisplay">
+<ul>
+  {{#with tree}}
+  {{> treeNode}}
+  {{/with}}
+</ul>
+</template>
+
+<template name="treeNode">
+<li>{{name}}</li>
+<ul>
+  {{#each children}}
+    {{> treeNode}}
+    {{/each}}
+</ul>
+</template>
+

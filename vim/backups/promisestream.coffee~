@@ -1,0 +1,19 @@
+root = (exports ? this)
+
+class PromiseStream extends require('stream').Transform
+  constructor: (@promise, options={passthrough: "false"}) ->
+    console.log 'promisestream built'
+    @chunks = null
+    super()
+    # @on('error', @promise.reject)
+    @resume() unless options.passthrough
+    @
+  _transform: (chunk, encoding, callback) ->
+    @chunks ||= chunk
+    @chunks += chunk
+    callback(null, chunk) if options.passthrough
+  end: ->
+    @promise.fulfill(@chunks)
+    super()
+
+root.PromiseStream = PromiseStream

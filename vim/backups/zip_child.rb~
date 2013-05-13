@@ -1,0 +1,105 @@
+require_relative 'zip'
+
+class ZipChild < Zip
+
+  def initialize node, parent, index
+    @parent = parent
+    @index = index
+    super(node)
+  end
+
+  def == other
+    node == other.node && index == other.index && path == other.path
+  end
+  alias :"eql?" :==
+  alias :=== :==
+  
+  def root
+    up.root
+  end
+
+  def root_zip
+    up.root_zip
+  end
+
+  def root?
+    false
+  end
+
+  def siblings
+    up.children
+  end
+
+  def rights
+    parent.children[index+1..-1]
+  end
+
+  def lefts
+    parent.children.take(index)
+  end
+
+  def path
+    parent.path + [node]
+  end
+
+  def up
+    parent
+  end
+
+  def right
+    ZipChild.new(siblings[index+1], parent, index+1) unless index+1 == siblings.size
+  end
+
+  def left
+    ZipChild.new(siblings[index-1], parent, index-1) unless index.zero?
+  end
+
+  def rightmost
+    ZipChild.new siblings.last, parent, siblings.size-1
+  end
+
+  def leftmost
+    ZipChild.new siblings.first, parent, 0
+  end
+
+  def prev
+    (left && left.bottom_rightmost) || up
+  end
+  
+  def replace new_node 
+    ZipChanged.new new_node, parent, index
+  end
+  
+  def insert_before new_node
+    ZipChild.new node, 
+      up.replace_children lefts + [new_node, node] + rights,
+      index+1
+  end
+
+  def insert_after new_node
+    ZipChild.new node, 
+      up.replace_children(lefts + [node, new_node] + rights),
+      index
+  end
+
+  def remove
+    if index.zero?
+      parent_without_this_child
+    else
+      parent_without_this_child.downto(index-1).bottom_rightmost
+    end
+  end
+
+protected
+
+  attr_reader :parent, :index
+
+  def closest_right_sibling
+    right || up.closest_right_sibling
+  end
+
+  def parent_without_this_child
+    parent.replace_children(lefts+rights)
+  end
+
+end

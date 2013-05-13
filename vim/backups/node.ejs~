@@ -1,0 +1,11 @@
+<div class="node <%= node.tag.selected %>">
+  <div class="tag depth<%= node.tag.depth %>">
+    <span class="open"><%= node.tag.openString %></span>
+    <span class="prefix"><%= node.tag.decoratorString %></span>
+    <span class="text"><%= node.tag.text %></span>
+  </div>
+  <div class="children">
+    <%= partial('node', node.children) %>
+  </div>
+</div>
+

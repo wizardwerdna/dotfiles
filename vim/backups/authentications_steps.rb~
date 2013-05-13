@@ -1,0 +1,7 @@
+Given /^the user has a typical authentication$/ do
+   @user.authentications.create! uid: 12345 
+end
+
+Then /^I should see the typical authentication$/ do
+  page.body.should match /12345/
+end

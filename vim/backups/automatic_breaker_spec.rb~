@@ -1,0 +1,34 @@
+require_relative '../automatic_breaker'
+require_relative '../score'
+
+describe AutomaticBreaker do
+
+  let (:breaker) { AutomaticBreaker.new }
+  let (:indexer) { GuessIndexer.new }
+
+  it "is a subclass of Breaker" do
+    AutomaticBreaker.new.should be_kind_of Breaker
+  end
+
+  context "a new codebreaker" do
+    it "should always guess the first guess first" do
+      breaker.next_guess.should == indexer.string_for(0)
+    end
+
+    it "should answer the first 10 guesses in sequence, without registered guesses" do
+      10.times do |i|
+        breaker.next_guess.should == indexer.string_for(i)
+      end
+    end
+  end
+
+  context "after registered score inconsistent with index 0, but not index 1" do
+    before :each do
+      breaker.guess_score Score.new(0,0,"aaaa")
+    end
+
+    it "should not guess index 0" do
+      breaker.next_guess.should_not == indexer.string_for(0)
+    end
+  end
+end

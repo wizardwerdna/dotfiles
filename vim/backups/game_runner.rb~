@@ -1,0 +1,39 @@
+require_relative 'position_service'
+
+class GameRunner
+  BLANK_BOARD = "012345678"
+
+  attr_accessor :player1, :player2, :console
+
+  def initialize(player1, player2, console)
+    self.player1 = player1
+    self.player2 = player2
+    self.console = console
+  end
+
+  def run
+
+    position = BLANK_BOARD
+
+    next_player = [
+      {player: player1, marker: 'X'}, 
+      {player: player2, marker: 'O'}
+    ].cycle
+
+    while PositionService.new(position).has_possible_moves?
+  
+      console.current_position(position)
+      mover = next_player.next
+      move = mover[:player].next_move position, mover[:marker]
+      console.player_move mover[:marker], move 
+      position = PositionService.new(position).apply_move move, mover[:marker]
+  
+    end
+
+    console.final_position position
+  
+  end
+
+end
+
+

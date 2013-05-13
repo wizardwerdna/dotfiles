@@ -1,0 +1,60 @@
+root = (exports ? this)
+trim = require 'cli-color/lib/trim'
+
+str =
+  repeat: (ch, cnt) ->
+    (new Array Math.max(0,cnt)+1).join(ch)
+  ellide: (str, width) ->
+    width = Math.max 3, width
+    if width >= (trim str).length then str else (trim str)[0...width-3] + '...'
+  ljust: (s, width, pad=" ") -> s + @repeat(pad, width - (trim s).length)
+  rjust: (s, width, pad=" ") -> @repeat(pad, width - (trim s).length) + s
+  fjust: (s, width, pad=" ") ->
+    trimlength = (trim s).length
+    lefts = Math.floor((width-trimlength)/2)
+    @repeat(pad, lefts) + s + @repeat(pad, width-trimlength-lefts)
+  hideCursor: '\x1b[?25l'
+  showCursor: '\x1b[?25h'
+  toRoman: (int) -> 
+    if int == 0
+      ""
+    else
+      next = switch true
+        when int >=1000 then {roman: "M",  arabic: 1000}
+        when int >= 900 then {roman: "CM", arabic:  900}
+        when int >= 500 then {roman: "D",  arabic:  500}
+        when int >= 400 then {roman: "CD", arabic:  400}
+        when int >= 100 then {roman: "C",  arabic:  100}
+        when int >=  90 then {roman: "XC", arabic:   90}
+        when int >=  50 then {roman: "L",  arabic:   50}
+        when int >=  40 then {roman: "XL", arabic:   40}
+        when int >=  10 then {roman: "X",  arabic:   10}
+        when int >=   9 then {roman: "IX", arabic:    9}
+        when int >=   5 then {roman: "V",  arabic:    5}
+        when int >=   4 then {roman: "IV", arabic:    4}
+        when int >=   1 then {roman: "I",  arabic:    1}
+      next.roman + @toRoman(int-next.arabic)
+  toAlpha: (int) ->
+    if int == 0
+      ""
+    else
+      @toAlpha(Math.floor (int-1)/26) + "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[(int-1)%26]
+  harvardDecoration: (depth, index) ->
+    switch depth
+      when  0 then ""
+      when  1 then "#{str.toRoman index+1}."
+      when  2 then "#{str.toAlpha index+1}."
+      when  3 then "#{index+1}."
+      when  4 then "#{(str.toAlpha index+1).toLowerCase()}."
+      when  5 then "#{(str.toRoman index+1).toLowerCase()}"
+      when  6 then "(#{str.toAlpha index+1})"
+      when  7 then "(#{index+1})"
+      when  8 then "(#{(str.toAlpha index+1).toLowerCase()})"
+      when  9 then "(#{(str.toRoman index+1).toLowerCase()})"
+      when 10 then "[#{str.toAlpha index+1}]"
+      when 11 then "[#{index+1}]"
+      when 12 then "[#{(str.toAlpha index+1).toLowerCase()}]"
+      when 13 then "[#{(str.toRoman index+1).toLowerCase()}]"
+      else  "#{index+1}."
+
+root.str = str

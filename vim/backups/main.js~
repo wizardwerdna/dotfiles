@@ -1,0 +1,2 @@
+console.log("first!!!!");
+Posts = new Meteor.Collection('posts')

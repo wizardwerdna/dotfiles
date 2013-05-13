@@ -1,0 +1,55 @@
+class Issue
+  class IssueEntry
+    def to_s
+      "Issue(case: .., name: #{name}, parent: #{parent.try(:name) || "nil"}"
+    end
+
+    def move_to
+    end
+  end
+
+  def self.destroy_all
+    @issues = []
+  end
+
+  def self.outline_for kase
+    @issues 
+  end
+
+  def self.create hash
+    record = self.new hash
+    @issues << record 
+    record
+  end
+
+  def self.find_by_case_and_name kase, name
+    @issues.find{|each| each.case == kase && each.name == name}
+  end
+
+  attr_accessor :case, :name, :parent
+  
+  def initialize(hash)
+    # puts "IssueEntry.initialize(#{hash.inspect}) ==>"
+    self.case   = hash[:case]
+    self.name   = hash[:name]
+    self.parent = hash[:parent]
+    self.children = []
+    # puts ">>> #{self.inspect} <<<"
+  end
+
+  def move_to target, direction
+    puts "(#{self.inspect}).move_to #{target.inspect}, #{direction.inspect}"
+    detach
+    case direction.to_sym
+    when :left
+    when :right
+    when :parent
+    else
+      raise ArgumentError, "illegal direction: #{direction}"
+    end
+  end
+
+  def detach
+    parent = nil
+  end
+end

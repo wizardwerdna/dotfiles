@@ -1,0 +1,93 @@
+Functional hierarchical zipper, with navigation, editing, and enumeration.  See Huet
+
+== EXAMINATION
+
+  branch?
+    Returns true if the node at loc is a branch
+
+  children
+    Returns a seq of the children of node at loc, which must be a branch
+
+  end?
+    Returns true if loc represents the end of a depth-first walk
+
+  lefts
+    Returns a seq of the left siblings of this loc
+
+  node
+    Returns the node at loc
+
+  path
+    Returns a seq of nodes leading to this loc
+
+  rights
+    Returns a seq of the right siblings of this loc
+
+  root
+    zips all the way up and returns the root node, reflecting any changes.
+
+== NAVIGATION
+
+  down
+    Returns the loc of the leftmost child of the node at this loc, or nil if no children
+
+  left
+    Returns the loc of the left sibling of the node at this loc, or nil
+
+  leftmost
+    Returns the loc of the leftmost sibling of the node at this loc, or self
+
+  right
+    Returns the loc of the right sibling of the node at this loc, or nil
+
+  rightmost
+    Returns the loc of the rightmost sibling of the node at this loc, or self
+
+  up
+    Returns the loc of the parent of the node at this loc, or nil if at the top
+
+== TRAVERSAL
+
+  next
+    Moves to the next loc in the hierarchy, depth-first. When reaching the end, returns a distinguished loc detectable via end?. If already at the end, stays there.
+
+  prev
+    Moves to the previous loc in the hierarchy, depth-first. If already at the root, returns nil.
+
+== MUTATION
+
+  append-child 
+    Inserts the item as the rightmost child of the node at this loc, without moving
+
+  edit
+    Replaces the node at this loc with the value of (f node args)
+
+  insert-child
+    Inserts the item as the leftmost child of the node at this loc, without moving
+
+  insert-left
+    Inserts the item as the left sibling of the node at this loc, without moving
+
+  insert-right
+    Inserts the item as the right sibling of the node at this loc, without moving
+
+  make-node
+    Returns a new branch node, given an existing node and new children. The loc is only used to supply the constructor.
+
+  remove
+    Removes the node at loc, returning the loc that would have preceded it in a depth-first walk.
+
+  replace
+    Replaces the node at this loc, without moving
+
+====
+
+seq-zip
+  Returns a zipper for nested sequences, given a root sequence
+
+vector-zip
+  Returns a zipper for nested vectors, given a root vector
+
+xml-zip
+  Returns a zipper for xml elements (as from xml/parse), given a root element
+

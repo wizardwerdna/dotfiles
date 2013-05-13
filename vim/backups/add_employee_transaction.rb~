@@ -1,0 +1,16 @@
+class AddEmployeeTransaction
+
+  def initialize emp_id, name, address
+    @emp_id = emp_id
+    @name = name
+    @address = address
+  end
+
+  def execute
+    e = Employee.new(emp_id: @emp_id, name: @name, address: @address)
+    e.classification = make_classification
+    e.schedule = make_schedule
+    e.payment_method = payment_method  
+  end
+
+end

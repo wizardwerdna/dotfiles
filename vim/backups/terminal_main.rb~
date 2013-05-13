@@ -1,0 +1,10 @@
+#!ruby
+require_relative 'game_runner.rb'
+require_relative 'terminal_console.rb'
+require_relative 'ai_player.rb'
+
+xPlayer = AIPlayer.new 
+oPlayer = AIPlayer.new 
+console = TerminalConsole.new
+
+GameRunner.new(xPlayer, oPlayer, console).run

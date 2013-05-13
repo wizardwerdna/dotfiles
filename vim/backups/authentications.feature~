@@ -1,0 +1,30 @@
+Feature: Authentications 
+  As a user
+  I would like to authenticate with third-party services 
+  So I can use them with eCaseBase 
+
+  Scenario: List of Authentications 
+    Given I signin as a typical user
+    And   the user has a typical authentication
+    When  I visit the authentications page
+    Then  I should see the typical authentication
+
+  Scenario: Requesting a new authentication
+    Given I signin as a typical user
+    And I request authentication for a service
+    Then  I should see the login page for the service
+
+  @wip
+  Scenario: Creating a new authorization
+    Given I signin as a typical user
+    And I request authentication for a service
+    When I authenticate with the service 
+    Then I should see confirmation that I am authenticated
+
+  @wip
+  Scenario: Authentication Page
+    Given I signin as a typical user
+    And the user has a typical authentication 
+    When I visit the page for the authentication
+    Then I should see the authentication information
+

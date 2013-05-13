@@ -1,0 +1,20 @@
+# This is a combination of 2 commits.
+# The first commit's message is:
+
+modified package.json to add script to run test suite under karma in Chrome, Firefox and Safar on Mac
+
+# This is the 2nd commit message:
+
+modify karma.conf.js
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# Not currently on any branch.
+# You are currently editing a commit while rebasing branch 'master' on 'eddcf6d'.
+#
+# Changes to be committed:
+#   (use "git reset HEAD^1 <file>..." to unstage)
+#
+#	modified:   karma.conf.js
+#	modified:   package.json
+#

@@ -1,0 +1,33 @@
+root = (exports ? this)
+Zip = (require './zip').Zip
+Node = (require './node').Node
+root.Zip = Zip
+root.Node = Node
+class root.Zipper
+  constructor: (@zip) ->
+  node: -> @zip.node
+  root: -> @zip.root()
+  isRoot: -> @zip.root()
+  children: -> @zip.children()
+  siblings: -> @zip.siblings()
+  rights: -> @zip.rights()
+  lefts: -> @zip.lefts()
+  
+  up: -> @zip = @zip.up() if @zip.up()? 
+  down: -> @zip = @zip.down() if @zip.down()?
+  left: -> @zip = @zip.left() if @zip.left()?
+  right: -> @zip = @zip.right() if @zip.right()?
+  leftmost: -> @zip = @zip.leftmost()
+  rightmost: -> @zip = @zip.rightmost()
+  _insertChild: (node) -> @zip = @zip.insertChild(node) if @zip.insertChild(node)
+  _appendChild: (node) -> @zip = @zip.appendChild(node) if @zip.appendChild(node)
+  _insertBefore: (node) -> @zip = @zip.insertBefore(node) if @zip.insertBefore(node)
+  _insertAfter: (node) -> @zip = @zip.insertAfter(node) if @zip.insertAfter(node)
+  insertChild: (node) -> @_insertChild @_N node
+  appendChild: (node) -> @_appendChild @_N node
+  insertBefore: (node) -> @_insertBefore @_N node 
+  insertAfter: (node) -> @_insertAfter @_N node 
+  _N: (node_description) ->
+    new Node node_description, []
+
+root.z = new root.Zipper new Zip new Node 'root', []

@@ -1,0 +1,79 @@
+require_relative '../guess_indexer'
+
+describe GuessIndexer do
+
+  context "#make_random_guess" do
+    it "should make random guesses" do
+      Random.should_receive(:rand)
+      GuessIndexer.new.make_random_guess
+    end
+  end
+
+  for alphabet in ["a", "ab", "abc", "abcd"]
+    for length in [1,2,3,4]
+      context "with alphabet = #{alphabet} and length = #{length}" do
+
+        lambda do |alphabet, length|
+          let(:guess) { GuessIndexer.new(alphabet, length) }
+          let(:first_char) { alphabet[0..0] }
+          let(:alphabet_size) { alphabet.size }
+          let(:last_char) { alphabet[alphabet_size-1..alphabet_size-1] }
+
+          it "should correctly translate the first index to the first string" do
+            guess.string_for(0).should == first_char * length
+          end
+
+          it "should correctly translate the last index to the last string" do 
+            guess.string_for(alphabet_size**length - 1).should == last_char * length
+          end
+
+          it "should string_for to diferent strings for different indices" do
+            strings = (0...alphabet_size**length - 1).map{|each| guess.string_for each}
+            strings.uniq.size.should == alphabet_size**length - 1    
+          end
+
+          it "should correctly translate the first string to the first index" do
+            guess.index_for(first_char * length).should == 0 
+          end
+
+          it "should correctly translate the last string to the last index" do 
+            guess.index_for(last_char * length).should == alphabet_size**length - 1
+          end
+
+          it "index_for and string_for should be inverse (1:1 and onto)" do
+            (0...alphabet_size**length).each do |index|
+              guess.index_for(guess.string_for(index)).should == index              
+            end
+          end
+          
+          it "should raise error for index underflow" do
+            lambda{ guess.string_for(-1) }.should raise_error
+          end
+
+          it "should raise error for index overflow" do
+            lambda{ guess.string_for(alphabet_size**length) }.should raise_error
+          end
+
+          it "should raise error for empty string" do
+            lambda{ guess.index_for("") }.should raise_error
+          end
+
+          it "should raise error for any invalid character in streing" do
+            lambda{ guess.index_for("x"*length) }.should raise_error
+          end
+
+          it "should raise error for any short string" do
+            lambda{ guess.index_for("a"*(length-1)) }.should raise_error
+          end
+
+          it "should raise error for any long string" do
+            lambda{ guess.index_for("a"*(length+1)) }.should raise_error
+          end
+
+        end.call(alphabet, length)
+      
+      end
+    end
+  end
+
+end

@@ -1,0 +1,3 @@
+$(function(){
+  alert('I love you, Melody.  I adore.');
+});

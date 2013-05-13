@@ -1,0 +1,14 @@
+require_relative 'repository'
+
+class DeleteEmployeeTransaction
+
+  def initialize emp_id
+    @emp_id = emp_id
+  end
+
+  def execute
+    Repository.for(Employee).delete @emp_id
+  end
+
+end
+

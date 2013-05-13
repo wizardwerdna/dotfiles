@@ -1,0 +1,23 @@
+require_relative '../src/change_employee_classification_transaction'
+
+describe ChangeEmployeeClassificationTransaction do
+
+  let(:subject){ChangeEmployeeClassificationTransaction.new(1)}
+  let(:employee){Employee.new(emp_id: 1)}
+  
+  it_should_behave_like 'a transaction'
+
+  before :each do
+    Repository.configure Employee => MemoryRepos::EmployeeRepo.new
+    Repository.for(Employee).store employee
+  end
+
+  it "should change the employee to an hourly" do
+    subject.stub(:make_classification => "classification",
+                 :make_schedule => "schedule")
+    subject.execute
+    e = Repository.for(Employee).fetch employee.emp_id
+    e.classification.should == "classification"
+    e.schedule.should == "schedule"
+  end    
+end

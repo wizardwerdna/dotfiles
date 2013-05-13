@@ -1,0 +1,12 @@
+root = (exports ? this)
+
+require './promise'
+
+root.fulfilled = (value) -> (new Promise).fulfill(value)
+root.rejected = (reason) -> (new Promise).reject(reason)
+root.pending = ->
+  promise: new Promise
+  fulfill: (value) -> @promise.fulfill(value)
+  reject: (reason) -> @promise.reject(reason)
+
+

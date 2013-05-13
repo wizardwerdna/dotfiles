@@ -1,0 +1,39 @@
+root = exports ? this
+chai = require "chai"
+test = require "../src/test"
+
+chai.should()
+
+describe "Bowling", ->
+
+
+  beforeEach ->
+    @game = new test.Bowling
+    @rollMany = (rolls, pins) =>
+      @game.roll(pins) for i in [1..rolls]
+
+  it "should score a gutter game", ->
+    @rollMany(20,0)
+    @game.score().should.equal 0
+
+  it "should score a 1-pin game", ->
+    @rollMany(20,1)
+    @game.score().should.equal 20
+
+  it "should score a one-spare game", ->
+    @game.roll(3)
+    @game.roll(7)
+    @game.roll(4)
+    @rollMany(17,0)
+    @game.score().should.equal 18
+
+  it "should score a one-strike game", ->
+    @game.roll(10)
+    @game.roll(3)
+    @game.roll(1)
+    @rollMany(17,0)
+    @game.score().should.equal 18
+
+  it "should score a perfect game", ->
+    @rollMany(12, 10)
+    @game.score().should.equal 300

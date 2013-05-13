@@ -1,0 +1,13 @@
+var Covenant = require('covenant').Covenant;
+
+exports.pending = function () {
+    var deferred = new Covenant;
+    return {
+        promise: deferred,
+        fulfill: deferred.fulfill,
+        reject: deferred.reject
+    };
+};
+
+exports.fulfilled = function(value){(new Covenant).fulfill(value)};
+exports.rejected = function(reason){(new Covenant).reject(reason)}; 

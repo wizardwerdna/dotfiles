@@ -1,0 +1,96 @@
+class TokenService
+  class NoRecord # sentinel for failure to find/produce user record
+    def self.user?
+      false
+    end
+  end
+
+  attr_accessor :record, :user_class, :token_name
+
+  def initialize token_name, user_class = User 
+    self.token_name = token_name
+    self.user_class = user_class
+    self.record = NoRecord
+  end
+  
+  def for_record record
+    if record.kind_of? user_class
+      self.record = record
+    else
+      self.record = NoRecord
+    end
+    self
+  end
+
+  def for_email email
+    return self if record.user?
+    self.record = user_class.find_by_email email
+    self.record = NoRecord unless record.present?
+    self
+  end
+
+  def for_token token
+    return self if record.user?
+    token_finder = ('find_by_'+token_name.to_s).to_sym
+    self.record = user_class.send(token_finder, token)
+    self.record = NoRecord unless record.present?
+    self
+  end
+
+  def record?
+    record.user?
+  end
+
+  def norecord?
+    !record?
+  end
+
+  def email
+    record.email
+  end
+
+  def token
+    record.send(token_name)
+  end
+
+  def token= value
+    record.send((token_name.to_s + '=').to_sym, value)
+    record.save
+  end
+
+  def generate
+    begin 
+      token = SecureRandom.urlsafe_base64(16) # rails documentation suggests default length may change
+    end while user_class.exists? token_name => token
+    record.send(token_assign_name, token)
+    record.send(token_timestamp_assign_name, Time.zone.now) if record.respond_to? token_timestamp_assign_name 
+    record.save
+    self
+  end
+
+  def assure_generation
+    generate unless record.send(token_name).present?
+    self
+  end
+
+  def expired? duration = 4.hours
+    stamp = record.send(token_timestamp_name)
+    return nil unless stamp.kind_of? Time    
+    Time.zone.now - stamp > duration
+  end
+
+private 
+
+  def token_assign_name
+    (token_name.to_s + '=').to_sym
+  end
+
+  def token_timestamp_name
+    (token_name.to_s + '_at').to_sym
+  end
+
+  def token_timestamp_assign_name
+    (token_name.to_s + '_at=').to_sym
+  end
+
+end

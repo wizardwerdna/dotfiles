@@ -1,0 +1,28 @@
+require_relative '../automatic_maker'
+
+describe AutomaticMaker do
+
+  let (:code) { "abcd" } 
+  let (:code_generator) { lambda { code } }
+  let (:maker) { AutomaticMaker.new( code_generator ) }
+  let (:guess_indexer) { double("guess_indexer") }
+
+  it "is a subclass of Maker" do
+    maker.should be_kind_of Maker
+  end
+
+  it "calls code_generator on initialization" do
+    code_generator.should_receive(:call).and_return "abcd"
+    maker
+  end
+
+  it "should answer with a perfect score for code" do
+    maker.score_guess("abcd").should =~ Score.new(4,0,"abcd")
+  end
+
+  it "should make a random score" do
+    GuessIndexer.should_receive(:new).and_return(guess_indexer)
+    guess_indexer.should_receive(:make_random_guess).and_return("abcd")
+    AutomaticMaker.new.score_guess("abcd").should =~ Score.new(4,0,"abcd")
+  end
+end

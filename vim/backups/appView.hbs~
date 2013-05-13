@@ -1,0 +1,13 @@
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <!--List of rooms-->
+  </div>
+</div>
+<div class="row-fluid">
+  <div class="span2">
+  <!--Left sidebar containing list of users-->
+  </div>
+  <div class="span10">
+  <!--Main chat window-->
+  </div>
+</div>

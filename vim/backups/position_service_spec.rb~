@@ -1,0 +1,30 @@
+describe PositionService do
+  context "#possible_moves?" do
+    context "no moves made" do
+      specify { PositionService.new("012345678").should have_possible_moves }
+    end
+    context "three in a row" do
+      specify { PositionService.new("XXX345678").should_not have_possible_moves }
+      specify { PositionService.new("012OOO678").should_not have_possible_moves }
+      specify { PositionService.new("012345XXX").should_not have_possible_moves }
+    end
+    context "three in a column" do
+      specify { PositionService.new("X12X45X78").should_not have_possible_moves }
+      specify { PositionService.new("0O23O56O8").should_not have_possible_moves }
+      specify { PositionService.new("01X34X67X").should_not have_possible_moves }
+    end
+    context "three in a diagonal" do
+      specify { PositionService.new("X123X567X").should_not have_possible_moves }
+      specify { PositionService.new("01O4O5O78").should_not have_possible_moves }
+    end
+    context "full board without a run" do
+      specify { PositionService.new("XOXOOXXXO").should_not have_possible_moves }
+    end
+  end
+
+  context "#apply_move" do
+    specify { PositionService.new("012345678").apply_move("0","X").should == "X12345678" } 
+  end
+end
+
+

@@ -1,0 +1,21 @@
+EMPTY_TREE = [:root, []]
+
+
+TREE_WITH_ONE_LEAF = [:root, [
+  [:A, []]
+]
+
+TREE_WITH_TWO_LEAVES = [:root, [
+  [:A, []],
+  [:B, []]
+]
+
+TREE_WITH_SUB_LEAVES = [:root, [
+  [:A, [
+    [:A1, []]
+    [:A2, []]
+  ]],
+  [:B, []]
+]
+
+puts TREE_WITH_SUB_LEAVES.flatten.inspect

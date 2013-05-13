@@ -1,0 +1,5 @@
+class ApplyMoveService
+  def self.score position, marker, move
+
+  end
+end

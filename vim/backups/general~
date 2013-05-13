@@ -1,0 +1,17 @@
+The system should manage the delivery of static information. Static information is information that does not change once it has been registered with the system.
+
+Two Actors are present, a User and a Site.
+
+Value <Static Information> comprises <name> and <data>.
+
+Use cases for the Site:
+  Register Static Information: <Static Information> 
+    Insert <Static Information> into the Static Information Repository
+    if <Static Information>.<name> has already been registered, whine.
+
+Use cases for the User:
+  View Static Information: <name>
+    Respond with the <Static Information> having <name>
+    if <name> has not been registered, whine.
+
+Classes StaticInformation

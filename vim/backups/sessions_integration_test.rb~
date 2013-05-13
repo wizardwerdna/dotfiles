@@ -1,0 +1,40 @@
+require "minitest_helper"
+
+describe "Sessions integration" do
+  before do
+    @andy = Factory(:user)
+    page.reset!
+  end
+  after do
+    @andy.destroy
+    page.reset!
+  end
+  it "should permit you to logout" do
+    page.driver.browser.delete session_path("current")
+    page.driver.browser.follow_redirects!
+    current_path.must_equal new_session_path
+    page.has_content?('Log In').must_equal true
+    page.has_content?('Sign Up').must_equal true
+    page.has_content?('Log Out').must_equal false
+  end
+  
+  it "should not permit you to login to an invalid account or password" do
+    page.driver.browser.post sessions_path, {session: {}}
+    page.driver.browser.follow_redirects!
+    current_path.must_equal new_session_path
+    page.has_content?('Log In').must_equal true
+    page.has_content?('Sign Up').must_equal true
+    page.has_content?('Log Out').must_equal false
+  end
+
+  it "should permit you to login" do
+    page.driver.browser.post sessions_path, {session: {email: @andy.email, password: @andy.password}}
+    page.driver.browser.follow_redirects!
+    current_path.must_equal dashboard_path
+    page.has_content?('Log In').must_equal false
+    page.has_content?('Sign Up').must_equal false
+    page.has_content?('Log Out').must_equal true
+  end
+  
+  it "should recognize whether you asked to be remembered"
+end

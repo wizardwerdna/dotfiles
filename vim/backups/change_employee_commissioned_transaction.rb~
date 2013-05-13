@@ -1,0 +1,17 @@
+class ChangeEmployeeCommissionedTransaction < ChangeEmployeeClassificationTransaction
+
+  def initialize emp_id, salary, commission
+    super emp_id
+    @salary = salary
+    @commission = commission
+  end
+
+  def make_classification
+    CommissionedClassification.new @salary, @commission
+  end
+  def make_schedule
+    BiWeeklySchedule.new
+  end
+
+end
+

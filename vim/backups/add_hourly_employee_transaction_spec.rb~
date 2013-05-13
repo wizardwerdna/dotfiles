@@ -1,0 +1,21 @@
+require_relative '../src/interfaces/transaction_interface'
+require_relative '../src/add_hourly_employee_transaction'
+
+describe AddHourlyEmployeeTransaction do
+  subject{AddHourlyEmployeeTransaction.new(1, "Alice", "Home", 1000)}
+  before :each do
+    Repository.configure Employee => MemoryRepos::EmployeeRepo.new
+  end
+
+  it_should_behave_like "a transaction"
+
+  it "should add the specified hourly employee to the Employee repository" do
+    subject.execute
+    employee = Repository.for(Employee).fetch_by_emp_id 1
+    employee.name.should == "Alice"
+    employee.address.should == "Home"
+    employee.classification.should be_kind_of HourlyClassification 
+    employee.schedule.should be_kind_of MonthlySchedule 
+    employee.payment_method.should be_kind_of HoldMethod
+  end
+end

@@ -1,0 +1,52 @@
+root = (exports ? this)
+
+"use strict"
+root.Promise = class Promise
+  constructor: (init=(->), @state=new PendingState) ->
+    try
+      init.call @, @resolve, @reject, @
+    catch e
+      @reject e
+  then: (onFulfilled, onRejected) => new Promise (resolve, reject) =>
+      @state.queue (state)->
+        state.then(onFulfilled, onRejected).then(resolve, reject)
+  fulfill: (value) => @state = @state.fulfill value
+  reject: (reason) => @state = @state.reject reason
+  resolve: (valueOrOtherP) =>
+    if valueOrOtherP instanceof Promise
+      valueOrOtherP.then(@fulfill, @reject)
+    else
+      @resolveNonPromise valueOrOtherP
+  resolveNonPromise: (value) ->
+    if value isnt Object(value)
+      @fulfill valueOrThennable
+
+  class PendingState
+    constructor: (@pendingThens = [])->
+    queue: (f)=> @pendingThens.push f
+    fulfill: (value) -> new FulfilledState value, @pendingThens
+    reject: (reason) -> new RejectedState reason, @pendingThens
+
+  class SettledState
+    constructor: (pendingThens=[])->
+      (@queue => pendingThen(@)) for pendingThen in pendingThens
+    queue: (f)=>
+      setImmediate => f(@)
+    fulfill: -> @
+    reject: -> @
+    then: (callback, datum) ->
+      if typeof callback isnt 'function'
+        @
+      else
+        try
+          new FulfilledState callback.call(undefined, datum)
+        catch e
+          new RejectedState e
+
+  class FulfilledState extends SettledState
+    constructor: (@value, pendingThens)-> super pendingThens
+    then: (onFulfilled, __) => super(onFulfilled, @value)
+
+  class RejectedState extends SettledState
+    constructor: (@reason, pendingThens)-> super pendingThens
+    then: (__, onRejected) => super(onRejected, @reason)

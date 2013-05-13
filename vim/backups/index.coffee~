@@ -1,0 +1,5 @@
+root = (exports ? this)
+{Covenant} = require './covenant.coffee'
+{Promise} = require './promise.coffee'
+root.Covenant = Covenant
+root.Promise = Promise

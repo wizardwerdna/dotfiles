@@ -1,0 +1,5 @@
+describe 'foo' do
+  it 'should foo' do
+    1.should ==1 
+  end
+end

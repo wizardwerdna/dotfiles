@@ -1,0 +1,6 @@
+class exports.GameRunner
+
+  constructor: (maker, breaker, console) ->
+    @maker = maker
+    @breaker = breaker
+    @console = console

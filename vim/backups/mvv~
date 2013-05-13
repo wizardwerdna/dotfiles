@@ -1,0 +1,2 @@
+#! /usr/bash
+mvim -v -O $1.rb spec/$1_spec.rb

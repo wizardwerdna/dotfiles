@@ -1,0 +1,38 @@
+describe Issues do
+
+  context "when created" do
+
+    let(:description) {"a description"}
+    let(:parent){Issue.new(description)}
+    subject{parent}
+    
+    it "should answer its description" do
+      subject.description.should == description
+    end
+    it "should have no parent" do
+      subject.parent.should be_nil
+    end
+    it "should have no children" do
+      subject.children.should be_empty
+    end
+
+    context "and a child is added" do
+      let(:child){Issues.new("a child")}
+      let(:second_child){Issues.new("a second child")}
+      begin :each do
+        subject << child
+      end
+
+      it "should be correctly situated" do
+        parent.children.should == [child]
+        child.parent.should == parent
+      end
+
+      it "should correctly add another child in order" do
+        subject << second_child
+        parent.children.should == [child, second_child]
+        second_child.parent.should == parent
+      end
+    end
+  end
+end

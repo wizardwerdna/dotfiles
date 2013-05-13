@@ -1,0 +1,108 @@
+function lift(x) {
+  return promise(function(resolve) {
+      resolve(x);
+      });
+}
+
+function reject(reason) {
+  return promise(function(_, reject) {
+      reject(reason);
+      });
+}
+
+function promise(resolver) {
+  self = new Promise(then);
+
+  try { 
+    resolver(promiseResolve, promiseReject);
+  } catch(e) {
+    promiseReject(e);
+  }
+
+  // Return the promise
+  return self;
+
+
+  function promiseResolve(value) {
+    if(!handlers) {
+      return;
+    }
+
+    resolve(coerce(value));
+  }
+
+  function promiseReject(reason) {
+    if(!handlers) {
+      return;
+    }
+
+    if(!handled) {
+      onUnhandled(self, reason);
+    }
+
+    resolve(rejected(reason));
+  }
+
+  function resolve(x) { }
+  
+  // Register handlers with this promise
+  function then(onFulfilled, onRejected) {
+    if (!handled) {
+      handled = true;
+      onHandled(self);
+    }
+
+    return promise(function(resolve, reject) {
+        handlers
+        // Call handlers later, after resolution
+        ? handlers.push(function(value) {
+          value.then(onFulfilled, onRejected).then(resolve, reject);
+          })
+        // Call handlers soon, but not in the current stack
+        : enqueue(function() {
+          value.then(onFulfilled, onRejected).then(resolve, reject);
+          });
+        });
+  }
+}
+
+// Private
+
+function Promise(then) {
+  this.then = then;
+  protect(this);
+}
+
+function coerce(x) {
+  if(x instanceof Promise) {
+    return x;
+  } else if (x !== Object(x)) {
+    return fulfilled(x);
+  }
+  return promise(function(resolve, reject) {
+      enqueue(function() {
+        try {
+          // We must check and assimilate in the same tick, but not the
+          // current tick, careful only to access promiseOrValue.then once.
+          var untrustedThen = x.then;
+
+          if(typeof untrustedThen === 'function') {
+          call(untrustedThen, x, resolve, reject);
+          } else {
+          // It's a value, create a fulfilled wrapper
+          resolve(fulfilled(x));
+          }
+        } catch(e) {
+          // Something went wrong, reject
+          reject(e);
+        }
+      });
+    });
+  }
+}
+
+// create an already-fulfilled promise used to break assimilation recursion
+function fulfilled(x) { }
+function rejected(x) { }
+function noop() {}
+

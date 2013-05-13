@@ -1,0 +1,145 @@
+require 'spec_helper'
+
+describe EmailVerification do
+
+  context "works with TokenService" do
+
+    subject{EmailVerification.new}
+    let(:token_service){double('token_service').as_null_object}
+
+    it "should use :verify_token" do
+      token_service.stub(:record => TokenService::NoRecord)
+      TokenService.should_receive(:new).with(:verify_token).and_return token_service 
+      subject.notify
+    end
+
+  end
+
+  context "notify" do
+    subject{EmailVerification.new}
+    let(:email){'abc@def.com'} 
+    let(:token_service){double('token_service').as_null_object}
+    let(:mail){stub('mail', :deliver => nil)}
+    before :each do
+      TokenService.stub(:new => token_service)
+      EcasebaseMailer.stub(:verify_notice => mail)
+    end
+
+    it "should return true on a valid email" do
+      subject.assign_attributes email: email
+      
+      subject.notify.should == true
+    end
+
+    it "should operate on the user having the specified email" do
+      token_service.should_receive(:for_email).with(email).and_return token_service
+      subject.assign_attributes(email: email)
+      
+      subject.notify
+    end
+
+    it "should assure that the user has a generated verification token" do
+      token_service.should_receive(:for_email).with(email).and_return token_service
+      token_service.should_receive(:assure_generation).and_return token_service
+      subject.assign_attributes(email: email)
+      
+      subject.notify
+    end
+
+    it "should deliver a verify token  notice to the email address" do
+      user = double('user record')
+      token_service.stub(:for_email => token_service, :record => user) 
+      EcasebaseMailer.should_receive(:verify_notice).with(user).and_return(mail)
+      mail.should_receive :deliver
+      subject.assign_attributes(email: email)
+      
+      subject.notify
+    end
+  end
+
+  context "notify edge cases" do
+    subject{EmailVerification.new}
+
+    it "should not return true if email is invalid as to form" do
+      subject.assign_attributes email: 'a@@b'
+      subject.notify.should == false
+      subject.errors[:email].should == ['is invalid'] 
+    end
+
+    it "should, however, return true if valid as to form, but not in database" do
+      token_service = double('token_service')
+      token_service.stub(:for_email => token_service, :record? => false)
+      TokenService.stub(:new => token_service)
+      EcasebaseMailer.should_not_receive(:verify_notice)
+      subject.assign_attributes email: 'abc@def.com'
+
+      subject.notify.should == true
+    end
+
+  end
+
+  context "verify" do
+    subject{EmailVerification.new}
+    let(:token_service){double('token service').as_null_object}
+    let(:good_token){'1234567890ABCDEabcde-_'}
+    let(:mail){stub('mail', deliver: nil)}
+    let(:record){stub('user_record', :update_attributes => true, :email_verified= => true, :save => true)}
+    before :each do
+      TokenService.stub(:new => token_service)
+      EcasebaseMailer.stub(:verify_confirm => mail)
+      token_service.stub(:for_token => token_service, :record => record)
+    end
+
+    it "should determine that an existing token is valid as to form, and answer true" do
+      subject.assign_attributes(token: good_token)
+      subject.verify.should == true
+    end
+
+    it "should mark the user corresponding to an existing token as verified" do
+      token_service.should_receive(:record).and_return(record)
+      record.should_receive(:email_verified=).with(true)
+      record.should_receive(:save)
+      subject.assign_attributes(token: good_token)
+      subject.verify
+    end 
+  
+    it "should send a confirmation email to the user corresponding to an existing token" do
+      token_service.should_receive(:record).and_return(record)
+      EcasebaseMailer.should_receive(:verify_confirm).with(record).and_return(mail)
+      mail.should_receive :deliver
+      subject.assign_attributes(token: good_token)
+      subject.verify
+    end 
+  
+  end
+
+  context "verify edge cases" do
+    let(:token_service){double('token service').as_null_object}
+    let(:bad_token){'not a valid urlsafe_base64 token'}
+    let(:good_token){'1234567890abcdeABCDE-_'}
+    before :each do
+      TokenService.stub(:new => token_service)
+    end
+
+
+    it "should answer false without a verification token" do
+      subject.verify.should == false
+      subject.errors[:token].should == ["can't be blank", "is invalid"]
+    end
+
+    it "should answer false without a valid verifiction token" do
+      subject.assign_attributes(token: bad_token)
+      subject.verify.should == false
+      subject.errors[:token].should == ["is invalid"]
+    end
+
+    it "should answer true with a valid verification token not in database, but do nothing else" do
+      token_service.stub(:record? => false)
+      EmailVerification.should_not_receive(:verify_confirm)
+      subject.assign_attributes(token: good_token)
+      subject.verify.should == true
+    end
+
+  end
+
+end

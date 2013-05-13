@@ -1,0 +1,84 @@
+require File.expand_path '../../../app/services/e_c_b_valid.rb', __FILE__
+
+describe ECBValid do
+
+  context 'email regex' do
+    it "should match letters, then @, then one or more strings ending in '.', then com" do
+      names = %w{a ab abc abcd a.%_'f}
+      doms  = %w{yahoo google www snuggles}
+      for name in names
+        for dom1 in doms
+          "#{name}@#{dom1}.com".should match ECBValid.email
+          for dom2 in doms
+            "#{name}@#{dom1}.#{dom2}.com".should match ECBValid.email
+            for dom3 in doms
+              "#{name}@#{dom1}.#{dom2}.#{dom3}.com".should match ECBValid.email
+            end
+          end
+        end
+      end
+    end
+    
+    it "should not match a string without a @" do
+      "abcd".should_not match ECBValid.email
+    end
+    
+    it "should not match a string not having a period after the @" do
+      "abcd@foo"
+    end
+    
+    it "names should have only and at least one letter, number, underscore, dot, %, + or quote before the @" do
+      %w{a Z 0 9 _ . % + '}.each{|str| "#{str}@b.com".should match ECBValid.email}
+      "@b.com".should_not match ECBValid.email
+      "$@b.com".should_not match ECBValid.email
+    end
+    
+    it "domains should only have letters, numbers or hyphens and at least one" do
+      "a@%.com".should_not match ECBValid.email
+      "a@.com".should_not match ECBValid.email
+    end
+    
+    it "should end with a tld having from two to four letters, museum or travel" do
+      "a@b.c".should_not match ECBValid.email
+      "a@b.abcde".should_not match ECBValid.email
+      "a@b.museum".should match ECBValid.email
+      "a@b.travel".should match ECBValid.email
+    end
+  
+  end
+
+  context 'password' do
+    it "should not validate a string shorter than six letters" do
+      "".should_not match ECBValid.password
+      "a".should_not match ECBValid.password
+      "abcde".should_not match ECBValid.password
+    end
+
+    it "should validate a string with six or more letters" do
+      "secret".should match ECBValid.password
+      "verylongstringwithlotsacharactersandnumbers".should match ECBValid.password
+    end
+
+    it "should validate a string with letters and numbers" do
+      "1a2b3c".should match ECBValid.password
+      "123456".should match ECBValid.password
+    end
+
+    it "should not match a string with a non-letter, non-number" do
+      "secret$".should_not match ECBValid.password
+    end
+  end
+
+  context 'base64' do
+    it "should be a string of length 22" do
+      "1234567890123456789012".should match ECBValid.urlsafe_base64
+      "123456789012345678901".should_not match ECBValid.urlsafe_base64
+      "12345678901234567890123".should_not match ECBValid.urlsafe_base64
+    end
+    it "should only contain base64 characters" do
+      "123456789ABCDEabcde0-_".should match ECBValid.urlsafe_base64
+      "$234567890123456789012".should_not match ECBValid.urlsafe_base64
+    end
+  end
+
+end

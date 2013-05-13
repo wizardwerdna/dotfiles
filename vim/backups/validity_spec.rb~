@@ -1,0 +1,35 @@
+describe ECBValid do
+
+  context 'email regex' do
+    it "should match letters, then @, then one or more strings ending in '.', then com" do
+      names = %w{a ab abc abcd a.%_'f}
+      doms  = %w{yahoo google www snuggles}
+      for name in names
+        for dom1 in doms
+          puts "#{name}@#{dom1}.com"
+          for dom2 in doms
+            puts "#{name}@#{dom1}.#{dom2}.com"
+            for dom3 in doms
+              puts "#{name}@#{dom1}.#{dom2}.#{dom3}.com"
+            end
+          end
+        end
+      end
+    end
+    it "should names having at least one letter, number, underscore, dot, %, + or quote" do
+    end
+    it "should match domains having at least one letter, number, or hypen, followed by a period" do
+    end
+    it "should end with a tld having from two to four letters, museum or travel" do
+    end
+      # return @email_regex if @email_regex
+      #       email_name_regex  = '[A-Z0-9_\.%\+\-\']+'
+      #             domain_head_regex = '(?:[A-Z0-9\-]+\.)+'
+      #                   domain_tld_regex  = '(?:[A-Z]{2,4}|museum|travel)'
+      #                         @email_regex = /\A#{email_name_regex}@#{domain_head_regex}#{domain_tld_regex}\z/i
+  
+  end
+
+  context 'password' do
+  end
+end

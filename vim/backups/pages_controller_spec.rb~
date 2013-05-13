@@ -1,0 +1,28 @@
+require 'spec_helper'
+describe PagesController do
+  context 'index' do
+    it "should render the index page" do
+      get :index
+      response.should redirect_to page_url 'index' 
+    end
+  end
+
+  context 'show' do
+    it "should render index always" do
+      get :show, :id => "index"
+      response.should render_template('index')  
+    end
+
+    it "should render 404 when directly called, with 200 status" do
+      get :show, :id => "404"
+      response.should be_success
+      response.should render_template('404')
+    end
+
+    it "should render 404, with status 404, on nonexistent files" do
+      get :show, :id => 'x\\y'  # illegal filename
+      response.should render_template('404')
+      response.response_code.should == 404 
+    end
+  end
+end

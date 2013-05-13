@@ -1,0 +1,78 @@
+#IMPERATIVE RECURSION
+
+
+##Introduction
+
+While Reginald Braithwaite writes eloquently about functional programming, his recent riff on trampolines made me sad.  [latest chapter in his "Javascript Allongé"]  They are a beautiful concept, but as implemented, they are fundamentally imperative in nature -- at end simply a while loop involving functions.
+
+The reason it made me sad, is that it ignored some of the most beautiful work of the 1990s, showing the late Edsger Dijkstra's loop- writing methodology at its finest.  Once you go to great efforts to make a function have tail-recursive shape, there is a simple and elegant way to implement it as a loop.  It may not involve thunks or monads or fuctions returning functions, but it is beautiful and elegant in its own way.  Paul Cohen, in a sweet book, "Programming in the 90s," offered us the following:
+
+Given a function in right-tail recursive form, specified as follows:
+
+```coffeescript
+f = (x) ->
+  if not isBase x
+    base(x)
+  else
+    h(x) ⊗ f(g(x))
+```
+
+Where "⊗" refers to any associative function having "1" as its unit operator, that is such that x ⊗ 1 == x for all x.  Ultimately, we don't care about type, so long as multiplication operator works.
+
+Of course, since coffeescript/javascript does not support tail recursion, these operations tend to blow up the stack, and something must be done about it.  Admittedly, the twenty-first century has taught us much about programming, but so did the 1990s.  Let's do this imperatively, following Dijkstra's "The Science of Programming."
+
+##Setting up for the kill: a loop invariant.
+
+Ultimately, we want to compute `R: f(N) = z`, setting z to the result of the function.  From this, we want to establish a weaker condition (we'll call it a loop invariant) that is easier to establish at the outset, and then easier to incrementally change.  Following the basic form of f, lets examine `INV: f(N) = j ⊗ f(k)`.
+
+We can initially establish the truth of this with the assignment [j,k] = [1,N], and we can note that if we can change N such that isBase(N), we can trivially arrive at our answer.  This suggests a function in the form:
+
+```coffeescript
+f = (N) ->
+  [j,k] = [1,N]
+  while not isBase k
+    # reduce N, while maintaining I
+  z = j ⊗ base(k)
+```
+
+ Whenever `not isBase k`, we can substitute `h(x) ⊗ f(g(x))` for f(x).  This would mean that whenever our invariant is true, then so is `f(N) = j ⊗ h(k) ⊗ f(g(k)`  Since the operator is associateive, we can rewrite this as `f(N) = (j ⊗ h(k)) ⊗ f(g(k))` Hence, the assignment
+
+```coffeescript
+f = (N) ->
+  [j,k] = [1,N]
+  while not isBase k
+    [j,k] = [j ⊗ h(k), g(k)]
+  j ⊗ base(k)
+```
+
+preserves the invariant and completes the program.  Substituting the appropriate fuctions shows how we can compute the factorial example iteratively.
+
+```coffeescript
+fact = (N) ->
+  [j,k] = [1,N]
+  while not k > 1
+    [j,k] = [j * k, k - 1]
+  j
+```
+
+More beautifully, the generalized tail-recursive function given by
+
+```coffeescript
+f = (x) ->
+  if not isBase x
+    base(x)
+  else
+    hl(x) ⊗ f(g(x)) ⊕ hr(x)
+```
+
+Given that 0 is the unity operator for "⊕", the function can be imperatively computed and derived:
+
+```coffeescript
+f = (N) ->
+  [lft, k, rgt] = [1, N, 0]
+  while not isBase x
+    [lft, k, rgt] = [lft⊗hl(k), g(k), hr(k)⊕rgt]
+  lft ⊗ base(k) ⊕ rgt
+```
+
+No doubt the trampoline is wonderful, but these lovely derivations, given using Dijkstra's programming calculus, can also take your breath away, as can a Mozart Aria. 

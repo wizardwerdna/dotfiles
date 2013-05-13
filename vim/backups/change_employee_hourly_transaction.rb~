@@ -1,0 +1,15 @@
+class ChangeEmployeeHourlyTransaction < ChangeEmployeeClassificationTransaction
+
+  def initialize emp_id, hourly_rate
+    super emp_id
+    @hourly_rate = hourly_rate
+  end
+
+  def execute
+    employee = Repository.for(Employee).fetch @emp_id
+    employee.classification = HourlyClassification.new @hourly_rate
+    employee.schedule = WeeklySchedule.new
+    Repository.for(Employee).store employee
+  end
+end
+

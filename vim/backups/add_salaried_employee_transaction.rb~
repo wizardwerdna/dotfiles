@@ -1,0 +1,25 @@
+require_relative 'repository'
+require_relative 'employee'
+
+class AddSalariedEmployeeTransaction < AddEmployeeTransaction
+
+  def initialize emp_id, name, address, salary
+    super(emp_id, name, address)
+    @salary = salary
+  end
+
+private
+
+  def make_classification
+    SalariedClassification.new(1000)
+  end
+
+  def make_schedule
+    MonthlySchedule.new
+  end
+
+  def payment_method
+    HoldMethod.new
+  end
+
+end

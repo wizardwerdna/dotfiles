@@ -1,0 +1,72 @@
+CONVERSION_TESTS = [
+  # roman symbols
+  {from: 0, to: ""},
+  {from: 1, to: "I"},
+  {from: 5, to: "V"},
+  {from: 10, to: "X"},
+  {from: 50, to: "L"},
+  {from: 100, to: "C"},
+  {from: 500, to: "D"},
+  {from: 1000, to: "M"},
+
+  # aggregate when symbol repeats
+  {from: 2, to: "II"},
+  {from: 3, to: "III"},
+
+  # shorthand to avoid four symbols in a row
+  {from: 4, to: "IV"},
+
+  # complex conversions 
+  {from: 1646, to: "MDCXLVI"},
+  {from: 1751, to: "MDCCLI"},
+  {from: 1866 , to: "MDCCCLXVI"},
+  {from: 1917, to: "MCMXVII"},
+  {from: 1776, to: "MDCCLXXVI"}
+]
+CORE_CONVERSIONS_TABLE = [
+  {from: 1000, to: "M"},
+  {from: 900, to: "CM"},
+  {from: 500, to: "D"},
+  {from: 400, to: "CD"},
+  {from: 100, to: "C"},
+  {from: 90, to: "XC"},
+  {from: 50, to: "L"},
+  {from: 40, to: "XL"},
+  {from: 10, to: "X"},
+  {from: 9, to: "IX"},
+  {from: 5, to: "V"},
+  {from: 4, to: "IV"},
+  {from: 1, to: "I"},
+  {from: 0, to: ""}
+]
+
+def core_conversion_for integer
+  CORE_CONVERSIONS_TABLE.
+    find(->{raise ArgumentError}) do |each| 
+      integer >= each[:from]
+    end
+end
+
+def convert integer
+  if integer == 0
+    ""
+  else
+    conversion = core_conversion_for(integer) 
+    conversion[:to] + convert(integer - conversion[:from])
+  end
+end
+
+describe "converting arabic numbers to roman numbers" do
+
+
+  CONVERSION_TESTS.each do |each|
+    it "should convert #{each[:from]} to #{each[:to]}" do
+      convert(each[:from]).should == each[:to]
+    end
+  end
+
+  it "should raise an error for an illegal number" do
+    ->{convert(-1)}.should raise_error(ArgumentError)
+  end
+
+end

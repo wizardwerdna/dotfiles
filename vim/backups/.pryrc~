@@ -1,0 +1,4 @@
+if defined?(Rails) && Rails.env
+    extend Rails::ConsoleMethods
+end
+Pry.config.editor = "emacsclient"

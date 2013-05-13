@@ -1,0 +1,5 @@
+should = require 'should'
+
+describe "newcli", ->
+  describe "colors", ->
+    it "tests" -> true.should.be.true

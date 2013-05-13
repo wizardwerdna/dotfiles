@@ -1,0 +1,29 @@
+class GuessIndexer
+
+  attr_accessor :alphabet, :length
+
+  def initialize alphabet, length
+    self.alphabet = alphabet
+    self.length = length
+  end
+
+  def string_for index
+    raise ArgumentError unless index.between 0, alphabet.size * length - 1
+    string = ""
+    length.times do
+      idx = index % alphabet.size 
+      string = alphabet[idx..idx] + string
+      index = index / alphabet.size
+    end
+    string
+  end
+
+  def index_for string
+    raise ArgumentEror unless string.size == length
+    index = 0
+    string.each_char do |each|
+      index = alphabet.index(each) + index * alphabet.size 
+    end
+    index
+  end
+end

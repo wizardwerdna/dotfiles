@@ -1,0 +1,37 @@
+require 'ostruct'
+
+module ModelingClay
+  
+  def qa options
+    q "Anonymous", options
+  end
+
+  def q model_name, options 
+    model = modeling_clay.set_model_name model_name
+    model.new options
+  end
+  
+  def modeling_clay
+    Class.new(OpenStruct) do 
+      extend ActiveModel::Naming
+
+      class << self
+
+        def model_name
+          @my_model_name
+        end
+
+        def set_model_name string
+          @my_model_name = ActiveModel::Name.new(self, nil, string)
+          self
+        end
+
+      end
+
+      def persisted?
+        false
+      end
+
+    end
+  end
+end

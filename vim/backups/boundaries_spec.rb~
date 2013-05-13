@@ -1,0 +1,71 @@
+require_relative '../z_repositories/in_memory_repos'
+require_relative '../boundaries'
+
+describe Boundaries do
+  
+  let(:test_value){ double "test_value" }
+  let(:test_value1){ double "test_value1" }
+  let(:test_value2){ double "test_value2" }
+  
+  before :each do
+    Boundaries.config=nil
+  end
+
+  it "should produce a configuration object with definable entries" do
+    Boundaries.config.test = test_value
+    Boundaries.config.test.should == test_value 
+  end
+
+  it "should permit you to reassign config" do
+    Boundaries.config = test_value
+    Boundaries.config.should == test_value
+  end
+
+  it "should produce a new onfiguration object afer setting config to nil" do
+    Boundaries.config.foo = double "first_value" 
+    Boundaries.config = nil
+    Boundaries.config.foo.should be_nil
+    Boundaries.config.foo = test_value
+  end
+
+  it "should delegate to the configuration object any undefined methods" do
+    Boundaries.foo.should be_nil
+    Boundaries.config.foo = test_value
+    Boundaries.foo.should == test_value
+  end
+
+  it "should configure elements of a hash" do
+    hash = {
+      test_value: test_value,
+      test_value1: test_value1,
+      test_value2: test_value,
+    }
+    Boundaries.configure(hash)
+    hash.each{ |k,v| Boundaries.config.send(k).should == v }
+  end
+
+  it "should permit configuration with an reopened definition" do
+    module Boundaries
+      config.test_value = "test_value" 
+      config.test_value1 = "test_value1" 
+      config.test_value2 = "test_value2" 
+    end
+    Boundaries.test_value.should == "test_value"
+    Boundaries.test_value1.should == "test_value1"
+    Boundaries.test_value2.should == "test_value2"
+  end
+
+  it "should permit setting up a database" do
+    module InMemoryRepos
+      class EntriesRepo; end
+      class PostsRepo; end
+    end
+    Boundaries.configure({
+      EntriesRepo: InMemoryRepos::EntriesRepo.new,
+      PostsRepo: InMemoryRepos::PostsRepo.new
+    })
+    Boundaries.EntriesRepo.should be_kind_of InMemoryRepos::EntriesRepo
+    Boundaries.PostsRepo.should be_kind_of InMemoryRepos::PostsRepo
+  end
+
+end

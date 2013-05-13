@@ -1,0 +1,2 @@
+if [ "$PS1" -a -r ~/.bash_profile ]; then . ~/.bash_profile ; fi 
+source ~/.bash_profile

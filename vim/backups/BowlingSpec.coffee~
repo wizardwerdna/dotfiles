@@ -1,0 +1,34 @@
+root = exports ? this
+
+rollMany = (game, times, pins) ->
+  (game.roll(pins)) for i in [1..times]
+
+describe "Bowling", ->
+  beforeEach ->
+    @game = new root.Bowling
+
+  it "should score a gutter game", ->
+    rollMany(@game, 20, 0) 
+    expect(@game.score()).toEqual 0
+
+  it "should score a 1-pin game", ->
+    rollMany(@game, 20, 1)
+    expect(@game.score()).toEqual 20
+
+  it "should score a single spare game", ->
+    @game.roll(5)
+    @game.roll(5)
+    @game.roll(3)
+    rollMany(@game, 17, 0)
+    expect(@game.score()).toEqual 16
+
+  it "should score a single strike game", ->
+    @game.roll(10)
+    @game.roll(3)
+    @game.roll(4)
+    rollMany(@game, 16,0)
+    expect(@game.score()).toEqual 24
+
+  it "should score a perfect game", ->
+    rollMany(@game, 12, 10)
+    expect(@game.score()).toEqual 300

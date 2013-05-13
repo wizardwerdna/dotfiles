@@ -1,0 +1,29 @@
+def default_rack_responder
+  "rails"
+end
+
+def rack_responder
+  (ENV["WEB"] || default_rack_responder).downcase
+end 
+
+def select_rack_responder
+  case rack_responder
+  when 'sinatra' then doSinatra 
+  when 'rails' then doRails
+  else 
+    puts "invalid RackResponder"
+    exit(1)
+  end
+end
+
+def doRails
+  puts "Configuring for rails"
+  eval ::File.read(::File.expand_path('../z_rails.ru',__FILE__))
+end
+
+def doSinatra
+  puts "Configuring for sinatra"
+  eval ::File.read(::File.expand_path('../z_sinatra.ru',__FILE__))
+end
+
+select_rack_responder

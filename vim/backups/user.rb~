@@ -1,0 +1,25 @@
+require 'active_attr'
+require_relative '../../app/services/e_c_b_valid'
+class User
+  include ActiveAttr::Model
+  include ActiveModel::SecurePassword
+  has_secure_password
+
+  attribute :first_name
+  attribute :last_name
+  attribute :email
+  attribute :password_digest
+  attribute :password
+  attribute :password_confirm
+
+  validates :first_name, :presence => true
+  validates :last_name, :presence => true
+  validates :email, :presence => true, :format => ECBValid.email
+
+  attribute :casebase
+
+  def subscribe
+    casebase.add_user self
+  end
+
+end

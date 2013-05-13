@@ -1,0 +1,17 @@
+root = exports ? this
+
+class root.Stack
+  constructor: (size=100) ->
+    @size = size
+    @values = []
+    @num_values = 0
+
+  isEmpty: -> @num_values == 0
+
+  push: (value) -> 
+    throw("Overflow") if @num_values == size
+    @values[@num_values++] = value
+
+  pop: ->
+    throw("Underflow") if @isEmpty()
+    @values[--@num_values]

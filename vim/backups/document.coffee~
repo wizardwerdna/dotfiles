@@ -1,0 +1,19 @@
+root = (entities ? this)
+Node = (require './node').Node
+MemoryModel = (require './memoryModel').MemoryModel
+
+#class Document
+#   @all: -> value for key, value of Document.documentHash
+#   @documentHash: {}
+#   @reset: -> Document.documentHash = {}; Document
+#   @maxID: -> Math.max -1, Document.all().map((e)->e.id)...
+#   @find: (id) -> Document.documentHash[id]
+#   constructor: (@name, @description, @mime, @url, @filename, @size, @id=Document.maxID()+1) ->
+#     throw new Error "Document id #{@id} must be unique." if Document.documentHash[@id]?
+#     Document.documentHash[@id] = @
+
+class Document extends MemoryModel
+  constructor: (@name, @description, @mime, @url, @filename, @size, id) ->
+    super(id)
+
+root.Document = Document

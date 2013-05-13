@@ -1,0 +1,25 @@
+= Getting then
+
+```coffeescript
+  p.then(f1,r1)
+  p.then(f2,r2)
+```
+
+is fundamentally different from
+
+```coffeescript
+  p.then(f1,r1).then(f2,r2)
+```
+
+because it is equivalent to
+
+```coffeescript
+  p2 = p.then(f1, r1)
+  p2.then(f2,r2)
+```
+
+First of all, p2 is pending and linked to p.  Thus, when p is resolved, however resolved, p2 will eventually, but LATER, be resolved identically.  Thus, p2, upon that resolution, will eventually run its callbacks with the value and posture of p.  The sequening will be:
+
+```coffeescript
+figured out later
+```

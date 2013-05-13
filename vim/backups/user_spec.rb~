@@ -1,0 +1,61 @@
+require_relative '../../app/models/user'
+
+attributes = {
+  first_name: 'first_name',
+  last_name: 'last_name',
+  email: 'abc@def.com', 
+  password_digest: 'password digest', 
+}
+
+describe User do
+  let (:user) { User.new }
+  it "starts with blank attributes" do
+    user.first_name.should be_nil
+    user.last_name.should be_nil
+    user.email.should be_nil
+    user.casebase.should be_nil
+  end
+
+  (attributes.keys+[:casebase]).each do |getter|
+    it "supports reading and writing #{getter.inspect}" do
+      attribute_value = getter.inspect 
+      setter = (getter.to_s + "=").to_sym
+      user.send(setter, attribute_value)
+      user.send(getter).should == attribute_value
+    end
+  end
+
+  it "is valid with all the attributes" do
+    user.assign_attributes(attributes)
+    user.password = user.password_confirmation = "foomie"
+    user.should be_valid  
+  end
+
+  attributes.keys.each do |missing_key|
+    it "is invalid without #{missing_key.inspect}" do
+      user.assign_attributes(attributes.except(missing_key))
+      user.should_not be_valid
+    end
+  end
+
+  it "is invalid if email not properly formatted" do
+    user.assign_attributes(attributes.merge(email: 'a@@b'))
+    user.should_not be_valid
+  end
+
+  it "supports setting attributes in the initializer" do
+    user = User.new(first_name: 'first', last_name: 'last', email: 'email')
+    user.first_name.should== 'first'
+    user.last_name.should == 'last'
+    user.email.should == 'email'
+  end
+  
+  describe "#subscribe" do
+    it "should add the user to the casebase" do 
+      casebase = double('casebase') 
+      casebase.should_receive(:add_user).with(user)
+      user.casebase = casebase
+      user.subscribe
+    end
+  end
+end

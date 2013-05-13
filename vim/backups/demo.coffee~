@@ -1,0 +1,9 @@
+root = (exports ? this)
+
+fact = (x) ->
+  if x > 1
+    x * fact(x-1)
+  else
+    1
+
+root.fact = fact

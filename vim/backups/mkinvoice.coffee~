@@ -1,0 +1,20 @@
+fs = require 'fs'
+ejs = require 'ejs'
+rand = (x)-> parseInt(Math.random() * x)
+pdate = (dstring, divider="/") ->
+  date = new Date dstring
+  "#{date.getMonth()+1}#{divider}#{date.getDate()}#{divider}#{date.getFullYear()}"
+data = require './invoices.json'
+filename = 'invoice.html'
+file = fs.readFileSync(filename, 'utf8')
+for datum in data
+  output = ejs.render(file, inv: datum, pdate: pdate)
+  outfile = "/Users/werdna/Dropbox/barry-" + pdate(datum.invoiceDate,"-") + ".html"
+  console.log outfile
+  fs.writeFileSync(outfile, output)
+  console.log new Date datum.invoiceDate
+  console.log (new Date datum.invoiceDate).getTime()
+  epochTime = (new Date datum.invoiceDate).getTime()/1000
+  random = random
+  epochTime += 60*60*16 - rand(60*60*6)
+  fs.utimes outfile, epochTime, epochTime

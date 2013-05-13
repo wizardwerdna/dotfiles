@@ -1,0 +1,16 @@
+Feature: Cases
+  As a user
+  I would like to work with data for my cases 
+  So I can litigate those cases more effectively
+
+  Scenario: List of Cases
+    When I signin as a typical user
+    And the user has a typical case
+    And I visit the cases page
+    Then I should see the case listed 
+
+  Scenario: Case Page
+    When I signin as a typical user
+    And the user has a typical case
+    And I visit the case page
+    Then I should see the case page

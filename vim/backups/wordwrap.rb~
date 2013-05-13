@@ -1,0 +1,57 @@
+class WordWrap
+
+  class << self
+    def wrap string, column_length
+      new(string, column_length).wrap
+    end
+  end
+
+  attr_accessor :string, :column_length, :break_index
+  
+  def initialize string, column_length
+    self.string = string 
+    self.column_length = column_length
+  end
+
+  def wrap
+    self.string.strip!
+    self.break_index = index_of_break_if_any
+    string_before_next_break + newline_and_wrapped_remainder_if_any
+  end
+
+private
+  
+  def string_before_next_break
+    string[0..break_index-1].rstrip
+  end
+
+  def newline_and_wrapped_remainder_if_any
+    if string_is_shorter_than_line?
+      ""
+    else
+      self.string = remainder_of_string_after_break
+      "\n" + wrap 
+    end
+  end
+
+  def remainder_of_string_after_break
+    string[break_index..-1]
+  end
+ 
+  def string_is_shorter_than_line?
+    string.length <= column_length
+  end
+
+  def index_of_break_if_any
+    index_of_rightmost_blank_or_nil || index_for_break_without_blanks
+  end
+
+  def index_for_break_without_blanks
+    [column_length, string.length].min
+  end
+
+  def index_of_rightmost_blank_or_nil
+    string[0..column_length-1].rindex(' ')
+  end
+ 
+end

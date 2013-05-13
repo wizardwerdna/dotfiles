@@ -1,0 +1,25 @@
+require "minitest_helper"
+
+describe "User signup workflow integration" do
+  before do
+    @andy_attributes = Factory.attributes_for(:user)
+  end
+  after do
+    User.find_by_email(@andy_attributes[:email]).delete
+  end
+
+  it "should permit a user to sign up" do
+    logout
+    puts @andy_attributes.inspect
+    signup_as @andy_attributes
+    User.find_by_email(@andy_attributes[:email]).must_be :present?
+  end
+
+  it "should authenticate the user and redirect her to the verification page" do
+    logout
+    signup_as @andy_attributes
+    page.driver.browser.follow_redirects!
+    current_url.must_equal verifications_url
+    page.must_be :has_content?, "Thank you for signing ucp!"
+  end
+end

@@ -1,0 +1,24 @@
+root = (exports ? this)
+
+class MemoryModel
+  @reset: -> @modelHash={}; @
+  @modelHash: {}
+  @all: -> value for key, value of @modelHash
+  @find: (id) -> @modelHash[id]
+  @where: (spec) ->  @all().filter (e) -> e._matches(spec)
+  @_objectAsModel: (object) => new @((v for k,v of object)...)
+  @_allIDs: -> @all().map (e)-> e.id
+  @_nextIndex: -> 1+Math.max(-1, @_allIDs()...)
+
+  constructor: (@id=@constructor._nextIndex()) ->
+    if @constructor.modelHash[@id]?
+      throw new Error "#{@constructor.name ? 'Object' } id #{@id} must be unique."
+    @constructor.modelHash[@id] = @
+
+  _matches: (spec) ->
+    ([key, val] for key, val of spec).
+      every (pair) => @[pair[0]] == pair[1]
+    
+root.MemoryModel = MemoryModel
+
+

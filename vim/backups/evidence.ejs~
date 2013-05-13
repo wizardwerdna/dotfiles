@@ -1,0 +1,38 @@
+<% layout('layout') %>
+<h1>Table of Evidence</h1>
+
+<h2>Documents</h2>
+<table class="table">
+  <tr>
+    <th>Id</th>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Type</th>
+    <th>Size</th>
+  </tr>
+  <% documents.forEach(function(document){ %>
+  <tr>
+    <td><%= document.id %></td>
+  <td><A href="<%= document.url %>"><%= document.name %></A></td>
+    <td><%= document.description.slice(0, 20) %></td>
+    <td><%= document.mime %></td>
+    <td><%= document.size %></td>
+    <td><%= require('util').inspect(document, false, null, false).split('\n').join(' ') %></td>
+  </tr>
+  <% }) %>
+</table>
+<h2>People/Entities</h2>
+<table class="table">
+  <tr><th>Document</th></tr>
+  <% [1,2,3,4,5].forEach(function(document){ %>
+  <tr><td><%= document %></td>
+  <% }) %>
+</table>
+<h2>Pleadings</h2>
+<table class="table">
+  <tr><th>Document</th></tr>
+  <% [1,2,3].forEach(function(document){ %>
+  <tr><td><%= document %></td>
+  <% }) %>
+</table>
+

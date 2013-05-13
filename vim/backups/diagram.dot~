@@ -1,0 +1,34 @@
+digraph graphname {
+  ECaseBase [shape=record; label="{EcaseBase|users\npages\ntickets\ncurrent_user\ncurrent_case}"]
+  User [shape=record; label="{User|first_name\nlast_name\nemail\npassword_digest}"]
+  Page [shape=record; label="{Page|name}"]
+  Mailer [shape=record; label="{Mailer}"]
+  Case [shape=record; label="{Case|user_id|name\ndescription}"]
+  Source [shape=record; label="{Source|user_id|service\noath_token\noath_secret\nuri}"]
+  TicketStore [shape=record; label="{TicketStore|user_id|type\nvalue\nsecure_token\ncreated_at}"]
+  Issue [shape=record; label="{Issue|case_id\ndescription}"]
+  Fact [shape=record; label="{Fact|case_id\ndate\ndescription}"]
+  Person [shape=record; label="{Person|case_id\ndescription}"]
+  Document [shape=record; label="{Document|case_id\ndescription\nsource_id\npath}"]
+  relationship [shape=record; label="{relationship|first_person\nsecond_person\ndescription}"]
+  issue_fact [shape=record; label="{issue_fact|issue_id\nfact_id}"]
+  fact_evidence [shape=record; label="{fact_evidence|fact_id\nevidence_id\nevidence_type\ncitation}"]
+
+  Page -> ECaseBase
+  User -> ECaseBase
+  TicketStore -> ECaseBase 
+  TicketStore -> User 
+  Case -> User 
+  Source -> User
+  Issue -> Case
+  Fact -> Case
+  Person -> Case
+  relationship -> Person
+  Document -> Case
+  Document -> Source
+  issue_fact -> Fact
+  issue_fact -> Issue
+  fact_evidence -> Fact
+  fact_evidence -> Document
+  fact_evidence -> Person
+}

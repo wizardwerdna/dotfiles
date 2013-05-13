@@ -1,0 +1,3 @@
+describe "truth", ->
+  it "should know truth", ->
+    true.should.eql truth

@@ -1,0 +1,16 @@
+require_relative '../breaker'
+
+describe Breaker do
+  it "can make guesses" do
+    Breaker.new.next_guess
+  end
+
+  it "can register guess_scores" do
+    Breaker.new.guess_score
+  end
+
+  it "can yield a null value" do
+    lambda{ Breaker::NoGuess }.should_not raise_error
+  end
+
+end

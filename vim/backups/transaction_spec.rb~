@@ -1,0 +1,3 @@
+describe "transaction" do
+  it {should be_respond_to :execute}
+end

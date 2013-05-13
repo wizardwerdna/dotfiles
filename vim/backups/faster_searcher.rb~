@@ -1,0 +1,104 @@
+require_relative 'abstract_searcher'
+class FasterSearcher < AbstractSearcher
+
+  attr_accessor :rightmost_mismatch_in_pattern, :good_suffix_table
+
+  def initialize pattern
+    super
+    compute_last_bad_character_table
+    compute_good_suffix_table
+  end
+
+
+  def pattern_longer_than_string_at? k
+    k > end_of_string_for_pattern_search
+  end
+
+  def pattern_matches_string_at? k
+    self.rightmost_mismatch_in_pattern = rightmost_mismatch_in_pattern_at k
+    return rightmost_mismatch_in_pattern.nil?
+  end
+
+  def index_of_unchecked_remainder_of_string_after k
+    k - bmbackshift + boyer_moore_shift(
+      string[ k + rightmost_mismatch_in_pattern ],
+      rightmost_mismatch_in_pattern
+    )
+  end
+
+  def bmbackshift
+   pattern_length - 1 - rightmost_mismatch_in_pattern 
+  end
+
+  def end_of_string_for_pattern_search
+    @eos_for_pattern_searches ||= string_length - pattern_length
+  end
+
+  def rightmost_mismatch_in_pattern_at k
+    (pattern_length-1).downto(0) do |rightmost_index|
+      return rightmost_index if pattern[rightmost_index] != string[k+rightmost_index]
+    end
+    nil 
+  end
+
+  def boyer_moore_shift(ch, mismatch)
+    [ pattern_length - mismatch,
+      boyer_moore_shift_for_last_bad_character( ch ),
+      boyer_moore_shift_for_good_suffix( mismatch )
+    ].max 
+  end
+
+private
+
+  def boyer_moore_shift_for_last_bad_character bad
+    @last_bad_character_table.fetch(bad, pattern_length)
+  end
+  
+  def boyer_moore_shift_for_good_suffix mismatch
+    @good_suffix_table[mismatch]
+  end
+
+  def compute_last_bad_character_table
+    @last_bad_character_table = {}
+    (pattern_length).times do |i|
+      @last_bad_character_table[pattern[i]] = pattern_length - i - 1 
+    end
+    @last_bad_character_table
+  end
+  
+  def compute_good_suffix_table
+    @good_suffix_table = []  
+    compute_prefix_and_suffix_values
+    overwrite_table_with_plausible_replacement_values
+    adjust_for_backshift
+    @good_suffix_table
+  end
+
+  def adjust_for_backshift
+    pattern_length.times do |mismatch|
+      @good_suffix_table[mismatch] += pattern_length - 1 - mismatch
+    end
+  end
+  
+  def overwrite_table_with_plausible_replacement_values
+    for tail in 0..pattern_length-1 
+      len = 0
+      while tail >= len && pattern[tail-len,1] == pattern[pattern_length-1-len] do
+        len+=1
+      end
+      @good_suffix_table[pattern_length-1-len] = pattern_length-1-tail  unless tail < len
+    end
+  end 
+  
+  def compute_prefix_and_suffix_values
+    last_prefix_position = pattern_length
+    (pattern_length-1).downto(0) do |i|
+      if pattern[0, pattern_length-1-i] == pattern[i-pattern_length+1, pattern_length-1-i]
+        last_prefix_position = i+1;
+      end 
+      @good_suffix_table[i] = last_prefix_position
+    end
+    self
+  end
+
+end

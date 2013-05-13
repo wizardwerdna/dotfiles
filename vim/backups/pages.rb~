@@ -1,0 +1,16 @@
+# require_relative '../entities'
+require_relative '../lib/interactor.rb'
+module Blogs 
+
+  class New < Interactor
+    def execute
+    end 
+  end
+  
+  class NewPost < Interactor
+    def execute
+    end
+  end
+
+end
+

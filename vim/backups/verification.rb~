@@ -1,0 +1,63 @@
+class VerificationValidator < ActiveModel::Validator
+	def validate(record)
+		if record.persisted?
+			user = User.find_by_verification_token(record.verification_token)
+			unless user && user.verification_token == record.verification_token
+				record.errors[:base] << "Either the email or verification code is invalid"
+			end
+		else
+			user = User.find_by_email(record.email)
+			unless user.present?
+				record.errors[:email] << "is not valid"
+			end
+		end
+	end
+end
+
+class Verification
+  include ActiveAttr::Model
+  
+  attribute :email
+  attribute :verification_token
+
+  validates_with VerificationValidator
+
+  def self.find email_or_verification_token
+    if user = User.find_by_email(email_or_verification_token)
+      puts "user found_by_email"
+      Verification.new email:user.email
+    elsif user = User.find_by_verification_token(email_or_verification_token)
+      puts "user found_by_verification_token"
+      Verification.new email: user.email, verification_token: user.verification_token
+    else
+      raise ActiveRecord::RecordNotFound
+    end
+  end
+
+  def persisted?
+  	verification_token.present?
+  end
+
+  def save
+  	valid? && persist
+  end
+
+  def save!
+  	raise ActiveRecord::RecordInvalid.new(self) unless valid?
+  	persist
+  end
+
+  def persist
+  	if persisted?
+	  	user = User.find_by_verification_token(verification_token)
+	  	user.verified_at = Time.zone.now
+	  	user.save!
+      # when persisted, send welcome to ecasebase e-mail
+      UserMailer.welcome(User.find_by_email(email)).deliver
+	  else
+      # when not persisted, re-send verification e-mail
+      UserMailer.verification(User.find_by_email(email)).deliver
+	  end
+    self
+  end
+end

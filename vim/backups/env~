@@ -1,0 +1,7 @@
+export PATH="/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
+export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
+export PATH="~/bin:$PATH"
+export MANPATH="/usr/local/man:$MANPATH"
+export DROPBOX_TOKEN='qdeducyipmiamgp'
+export DROPBOX_SECRET='t3tpix9dhukmc8r'
+export ARCHFLAGS="-arch i386 -arch x86_64"

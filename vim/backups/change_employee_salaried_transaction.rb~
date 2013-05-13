@@ -1,0 +1,19 @@
+require_relative 'change_employee_classification_transaction'
+
+class ChangeEmployeeSalariedTransaction < ChangeEmployeeClassificationTransaciton
+
+  def initialize emp_id, salary
+    super emp_id
+    @salary = salary
+  end
+
+  def make_classification
+    SalariedClassification.new @salary
+  end
+
+  def make_schedule
+    MonthlySchedule.new
+  end
+
+end
+

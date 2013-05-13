@@ -1,0 +1,14 @@
+require_relative '../ziploc'
+
+describe ZipLoc do
+  subject{ ZipLoc.new(Node.new(:payload, []), 1, false) }
+  context "with changed_child" do
+    it "should not be the same" do
+      subject.with_changed_child(1,2).should_not be_equal subject 
+    end
+
+    it "should have the same node payload" do
+      subject.with_changed_child(1,2).node.payload.should == :payload
+    end
+  end
+end

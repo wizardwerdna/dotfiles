@@ -1,0 +1,26 @@
+root = (exports ? @)
+Zip = (require "./zip")
+console.log Zip
+
+class root.ZipChild extends Zip
+  constructor: (@node, @parent, @index) ->
+  root: -> @parent.root()
+  isRoot: -> false
+  siblings: -> @parent.children()
+  lefts: -> @parent.children()[0...@index]
+  rights: -> @parent.children()[@index+1..]
+  path: -> @parent.path().concat([@node])
+  up: -> @parent
+  left: -> (new root.ZipChild @siblings()[@index-1], @parent, @index-1) unless @_isLeftmost()
+  right: -> (new root.ZipChild @siblings()[@index+1], @parent, @index+1) unless @_isRightmost()
+  leftmost: ->new root.ZipChild @siblings()[0], @parent, 0
+  rightmost: ->new root.ZipChild @siblings()[@siblings().length-1], @parent, @siblings().length-1
+  prev: -> if @_isLeftmost() then @up() else @left()._bottomRightmost()
+  replace: (newNode) -> new root.ZipChanged newNode, @parent, @index
+
+  _isRightmost: -> @index + 1 == @siblings().length
+  _isLeftmost: -> @index == 0
+  _closestRightNeighbor: ->
+    if @_isRightmost() then @up()._closestRightNeighbor() else @right() 
+  _bottomRightmost: -> if @_isLeaf() then @ else @down().rightmost()._bottomRightmost()
+

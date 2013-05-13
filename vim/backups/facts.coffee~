@@ -1,0 +1,13 @@
+jQuery ->
+
+  console.log data
+  data = [33]
+
+  options =
+    "width":  "100%",
+    "height": "99%",
+    "style": "box"
+
+  timeline = new links.Timeline(document.getElementById('factTimeline'));
+
+  timeline.draw(data, options)

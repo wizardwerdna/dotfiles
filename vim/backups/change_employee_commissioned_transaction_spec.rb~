@@ -1,0 +1,24 @@
+require_relative '../src/change_employee_commissioned_transaction'
+
+describe ChangeEmployeeCommissionedTransaction do
+
+  let(:subject){ChangeEmployeeCommissionedTransaction.new(1, 1000, 0.5)}
+  let(:employee){Employee.new(emp_id: 1)}
+  
+  it_should_behave_like 'a transaction'
+
+  before :each do
+    Repository.configure Employee => MemoryRepos::EmployeeRepo.new
+    Repository.for(Employee).store employee
+  end
+
+  it "should change the employee to an hourly" do
+    subject.execute
+    e = Repository.for(Employee).fetch employee.emp_id
+    classification = e.classification
+    classification.should be_kind_of CommissionedClassification
+    classification.salary.should == 1000
+    classification.commission.should == 0.5
+    e.schedule.should be_kind_of BiWeeklySchedule
+  end    
+end

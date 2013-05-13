@@ -1,0 +1,16 @@
+require_relative 'maker'
+require_relative 'breaker'
+
+class ConsoleMaker < Maker
+
+  def score_guess guess
+    return Score::NoScore if guess = Breaker::NoGuess
+    string = "xxxx"
+    while (/^[-+]{0,4}$/ =~ string).nil?
+      print "(uses + and -)>"
+      string = gets.chomp
+    end
+    Score.new string.count('+'), string.count('-'), guess    
+  end
+
+end

@@ -1,0 +1,4 @@
+require_relative '../automatic_maker'
+
+describe AutomaticMaker do
+end

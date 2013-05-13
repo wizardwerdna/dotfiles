@@ -1,0 +1,25 @@
+1. A method for delivering a massively multiplayer modification of a limited player game having a set of rules using a data server and communication system having the capability to generate random samples from a limited source of game tokens; to securely and independently communicate game information with the players; and to broadcast information to the players, said method comprising the steps of:
+
+(a) generating at random a sequence of common game tokens from said limited source of game tokens in accordance with said set of rules;
+(b) generating at random for each player a sequence of player game tokens from said limited source of game tokens, excluding said common game tokens generated, in accordance with said set of rules;
+(c) secure disclosing said player game tokens to each player, respectively, in accordance with said set of rules;
+(d) disclose the common sequence of game tokens and receive communication of player investments to a prize pool from each player in reaction thereto, in accordance with said set of rules;
+(e) determining said modified limited player game results and allocating said prize pool in accordance with said set of rules; and
+(f) broadcasting said modified limited player game results and said allocation of said prize pool to each player.
+
+2. The method of claim 1, where said limited player game is a form of Texas Hold'em Poker where the tokens are the cards from a standard 52-card deck, modified to permit players to have hole cards drawn from non-common cards, replacing said hole cards after each said player has drawn them.
+
+3.  The method of claim 1, where said rules of said limited player game distinguish "round winners" and "round losers," and the steps (a) through (e) are repeated for the "round winners," removing said "round losers" from the game, until a predetermined number of game winners are determined.
+
+4. The method of claim 3, having an initial step of players paying an entry fee for one or more of a predetermined number of qualifying games, said entry fees comprising an overall prize pool; applying the method of claim 3 for determining a winner for each of said predetermined number of qualifying games, respectively; delivering a final limited player game to the winners of each said qualifying game to determine overall final results and allocating said overall prize pool; and broadcasting said final limited player game results and said allocation of said overall prize pool.
+
+
+
+
+------
+
+credit card -- 571-272-6500
+
+------
+
+(866) 217-9197

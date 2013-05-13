@@ -1,0 +1,9 @@
+class AIPlayer
+  def next_move position, mark
+    move = position[/[0-8]/]
+    puts "next_move(#{position},#{mark}) / move == #{move})"
+    raise position unless move =~ /[0-8]/
+    move
+  end
+end
+

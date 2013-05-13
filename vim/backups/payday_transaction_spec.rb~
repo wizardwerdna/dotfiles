@@ -1,0 +1,5 @@
+require_relative '../src/payday_transaction'
+
+describe PaydayTransaction do
+
+end

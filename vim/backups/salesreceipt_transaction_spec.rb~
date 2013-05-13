@@ -1,0 +1,29 @@
+require_relative '../src/salesreceipt_transaction'
+require 'date'
+
+describe SalesreceiptTransaction do
+
+  let(:date){Date.today}
+  let(:subject){SalesreceiptTransaction.new(1, date, 1111)}
+  let(:employee){Employee.new(emp_id: 1, name: "Alice", address: "Home")}
+
+  it_should_behave_like "a transaction"
+
+  before :each do
+    employee.classification = CommissionedClassification.new(111, 222)
+    Repository.configure Employee => MemoryRepos::EmployeeRepo.new
+    Repository.for(Employee).store employee  
+  end
+
+  it "should add a timecard" do
+    subject.execute
+    e = Repository.for(Employee).fetch(employee.emp_id)
+    e.emp_id.should == employee.emp_id
+    e.classification.should be_kind_of CommissionedClassification
+    timecard = e.classification.timecards.first
+    timecard.emp_id.should == 1
+    timecard.date.should == date
+    timecard.hours.should == 1111 
+  end
+  
+ end 

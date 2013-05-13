@@ -1,0 +1,66 @@
+class DoableStackError < RuntimeError; end
+class DoableStackRedoError < DoableStackError; end
+class DoableStackUndoError < DoableStackError; end
+
+class DoableStack
+
+  def initialize
+    reset_redo_stack
+    reset_undo_stack
+  end
+
+  def undo
+    assure_undo_command
+    moved_undo_command.undo
+  end
+
+  def redo
+    assure_redo_command
+    moved_redo_command.run
+  end
+
+  def run command
+    reset_redo_stack
+    push_or_reset_undo_stack command
+    command.run
+  end
+  
+private
+
+  def reset_redo_stack
+    @redo_stack = []
+  end
+
+  def reset_undo_stack
+    @undo_stack = []
+  end
+
+  def assure_undo_command
+    raise DoableStackUndoError if @undo_stack.empty?
+  end
+
+  def assure_redo_command
+    raise DoableStackRedoError if @redo_stack.empty?
+  end
+
+  def moved_undo_command  
+    (@redo_stack.push @undo_stack.pop).last
+  end
+
+  def moved_redo_command
+    (@undo_stack.push @redo_stack.pop).last
+  end
+
+  def push_or_reset_undo_stack command
+    if command_is_undoable? command
+      @undo_stack.push command
+    else
+      reset_undo_stack
+    end
+  end
+
+  def command_is_undoable? command
+    command.respond_to? :undo
+  end
+
+end

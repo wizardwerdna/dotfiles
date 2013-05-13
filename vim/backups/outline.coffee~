@@ -1,0 +1,118 @@
+should = require 'should'
+util = require 'util'
+
+Node = require('../src/node').Node
+Zip = require('../src/zip').Zip
+Outline = require('../src/outline').Outline
+
+emptyNode = new Node 'empty', []
+
+rootNode = new Node 'root', [
+    (leftNode = new Node 'left', [
+      bottomNode = new Node 'bottom', []]),
+    (middleNode = new Node 'middle', [
+      (middleLeftNode = new Node 'middleLeft', []),
+      (middleMiddleNode = new Node 'middleMiddle', []),
+      (middleRightNode = new Node 'middleRight', [])]),
+    (rightNode = new Node 'right', [])]
+
+emptyZip = new Zip emptyNode
+rootZip = new Zip rootNode
+oneNode = new Node 'one', []
+twoNode = new Node 'two', []
+threeNode = new Node 'three', []
+oneZip = new Zip new Node 'one', []
+twoZip = new Zip new Node 'two', []
+threeZip = new Zip new Node 'three', []
+
+outline = new Outline emptyZip
+
+describe "Outline", ->
+  describe "on empty zip", ->
+    it "should have the zip", -> outline.zip.should.eql emptyZip
+
+  describe "do", ->
+    beforeEach -> @outline = new Outline emptyZip
+    
+    it "should return an outline", ->
+      Outline::isPrototypeOf(@outline.do()).should.be.true
+      Outline::isPrototypeOf(@outline.do(null)).should.be.true
+      Outline::isPrototypeOf(@outline.do(rootZip)).should.be.true
+ 
+    describe "wtih zip", ->
+      it "should replace Zip if a Zip is passed", ->
+        @outline.do(rootZip).zip.should.eql rootZip
+        @outline.do(rootZip.down()).zip.node.should.eql rootZip.down().node
+      it "should leave zip unchanged if not a zip", ->
+        @outline.do(undefined).zip.should.eql emptyZip
+        @outline.do(null).zip.should.eql emptyZip
+    
+    describe "with function", ->
+      it "should return an outline", ->
+        Outline::isPrototypeOf(@outline.do(->)).should.be.true
+      it "should leave zip unchanged if function does not return zip", ->
+        @outline.do(->).zip.should.eql emptyZip
+      it "should return new zip if function application exists", ->
+        @outline.do(->rootZip).zip.should.eql rootZip
+      it "should pass prior zip to function", ->
+        @outline.do((z)->z.insertChild(rootNode)).
+          zip.down().node.should.eql rootNode
+      it "should throw error if application throws error", ->
+        (=> @outline.do(->throw new Error 'happy')).
+          should.throwError('happy')
+
+    xdescribe "with string", ->
+      beforeEach ->
+        @outline = new Outline emptyZip
+        @nodeClass = @outline.zip.node.constructor::
+        @outline.do '{"tag":"new", "children":[]}'
+        
+      it "should parse as json", ->
+        @outline.zip.node.tag.should.eql "new"
+        @outline.zip.node.children.should.be.empty
+      it "should be coerced to the node type presently as root", ->
+        (@nodeClass.isPrototypeOf @outline.zip.node).should.be.ok
+
+    xdescribe "with undo parameters", ->
+      it "should reset redos changing the zip", ->
+        @outline.do(oneZip, 'clear').redos.should.be.empty
+        @outline.do(oneZip, 'save').redos.should.be.empty
+        @outline.do(oneZip, 'noSave').redos.should.be.empty
+
+       it "should reset undos changing the zip on 'clear'", ->
+         @outline.do(oneZip, 'clear').undos.should.be.empty
+
+       it "should add an undo changing the zip on 'save'", ->
+         @outline.do(oneZip, 'save').undos.should.not.be.empty
+
+  describe "undo", ->
+    beforeEach -> @outline = new Outline emptyZip
+    it "should return on instance of an Outline descendant", ->
+      Outline::isPrototypeOf(@outline.undo()).should.be.true
+    it "should not do anything if no action has been 'do'ne", ->
+      @outline.undo().zip.should.eql @outline.zip
+    it "should undo the last action", ->
+      @outline = @outline.do(oneZip).do(twoZip).do(threeZip)
+      @outline.zip.node.should.eql threeNode
+      (@outline = @outline.undo()).zip.node.should.eql twoNode
+      (@outline = @outline.undo()).zip.node.should.eql oneNode
+      (@outline = @outline.undo()).zip.node.should.eql emptyNode
+      @outline.undo().zip.node.should.eql emptyNode
+
+  describe "redo", ->
+    beforeEach -> @outline = new Outline emptyZip
+    it "should return the outline", ->
+      Outline::isPrototypeOf(@outline.redo()).should.be.true
+    it "should redo the last action", ->
+      @outline.do(rootZip).undo().redo().zip.should.eql rootZip
+    it "should redo past undos in reverse order, and do nothing thereafter", ->
+      @outline = @outline.do(oneZip).do(twoZip).do(threeZip).undo().undo().undo()
+      @outline.zip.should.eql emptyZip
+      (@outline = @outline.redo()).zip.should.eql oneZip
+      (@outline = @outline.redo()).zip.should.eql twoZip
+      (@outline = @outline.redo()).zip.should.eql threeZip
+      @outline.redo().zip.should.eql threeZip
+    it "should allow undoing redone actions", ->
+      @outline.do(oneZip).undo().redo().undo().zip.should.eql emptyZip
+    it "should not permit redoing actions after a new do", ->
+      @outline.do(oneZip).undo().do(twoZip).redo().zip.should.eql twoZip

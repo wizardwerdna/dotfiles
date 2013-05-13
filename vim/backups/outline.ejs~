@@ -1,0 +1,5 @@
+<% layout('layout') %>
+<h1><%= root %></h1>
+<div class="outline">
+  <%- partial('node', outline) %>
+</div>

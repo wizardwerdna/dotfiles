@@ -1,0 +1,24 @@
+require_relative "../coin_changer"
+
+DENOMINATIONS = [1,5,10,25,50,100,200,500,1000,2000,5000,10000]
+describe CoinChanger do
+  it "should change 0 correctly" do
+    CoinChanger.new(DENOMINATIONS).change(0).should be_empty
+  end
+
+  it "should change 1 correctly" do
+    CoinChanger.new(DENOMINATIONS).change(1).should == {1 => 1}
+  end
+
+  it "should change 6 correctly" do
+    CoinChanger.new(DENOMINATIONS).change(6).should == {1 => 1, 5 => 1}
+  end
+
+  it "should change 1001 correctly" do
+    CoinChanger.new(DENOMINATIONS).change(1001).should == {1 => 1, 1000 => 1}
+  end
+
+  it "should change 25000 correctly" do
+    CoinChanger.new(DENOMINATIONS).change(250000).should == {10000 => 25}
+  end
+end

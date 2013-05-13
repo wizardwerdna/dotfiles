@@ -1,0 +1,42 @@
+require_relative '../src/change_union_member_transaction'
+
+describe ChangeUnionMemberTransaction do
+
+  let(:subject){ChangeUnionMemberTransaction.new(emp_id, member_id, dues)}
+  let(:emp_id){8}
+  let(:member_id){7743}
+  let(:dues){1000}
+  let(:employee){Employee.new(emp_id: emp_id)}
+  it_should_behave_like "a transaction"
+
+  before :each do
+    Repository.configure(
+      Employee => MemoryRepos::EmployeeRepo.new,
+      UnionMember => MemoryRepos::UnionMemberRepo.new
+    )
+    Repository.for(Employee).store employee
+    subject.execute
+    @affiliation = Repository.for(Employee).fetch(emp_id).affiliation
+  end
+
+  it "should create and store a UnionAffiliation" do
+    @affiliation.should be_kind_of UnionAffiliation
+  end
+ 
+  it "should store the membership id" do
+    @affiliation.member_id.should == member_id
+  end
+
+  it "should store the dues" do
+    @affiliation.dues.should == dues
+  end
+
+  it "should have an empty service charge collection" do
+    @affiliation.servicecharges.should be_empty
+  end
+
+  it "should be a member of the union" do
+    Repository.for(UnionMember).fetch(member_id).should ==
+      Repository.for(Employee).fetch(emp_id)
+  end
+end

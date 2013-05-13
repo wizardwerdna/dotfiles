@@ -1,0 +1,14 @@
+require 'should'
+Node = (require '../src/node').Node
+
+rootNode = new Node 'root', [
+    (leftNode = new Node 'left', [bottomNode = new Node 'bottom']),
+    (middleNode = new Node 'middle', [
+      (middleLeftNode = new Node 'middleLeft'),
+      (middleMiddleNode = new Node 'middleMiddle'),
+      (middleRightNode = new Node 'middleRight') ],
+    (rightNode = new Node 'right')]
+
+describe "Loc", ->
+  it "should know the truth", ->
+    rootNode.tag.should.eql 'root'

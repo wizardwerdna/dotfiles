@@ -1,0 +1,169 @@
+root = (exports ? this)
+Zip = (require '../src/zip').Zip
+Node = (require '../src/node').Node
+util = require 'util'
+
+class ANode extends Node
+  constructor: (@tag, @children) ->
+  clone: -> new ANode @tag, @children?.map (each) -> each.clone()
+
+class root.App
+  constructor: (rootName) ->
+    @zip = new Zip new ANode rootName ? 'root', []
+    @redoStack = []
+    @undoStack = []
+    @clipboard = undefined
+    @flashData = []
+
+  flash: (hash) ->
+    hash = {} unless hash?
+    hash = {text: hash} if typeof hash == 'string'
+    hash.type = "info" unless hash.type?
+    @flashData.push
+      type: hash.type
+      text: hash.text
+
+  addAfter: (string) ->
+    @_mutate "add '#{string}' after '#{@zip.node.tag}'",
+      if @zip.isRoot()
+        @zip.insertChild(@_node string).down()
+      else
+        @zip.insertAfter(@_node string).right()
+
+  addBefore: (string) ->
+    @_mutate "add '#{string}' before '#{@zip.node.tag}'",
+      @zip.insertBefore(@_node string)?.left()
+
+  renameOutline: (string) ->
+    @_mutate "rename Outline '#{string}'",
+      @zip = new Zip @_node string, @zip.root().children
+
+  indent: ->
+    @_mutate "indent '#{@zip.node.tag}'", @zip.indent()
+
+  outdent: ->
+    @_mutate "outdent '#{@zip.node.tag}'", @zip.outdent()
+
+  remove: ->
+    @_mutate "remove '#{@zip.node.tag}'",
+      unless @zip.isRoot()
+        @clipboard = @zip.node
+        @zip.remove()
+
+  movePrev: -> @_mutate "move selection '#{@zip.node.tag}' after next item", @zip.moveNext()
+
+  moveNext: -> @_mutate "move selection before previous item", @zip.movePrev()
+
+  selectNext: ->
+    @_select "select next item '%s'", @zip.next()
+ 
+  selectPrev: ->
+    @_select "select previous item '%s'", @zip.prev()
+  
+  selectFirst: ->
+    @_select "select first sibling", @zip.leftmost()
+
+  selectLast: ->
+    @_select "select last sibling", @zip.rightmost()
+  
+  selectTop: ->
+    @_select "select top of outline", new Zip @zip.root()
+
+  selectBottom: ->
+    @_select "select bottom of outline", @zip._bottomRightmost()
+
+  selectParent: ->
+    @_select "select parent of '#{@zip.node.tag}'", @zip.up()
+
+  selectChild: ->
+    @_select "select first child of '#{@zip.node.tag}'", @zip.down()
+
+  pasteBefore: ->
+    if @clipboard?
+      @_mutate "paste '#{@clipboard.tag}' before '#{@zip.node.tag}'",
+        if @clipboard? and not @zip.isRoot?
+          @zip.insertBefore(@clipboard.clone()).left()
+  
+  pasteAfter: ->
+    if @clipboard?
+      @_mutate "paste '#{@clipboard.tag}' after '#{@zip.node.tag}'", 
+        if @clipboard?
+          if @zip.isRoot()
+            @zip.insertChild(@clipboard.clone()).down()
+          else
+            @zip.insertAfter(@clipboard.clone()).right()
+  
+  pasteChild: ->
+    if @clipboard?
+      @_mutate "paste '#{@clipboard.tag}' after '#{@zip.node.tag}'",
+        @zip.insertChild(@clipboard.clone()).down() if @clipboard?
+  
+  undo: ->
+    if @undoStack.length > 0
+      undo = @undoStack.pop()
+      @redoStack.push
+        zip: @zip
+        command: undo.command
+      @zip = undo.zip
+      @flash "undo #{undo.command}"
+    else
+      @flash text: "nothing to undo", type: "error"
+
+  redo: ->
+    if @redoStack.length > 0
+      redo = @redoStack.pop()
+      @undoStack.push
+        zip: @zip
+        command: redo.command
+      @zip = redo.zip
+      @flash "redo #{redo.command}"
+    else
+      @flash text: "nothing to redo", type: "error"
+
+  loadJSON: (json)->
+    try
+      json = json() if typeof json == 'function'
+      @_mutate("outline loaded from file", 
+        new Zip @_newNodeFrom JSON.parse json)
+    catch error
+      @_mutate "default outline loaded due to #{error}", 
+        new Zip @_newNodeFrom {tag: 'root', children: []}
+
+  dumpJSON: ->
+    @flash text: "outline dumped to file", type: "notice"
+    JSON.stringify @zip.root(), undefined, null
+
+  _select: (string, newZip) ->
+    @_execute
+      string: string
+      newZip: newZip
+      isUndoable: false
+
+  _mutate: (string, newZip) ->
+    @_execute
+      string: string
+      newZip: newZip
+      isUndoable: true
+
+  _execute: (opt) ->
+    opt.newZip = opt.newZip() if typeof opt.newZip == 'function'
+    if opt.newZip?
+      opt.string = util.format(opt.string, opt.newZip.node.tag) unless opt.string.indexOf("%s") == -1
+      if opt.isUndoable
+        @undoStack.push
+            zip: @zip
+            command: opt.string
+          @redoStack = []
+      @zip = opt.newZip
+      @flash text:  opt.string, type: "info"
+    else
+      opt.string = util.format(opt.string, "*") unless opt.string.indexOf("%s") == -1
+      @flash text: "failed #{opt.string}", type: "error"
+
+  _node: (tag, children) ->
+    tag = tag ? @zip.node.tag
+    children = children ? []
+    new @zip.node.constructor tag, children
+ 
+  _newNodeFrom: (json) ->
+    @_node json.tag, json.children.map (each) => @_newNodeFrom(each)

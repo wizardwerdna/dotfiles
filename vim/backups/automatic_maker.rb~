@@ -1,0 +1,15 @@
+require_relative 'maker'
+require_relative 'scorer'
+require_relative 'guess_indexer'
+
+class AutomaticMaker < Maker
+
+  def initialize code_generator = lambda { GuessIndexer.new.make_random_guess  }  
+    @code = code_generator.call
+  end
+
+  def score_guess guess
+    Scorer.score_guess(@code, guess)
+  end
+
+end

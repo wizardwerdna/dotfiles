@@ -1,0 +1,4 @@
+{Promise} = require './promise'
+P = Promise
+{Covenant} = require './covenant'
+C = Covenant

@@ -1,0 +1,28 @@
+require 'ostruct'
+
+module Boundaries
+
+  extend self
+
+  def config
+    @config ||= OpenStruct.new
+  end  
+
+  def config= value
+    @config = value
+  end
+
+  def configure hash
+    hash.each do |key, value|
+      selector = (key.to_s + '=').to_sym
+      config.send(selector, value)
+    end
+  end
+
+  private
+
+  def method_missing message, *args, &block
+    config.send(message, *args, &block)
+  end
+
+end

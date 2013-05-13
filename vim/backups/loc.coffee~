@@ -1,0 +1,434 @@
+should = require 'should'
+Node = (require '../../src/entities/node').Node
+Loc = (require '../../src/entities/loc').Loc
+
+rootNode = new Node 'root', [
+  (leftNode = new Node 'left', [bottomNode = new Node 'bottom']),
+  (middleNode = new Node 'middle',[
+    (middleLeftNode = new Node 'middleLeft'),
+    (middleMiddleNode = new Node 'middleMiddle'),
+    (middleRightNode = new Node 'middleRight')]),
+  (rightNode = new Node 'right')]
+
+rootLoc = new Loc rootNode
+
+newNode = new Node 'new'
+
+aLoc = rootLoc
+locs = while aLoc?
+  [last, aLoc] = [aLoc, aLoc.next()]
+  last
+
+nodes = [rootNode,
+           leftNode, bottomNode,
+           middleNode, middleLeftNode, middleMiddleNode, middleRightNode,
+           rightNode]
+
+pLoc= (loc) -> if loc? then "Loc(#{pNode loc.node})" else "undefined"
+pNode= (node) -> if node? then "Node #{pTag node.tag}" else "undefined"
+pTag= (tag) -> if tag? then "'#{tag}'" else "undefined"
+pTArr= (arr) -> "[#{arr.map((e) -> pNode e).join(',')}]"
+
+describe "Loc", ->
+
+  describe "reflection", ->
+
+    it_must_reflect = (o) ->
+      describe "on #{pLoc o.subject}", ->
+        it ".node should == #{pNode o.node}", -> o.subject.node.should.eql o.node
+        it ".root() should == #{pNode o.root}", -> o.subject.root().should.eql o.root
+        it ".isRoot() should be #{o.isRoot}", -> o.subject.isRoot().should.eql o.isRoot
+        it ".tag() should == #{pTag o.tag}", -> o.subject.tag().should.eql o.tag
+        it ".children() should == #{pTArr o.children}", -> o.subject.children().should.eql o.children
+        it ".siblings() should == #{pTArr o.siblings}", -> o.subject.siblings().should.eql o.siblings
+
+    it_must_reflect
+      subject: rootLoc
+      node: rootNode
+      root: rootNode
+      isRoot: true
+      tag: 'root'
+      children: [leftNode, middleNode, rightNode]
+      siblings: [rootNode]
+
+    it_must_reflect
+      subject: rootLoc.down()
+      node: leftNode
+      root: rootNode
+      isRoot: false
+      tag: 'left'
+      children: [bottomNode]
+      siblings: [leftNode, middleNode, rightNode]
+     
+    it_must_reflect
+      subject: rootLoc.down().down()
+      node: bottomNode
+      root: rootNode
+      isRoot: false
+      tag: 'bottom'
+      children: []
+      siblings: [bottomNode]
+
+    it_must_reflect
+      subject: rootLoc.down().right()
+      node: middleNode
+      root: rootNode
+      isRoot: false
+      tag: 'middle'
+      children: [middleLeftNode, middleMiddleNode, middleRightNode]
+      siblings: [leftNode, middleNode, rightNode]
+
+    it_must_reflect
+      subject: rootLoc.down().rightmost()
+      node: rightNode
+      root: rootNode
+      isRoot: false
+      tag: 'right'
+      children: []
+      siblings: [leftNode, middleNode, rightNode]
+
+  describe "utility", ->
+    describe "depth", ->
+      it "should be 0 for root", ->
+        rootLoc.depth.should.be.zero
+      it "if a child of loc parent, then 1 more than the depth of loc parent", ->
+        rootLoc.down().depth.should.eql 1
+        rootLoc.down().down().depth.should.eql 2
+    describe "path", ->
+      it "should be empty for root", ->
+        rootLoc.path().should.be.empty
+      it "if a child of loc parent, then should be parent's path followed by index", ->
+        rootLoc.down().path().should.eql [0]
+        rootLoc._childLoc(1).path().should.eql [1]
+        rootLoc._childLoc(1)._childLoc(2).path().should.eql [1, 2]
+    describe "pathto", ->
+      it "should be the loc node if arguments are empty", ->
+        rootLoc.pathto().should.eql rootLoc
+      it "if one argument, i, is given, then should be the ith child of loc", ->
+        rootLoc.pathto(1).node.should.eql middleNode
+      it "if several arguments are given, then should follow each argument down in turn", ->
+        rootLoc.pathto(1, 1).node.should.eql rootLoc.pathto(1).pathto(1).node
+      it "should not be defined for invalid path indices", ->
+        should.not.exist rootLoc.pathto(-1)
+        should.not.exist rootLoc.pathto(0,1)
+      it "should flatten all arguments", ->
+        rootLoc.pathto().should.eql rootLoc.pathto([])
+        rootLoc.pathto().should.eql rootLoc.pathto([], [], [[], []])
+        rootLoc.pathto([1,1]).should.eql rootLoc.pathto([], [1, []], [[], 1])
+
+  describe "navigation", ->
+
+    describe "down", ->
+      it "should answer a loc for an existing leftmost child", ->
+        rootLoc.down().node.should.eql leftNode
+        rootLoc.down().down().node.should.eql bottomNode
+      it "should not be defined if the node is a leaf", ->
+        should.not.exist rootLoc.down().down().down()
+      it "should permit creating a loc for other children, by index", ->
+        rootLoc.down(1).node.should.eql middleNode
+
+    describe "leftmost", ->
+      it "should be the rightmost sibling if at a child node", ->
+        rootLoc.leftmost().node.should.eql rootNode
+        rootLoc.down().leftmost().node.should.eql leftNode
+        rootLoc.down().rightmost().leftmost().node.should.eql leftNode
+   
+    describe "rightmost", ->
+      it "should be the rightmost sibling if at a child node", ->
+        rootLoc.rightmost().node.should.eql rootNode
+        rootLoc.down().rightmost().node.should.eql rightNode
+        rootLoc.down().rightmost().rightmost().node.should.eql rightNode
+    
+    describe "up", ->
+      it "should be undefined for the root", ->
+        should.not.exist rootLoc.up()
+      it "should go up for a non-root", ->
+        rootLoc.down().up().node.should.eql rootNode
+
+    describe "right", ->
+      it "should be undefined if rightmost", ->
+        should.not.exist rootLoc.right()
+        should.not.exist rootLoc.down().rightmost().right()
+        should.not.exist rootLoc.down().down().right()
+        should.not.exist rootLoc.down().right().down().rightmost().right()
+      it "should be the next neighbor if not rightmost", ->
+        rootLoc.down().right().node.should.eql middleNode
+    
+    describe "left", ->
+      it "should be undefined if leftmost", ->
+        should.not.exist rootLoc.left()
+        should.not.exist rootLoc.down().left()
+        should.not.exist rootLoc.down().down().left()
+        should.not.exist rootLoc.down().right().down().left()
+      it "should be the previous neighbor if not leftmost", ->
+        rootLoc.down().rightmost().left().node.should.eql middleNode
+
+    describe "upmost", ->
+      it "should always be root", ->
+        rootLoc.upmost().node.should.eql rootNode
+        rootLoc.down().upmost().node.should.eql rootNode
+        rootLoc.down().down().upmost().node.should.eql rootNode
+
+    describe "downmost", ->
+      describe "for non-leaf nodes", ->
+        it "Loc(Node 'rootNode').downmost().node.should be rightNode", ->
+          rootLoc.downmost().node.should.eql rightNode
+        it "Loc(Node 'leftNode').downmost().node.should be bottomNode", ->
+          rootLoc.down().downmost().node.should.eql bottomNode
+        it "Loc(Node 'middleNode').downmost().node.should be middleRightNode", ->
+          rootLoc.down().right().downmost().node.should.eql middleRightNode
+      describe "for leaf nodes", ->
+        nodes.map (node) -> do(loc = new Loc node) ->
+          if loc._isLeaf()
+            it "#{pLoc loc}.downmost answers itself", ->
+              loc.downmost().node.should.eql loc.node
+
+  describe "traversal", ->
+
+    describe "next", ->
+      nxt = rootLoc
+      it "moves downwards root to left to bottom", ->
+        (nxt = nxt.next()).node.should.eql leftNode
+        (nxt = nxt.next()).node.should.eql bottomNode
+      it "leaps to middle",  ->
+        (nxt = nxt.next()).node.should.eql middleNode
+      it "descends to middleLeft", ->
+        (nxt = nxt.next()).node.should.eql middleLeftNode
+      it "moves right to middleMiddle and middleRight", ->
+        (nxt = nxt.next()).node.should.eql middleMiddleNode
+        (nxt = nxt.next()).node.should.eql middleRightNode
+      it "leaps to rightNode", ->
+        (nxt = nxt.next()).node.should.eql rightNode
+      it "from bottommost node is undefined", ->
+        should.not.exist nxt.next()
+        
+    describe "prev", ->
+      prv = rootLoc.downmost()
+      it "descends left and bottommost to middleRight", ->
+        (prv = prv.prev()).node.should.eql middleRightNode
+      it "continues left and bottommost to middleLeft", ->
+        (prv = prv.prev()).node.should.eql middleMiddleNode
+        (prv = prv.prev()).node.should.eql middleLeftNode
+      it "goes up to middle", ->
+        (prv = prv.prev()).node.should.eql middleNode
+      it "goes left then bottommost to bottom", ->
+        (prv = prv.prev()).node.should.eql bottomNode
+      it "goes up to left, and then up to root", ->
+        (prv = prv.prev()).node.should.eql leftNode
+        (prv = prv.prev()).node.should.eql rootNode
+      it "from root is undefined", ->
+        should.not.exist prv.prev()
+
+  describe "modification", ->
+    beforeEach ->
+      @leftLoc = rootLoc.down()
+      @midLoc = @leftLoc.right()
+      @rightLoc = @midLoc.right()
+      @newNode = new Node 'new', [@underNewNode = new Node 'under new']
+
+    describe "replace", ->
+      it "should have the specified Node", ->
+        @midLoc.replace(@newNode).node.should.eql @newNode
+      it "should have a parent with the same node tag", ->
+        @midLoc.replace(@newNode).up().node.tag.should.eql @midLoc.up().node.tag
+        should.not.exist rootLoc.replace(@newNode).up()
+      it "should have the same left sib", ->
+        @midLoc.replace(@newNode).left().node.tag.should.eql @midLoc.left().node.tag
+        should.not.exist rootLoc.replace(@newNode).left()
+        should.not.exist @leftLoc.replace(@newNode).left()
+      it "should have the same right sib", ->
+        @midLoc.replace(@newNode).right().node.tag.should.eql @midLoc.right().node.tag
+        should.not.exist rootLoc.replace(@newNode).right()
+        should.not.exist @rightLoc.replace(@newNode).right()
+      it "should have the same children as the new Node", ->
+        @midLoc.replace(@newNode).children().should.eql @newNode.children
+      it "should propagate changes upward", ->
+        @midLoc.replace(@newNode).up().down().right().node.should.eql @newNode
+      it "should propagate changes leftward", ->
+        @midLoc.replace(@newNode).left().right().node.should.eql @newNode
+      it "should propagate changes rightward", ->
+        @midLoc.replace(@newNode).right().left().node.should.eql @newNode
+      it "should propagate changes downward and back up", ->
+        @midLoc.replace(@newNode).down().node.should.eql @underNewNode
+        @midLoc.replace(@newNode).down().up().up().down().right().node.should.eql @newNode
+      it "should propagate changes rightmost and leftmost", ->
+        @midLoc.replace(@newNode).rightmost().left().node.should.eql @newNode
+        @midLoc.replace(@newNode).leftmost().right().node.should.eql @newNode
+      it "should propagate changes upmost", ->
+        @midLoc.replace(@newNode).upmost().down().right().node.should.eql @newNode
+
+    describe "edit", ->
+      it "should replace the location with the result of the function", ->
+        @midLoc.edit((n)=>@newNode).node.should.eql @newNode
+      it "should pass the current node to the function", ->
+        @midLoc.edit((n)->n).node.should.eql @midLoc.node
+
+    describe "insertions", ->
+      it "insertBefore should insert the node to the left of the loc, except for root", ->
+        should.not.exist rootLoc.insertBefore(@newNode)
+        @midLoc.insertBefore(@newNode).left().node.should.eql @newNode
+      it "insertAfter should insert the node to the right of the loc, except for root", ->
+        should.not.exist rootLoc.insertAfter(@newNode)
+        @midLoc.insertAfter(@newNode).right().node.should.eql @newNode
+      it "insertChild should insert the node as the first child of the loc", ->
+        @midLoc.insertChild(@newNode).down().node.should.eql @newNode
+        @midLoc.insertChild(@newNode).children().should.eql [
+          @newNode, middleLeftNode, middleMiddleNode, middleRightNode]
+      it "appendChild should insert the node as the last child of the loc", ->
+        @midLoc.appendChild(@newNode).down().rightmost().node.should.eql @newNode
+        @midLoc.appendChild(@newNode).children().should.eql [
+          middleLeftNode, middleMiddleNode, middleRightNode, @newNode]
+
+    describe "remove", ->
+      it "cannot remove root", ->
+        should.not.exist rootLoc.remove()
+      it "should remove a leftmost node, remove it and answer the parent.", ->
+        rootLoc.down().remove().node.tag.should.eql rootNode.tag
+        rootLoc.down().remove().down().node.should.eql middleNode
+      it "should remove a non-leftmost node, and answer prev of the deleted node.", ->
+        rootLoc.down().right().remove().node.should.eql bottomNode
+        rootLoc.down().rightmost().remove().node.should.eql middleRightNode
+
+  describe "Compound Modification", ->
+    beforeEach -> @newNode = new Node "new", [new Node "newNext"]
+    for loc in locs
+      do(loc) ->
+        describe "#{pLoc loc}", ->
+          describe ".movebefore()", ->
+            if loc.isRoot() or loc.prev().isRoot()
+              it ".moveBefore is not defined", ->
+                should.not.exist loc.moveBefore()
+            else
+              it "should be loc", ->
+                loc.moveBefore().node.should.eql loc.node
+              it "should be left of loc.prev()", ->
+                loc.moveBefore().right().tag().should.eql loc.prev().tag()
+              it "should preceed loc.prev()", ->
+                loc.moveBefore().downmost().next().tag().should.eql loc.prev().tag()
+          describe ".moveChild()", ->
+            if loc.isRoot() or not loc.downmost().next()?
+              it "is not defined", ->
+                should.not.exist loc.moveChild()
+            else
+              it "should be loc", ->
+                loc.moveChild().node.should.eql loc.node
+              it ".moveChild() should be leftmost child of loc.downmost().next()", ->
+                loc.moveChild().up().tag().should.eql loc.downmost().next().tag()
+          describe ".moveAfter()", ->
+            if loc.isRoot() or not loc.downmost().next()?
+              it "is not defined", ->
+                should.not.exist loc.moveAfter()
+            else
+              it "should be loc", ->
+                loc.moveAfter().node.should.eql loc.node
+              it "should be right of loc.downmost().next()", ->
+                loc.moveAfter().left().tag().should.eql loc.downmost().next().tag()
+          describe ".indent()", ->
+            if loc.isRoot() or not loc.left()?
+              it "is not defined", ->
+                should.not.exist loc.indent()
+            else
+              it "should be the rightmost child of the left node", ->
+                should.not.exist loc.indent().right()
+                loc.indent().up().tag().should.eql loc.left().tag()
+          describe ".outdent()", ->
+            if loc.isRoot() or loc.up().isRoot()
+              it "is not defined", ->
+                should.not.exist loc.outdent()
+            else
+              it "should be immediate right sibling of the parent", ->
+                loc.outdent().left().tag().should.eql loc.up().tag()
+
+  describe "enumeration", ->
+    describe "flatMap", ->
+      it "if a leaf, a singleton array with @node", ->
+        rootLoc.down().down().flatMap().should.eql [bottomNode]
+      it "defaults to an array of nodes from a depthfirst search", ->
+        rootLoc.flatMap().should.eql nodes
+      it "only considers nodes descended from loc", ->
+        rootLoc.down().right().flatMap().should.eql [
+          middleNode, middleLeftNode, middleMiddleNode, middleRightNode]
+      it "applies a function to each node, when given", ->
+        rootLoc.flatMap((e)->1).should.eql nodes.map (e)->1
+      it "applies a second index parameter to each node", ->
+        rootLoc.flatMap((e,i)->i).should.eql nodes.map (e,i)->i
+      it "applies a third loc parameter to each node", ->
+        rootLoc.flatMap((e,i,l)->l.parent?.tag()).should.eql(
+          locs.map (l) -> l.parent?.tag())
+
+    describe "treeMap", ->
+      it "@edit f(n) if f(n) is childless", ->
+        rootLoc.treeMap((n)->newNode).node.should.eql newNode
+        rootLoc.down().treeMap((n)->newNode).node.should.eql newNode
+      it "applying f to each node, mimicking tree structure after application", ->
+        tm = rootLoc.treeMap (n)->new Node 'x'+n.tag, n.children
+        tm.tag().should.eql 'xroot'
+        tm.down().tag().should.eql 'xleft'
+        tm.down().down().tag().should.eql 'xbottom'
+        tm.down().right().tag().should.eql 'xmiddle'
+        tm.down().right().down().tag().should.eql 'xmiddleLeft'
+        tm.down().right().down().right().tag().should.eql 'xmiddleMiddle'
+        tm.down().right().down().rightmost().tag().should.eql 'xmiddleRight'
+        tm.down().right().rightmost().tag().should.eql 'xright'
+      it "should pass a second loc parameter to each node", ->
+        tm = rootLoc.treeMap (n, loc) -> new Node loc.path(), n.children
+        tm.flatMap((n) -> n.tag).should.eql locs.map (e) -> e.path()
+
+    describe "treeTagMap", ->
+      it "@edit new Node f(t), @children()", ->
+        tm = rootLoc.treeTagMap (t)->'x'+t
+        tm.tag().should.eql 'xroot'
+        tm.down().tag().should.eql 'xleft'
+        tm.down().down().tag().should.eql 'xbottom'
+        tm.down().right().tag().should.eql 'xmiddle'
+        tm.down().right().down().tag().should.eql 'xmiddleLeft'
+        tm.down().right().down().right().tag().should.eql 'xmiddleMiddle'
+        tm.down().right().down().rightmost().tag().should.eql 'xmiddleRight'
+        tm.down().right().rightmost().tag().should.eql 'xright'
+      it "should pass a second loc parameter to each tag", ->
+        tm = rootLoc.treeTagMap (t, loc) -> loc.path()
+        tm.flatMap((n) -> n.tag).should.eql locs.map (e) -> e.path()
+
+  describe "open/closure", ->
+    describe "isOpen()", ->
+      it "a node is open if its tag does not have a closed property", ->
+        rootLoc.isOpen().should.be.true
+      it "a node is open if it tag.closed is not true", ->
+        rootLoc._mergeTag(closed: false).isOpen().should.be.true
+      it "a node is not open if tag.closed == true ", ->
+        rootLoc._mergeTag(closed: true).isOpen().should.be.false
+    describe "toggle(), open(), close()", ->
+      it "should toggle tag without closed property to closed", ->
+        rootLoc.toggle().isOpen().should.be.false
+      it "should toggle tag with closed not true to closed", ->
+        rootLoc._mergeTag(closed: false).toggle().isOpen().should.be.false
+      it "should toggle tag with closed true to open", ->
+        rootLoc._mergeTag(closed: true).toggle().isOpen().should.be.true
+      it "should set tag to open", ->
+        rootLoc._mergeTag(closed: true).open().isOpen().should.be.true
+      it "should set tag to closed", ->
+        rootLoc._mergeTag(closed: false).close().isOpen().should.be.false
+    describe "openAll/closeAll/openOnly", ->
+      it "should open and close every node", ->
+        loc=rootLoc.closeAll()
+        (loc=loc.openAll()).flatMap((n,i,l)->l.isOpen()).map (e)->e.should.be.true
+        (loc=loc.closeAll()).flatMap((n,i,l)->l.isOpen()).map (e)->e.should.be.false
+      it "should open only to a specified depth, defaulting to 0", ->
+        should.not.exist rootLoc.openOnly().down()
+        should.not.exist rootLoc.openOnly(0).down()
+        rootLoc.openOnly(1).down().tag().text.should.eql 'left'
+        should.not.exist rootLoc.openOnly(1).down().down()
+        rootLoc.openOnly(2).down().tag().text.should.eql 'left'
+        rootLoc.openOnly(2).down().down().tag().text.should.eql 'bottom'
+    describe "movement for closed nodes", ->
+      it "down() is undefined for a closed node", ->
+        should.not.exist rootLoc.toggle().down()
+      it "downmost() is node for a closed node", -> do (merged=rootLoc.toggle()) =>
+        merged.downmost().should.eql merged
+      it "next() should not descend into a closed node", ->
+        rootLoc.down().next().node.should.eql bottomNode
+        rootLoc.down().toggle().next().should.not.eql bottomNode
+      it "prev() should not descend into a closed node", ->
+        do (middleLoc = rootLoc._childLoc(1)) =>
+          middleLoc.right().prev().node.should.eql middleRightNode
+          middleLoc.toggle().right().prev().node.should.not.eql middleRightNode

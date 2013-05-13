@@ -1,0 +1,214 @@
+require File.expand_path('../../mock_user_helper.rb', __FILE__) 
+require File.expand_path('../../../app/services/token_service.rb', __FILE__)
+require File.expand_path('../../../app/services/session.rb', __FILE__)
+
+describe Session do
+  let(:cookie){Hash.new}
+  subject{Session.on(cookie)}
+
+  it ".on(...) is equivalent to Session.new(cookie: ...)" do
+    cookie = stub
+    Session.should_receive(:new).with(cookie: cookie)
+    Session.on cookie 
+  end
+
+  context "works with TokenService" do
+    let(:token_service){double('token_service').as_null_object}
+
+    it "using :session_token" do
+      token_service.stub(:record => TokenService::NoRecord)
+      TokenService.should_receive(:new).with(:session_token).and_return token_service 
+      subject.token_service
+    end
+  end
+
+  context "when created on a cookie" do
+    let(:token_service){double('token_service').as_null_object}
+    let(:cookie){stub}
+    it "should remember the cookie for later" do
+      TokenService.stub(:new => token_service)
+      Session.new(cookie: cookie).cookie.should == cookie  
+    end
+  end
+
+  context "when used as a constraint on a request without a token cookie" do
+    it "shouldn't match a request without a token" do
+      req_without_token = stub(:cookies => {"session_token" =>  nil})
+      Session.should_not be_matches req_without_token
+    end
+
+    it "should match a request with a token" do
+      req_with_token = stub(:cookies => {"session_token" => stub})
+      Session.should be_matches req_with_token
+    end
+  end
+
+  context "#create" do
+    let!(:token_service){double 'token service'}
+    let(:password){'secret'}
+    let(:email){'abc@def.com'}
+  
+    context "with email and password for existing user" do
+
+      let(:record){double 'user record'}
+      let(:token){'1234567890ABCDEabcde_-'}
+
+      before :each do
+        record.stub(:user? => true, :authenticate => record)
+        subject{Session.new}
+        token_service.stub(
+          :for_email => token_service, 
+          :record? => true, 
+          :record => record, 
+          :assure_generation => token_service, 
+          :token => token
+        )
+        cookie.stub(respond_to?: true, permanent: cookie)
+        TokenService.stub(:new => token_service)
+      end
+      
+      it "should answer true" do
+        subject.create(email: email, password: password).should == true
+      end
+
+      it "should create a new token if one does not exist" do
+        token_service.should_receive(:assure_generation).and_return(token_service)
+        subject.create(email: email, password: password) 
+      end
+
+      it "should store the token in a cookie upon creation" do
+        subject.create(email: email, password: password)
+        cookie[:session_token].should == token
+      end
+
+      it "should store the table in a permanent cookie upon creation with 'remember me'" do
+        cookie.should_receive(:permanent).and_return cookie
+        subject.create(email: email, password: password, remember_me: true)
+      end
+
+      it "should not use a permanent cookie upon creation with 'remember me' blank" do
+        cookie.should_not_receive(:permanent)
+        subject.create(email: email, password: password)
+      end
+
+      it "should not use a permanent cookie upon creation without 'remember me' false" do
+        cookie.should_not_receive(:permanent)
+        subject.create(email: email, password: password, remember_me: false)
+      end
+        
+      it "should not call permanent on the cookie unless it responds to :permanent" do
+        cookie.stub(:respond_to? => false)
+        cookie.should_not_receive(:permanent)
+        subject.create(email: email, password: password, remember_me: true)        
+      end
+    end
+
+    it "should be invalid if email is blank" do
+      subject.create(email: nil, password: password).should == false
+      subject.errors[:email].should include("can't be blank")
+      cookie[:session_token].should be_blank
+    end
+
+    it "should be invalid  with invalidly formatted email" do
+      subject.create(email: 'a@@b', password: password).should == false
+      subject.errors[:email].should include('is invalid')
+      cookie[:session_token].should be_blank
+    end
+
+    it "should be invalid if password is blank" do
+      subject.create(email: email, password: nil).should == false
+      subject.errors[:password].should include("can't be blank")
+      cookie[:session_token].should be_blank
+    end
+
+    it "should be invalid with invalidly formatted password" do
+      subject.create(email: email, password: 'ab').should == false
+      subject.errors[:password].should include("must be at least 6 letters or numbers")
+      cookie[:session_token].should be_blank
+    end
+
+    it "should fail with unauthenticated email and password" do
+      record = double 'user record'
+      token = '1234567890ABCDEabcde_-'
+      record.stub(:user? => true, :authenticate => nil)
+      subject{Session.new}
+      token_service.stub(
+        :for_email => token_service, 
+        :record? => true, 
+        :record => record, 
+        :assure_generation => token_service, 
+        :token => token
+      )
+      TokenService.stub(:new => token_service)
+
+      subject.create(email: email, password: password).should == false
+      cookie[:session_token].should be_blank
+    end
+
+  end
+
+  context "#destroy_session" do
+    let(:cookie){Hash.new}
+    subject{Session.new cookie: cookie}
+
+    it "should destroy the session when requested" do
+      cookie.should_receive(:delete).with(:session_token)
+      subject.destroy_session
+    end
+  end
+
+  context "#session_token and #session_token?" do
+    subject{Session.new cookie: cookie}
+
+    it "should be the token and true, respectively, if a session cookie is present" do
+      session_token = stub
+      cookie["session_token"] = session_token 
+      subject.session_token.should == session_token 
+      subject.should be_session_token
+    end
+
+    it "should be nil and false, respectively, if no session cookie is present" do
+      cookie["session_token"] = nil
+      subject.session_token.should be_nil
+      subject.should_not be_session_token
+    end
+  end
+
+  context "#current_user" do
+    subject{Session.new cookie: cookie}
+    
+    let(:cookie){Hash.new}
+    let(:user){stub 'user record'}
+    let(:token){stub 'session_token'}
+    let(:token_service){stub 'token_service'}
+    
+    before :each do
+      subject.stub(:token_service => token_service)
+      token_service.stub(:for_token => token_service)
+    end
+
+    it "should draw from the session cookie" do
+      subject.cookie.should == cookie
+    end
+
+    it "should return the user when a valid token is in the session cookie" do
+      cookie[:session_token] = token
+      token_service.stub(:record? => true, :record => user)
+      subject.current_user.should == user
+    end
+
+    it "should return nil when no token is present" do
+      cookie.delete :session_token
+      token_service.stub(:record? => false)
+      subject.current_user.should be_nil
+    end
+
+    it "should return nil when a token is present, but not valid" do
+      cookie[:session_token] = token
+      token_service.stub(:record? => false)
+      subject.current_user.should be_nil
+    end
+
+  end
+
+end

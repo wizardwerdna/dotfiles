@@ -1,0 +1,83 @@
+require File.expand_path('../../../app/services/e_c_b_valid.rb', __FILE__)
+require 'active_attr'
+
+class SessionValidator < ActiveModel::Validator
+  def validate(sess)
+    sess.token_service.for_email(sess.email)
+    unless sess.token_service.record? && sess.token_service.record.authenticate(sess.password)
+      sess.errors[:base] << 'incorrect username or password'
+    end
+  end
+end
+
+class Session
+  include ActiveAttr::Model
+
+  attribute :cookie
+  attribute :email
+  validates :email, presence: true, format: ECBValid.email
+  attribute :password 
+  validates :password, presence: true, format: {:with => ECBValid.password, :message => "must be at least 6 letters or numbers"}
+  validates_with SessionValidator
+
+  attribute :remember_me, :type => Boolean
+
+  def self.on cookie
+    new(cookie: cookie)
+  end
+
+  def self.matches? req
+    new(cookie: req.cookies).session_token?
+  end
+
+  def token_service
+    @token_service ||= TokenService.new(:session_token)
+  end
+
+  def initialize hash={}
+    assign_attributes(hash)
+  end
+
+  def create hash={}
+    if update_attributes(hash)
+      persist_on_cookie token_service.assure_generation.token
+    end
+    valid?
+  end
+
+  def destroy_session 
+    cookie.delete :session_token
+  end
+
+  def session_token
+    cookie["session_token"] || cookie[:session_token]
+  end
+
+  def session_token?
+    self.session_token.present?
+  end
+
+  def current_user
+    if session_token? && token_service.for_token(session_token).record?
+      token_service.record
+    else
+      nil
+    end
+  end
+
+  def update_attributes hash = {}
+    assign_attributes(hash)
+    valid?
+  end
+
+private
+
+  def persist_on_cookie value
+    if cookie.respond_to?(:permanent) && remember_me
+      cookie.permanent[:session_token] = value
+    else
+      cookie[:session_token] = value
+    end
+  end
+
+end

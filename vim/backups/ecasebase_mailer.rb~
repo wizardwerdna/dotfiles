@@ -1,0 +1,23 @@
+class EcasebaseMailer < ActionMailer::Base
+  default from: "from@example.com"
+
+  # Subject can be set in your I18n file at config/locales/en.yml
+  # with the following lookup:
+  #
+  #   en.ecasebase_mailer.verify_notice.subject
+  #
+  def verify_notice(user)
+    @user = user
+    mail to: user.email 
+  end
+
+  def verify_confirm(user)
+    @user = user
+    mail to: user.email
+  end
+
+  def password_reset_notice(user)
+    @user = user
+    mail to: user.email
+  end
+end

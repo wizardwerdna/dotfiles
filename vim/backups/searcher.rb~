@@ -1,0 +1,61 @@
+class Searcher
+
+  class << self
+    def [] pattern, string
+      new(pattern).run(string)
+    end
+  end
+
+  attr_accessor :pattern, :pattern_length, :string, :string_length
+  attr_accessor :index_rightmost_mismatch_in_string
+  def initialize pattern
+    self.pattern = pattern
+    self.pattern_length = pattern.length
+  end
+
+  def run string
+    self.string = string
+    self.string_length = string.length
+    find 0
+  end
+
+private
+
+  def find k
+    printf "\n\n==str-> '%s'", string
+    printf "\n==pat-> '%s%s'", " "*k, pattern 
+    if pattern_longer_than_string_at? k
+      printf "\n== no match in string"
+      nil
+    elsif pattern_matches_string_at? k
+      printf "\n== match at #{k}"
+      k 
+    else
+      printf "\n==mis-> <%sX", " "*index_rightmost_mismatch_in_string
+      find index_of_unchecked_remainder_of_string_after k
+    end
+  end
+
+  def pattern_longer_than_string_at? k
+    pattern_length > string_length - k
+  end
+
+  def pattern_matches_string_at? k
+    self.index_rightmost_mismatch_in_string = nil
+    index = pattern_length - 1  
+    while index >= 0
+      if string[k + index] != pattern[index]
+        self.index_rightmost_mismatch_in_string = k + index
+        return false
+      end
+      index -= 1
+    end 
+    return true
+  end
+
+  def index_of_unchecked_remainder_of_string_after k 
+    k+1 
+  end
+
+end
+

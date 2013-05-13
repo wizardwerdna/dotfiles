@@ -1,0 +1,28 @@
+class Score
+
+  class NoScore
+    def self.ends_game
+      true
+    end
+  end
+  
+  attr_accessor :number_correct_and_in_place, :number_correct_but_out_of_place, :string
+ 
+  def initialize number_correct_and_in_place, number_correct_but_out_of_place, string=""
+    self.number_correct_and_in_place = number_correct_and_in_place
+    self.number_correct_but_out_of_place = number_correct_but_out_of_place
+    self.string = string 
+  end
+
+  def =~ score
+    self.number_correct_and_in_place == score.number_correct_and_in_place && 
+    self.number_correct_but_out_of_place == score.number_correct_but_out_of_place && 
+    ends_game == score.ends_game 
+  end
+
+  def ends_game
+    number_correct_and_in_place == string.size
+  end
+
+end
+

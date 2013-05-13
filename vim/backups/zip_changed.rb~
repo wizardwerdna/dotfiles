@@ -1,0 +1,35 @@
+require_relative 'zip'
+
+class ZipChanged < ZipChild
+
+  def root
+    propagated_parent.root
+  end
+
+  def up
+    propagated_parent
+  end
+
+  def left
+    propagated_parent.downto index-1
+  end
+
+  def right
+    propagated_parent.downto index+1
+  end
+
+  def rightmost
+    propagated_parent.downto siblings.size-1
+  end
+
+  def leftmost
+    propagated_parent.downto 0
+  end
+
+protected
+
+  def propagated_parent
+    parent.replace_children lefts + [node] + rights
+  end
+
+end

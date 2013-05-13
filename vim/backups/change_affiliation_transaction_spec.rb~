@@ -1,0 +1,33 @@
+require_relative '../src/change_affiliation_transaction'
+
+describe ChangeAffiliationTransaction do
+
+  let(:subject){ChangeAffiliationTransaction.new(emp_id)}
+  let(:emp_id){8}
+  let(:employee){Employee.new(emp_id: emp_id)}
+  let(:new_affiliation){double "new affiliation"}
+  it_should_behave_like "a transaction"
+
+  before :each do
+    Repository.configure(
+      Employee => MemoryRepos::EmployeeRepo.new,
+      UnionMember => MemoryRepos::UnionMemberRepo.new
+    )
+    Repository.for(Employee).store employee
+    subject.stub(
+      :make_new_affiliation => new_affiliation,
+      :adjust_union_membership => nil
+    )
+    subject.execute
+  end
+
+  it "should change the affiliation appropriately" do
+    subject.execute
+    Repository.for(Employee).fetch(emp_id).affiliation.should == new_affiliation 
+  end
+
+  it "should adjust the employee's membership in the Union" do
+    subject.should_receive(:adjust_union_membership)
+    subject.execute
+  end
+end

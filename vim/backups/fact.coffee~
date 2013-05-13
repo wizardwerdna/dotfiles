@@ -1,0 +1,12 @@
+root = (exports ? this)
+Document = (require './document').Document
+MemoryModel = (require './memoryModel').MemoryModel
+
+class Fact extends MemoryModel
+  constructor: (@title, @caption, @description, @documentID, @durationEvent,
+    @start, @latestStart, @earliestEnd, @end, @link, @textColor, @color, @className,
+    id) ->
+      super(id)
+  document: -> Document.find(@documentID)
+
+ root.Fact = Fact

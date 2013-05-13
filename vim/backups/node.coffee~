@@ -1,0 +1,13 @@
+require 'should'
+Node = (require '../src/node').Node
+
+tag = new class TagClass
+children = new class ChildrenClass
+
+describe "Node", ->
+  it "tag property should hold the tag", ->
+    (new Node tag, children).tag.should.eql tag
+  it "children property should hold the children", ->
+    (new Node tag, children).children.should.eql children
+  it "should default children to an empty array", ->
+    (new Node tag).children.should.eql []

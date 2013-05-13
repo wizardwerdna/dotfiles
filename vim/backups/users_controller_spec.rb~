@@ -1,0 +1,46 @@
+require 'spec_helper'
+
+describe UsersController do
+  let!(:casebase) { Casebase.it }
+  let(:user_attributes) { {"first_name" => 'first', "last_name" => 'last', "email" => 'abc@def.com'} }
+  let!(:user) { casebase.new_user( user_attributes ) }
+  before :each do 
+    value = user
+    casebase.user_source = Proc.new{|*args| value }
+  end
+
+  context "#new" do
+
+    it "should assign a new user" do
+      get :new
+      assigns[:user].should == user
+    end
+
+  end
+
+  context "#create" do
+
+    it "should assign a user" do
+      post :create, user: user_attributes
+      assigns[:user].should == user
+    end
+
+    it "should attempt to add the user with params" do
+      casebase.should_receive(:new_user).with(user_attributes).and_return(user)
+      user.should_receive(:subscribe)
+      post :create, user: user_attributes
+    end
+
+    it "should redirect to the root page" do
+      post:create, user: user_attributes
+      response.should redirect_to '/'
+    end
+
+    it "should notify the successful subscription" do
+      post :create, user: user_attributes
+      flash[:notice].should match /success/
+    end
+
+  end
+
+end

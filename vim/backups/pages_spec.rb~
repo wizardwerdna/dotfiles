@@ -1,0 +1,33 @@
+require_relative '../boundaries/interactor_interface'
+# require_relative '../../boundaries/repository'
+require_relative '../../interactors/pages'
+
+describe Blogs do
+
+  # let(:request){Request.new name: 'name', locator: 'http://first.com/locator.html'}
+  # let(:update_request){Request.new name: 'name', locator: 'http:/update.com/locator.html'}
+
+  # before :each do
+  #   Repository.configure Page => MemoryRepos::PageRepo.new
+  # end 
+
+  describe Blogs::New do
+
+    let(:subject){Blogs::New.new(request)}
+    let(:request){Request.new}
+
+    it_should_behave_like "an interactor"
+
+  end
+
+  describe Blogs::NewPost do
+
+    let(:blog){double "blog")
+    let(:request){Request.new(blog: blog}
+    let (:subject){Blogs::NewPost.new(request)}
+    
+    it_should_behave_like "an interactor" 
+  
+  end
+
+end

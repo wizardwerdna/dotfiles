@@ -1,0 +1,37 @@
+chai = require 'chai'
+chai.should()
+
+stack_lib = require '../src/stack'
+
+describe "Stack", ->
+
+  beforeEach ->
+    @stack = new stack_lib.Stack(20)
+
+  describe "when empty", ->
+    it "should be empty upon creation", ->
+      @stack.isEmpty().should.equal true
+
+    it "should not be empty after a push", ->
+      @stack.push(11)
+      @stack.isEmpty().should.equal false
+
+    it "should throw an error after a pop", ->
+      @stack.should.receive("pop")
+      (=>@stack.pop()).should.throw "Underflow"
+
+    it "should throw an error after too many pushes", ->
+      (=>@stack.push(11) for i in [1..21]).should.throw "Overflow"
+
+    it "should be empty once again after a push/pop", ->
+      @stack.push(11)
+      @stack.pop()
+      @stack.isEmpty().should.equal true
+
+  it "should return the last pushed value upon #pop", ->
+    @stack.push(11)
+    @stack.pop().should.equal 11
+
+  it "should return pushed values in reverse order using an equal number of #pops", ->
+    @stack.push(value) for value in [1..20]
+    @stack.pop().should.equal(value) for value in [20..1]

@@ -1,0 +1,3 @@
+cli = require 'cli-color'
+
+console.log cli.green + "hello"

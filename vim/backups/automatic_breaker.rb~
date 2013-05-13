@@ -1,0 +1,36 @@
+require_relative 'breaker'
+require_relative 'scorer'
+require_relative 'guess_indexer'
+
+class AutomaticBreaker < Breaker
+
+  def initialize
+    @index = 0
+    @grades = []
+  end
+
+  def next_guess
+    assure_index_is_consistent_with_all_grades
+    guess = GuessIndexer.new.string_for @index
+    @index += 1
+    guess
+  rescue
+    NoGuess
+  end
+
+  def guess_score score
+    @grades << score 
+  end
+
+private
+
+  def assure_index_is_consistent_with_all_grades  
+    @index += 1 while index_not_consistent_with_all_grades?
+  end
+
+  def index_not_consistent_with_all_grades?
+    guess = GuessIndexer.new.string_for @index
+    not @grades.all? {|grade| Scorer.consistent? grade, guess }
+  end
+
+end

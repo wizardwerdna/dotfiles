@@ -1,0 +1,13 @@
+suite = require 'promises-aplus-tests'
+{Core} = require '../../covenant'
+suite
+  fulfilled: (value) -> p=new Core; p.resolve(value); p
+  rejected: (reason) -> p=new Core; p.reject(reason); p
+  pending: ->
+    p = new Core
+    promise: p
+    fulfill: p.resolve
+    reject: p.reject
+, { reporter: 'dot' }
+, (err) -> 
+  console.log "#{err} tests failed."

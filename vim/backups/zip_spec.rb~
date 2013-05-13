@@ -1,0 +1,362 @@
+require_relative '../zip'
+require_relative '../zip_child'
+require_relative '../zip_changed'
+
+describe Zip do
+
+  context "upon creation" do
+    shared_examples_for "a value object" do
+      it {should be_frozen}
+      it {should be_equal subject}
+      it {should_not be_equal equivalent_zip}
+      it {should_not equal non_equivalent_zip}
+      it {should be_eql equivalent_zip}
+      it {should_not be_eql non_equivalent_zip}
+      it {should == equivalent_zip}
+      it {should_not == non_equivalent_zip}
+      it {should === equivalent_zip}
+      it {should_not === non_equivalent_zip}
+    end
+    
+    context "as a root" do
+      subject {Zip.new(Node.new(:root, [1,2,3]))}
+      let(:equivalent_zip){Zip.new(Node.new(:root, [1,2,3]))}
+      let(:non_equivalent_zip){Zip.new(Node.new(:root2, [1,2,3]))}
+      it_should_behave_like "a value object"
+    end
+
+    context "as a child" do
+      subject {Zip.new(Node.new(:root, [Node.new(:child, [])])).down}
+      let(:equivalent_zip) {Zip.new(Node.new(:root, [Node.new(:child, [])])).down}
+      let(:non_equivalent_zip) {Zip.new(Node.new(:another_root, [Node.new(:child, [])])).down}
+      it_should_behave_like "a value object"
+    end
+  end
+  
+  #EXAMPLE STRUCTURE:
+  #
+  #        root
+  #       / |  \
+  #     /   |    \
+  # left middle right
+  #   |
+  #   |
+  # bottom
+  #
+  let(:root_node){Node.new(:root, [left_node, middle_node, right_node])}
+  let(:left_node){Node.new(:left, [bottom_node])}
+  let(:middle_node){Node.new(:middle, [])}
+  let(:right_node){Node.new(:right, [])}
+  let(:bottom_node){Node.new(:bottom, [])}
+
+  shared_examples_for "root_node" do
+    it {subject.node.should == x_root_node}
+    it {subject.root.should == x_root_node}
+    it {subject.root_zip.node.should == x_root_node}
+    it {subject.should be_root}
+    it {subject.children.should == x_root_node.children}
+    it {subject.siblings.should == [x_root_node]}
+    it {subject.lefts.should be_empty}
+    it {subject.rights.should be_empty}
+    it {subject.path.should == [x_root_node]}
+  end
+
+  shared_examples_for "child_node" do
+    it{subject.node.should == x_child_node}
+    it{subject.root.should == x_root_node}
+    it {subject.root_zip.node.should == x_root_node}
+    it{subject.should_not be_root}
+    it{subject.children.should == x_child_node.children}
+    it{subject.siblings.should == x_child_siblings}
+    it{subject.lefts.should == x_child_lefts}
+    it{subject.rights.should == x_child_rights}
+    it{subject.path.should == x_child_path}
+  end
+
+  context "introspection" do
+    context "root" do
+      subject{ Zip.new root_node }
+      
+      let(:x_root_node){root_node}
+      it_should_behave_like "root_node"
+    end
+
+    context "left" do
+      subject{ Zip.new(root_node).down }
+     
+      let(:x_root_node){root_node}
+      let(:x_child_node){left_node}
+      let(:x_child_siblings){[left_node, middle_node, right_node]}
+      let(:x_child_lefts){[]}
+      let(:x_child_rights){[middle_node, right_node]}
+      let(:x_child_path){[root_node, left_node]}
+      it_should_behave_like "child_node"
+    end
+
+    context "bottom" do
+      subject{ Zip.new(root_node).down.down }
+      it{subject.node.should == bottom_node}
+      it{subject.root.should == root_node}
+      it{subject.should_not be_root}
+      it{subject.children.should be_empty}
+      it{subject.siblings.should == [bottom_node]}
+      it{subject.lefts.should be_empty}
+      it{subject.rights.should be_empty}
+      it{subject.path.should == [root_node, left_node, bottom_node]}
+    end
+
+    context "middle" do
+      subject{ Zip.new(root_node).down.right }
+      it{subject.node.should == middle_node}
+      it{subject.root.should == root_node}
+      it{subject.should_not be_root}
+      it{subject.children.should be_empty}
+      it{subject.siblings.should == [left_node, middle_node, right_node]}
+      it{subject.lefts.should == [left_node]}
+      it{subject.rights.should == [right_node]}
+      it{subject.path.should == [root_node, middle_node]}
+    end
+
+    context "right" do
+      subject{ Zip.new(root_node).down.rightmost }
+      it{subject.node.should == right_node}
+      it{subject.root.should == root_node}
+      it{subject.should_not be_root}
+      it{subject.children.should be_empty}
+      it{subject.siblings.should == [left_node, middle_node, right_node]}
+      it{subject.lefts.should == [left_node, middle_node]}
+      it{subject.rights.should be_empty}
+      it{subject.path.should == [root_node, right_node]}
+    end
+  end
+
+  context "navigation" do
+    context "root" do
+      subject{ Zip.new root_node }
+      it {subject.down.node.should == left_node}
+      it {subject.up.should be_nil}
+      it {subject.right.should be_nil}
+      it {subject.left.should be_nil}
+      it {subject.rightmost.should == subject}
+      it {subject.leftmost.should == subject}
+    end
+
+    context "left" do
+      subject{ Zip.new(root_node).down }
+      it {subject.down.node.should == bottom_node}
+      it {subject.up.node.should == root_node }
+      it {subject.right.node.should == middle_node }
+      it {subject.left.should be_nil }
+      it {subject.rightmost.node.should == right_node }
+      it {subject.leftmost.node.should == left_node }
+    end
+
+    context "bottom" do
+      subject{ Zip.new(root_node).down.down }
+      it {subject.down.should be_nil}
+      it {subject.up.node.should == left_node }
+      it {subject.right.should be_nil}
+      it {subject.left.should be_nil}
+      it {subject.rightmost.node.should == bottom_node}
+      it {subject.leftmost.node.should == bottom_node}
+    end
+
+    context "middle" do
+      subject{ Zip.new(root_node).down.right }
+      it {subject.down.should be_nil}
+      it {subject.up.node.should == root_node }
+      it {subject.right.node.should == right_node}
+      it {subject.left.node.should == left_node}
+      it {subject.rightmost.node.should == right_node}
+      it {subject.leftmost.node.should == left_node}
+    end
+
+    context "right" do
+      subject{ Zip.new(root_node).down.rightmost }
+      it {subject.down.should be_nil}
+      it {subject.up.node.should == root_node }
+      it {subject.right.should be_nil }
+      it {subject.left.node.should == middle_node }
+      it {subject.rightmost.node.should == right_node}
+      it {subject.leftmost.node.should == left_node}
+    end
+
+  end
+
+  context "traversal" do
+    let(:root_zip) { Zip.new root_node }
+    
+    context "next" do
+      it {root_zip.next.node.should == left_node}
+      it {root_zip.next.next.node.should == bottom_node}
+      it {root_zip.next.next.next.node.should == middle_node}
+      it {root_zip.next.next.next.next.node.should == right_node}
+      it {root_zip.next.next.next.next.next.should be_nil}
+    end
+
+    context "prev" do
+      let(:right_zip) {root_zip.down.rightmost}
+      it {right_zip.prev.node.should == middle_node}
+      it {right_zip.prev.prev.node.should == bottom_node}
+      it {right_zip.prev.prev.prev.node.should == left_node}
+      it {right_zip.prev.prev.prev.prev.node.should == root_node}
+      it {right_zip.prev.prev.prev.prev.prev.should be_nil}
+    end
+
+    context "enumerable" do
+      context "root" do
+        subject {Zip.new root_node}
+        it {should respond_to :each}
+        it {should respond_to :reverse_each}
+        it {subject.class.should be_include Enumerable}
+        it {subject.flat_map{ |each| each.node.payload }.should == 
+              [:root, :left, :bottom, :middle, :right]}
+        it {subject.reverse.flat_map{|each| each.node.payload}.should ==
+              [:right, :middle, :bottom, :left, :root]}
+      end
+
+      context "child" do
+        subject {Zip.new(root_node).down}
+        it {should respond_to :each}
+        it {should respond_to :reverse_each}
+        it {subject.class.should be_include Enumerable}
+        it {subject.flat_map{ |each| each.node.payload }.should == [:left, :bottom]}
+        it {subject.reverse.flat_map{|each| each.node.payload}.should ==
+              [:bottom, :left]}
+      end
+
+      context "changes propagated to root" do
+        let(:new_node){Node.new(:new, [])}
+        subject {Zip.new(root_node).down.down.replace(new_node).root_zip}
+        it {subject.flat_map{ |each| each.node.payload }.should == 
+              [:root, :left, :new, :middle, :right]}
+        it {subject.reverse.flat_map{|each| each.node.payload}.should ==
+              [:right, :middle, :new, :left, :root]}
+      end
+    
+    end
+
+  end
+
+  context "mutations" do
+
+    context "replace" do 
+    
+      context "root" do
+        let(:new_node){Node.new :new_node, []}
+        let(:x_root_node){new_node}
+        subject {Zip.new(root_node).replace(new_node)}
+        it_should_behave_like "root_node" 
+      end
+
+      context "child" do
+        let(:random_node){Node.new :random, []}
+        let(:new_node){Node.new :new_node, [random_node]}
+        subject {Zip.new(root_node).down.right.replace(new_node)} 
+
+        let(:x_root_node){Node.new(:root, [left_node, new_node, right_node])}
+        let(:x_child_node){new_node}
+        let(:x_child_siblings){[left_node, new_node, right_node]}
+        let(:x_child_lefts){[left_node]}
+        let(:x_child_rights){[right_node]}
+        let(:x_child_path){[root_node, new_node]}
+        it_should_behave_like "child_node"
+
+        it "should propagate changes through navigation" do
+          subject.up.down.right.node.should == new_node
+          subject.down.up.node.should == new_node
+          subject.left.right.node.should == new_node
+          subject.right.left.node.should == new_node
+          Zip.new(subject.root).down.right.node.should == new_node
+        end
+
+      end
+
+    end
+
+    context "edit" do
+      let(:block){->(node){Node.new(:edited, node.children)}}
+      let(:function_call_version){Zip.new(root_node).edit(block)}
+      let(:block_version){Zip.new(root_node).edit{|node| Node.new(:edited, node.children)}}
+      it{function_call_version.node.should == block[root_node]}
+      it{block_version.node.should == block[root_node]}
+    end
+
+    context "append_child" do 
+      let(:new_node){Node.new :new_node, []}
+      subject {Zip.new(root_node).append_child(new_node)}
+      it {subject.children.last.should == new_node}
+      it {subject.down.rightmost.node.should == new_node}
+    end
+
+    context "insert_child" do
+      let(:new_node){Node.new :new_node, []}
+      subject {Zip.new(root_node).insert_child(new_node)}
+      it {subject.children.first.should == new_node}
+      it {subject.down.leftmost.node.should == new_node}
+    end
+
+    context "insert_before" do
+      let(:new_node){Node.new :new_node, []}
+      let(:new_node2){Node.new :new_node2, []}
+      
+      it{Zip.new(root_node).should_not respond_to :insert_before}
+      
+      context "child" do
+        subject{Zip.new(root_node).down.insert_before new_node}
+        it{subject.left.node.should == new_node}
+      end
+
+      context "changed" do
+        subject{Zip.new(root_node).down.insert_before(new_node).insert_before(new_node2)}
+        it{subject.left.node.should == new_node2}
+        it{subject.left.left.node.should == new_node}
+      end
+
+    end
+
+    context "insert_after" do
+      let(:new_node){Node.new :new_node, []}
+      let(:new_node2){Node.new :new_node2, []}
+      
+      it{Zip.new(root_node).should_not respond_to :insert_after}
+      
+      context "child" do
+        subject{Zip.new(root_node).down.insert_after new_node}
+        it{subject.right.node.should == new_node}
+      end
+
+      context "changed" do
+        subject{Zip.new(root_node).down.insert_after(new_node).insert_after(new_node2)}
+        it{subject.right.node.should == new_node2}
+        it{subject.right.right.node.should == new_node}
+      end
+
+    end
+
+    context "remove" do
+      it{Zip.new(root_node).should_not respond_to :remove}
+
+      context "leftmost child" do
+        subject{Zip.new(root_node).down.remove}
+        it {subject.node.payload.should == :root}
+        it {subject.children.should == [middle_node, right_node]}
+      end
+
+      context "middle child" do
+        subject{Zip.new(root_node).down.right.remove}
+        it {subject.node.payload.should == :bottom}
+        it {subject.root.children.should == [left_node, right_node]}
+      end
+
+      context "bottom child" do
+        subject{Zip.new(root_node).down.down.remove}
+        it {subject.node.payload.should == :left}
+        it {subject.children.should == []}
+      end
+
+    end
+
+  end
+  
+end

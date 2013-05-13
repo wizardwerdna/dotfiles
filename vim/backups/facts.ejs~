@@ -1,0 +1,23 @@
+<% layout('layout') %>
+<h1>Table of Facts</h1>
+
+<div id="factTimeline"></div>
+<hr>
+<ol class="table">
+  <% facts.forEach(function(fact){ %>
+  <li>
+    <b>
+      <%= new Date(fact.start) %>
+      <%= fact.title %>
+    </b>
+    <% if (fact.documentID) { %>
+    <A class="btn btn-success btn-mini" href="<%=fact.document().url %>">Attachment</A>
+    <% } %>
+    <br/>
+    <%- marked(fact.description) %>
+  </li>
+  <hr>
+  <% }) %>
+</ol>
+
+<% block('scripts', partial('factsTimeline')) %>

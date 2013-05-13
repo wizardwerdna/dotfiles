@@ -1,0 +1,38 @@
+require_relative '../scorer'
+
+describe Scorer do
+
+  it "should score a perfect miss correctly" do
+    Scorer.score([0, 0, 0, 0, 0], [1, 2, 3, 4, 5]).should == 0
+  end
+
+  it "should score a perfect guess correctly" do
+    Scorer.score([1, 2, 3, 4, 5], [1, 2, 3, 4, 5]).should == 34
+  end
+
+
+  it "should score 15 points for hitting only first place" do
+    Scorer.score([1, 0, 0, 0, 0], [1, 2, 3, 4, 5]).should == 15
+  end
+
+  it "should score 10 points for hitting only 2d place" do
+    Scorer.score([0, 2, 0, 0, 0], [1, 2, 3, 4, 5]).should == 10
+  end
+
+  it "should score 5 points for hitting only 3d place" do
+    Scorer.score([0, 0, 3, 0, 0], [1, 2, 3, 4, 5]).should == 5
+  end
+
+  it "should score 3 points for hitting only 4th place" do
+    Scorer.score([0, 0, 0, 4, 0], [1, 2, 3, 4, 5]).should == 3
+  end
+
+  it "should score 1 points for hitting only 5th place" do
+    Scorer.score([0, 0, 0, 0, 5], [1, 2, 3, 4, 5]).should == 1
+  end
+
+  it "should score 1 point for guessing a finisher in wrong position" do
+    Scorer.score([5, 1, 2, 3, 4], [1, 2, 3, 4, 5]).should == 5
+  end
+
+end

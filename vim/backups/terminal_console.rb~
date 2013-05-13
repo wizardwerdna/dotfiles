@@ -1,0 +1,32 @@
+class TerminalConsole
+
+  def current_position position
+    puts "Current Position:"
+    print_position position
+  end
+
+  def player_move marker, move
+    puts "Player #{marker} moves '#{move}'."
+  end
+
+  def final_position position
+    puts "Final Position:"
+    print_position position
+  end
+
+private
+
+  def print_position position
+    printf("\t+---+---+---+\n")
+    for row in 0..2
+      printf("\t")
+      for col in 0..2
+        printf("| %s ", position[(3*row+col)..(3*row+col)])
+      end
+      printf("|\n")
+      printf("\t+---+---+---+\n")
+    end
+  end
+
+end
+

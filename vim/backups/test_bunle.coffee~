@@ -1,0 +1,10 @@
+# Mocha = require 'mocha/mocha.js'
+# mocha = new Mocha
+# mocha.addFile 'test/covenant.coffee'
+# mocha.addFile 'test/promise.coffee'
+# mocha.run (failures)->
+#   process.exit(failures)
+require './covenant.coffee'
+require './promise.coffee'
+require './test/covenant.coffee'
+require './test/promise.coffee'

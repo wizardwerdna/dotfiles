@@ -1,0 +1,150 @@
+require_relative 'abstract_searcher'
+
+class FasterSearcher < AbstractSearcher
+
+  attr_accessor :rightmost_mismatch_in_pattern
+
+# private
+
+  def pattern_longer_than_string_at? k
+    k > end_of_string_for_pattern_search
+  end
+
+  def pattern_matches_string_at? k
+    self.rightmost_mismatch_in_pattern = rightmost_mismatch_in_pattern_at k
+    return rightmost_mismatch_in_pattern.nil?
+  end
+
+  def index_of_unchecked_remainder_of_string_after k
+    k + shift( string[ k + rightmost_mismatch_in_pattern ] )
+  end
+
+  def end_of_string_for_pattern_search
+    @eos_for_pattern_searches ||= string_length - pattern_length
+  end
+
+  def rightmost_mismatch_in_pattern_at k
+    (pattern_length-1).downto(0) do |p_idx|
+      return p_idx if pattern[p_idx] != string[p_idx+k]
+    end
+    nil 
+  end
+  
+  def shift string_mismatch_char
+    rightmost_mismatch_in_pattern - shift_lookup(string_mismatch_char) 
+  end
+
+  def shift_lookup ch
+    [bad_character_table.fetch(ch,-1), 
+     good_suffix_table.fetch(rightmost_mismatch_in_pattern,string_length+pattern_length)
+    ].min
+  end
+
+  def bad_character_table
+    @bad_character_table ||= compute_bad_character_table
+  end
+
+  def compute_bad_character_table
+
+    #    ABCDEFGHC
+    # ...?????CGHC.....
+    #    ABCDEFGHC
+    #      c  m  k
+    #    012345678     
+    #
+    # when c is the rightmost occurrence of the mismatched letter, we know we can shift
+    # k by the pattern_length - 1 - c
+    #
+    # when the mismatched letter doesn't appear at all, we know we can shift k by the
+    # entire pattern_length
+
+    pattern.each_char.each_with_object({}) do |ch, hash|
+      hash[ch] ||= pattern.rindex(ch)
+    end
+  end
+
+  def good_suffix_table
+    compute_good_suffix_table
+    []
+  end
+
+  def compute_good_suffix_table
+    @table = [] 
+    shift_table_for_longest_matching_prefix
+    # display_table "longest_matching_prefix"
+    adjust_shift_table_where_rightmost_mismatches_exist
+    # display_table "rightmost_mismatches"
+  end
+
+  def display_table title
+    printf "\n\n======="
+    printf "\n%s for %s", title, pattern
+    printf "\n======="
+    pattern_length.times do |m|
+      printf "\nmismatch at #{m}:"
+      printf "\n   %s   ", pattern
+      printf "\nppp%s%s%sppp", m==0?"":pattern[0..m-1], "?", pattern[m+1..pattern_length-1]
+      printf "\nshift = %d", @table[m]
+    end
+  end 
+  
+  def shift_table_for_longest_matching_prefix
+    last_prefix_index = pattern_length-1
+    (pattern_length-1).downto(0) do |mismatch|
+      if remainder_of_pattern_after_mismatch_is_a_prefix? mismatch
+        last_prefix_index = mismatch+1
+      end
+      @table[mismatch] = - last_prefix_index - 1
+    end
+  end
+
+  def adjust_shift_table_where_rightmost_mismatches_exist 
+    (pattern_length-1).times do |i|
+      slen = longest_suffix_in_pattern_ending_at i
+      if pattern[i-slen] != pattern[pattern_length-1 - slen]
+        @table[pattern_length-1-slen] = pattern_length-1-i+slen
+      end
+    end
+  end
+
+  def remainder_of_pattern_after_mismatch_is_a_prefix? mismatch
+    pattern[mismatch+1..pattern_length-1] == pattern[1..pattern_length-mismatch]
+  end
+
+  def longest_suffix_in_pattern_ending_at pos
+    longest = [pattern_length-1-pos, pos+1].min
+    longest.times do |i|
+      return i if pattern[pos-i] != pattern[pattern_length-1-i]
+    end
+    return longest 
+  end
+
+  def shift_for_bad_character bad
+    rightmost = pattern.rindex(bad)
+    if rightmost.nil?
+      pattern.size
+    else
+      pattern.length - rightmost - 1
+    end
+  end
+
+  def shift_for_good_suffix mismatch 
+
+    suffix_length = pattern_length - mismatch - 1
+
+    (mismatch-1).downto(0) do |plausible|
+      return mismatch - plausible if pattern[plausible] != pattern[mismatch] && 
+        pattern[plausible+1..plausible+suffix_length] == pattern[mismatch+1..-1]
+    end
+
+    (suffix_length-1).downto(0) do |suffix_end|
+      if  pattern[0..suffix_end] == pattern[pattern_length-suffix_end-1..-1]
+        return pattern_length-suffix_end-1 
+      end 
+    end
+    
+    pattern_length
+  
+  end
+
+end 

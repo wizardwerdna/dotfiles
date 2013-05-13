@@ -1,0 +1,31 @@
+require_relative '../guesser.rb'
+
+describe Guesser do
+
+  let!(:strategy) { double("strategy") }
+
+  context "once initialized" do
+    let(:guesser) { Guesser.new(strategy) }
+   
+    context "#next_guess" do
+      it "should respond NoGuess if strategy fails" do
+        strategy.stub(:next_guess => nil)
+        guesser.next_guess.should == Guesser::NoGuess
+      end
+
+      it "should respond with the guess if strategy does not fail" do
+        strategy.stub(:next_guess => "abcde")
+        guesser.next_guess.should == "abcde"
+      end
+    end
+
+    context "#register_score" do
+      it "should delegate to strategy" do
+        guess = double("guess")
+        score = double("score")
+        strategy.should_receive(:register_score).with guess, score 
+        guesser.register_score guess, score 
+      end
+    end
+  end
+end

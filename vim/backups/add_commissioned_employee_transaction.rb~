@@ -1,0 +1,27 @@
+require_relative 'employee'
+require_relative 'add_employee_transaction'
+
+class AddCommissionedEmployeeTransaction < AddEmployeeTransaction
+
+  def initialize emp_id, name, address, salary, commission
+    super emp_id, name, address
+    @salary = salary
+    @commission = commission
+  end
+
+private
+
+  def make_classification
+    CommissionedClassification.new @salary, @commission
+  end
+
+  def make_schedule
+    BiWeeklySchedule.new
+  end
+
+  def payment_method
+    HoldMethod.new
+  end
+
+end
+

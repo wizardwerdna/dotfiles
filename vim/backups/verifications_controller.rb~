@@ -1,0 +1,27 @@
+class VerificationsController < ApplicationController
+  def index
+  end
+  
+  def new
+    @verification = Verification.new
+  end
+
+  def show
+    update 
+  end
+
+  def create
+    @verification = Verification.find(params[:verification][:email]).save
+  rescue ActiveRecord::RecordNotFound
+    # we do not alert potential hackers that they typed an invalid e-mail
+  ensure
+    redirect_to verifications_url, :notice => "Your verification e-mail has been re-sent."
+  end
+  
+  def update
+    @verification = Verification.find(params[:id]).save
+    redirect_to dashboard_url, :notice => "Thank you for verifying #{@verification.email}"
+  rescue ActiveRecord::RecordNotFound
+    redirect_to new_verification_url, :alert => "The link you used to verify your e-mail was invalid."
+  end
+end

@@ -1,0 +1,47 @@
+require_relative '../lib/fizzbuzz'
+
+describe FizzBuzz do
+  it "should compute the proper array" do
+    FizzBuzz.for(
+      (1..15).map{|each| topnum(each)}
+    ).should == 
+      [1,2,'Fizz',4,'Buzz','Fizz',7,8,'Fizz','Buzz',11,'Fizz',13,14,'FizzBuzz']
+  end
+end
+
+describe "ZERO" do
+
+  it "should be a proc" do
+    ZERO.should be_kind_of Proc
+  end
+
+  it "should convert to 0" do
+    ZERO[Increment][0].should == 0
+  end 
+
+end
+
+describe "INCREMENT" do
+
+  specify { INCREMENT[ZERO][Increment][0].should == 1 }
+  specify { INCREMENT[INCREMENT[ZERO]][Increment][0].should == 2 }
+  specify { INCREMENT[INCREMENT[INCREMENT[ZERO]]][Increment][0].should == 3}
+
+end
+
+describe "ADD" do
+
+  specify { ADD[ZERO][ONE][Increment][0].should == 1 } 
+  specify { ADD[ONE][ONE][Increment][0].should == 2 }
+  specify { ADD[ONE][TWO][Increment][0].should == 3 }
+
+end
+
+describe "MULTIPLY" do
+  specify { MULTIPLY[ZERO][THREE][Increment][0].should == 0 }
+  specify { MULTIPLY[THREE][ZERO][Increment][0].should == 0 }
+  specify { MULTIPLY[ONE][THREE][Increment][0].should == 3 }
+  specify { MULTIPLY[THREE][ONE][Increment][0].should == 3 }
+  specify { MULTIPLY[TWO][TWO][Increment][0].should == 4 } 
+  specify { MULTIPLY[TWO][THREE][Increment][0].should == 6 }
+end

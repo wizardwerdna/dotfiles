@@ -1,0 +1,32 @@
+# HOW PROMISES WORK
+
+Assume, you have only promise types P, and P's can fulfill, reject and then as anticipated.  Assume that fulfill(value) and reject(reason) behaves as expected, not permitting other transitions.  How then, does then work?  Believe it or not, like this:
+
+
+```cofeescript
+class P
+  ...
+  then: (onFulfill, onReject) =>
+    new P (p2) => @state.thenP(onFulfill, onReject, p2)
+```
+We have three cases, when @state is pending, fulfilled, and rejected.  Pending is easy, we simply remember to schedule callbacks later, for when they are fulfilled by pushing them on a stack:
+
+```coffeescript
+
+class PendingState
+  ...
+  thenP: (onFulfill, onReject) =>
+    new P (p2)=> @pendings.push [onFulfill, onReject, p2]
+```
+
+For the fulfilled case, we need to run the callback, so we think ahead and consider how we intend to `resolve` the callbacks.  This is accomplished by making the p2 "behave like" the value given to us, or something like 
+
+```coffeescript
+
+class FulfilledState
+  ...
+  then: (onFulfill, __) =>
+    new P (p2) => @enqueue =>
+      p2.then 
+
+```

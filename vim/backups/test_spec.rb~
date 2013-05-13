@@ -1,0 +1,5 @@
+describe "truth" do
+  it "should tell the truth" do
+    expect(true).to be_true
+  end
+end

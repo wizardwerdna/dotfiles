@@ -1,0 +1,44 @@
+class CasesController < ApplicationController
+  before_filter :authenticate_user!
+
+  def index
+    @cases = current_user.cases
+  end
+
+  def new
+    @case = current_user.cases.new
+  end
+
+  def show
+    @case = current_user.cases.find params[:id]
+  end
+  
+  def edit
+    @case = current_user.cases.find params[:id]
+  end
+
+  def create
+    @case = current_user.cases.new(params[:case])
+    if @case.save
+      redirect_to case_url(@case), :notice => I18n.t('cases.create.notice') 
+    else
+      flash.now[:alert] = I18n.t('cases.create.alert') 
+      render 'new'
+    end
+  end
+
+  def update
+    @case = current_user.cases.find( params[:id] )
+    if @case.update_attributes( params[:case] )
+      redirect_to case_url(@case), :notice => I18n.t('cases.update.notice')
+    else
+      flash.now[:alert] = I18n.t('cases.update.alert')
+      render 'edit'
+    end
+  end
+
+  def destroy 
+    current_user.cases.find( params[:id] ).delete
+    redirect_to cases_url, :notice => I18n.t('cases.destroy.notice')
+  end
+end

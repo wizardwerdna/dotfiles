@@ -1,0 +1,18 @@
+class PostsController < ApplicationController
+
+  def new
+    @post = NewPost[blog: @blog].post
+  end
+
+  def create
+
+    @post = PublishPost[ params[:post].merge(blog: @blog) ].post
+    if @post.errors.blank? 
+      redirect_to root_url, notice: "Post Added"
+    else
+      render 'new'
+    end
+
+  end
+
+end

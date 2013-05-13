@@ -1,0 +1,25 @@
+class User; end
+
+module MockUser
+  def mock_user_by_email(email)
+    if block_given?
+      user = stub "user with email #{email.inspect}"
+      yield user
+    else
+      user = nil
+    end
+    User.should_receive(:find_by_email).with(email).and_return(user)
+  end
+
+  def mock_user_by_token(token, token_name=:mock_token)
+    if block_given?
+      token = stub "user with #{token_name.inspect} #{token.inspect}"
+      yield user
+    else
+      user = nil
+    end
+    finder = ('find_by' + token_name.to_s).to_sym
+    User.should_receive(finder).with(email).and_return(user)
+  end
+end
+World(MockUser)

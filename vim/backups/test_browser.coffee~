@@ -1,0 +1,9 @@
+Mocha = require('mocha')
+fs = require('fs')
+path = require('path')
+coffeescript = require 'coffee-script'
+mocha = new Mocha
+mocha.addFile('test/covenant.coffee')
+mocha.addFile('test/promise.coffee')
+mocha.run (failures)->
+  process.exit(failures)

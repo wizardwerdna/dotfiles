@@ -1,0 +1,3 @@
+EcasebaseMailer#verify_notice
+<%puts @user.inspect%>
+<%=email_verification_url(TokenService.new(:verify_token).for_record(@user).token)%>

@@ -1,0 +1,6 @@
+console.log "Naked Cache Secured"
+cache = require.cache
+
+module.export = ->
+  restoreNakedCache()
+  runReloadrc()

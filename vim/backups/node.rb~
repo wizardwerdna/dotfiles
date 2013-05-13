@@ -1,0 +1,15 @@
+class Node < Struct.new(:payload, :children)
+
+  def initialize payload, children
+    super
+    freeze
+  end
+
+  def to_s 
+    "Node(#{payload.inspect}, #{children.map{|each| each}}"
+  end
+
+  def inspect
+    to_s
+  end
+end

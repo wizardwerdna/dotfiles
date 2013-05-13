@@ -1,0 +1,123 @@
+==> automatic_breaker.rb <==
+require_relative 'breaker'
+require_relative 'scorer'
+require_relative 'guess_indexer'
+
+class AutomaticBreaker < Breaker
+
+  def initialize
+    @index = 0
+    @grades = []
+  end
+
+==> automatic_maker.rb <==
+require_relative 'maker'
+require_relative 'scorer'
+require_relative 'guess_indexer'
+
+class AutomaticMaker < Maker
+
+  def initialize code_generator = lambda { GuessIndexer.new.make_random_guess  }  
+    @code = code_generator.call
+  end
+
+
+==> breaker.rb <==
+require_relative 'score'
+
+class Breaker
+  class NoGuess; end
+  def next_guess; end
+  def guess_score score; end
+end
+
+==> console.rb <==
+require_relative 'score'
+
+class Console
+
+  def initialize
+    puts "Mastermind Online!"
+  end
+
+  def end_after number_guesses, score
+    puts "Game ends after #{number_guesses} tries."
+
+==> game_runner.rb <==
+require_relative 'score'
+
+class GameRunner
+
+  def initialize maker, breaker, console
+
+    @maker = maker
+    @breaker = breaker
+    @console = console
+
+
+==> guess.rb <==
+class GuessIndexer
+
+  attr_accessor :alphabet, :length
+
+  def initialize alphabet, length
+    self.alphabet = alphabet
+    self.length = length
+  end
+
+  def string_for index
+
+==> guess_indexer.rb <==
+class GuessIndexer
+
+  attr_accessor :alphabet, :length
+
+  def initialize alphabet="abcdef", length=4
+    self.alphabet = alphabet
+    self.length = length
+  end
+
+  def string_for index
+
+==> main.rb <==
+require_relative 'game_runner'
+require_relative 'automatic_breaker'
+require_relative 'automatic_maker'
+require_relative 'console'
+
+class Main
+  def self.call
+    @console = Console.new 
+    @breaker = AutomaticBreaker.new
+    @maker   = AutomaticMaker.new
+
+==> maker.rb <==
+class Maker
+
+  def score_guess guess; end
+
+end
+
+==> score.rb <==
+class Score
+
+  class NoScore
+    def self.ends_game
+      true
+    end
+  end
+  
+  attr_accessor :number_correct_and_in_place, :number_correct_but_out_of_place, :string
+ 
+
+==> scorer.rb <==
+require_relative 'score'
+class Scorer
+
+  def self.score_guess code, guess
+    Score.new(
+      number_correct_and_in_place(code, guess),
+      number_correct_but_out_of_place(code, guess),
+      guess
+    )
+  end
