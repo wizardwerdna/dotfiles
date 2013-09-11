@@ -1,0 +1,6 @@
+'use strict';
+
+angular.module('bowlingApp')
+  .filter 'rollsDisplay', () ->
+    (input) ->
+      'rollsDisplay filter: ' + input

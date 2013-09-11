@@ -1,0 +1,112 @@
+'use strict'
+
+describe 'Directive: bowlingLine', () ->
+
+  # load the directive's module
+  beforeEach module 'bowlingApp'
+  beforeEach module 'views/bowlingLine.html'
+
+  elt = $('')
+
+  beforeEach inject ($rootScope, $compile) ->
+    html = '<div bowling-line></div>'
+    scope = $rootScope.$new()
+    elt = $compile(html) $rootScope.$new()
+    $rootScope.$digest()
+
+  expectRollsDisplayToBe = (str)-> (expect elt.find('.rolls').text()).toBe str
+  rollButtons = -> elt.find('.roll')
+  rollButton = (pins)-> rollButtons().eq(pins)
+  roll = (pins)-> rollButton(pins).click()
+  reset = -> elt.find('.reset').click()
+
+  describe "DATA ENTRY", ->
+    describe "data input means", ->
+      it "should have 11 buttons for rolls", ->
+        (expect elt.find('.roll').length).toBe 11
+      it "should have a reset button", ->
+        (expect elt.find('.reset').length).toBe 1
+
+  frameScores = -> elt.find('.frame-score').get().map((e)->$(e).text()).filter (e)->e!=''
+  frameScoresDisplay = -> "[#{frameScores().join(',')}]"
+
+  expectFrameScoresDisplayToBe = (str)->
+    (expect frameScoresDisplay()).toBe str
+
+  describe "SCORING", ->
+    it "should display an initially empty list of frame scores", ->
+      expectFrameScoresDisplayToBe "[]"
+    it "should display framescores for a single incomplete frame", ->
+      roll(3)
+      expectFrameScoresDisplayToBe "[]"
+    it "should display framescores for a single complete frame", ->
+      roll(3); roll(4)
+      expectFrameScoresDisplayToBe "[7]"
+    it "shold display a perfect game", ->
+      roll(10) for i in [1..12]
+      expectFrameScoresDisplayToBe '[' +
+        [1..10].map((f)->(30*f).toString()).join(',') + ']'
+
+  rollsDisplay = -> elt.find('.roll-display').text()
+  expectRollDisplayToBe = (str)->
+    (expect rollsDisplay()).toBe str
+
+  describe "ROLL DISPLAY", ->
+    describe "one incomplete frame", ->
+      it "should display empty rolls", ->
+        expectRollDisplayToBe  ""
+      it "should display a single roll", ->
+        roll(5)
+        expectRollDisplayToBe "5"
+        reset(); roll(7)
+        expectRollDisplayToBe "7"
+
+      it "should display a gutter ball", ->
+        roll(0)
+        expectRollDisplayToBe "-"
+
+      it "should display a strike", ->
+        roll(10)
+        expectRollDisplayToBe " X"
+
+      it "should display an open frame", ->
+        roll(3); roll(4)
+        expectRollDisplayToBe "34"
+
+      it "should be empty after reset", ->
+        roll(3); reset()
+        expectRollDisplayToBe ""
+
+    describe "complete games", ->
+      it "should display a perfect game", ->
+        roll(10) for i in [1..12]
+        expectRollDisplayToBe " X X X X X X X X XXXX"
+
+  describe "USER EXPERIENCE / ERROR CONDITIONS", ->
+    it "roll buttons should be initially enabled", ->
+      (expect rollButtons().is ':disabled').toBeFalsy()
+
+    it "roll buttons should be disabled when game is over", ->
+      roll(10) for i in [1..12]
+      (expect rollButtons().is ':enabled').toBeFalsy()
+
+    it "roll buttons should be disabled on second roll if total pins > 10", ->
+      roll(5)
+      (expect rollButton(0).is ':enabled').toBeTruthy()
+      (expect rollButton(5).is ':enabled').toBeTruthy()
+      (expect rollButton(6).is ':disabled').toBeTruthy()
+      (expect rollButton(10).is ':disabled').toBeTruthy()
+
+    it "should enable pins after tenth frame strike", ->
+      roll(10) for i in [1..10]
+      (expect rollButton(0).is ':enabled').toBeTruthy()
+      (expect rollButton(1).is ':enabled').toBeTruthy()
+      (expect rollButton(10).is ':enabled').toBeTruthy()
+
+    it "roll buttons should be disabled after tenth frame strike and non-double", ->
+      roll(10) for i in [1..10]
+      roll(5)
+      (expect rollButton(0).is ':enabled').toBeTruthy()
+      (expect rollButton(5).is ':enabled').toBeTruthy()
+      (expect rollButton(6).is ':disabled').toBeTruthy()
+      (expect rollButton(10).is ':disabled').toBeTruthy()

@@ -9,7 +9,16 @@ let g:loaded_pasta = 1
 
 function! s:NormalPasta(p, o)
   if (getregtype() ==# "V")
-    exe "normal! " . a:o . "\<space>\<bs>\<esc>" . v:count1 . '"' . v:register . ']pk"_dd'
+    exe "normal! " . a:o . "\<space>\<bs>\<esc>" . v:count1 . '"' . v:register . ']p'
+    " Save the `[ and `] marks (point to the last modification)
+    let first = getpos("'[")
+    let last  = getpos("']")
+    normal! k"_dd
+    " Compensate the line we have just deleted
+    let first[1] -= 1
+    let last[1]  -= 1
+    call setpos("'[", first)
+    call setpos("']", last)
   else
     exe "normal! " . v:count1 . '"' . v:register . a:p
   endif
@@ -40,19 +49,23 @@ function! s:SetupPasta()
     return
   endif
 
-  if maparg('p') ==# ''
-    nmap <buffer> p <Plug>AfterPasta
-    xmap <buffer> p <Plug>VisualPasta
-  endif
+  exe "nmap <buffer> " . g:pasta_paste_before_mapping . " <Plug>BeforePasta"
+  exe "xmap <buffer> " . g:pasta_paste_before_mapping . " <Plug>VisualPasta"
 
-  if maparg('P') ==# ''
-    nmap <buffer> P <Plug>BeforePasta
-    xmap <buffer> P <Plug>VisualPasta
-  endif
+  exe "nmap <buffer> " . g:pasta_paste_after_mapping . " <Plug>AfterPasta"
+  exe "xmap <buffer> " . g:pasta_paste_after_mapping . " <Plug>VisualPasta"
 endfunction
 
 if !exists("g:pasta_disabled_filetypes")
-  let g:pasta_disabled_filetypes = ["python", "coffee", "markdown"]
+  let g:pasta_disabled_filetypes = ["python", "coffee", "markdown", "yaml", "slim"]
+endif
+
+if !exists("g:pasta_paste_before_mapping")
+  let g:pasta_paste_before_mapping = 'P'
+endif
+
+if !exists("g:pasta_paste_after_mapping")
+  let g:pasta_paste_after_mapping = 'p'
 endif
 
 nnoremap <silent> <Plug>BeforePasta :<C-U>call <SID>NormalPasta('P', 'O')<CR>

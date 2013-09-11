@@ -1,0 +1,1 @@
+(rails s) & (sleep 10; karma start spec/frontend/karma.conf.js --reporters dot,grunt)

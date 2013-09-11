@@ -1,0 +1,101 @@
+SimileAjax = @SimileAjax
+documentHref = @document.location.href
+
+App.service 'simile', class SimileBuilder
+  constructor: ->
+    @SimileAjax.History.enabled = false;
+    @timelineDOMId = 'my-timeline'
+
+  buildTimeline: ->
+    @customizeInfoBubbles()
+    @eventSource = new Timeline.DefaultEventSource()
+    @timeline = Timeline.create(@timelineElement(), @timelineConfiguration())
+
+  loadEvents: (events) ->
+    @hideLogo()
+    @eventSource.clear()
+    @eventSource.loadJSON {events: events}, documentHref
+
+  hideLogo: ->
+    $('#' + @timelineDOMId).children().first().hide()
+ 
+  timelineElement: ->
+    document.getElementById(@timelineDOMId)
+
+  timelineConfiguration: ->
+    contentBand = Timeline.createBandInfo
+      eventSource: @eventSource
+      width:       "90%"
+      intervalUnit: Timeline.DateTime.MONTH
+      intervalPixels: 100
+    summaryBand = Timeline.createBandInfo
+      overview:       true
+      eventSource:    @eventSource
+      width:          "10%"
+      intervalUnit: Timeline.DateTime.YEAR
+      intervalPixels: 200
+    summaryBand.syncWith = 0
+    summaryBand.highlight = true
+    [contentBand, summaryBand]
+
+  customizeInfoBubbles: ->
+    Timeline.DefaultEventSource.Event::fillInfoBubble =
+      (elmt, theme, labeller) ->
+        (new InfoBubbleBuilder(this,  elmt, theme, labeller)).build()
+
+class InfoBubbleBuilder
+  constructor: (@item, @elmt, @theme, @labeller) ->
+    @doc = elmt.ownerDocument
+
+  build: ->
+    @buildTitle()
+    @buildImage() unless @item.getImage() is null
+    @buildBody()
+    @buildTime()
+    @buildWiki()
+
+  buildImage: ->
+    img = @doc.createElement("img")
+    img.src = @item.getImage()
+    @theme.event.bubble.imageStyler(img)
+    @elmt.appendChild(img)
+
+  buildTitle: ->
+    divTitle = @doc.createElement("div")
+    @appendTextContents divTitle, @item.getText(), @item.getLink()
+    @theme.event.bubble.titleStyler(divTitle)
+    @elmt.appendChild(divTitle)
+
+  appendTextContents: (node, text, link) ->
+    if link is null
+      @appendText(node, text)
+    else
+      @appendLinkedText(node, text, link)
+
+  appendLinkedText: (node, text, link) ->
+    a = @doc.createElement('a')
+    a.href = link
+    a.target = "_self"
+    @appendText a, text
+    node.appendChild(a)
+
+  appendText: (node, text) ->
+    node.appendChild @doc.createTextNode text
+      
+  buildBody: ->
+    divBody = @doc.createElement("div")
+    @item.fillDescription(divBody)
+    @theme.event.bubble.bodyStyler(divBody)
+    @elmt.appendChild(divBody)
+
+  buildTime: ->
+    divTime = @doc.createElement("div")
+    @item.fillTime(divTime, @labeller)
+    @theme.event.bubble.timeStyler(divTime)
+    @elmt.appendChild(divTime)
+
+  buildWiki: ->
+    divWiki = @doc.createElement("div")
+    @item.fillWikiInfo(divWiki)
+    @theme.event.bubble.wikiStyler(divWiki)
+    @elmt.appendChild(divWiki)

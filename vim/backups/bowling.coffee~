@@ -1,34 +1,75 @@
-root = exports ? this
+'use strict'
 
-class root.Game
-  constructor: ->
-    @pins = [] 
-    @next_pin = 0
+angular.module('ngBowlingApp')
+.service 'bowling', class Bowling
 
-  roll: (pins) ->
-    @pins[@next_pin++] = pins
+  constructor: -> @reset()
 
-  score: ->
-    firstInFrame = frame = score = 0
-    while frame < 10
-      if @isStrike(firstInFrame)
-        score += @nextThreeRolls(firstInFrame)
-        firstInFrame+=1
-      else if @isSpare(firstInFrame)
-        score += @nextThreeRolls(firstInFrame)
-        firstInFrame += 2
-      else
-        score += @pins[firstInFrame] + @pins[firstInFrame+1]
-        firstInFrame += 2
-      frame += 1
-    score
+  reset: -> @pins = []
 
-  isStrike: (firstInFrame) ->
-    @pins[firstInFrame] == 10
+  roll: (pins)-> @pins.push(pins)
 
-  isSpare: (firstInFrame) ->
-    @pins[firstInFrame] + @pins[firstInFrame+1] == 10
- 
-  nextThreeRolls: (firstInFrame) ->
-    @pins[firstInFrame] + @pins[firstInFrame+1] + @pins[firstInFrame+2]
+  score: -> @_score(0, 0)
 
+  _score: (sofar, fromhere) ->
+    if @_isLastFrame fromhere
+      sofar + @pins[fromhere...].reduce ((x,y)->x+y), 0
+    else if @_isStrike fromhere
+      sofar + @_nextThreePins(fromhere) + @_score(sofar, fromhere+1)
+    else if @_isSpare fromhere
+      sofar + @_nextThreePins(fromhere) + @_score(sofar, fromhere+2)
+    else
+      sofar + @pins[fromhere] + @pins[fromhere+1] + @_score(sofar, fromhere+2)
+
+  _nextThreePins: (fromhere) -> @pins[fromhere] + @pins[fromhere+1] + @pins[fromhere+2]
+
+  _isStrike: (fromhere) -> @pins[fromhere] == 10
+
+  _isSpare: (fromhere) -> @pins[fromhere] + @pins[fromhere+1] == 10
+
+  _isLastFrame: (fromhere) -> fromhere+3 >= @pins.length
+
+  frames: ->  @_frames(0, [])
+  
+  _frames: (fromhere, frames) ->
+    sofar = frames[frames.length-1] || 0
+    if @_completeNonMark(fromhere)
+      frames.push sofar+@_nextTwoPins(fromhere)
+      @_frames(fromhere+2, frames)
+    else if @_completeSpare(fromhere)
+      frames.push sofar+@_nextThreePins(fromhere)
+      @_frames(fromhere+2, frames)
+    else if @_completeStrike(fromhere)
+      frames.push sofar+@_nextThreePins(fromhere)
+      @_frames(fromhere+1, frames)
+    else
+      frames
+
+  _completeSpare: (fromhere) -> fromhere+2 < @pins.length && @_isSpare(fromhere)
+  _completeStrike: (fromhere) -> fromhere+2 < @pins.length && @_isStrike(fromhere)
+  _completeNonMark: (fromhere) -> fromhere+1 < @pins.length && @pins[fromhere] + @pins[fromhere+1] < 10
+  _nextTwoPins: (fromhere) -> @pins[fromhere] + @pins[fromhere+1]
+
+  display: -> @_display(0, "")
+
+  _display: (fromhere, str) ->
+    if @pins.length == fromhere
+      str
+    else if @_isStrike(fromhere) or fromhere+1 == @pins.length
+      @_display fromhere+1, @_appendOnePinDisplay(str, fromhere)
+    else
+      @_display fromhere+2, @_appendTwoPinDisplay(str, fromhere)
+
+  _appendOnePinDisplay: (str, fromhere) ->
+    str += if @_isStrike(fromhere)
+      if str.length > 18 then "x" else " x"
+    else
+      @_displayRoll @pins[fromhere]
+
+  _appendTwoPinDisplay: (str, fromhere)->
+    str += @_displayRoll @pins[fromhere]
+    str += if @_isSpare(fromhere) then '/' else @_displayRoll @pins[fromhere+1]
+    str
+
+  _displayRoll: (pins) ->
+    "-123456789"[pins..pins]

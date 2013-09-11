@@ -1,0 +1,30 @@
+describe "integration of the root route", ->
+
+  beforeEach module "bowlingApp"
+  beforeEach module "views/main.html"
+
+  app = {}
+
+  beforeEach inject ($rootScope, $compile)->
+    html = '''
+      <div ng-app="bowlingApp">
+        <div ng-view=""></div>
+      </div>
+    '''
+    app = ($compile html) $rootScope.$new()
+    $rootScope.$digest()
+
+  describe "input apparatus", ->
+    it "should have buttons for rolls", ->
+      (expect app.find('.roll').length).toBe 11
+    it "should have a button to reset", ->
+      (expect app.find('.reset').length).toBe 1
+
+  describe "output appartus", ->
+    it "should have an initially empty rolls list", ->
+      (expect app.find('.rolls').text()).toBe "[]"
+
+  describe "bowling", ->
+    it "should allow you to roll a gutter ball", ->
+      app.find('.roll').eq(0).click()
+      (expect app.find('.rolls').text()).toBe "[0]"

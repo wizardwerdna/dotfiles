@@ -1,0 +1,2 @@
+mocha.setup({globals: ['SimileAjax', 'getHead', 'Timeline']})
+should = chai.should()

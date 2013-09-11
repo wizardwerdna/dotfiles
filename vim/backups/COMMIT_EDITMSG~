@@ -1,20 +1,40 @@
-# This is a combination of 2 commits.
-# The first commit's message is:
-
-modified package.json to add script to run test suite under karma in Chrome, Firefox and Safar on Mac
-
-# This is the 2nd commit message:
-
-modify karma.conf.js
 
 # Please enter the commit message for your changes. Lines starting
 # with '#' will be ignored, and an empty message aborts the commit.
-# Not currently on any branch.
-# You are currently editing a commit while rebasing branch 'master' on 'eddcf6d'.
+# On branch master
+#
+# Initial commit
 #
 # Changes to be committed:
-#   (use "git reset HEAD^1 <file>..." to unstage)
+#   (use "git rm --cached <file>..." to unstage)
 #
-#	modified:   karma.conf.js
-#	modified:   package.json
+#	new file:   .bowerrc
+#	new file:   .editorconfig
+#	new file:   .gitattributes
+#	new file:   .gitignore
+#	new file:   .jshintrc
+#	new file:   .travis.yml
+#	new file:   Gruntfile.js
+#	new file:   app/.buildignore
+#	new file:   app/.htaccess
+#	new file:   app/404.html
+#	new file:   app/favicon.ico
+#	new file:   app/images/glyphicons-halflings-white.png
+#	new file:   app/images/glyphicons-halflings.png
+#	new file:   app/index.html
+#	new file:   app/robots.txt
+#	new file:   app/scripts/app.coffee
+#	new file:   app/scripts/controllers/main.coffee
+#	new file:   app/scripts/filters/frameScores.coffee
+#	new file:   app/styles/main.scss
+#	new file:   app/views/main.html
+#	new file:   bower.json
+#	new file:   karma-e2e.conf.js
+#	new file:   karma.conf.js
+#	new file:   libpeerconnection.log
+#	new file:   package.json
+#	new file:   test/.jshintrc
+#	new file:   test/runner.html
+#	new file:   test/spec/controllers/main.coffee
+#	new file:   test/spec/filters/frameScores.coffee
 #

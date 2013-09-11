@@ -89,9 +89,9 @@ Just paste as usual with `p` and `P`. Enjoy!
 
 ## Configuration
 
-By default pasta is disabled for python, coffeescript and markdown because for
-these types desired indentation for new lines can't be easily computed from
-existing code/text.
+By default pasta is disabled for python, coffeescript, markdown, yaml and slim
+because for these types desired indentation for new lines can't be easily
+computed from existing code/text.
 
 To change the list of filetypes for which pasta is enabled you can either
 use black-listing or white-listing.
@@ -105,6 +105,12 @@ To white-list some filetypes put following in your .vimrc:
     let g:pasta_enabled_filetypes = ['ruby', 'javascript', 'css', 'sh']
 
 *Note: if white list is defined no black list checking is performed.*
+
+If you don't want pasta to override default `p` and `P` mappings you can
+change it like this:
+
+    let g:pasta_paste_before_mapping = ',P'
+    let g:pasta_paste_after_mapping = ',p'
 
 ## Author
 

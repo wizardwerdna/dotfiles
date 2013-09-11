@@ -1,0 +1,25 @@
+require("chai").Should()
+
+wrap = (str, width) ->
+  if str.length <= width
+    str
+  else
+    rightMostAnchor = str[0...width].lastIndexOf(' ')
+    rightMostAnchor = width if rightMostAnchor < 0
+    str[0...rightMostAnchor] + "\n" + wrap(str[rightMostAnchor...].trim(), width)
+
+
+describe "wrap", ->
+  it "should wrap empty string", ->
+    wrap("", 0).should.eql ""
+  it "should wrap singleton string", ->
+    wrap("x", 1).should.eql "x"
+  it "should wrap long string", ->
+    wrap("xx", 1).should.eql "x\nx"
+  it "should wrap double-long string", ->
+    wrap("xxx", 1).should.eql "x\nx\nx"
+  it "should wrap at a space if it can", ->
+    wrap("x xy", 2).should.eql "x\nxy"
+  it "should wrap complext case", ->
+    wrap("four score and seven years ago our fathers brought forth upon this continent a new nation", 7).should.
+      eql("four\nscore\nand\nseven\nyears\nago our\nfathers\nbrought\nforth\nupon\nthis\ncontin\nent a\nnew\nnation")

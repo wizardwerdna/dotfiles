@@ -1,12 +1,6 @@
-<head>
-  <title>Microscope</title>
-</head> 
-<body>
-  <div class="container">
-    {{> header}}
-    {{> errors}}
-    <div id="main" class="row-fluid">
-      {{renderPage}}
-    </div>
-  </div>
-</body>
+<h1>Superheroic Bowling</h1>
+
+<div line-scorer></div>
+<div line-scorer></div>
+<div line-scorer></div>
+

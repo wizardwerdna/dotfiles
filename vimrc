@@ -1,6 +1,78 @@
+autocmd vimenter * if !argc() | NERDTree | endif
+map <leader>z :NERDTreeToggle<CR>
+set nocompatible               " be iMproved
+
+filetype off                   " required!
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+"let Vundle manage Vundle
+" required! 
+Bundle 'gmarik/vundle'
+
+" My Bundles here:
+"
+" original repos on github
+Bundle 'Lokaltog/vim-easymotion'
+Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
+Bundle 'vividchalk.vim'
+Bundle 'mattn/emmet-vim'
+
+Bundle 'delimitmate.vim'
+Bundle 'html5.vim'
+Bundle 'gmarik/vundle'
+Bundle 'tpope/vim-fugitive'
+Bundle 'Lokaltog/vim-easymotion'
+Bundle 'rstacruz/sparkup'
+Bundle 'tpope/vim-rails.git'
+Bundle 'Gist.vim'
+Bundle 'neocomplcache'
+Bundle 'vimux'
+Bundle 'IndexedSearch'
+Bundle 'vim-coffee-script'
+Bundle 'vim-fugitive'
+Bundle 'ctrlp.vim'
+Bundle 'jQuery'
+Bundle 'vim-javascript'
+Bundle 'L9'
+Bundle 'FuzzyFinder'
+Bundle 'rizzatti/dash.vim'
+Bundle 'rizzatti/funcoo.vim'
+Bundle 'scrooloose/nerdtree'
+Bundle 'timcharper/textile.vim'
+Bundle 'tpope/vim-cucumber'
+Bundle 'tpope/vim-haml'
+Bundle 'tpope/vim-markdown'
+Bundle 'tpope/vim-git'
+Bundle 'tpope/vim-ragtag'
+Bundle 'tpope/vim-repeat'
+Bundle 'tpope/vim-surround'
+Bundle 'L9'
+Bundle 'FuzzyFinder'
+Bundle 'tomtom/tcomment_vim'
+Bundle 'peterhoeg/vim-tmux'
+Bundle 'christoomey/vim-tmux-navigator'
+Bundle 'blockle.vim'
+Bundle 'vim-ruby/vim-ruby'
+Bundle 'godlygeek/tabular'
+Bundle 'tpope/vim-endwise'
+Bundle 'suan/vim-instant-markdown'
+Bundle 'tsaleh/vim-matchit'
+Bundle 'skalnik/vim-vroom'
+Bundle 'altercation/vim-colors-solarized'
+Bundle 'sickill/vim-pasta'
+
+syntax on
+filetype plugin indent on     " required!
+
+" CommandT hack
+set ttimeoutlen=50
+let g:CommandTCancelMap     = ['<ESC>', '<C-c>']
+let g:CommandTSelectNextMap = ['<C-j>', '<ESC>OB']
+let g:CommandTSelectPrevMap = ['<C-k>', '<ESC>OA']
+
 au BufNewFile,BufRead *.ejs set filetype=js
 au BufNewFile,BufRead *.ejs set filetype=html
-
 
 map <leader>k :CoffeeCompile vert watch<cr>
 
@@ -14,14 +86,6 @@ nmap <leader>} :w<cr>:call VimuxRunCommand('npm run-script browserTest')<cr>
 nmap <leader>[ :w<cr>:call VimuxRunCommand('coffee')<cr>
 nmap <leader>gq :VimuxCloseRunner<cr>
 nmap <leader>gw :VimuxInspectRunner<cr>
-" see http://www.adamlowe.me/2009/12/vim-destroys-all-other-rails-editors.html
-filetype off 
-call pathogen#runtime_append_all_bundles()
-call pathogen#helptags()
-
-syntax on
-filetype plugin indent on
-
 " nocomplcache stuff
 let g:neocomplcache_enable_at_startup = 1
 " Snippets still don't work the way I want - tab doesn't jump to next

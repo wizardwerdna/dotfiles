@@ -116,7 +116,7 @@ function s:GetMSL(lnum, in_one_line_scope)
       " Don't use lines that are part of a one line scope as msl unless the
       " flag in_one_line_scope is set to 1
       "
-      if a:in_one_line_scope 
+      if a:in_one_line_scope
 	break
       end
       let msl_one_line = s:Match(lnum, s:one_line_scope_regex)
@@ -159,7 +159,7 @@ function s:IndentWithContinuation(lnum, ind, width)
   " Set up variables to use and search for MSL to the previous line.
   let p_lnum = a:lnum
   let lnum = s:GetMSL(a:lnum, 1)
-  let line = getline(line)
+  let line = getline(lnum)
 
   " If the previous line wasn't a MSL and is continuation return its indent.
   " TODO: the || s:IsInString() thing worries me a bit.

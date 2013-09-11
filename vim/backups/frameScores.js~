@@ -1,0 +1,65 @@
+'use strict';
+
+angular.module('b2jsApp')
+  .filter('frameScores', function () {
+    return function (rolls) {
+
+      function isSpare(here){
+        return rolls[here]+rolls[here+1]===10;
+      }
+
+      function isStrike(here){
+        return rolls[here]===10
+      }
+
+      function isNakedSpareOrStrikeAndOneRoll(here){
+        return rolls.length===here+2 &&
+          (isSpare(here) || isStrike(here));
+      }
+
+      function isShortFrame(here){
+        return rolls.length <= here+1;
+      }
+
+      function sumTwoRollsFrom(here){
+        return rolls[here]+rolls[here+1];
+      }
+
+      function sumThreeRollsFrom(here){
+        return rolls[here] +
+          rolls[here+1] +
+          rolls[here+2];
+      }
+
+      function frameValueAt(here){
+        if (isStrike(here) || isSpare(here)){
+          return sumThreeRollsFrom(here);
+        } else {
+          return sumTwoRollsFrom(here);
+        }
+      }
+
+      function nextFrameFrom(here){
+        if (isStrike(here)){
+          return here + 1;
+        } else {
+          return here + 2;
+        }
+      }
+
+      function pushFrameValueAt(here, toScores){
+        toScores.push(frameValueAt(here) + (toScores[toScores.length-1]||0));
+      }
+
+      function frameScoresFrom(here, toScores){
+        if (isShortFrame(here) || isNakedSpareOrStrikeAndOneRoll(here)) {
+          return toScores;
+        } else {
+          pushFrameValueAt(here, toScores);
+          return frameScoresFrom(nextFrameFrom(here), toScores);
+        }
+      }
+
+      return frameScoresFrom(0, []);
+    };
+  });

@@ -1,0 +1,61 @@
+describe('Integration of the Entire Application', function(){
+  app = $('');
+
+  beforeEach( module(
+    'b2jsApp',
+    'views/main.html',
+    'views/lineScorer.html' ));
+
+  beforeEach( inject(function($compile, $rootScope){
+    html = '<div ng-app="b2jsApp"><div ng-view></div></div>';
+    app = $compile(html)($rootScope.$new());
+    $rootScope.$digest();
+  }));
+
+  it('should have the proper header', function(){
+    expect(app.find('h1').text()).toBe('Superheroic Bowling');
+  });
+
+  it('should score a line of bowling', function(){
+    for(var i=0; i<12; i++){ roll(0, 10); }
+    expectScoreToBe(0, '300');
+  });
+
+  it('should score a line after reset', function(){
+    for(var i=0; i<12; i++){ roll(0,  5); }
+    reset(0);
+    for(var i=0; i<12; i++){ roll(0, 10); }
+    expectScoreToBe(0, '300');
+  });
+
+  it('should display three lines of bowling', function(){
+    expect(app.find('[line-scorer]').length).toBe(3);
+  });
+
+  it('should independently score the three lines', function(){
+    for(var i=0; i<12; i++){ roll(0, 10) } 
+    for(var i=0; i<21; i++){ roll(1,  5) } 
+    for(var i=0; i<20; i++){ roll(2,  1) }
+    expectScoreToBe(0, '300');
+    expectScoreToBe(1, '150');
+    expectScoreToBe(2,  '20');
+  });
+
+  function scorer(line){
+    return app.find('[line-scorer]').eq(line);
+  }
+
+  function roll(line, pins) {
+    scorer(line).find('.roll').eq(pins).click();
+  }
+
+  function expectScoreToBe(line, score) {
+    expect(scorer(line).find('.frame-score-display').
+           eq(9).text()).toBe(score);
+  }
+
+  function reset(line) {
+    scorer(line).find('.reset').click();
+  }
+
+}); 

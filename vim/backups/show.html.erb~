@@ -1,5 +1,83 @@
-<div id="dashbaord">
-  <h1>User Dashboard</h1>
-  <p>This is the dashboard for <%= current_user.first_name %> <%= current_user.last_name %>!</p>
-</div>
+<% content_for :head do %>
+<style type="text/css">
+.has_attachment {
+    font-weight: bold;
+}
+</style>
+<script src="http://static.simile.mit.edu/timeline/api-2.3.0/timeline-api.js?bundle=true" type="text/javascript"></script>
+<% end %>
 
+<div id="my-timeline" style="height: <%= @matter.height %>px; border: 1px solid #aaa"></div>
+<noscript>
+This page uses Javascript to show you a Timeline. Please enable Javascript in your browser to see the full page. Thank you.
+</noscript>
+
+<p>
+  <%= @matter.description %>
+</p>
+
+<p>
+  <%= link_to "New Event", new_matter_event_path(@matter) %>
+  <%= link_to "Edit Timeline", edit_matter_path(@matter) %> |
+  <%= link_to "Destroy Timeline", @matter, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All Timelines", matters_path %>
+</p>
+
+<%= form_tag @matter, :method => 'get', :id => "matter_search" do %>
+  <p>
+    <%= text_field_tag :q, params[:q] %>
+    <%= submit_tag "Search", :name => nil %>
+  </p>
+<% end %>
+
+<ol>
+  <% for event in @matter.events.where(['title LIKE ? OR description LIKE ?', "%#{params[:q]}%", "%#{params[:q]}%"]).sort_by{|each| each.start} %>
+  <li>
+    <b><%= event.start %>
+    <%= event.title %>
+    </b>
+    <%= link_to "Show", [@matter, event] %>|
+    <% if event.document %>
+      <%= link_to "Attachment", event.document.file.url %>
+    <% end %>
+    <%= link_to "Edit", edit_matter_event_path(@matter, event) %>|
+    <%= link_to "Destroy", [@matter, event], :confirm => 'Are you sure?', :method => :delete %>
+    <%= simple_format(event.description) %>
+  </li>
+  <hr>
+  <% end %>
+</ol>
+
+<% content_for :javascript do %>
+$(function(){
+    
+  SimileAjax.History.enabled = false;
+  elmtCopyright = null;
+  var eventSource = new Timeline.DefaultEventSource();
+  var bandInfos = [
+      Timeline.createBandInfo({
+      eventSource:    eventSource,
+      date:           "<%= @matter.events.minimum(:start).try(:utc) %>",
+      width:          "<%= @matter.top_percentage || 90 %>%", 
+      intervalUnit:   <%= @matter.top_unit.blank? ? "Timeline.DateTime.MONTH" : @matter.top_unit %>,
+      intervalPixels: <%= @matter.top_unit_pixels.blank? ? 100 : @matter.top_unit_pixels %>
+    }),
+      Timeline.createBandInfo({
+      overview:       true,
+      eventSource:    eventSource,
+      date:           "<%= @matter.events.minimum(:start).try(:utc) %>",
+      width:          "<%= 100 - (@matter.top_percentage||90) %>%", 
+      intervalUnit:   <%= @matter.bottom_unit.blank? ? "Timeline.DateTime.YEAR" : @matter.bottom_unit %>,
+      intervalPixels: <%= @matter.bottom_unit_pixels.blank? ? 200 : @matter.bottom_unit_pixels %>
+    })
+  ];
+  bandInfos[1].syncWith = 0;
+  bandInfos[1].highlight = true;
+  tl = Timeline.create(document.getElementById("my-timeline"), bandInfos);
+  tl.showLoadingMessage();
+  Timeline.loadJSON("/matters/<%=@matter.id%>/events.json?q=<%=params[:q]%>", function(data, url) {
+    eventSource.loadJSON(data, url);
+  });
+  tl.hideLoadingMessage();
+});
+<% end %>

@@ -1,0 +1,71 @@
+'use strict';
+
+angular.module('bowlingApp').directive('gameScorer',function(){
+  return {
+    templateUrl: 'views/gameScorer.html',
+    restrict: 'A',
+    scope: { },
+    link: function(scope, element, attrs){
+
+      function reset(){
+        scope.rolls = [];
+        scope.frameScores = [];
+        scope.rollsDisplay = '';
+      }
+
+      function addRolls(pins){
+        scope.rolls.push(pins);
+        scope.frameScores = scope.$eval('rolls|frameScores');
+        scope.rollsDisplay = scope.$eval('rolls|rollsDisplay');
+      }
+
+      function isInvalid(pins){
+        return isGameOver() ||
+          (isSpareOpportunity() && isInvalidSpareRoll(pins));
+      }
+
+      scope.reset = reset;
+      scope.addRolls = addRolls;
+      scope.isInvalid = isInvalid;
+
+      scope.reset();
+        
+
+      function isGameOver(){
+        return scope.frameScores.length === 10;
+      }
+
+      function isSpareOpportunity(){
+        return isTenthFrameStrikeAndSpareOpportunity() ||
+          isSecondRollSpareOpportunity();
+      }
+
+      function isInvalidSpareRoll(pins){
+        return pins+scope.rolls[scope.rolls.length-1]>10;
+      }
+      
+      function isSecondRollSpareOpportunity(){
+        return isSecondRollOfFrame() &&
+                 isNotTenthFrameStrike();
+      }
+
+      function isNotTenthFrameStrike(){
+        return scope.rollsDisplay.length!==19 ||
+          scope.rollsDisplay[18]!=='X';
+      }
+
+      function isSecondRollOfFrame(){
+        return scope.rollsDisplay.length%2 === 1;
+      }
+
+      function isTenthFrameStrikeAndSpareOpportunity(){
+        return scope.rollsDisplay.length===20 &&
+          scope.rollsDisplay[18]==='X' &&
+          scope.rollsDisplay[19]!=='X';
+      }
+
+    }
+
+  };
+
+});

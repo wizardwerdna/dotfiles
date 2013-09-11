@@ -1,6 +1,6 @@
-npm-degbug.log
-coverage
-node_modules/
-builtAssets/
-*.swo
-*.swp
+node_modules
+dist
+.tmp
+.sass-cache
+.*.swo
+app/bower_components

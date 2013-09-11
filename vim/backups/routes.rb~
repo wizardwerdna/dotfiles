@@ -1,8 +1,17 @@
-Myapp::Application.routes.draw do
-  authenticated :user do
-    root :to => 'home#index'
+Experiment::Application.routes.draw do
+  get "tags/new"
+  get "tags/create"
+  get "tags/edit"
+  get "tags/update"
+  get "tags/delete"
+  get "tags/index"
+  resources :items do
+    resources :tags
   end
-  root :to => "home#index"
-  devise_for :users
-  resources :users
+  resources :tags
+  
+  root :to => "casebase#index"
+  get '/assets/*rest' => lambda{|env| [404, {}, ["<H1>404 Not Found: #{env['REQUEST_URI']}</H1>"]]}
+  get '/system/*rest' => lambda{|env| [404, {}, ["<H1>404 Not Found: #{env['REQUEST_URI']}</H1>"]]}
+  match '/*rest' => "casebase#index", :via => [:get, :post, :put, :delete]
 end

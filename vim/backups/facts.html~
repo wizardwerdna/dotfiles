@@ -1,0 +1,23 @@
+<h3>Facts</h3>
+
+<input type="search" class="search-query" ng-model="search.q"></input>
+{{filteredFacts.length}}/{{totalFacts}} facts selected.
+
+<div app-zippy title="Fact Details" visibleContent="false">
+  <div ng-animate="'animate'" ng-repeat="fact in filteredFacts">
+    <div app-bubble>
+      <b>
+        {{fact.start}}
+        {{fact.title}}
+      </b>
+      <a class="btn btn-success btn-small" ng-show="fact.link" href="{{fact.link}}" target="_self">
+        Attachment
+      </a>
+      <span ng-bind-html-unsafe="fact.description"></span>
+    </div>
+  </div>
+</div>
+
+<div app-zippy title="Timeline" initially="open">
+  <div id="my-timeline" app-timeline>=</div>
+</div>

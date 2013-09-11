@@ -1,0 +1,20 @@
+<div class="button-row">
+  <button class="rolls" ng-click="bowl(0)" ng-disabled="disabled(0)">-</button>
+  <button class="rolls" ng-click="bowl(roll)" 
+    ng-repeat="roll in [1,2,3,4,5,6,7,8,9]" ng-disabled="disabled(roll)">{{roll}}</button>
+  <button class="rolls" ng-click="bowl(10)" ng-disabled="disabled(10)">X</button>
+  <button class="reset" ng-click="reset()">Reset</button>
+</div>
+<div class="frame-row">
+  <div class="frame" ng-repeat="frame in [1, 2, 3, 4, 5, 6, 7, 8, 9]">
+    <div class="mark">{{marks[2*$index]}}</div>
+    <div class="mark">{{marks[2*$index+1]}}</div>
+    <div class="frame-score">{{frameScores[frame-1]}}</div>
+  </div>
+  <div class="frame tenth">
+    <div class="mark">{{marks[18]}}</div>
+    <div class="mark">{{marks[19]}}</div>
+    <div class="mark">{{marks[20]}}</div>
+    <div class="frame-score">{{frameScores[9]}}</div>
+  </div>
+</div>

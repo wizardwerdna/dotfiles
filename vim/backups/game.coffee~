@@ -1,0 +1,87 @@
+'use strict'
+
+describe 'Directive: bowlingLine', () ->
+
+  beforeEach ->
+    module 'ngBowlingApp'
+    module 'testTemplateLoader'
+
+  element = {}
+  scope = {}
+  $rootScope = {}
+
+  beforeEach inject ($compile, _$rootScope_) ->
+    $rootScope = _$rootScope_
+    scope = $rootScope.$new()
+    element = angular.element '<div bowling-line></div>'
+    element = $compile(element) scope
+    $rootScope.$digest()
+
+  # directive DOM objects
+  rollButton = (pins) -> element.find ".roll"+pins.toString()
+  strikeButton = -> element.find ".rollx"
+  resetButton = -> element.find ".reset"
+  rollPlaces = -> element.find ".frame .pins"
+  framePlaces = -> element.find ".frame .score"
+  rollPlace = (pos) -> rollPlaces().slice(pos, pos+1)
+  framePlace = (frame) -> framePlaces().slice(frame, frame+1)
+
+  it "should present buttons for 0-9 pin rolls", ->
+    (expect rollButton(i).length).toBe(1) for i in [0..9]
+
+  it "should present a button for a strike roll", ->
+    (expect strikeButton().length).toBe 1
+
+  it "should present a button for a reset", ->
+    (expect resetButton().length).toBe 1
+
+  it "should present a placeholder for each possible roll position", ->
+    (expect rollPlaces().length).toBe 21
+
+  it "should present a placeholder for each possible frame score", ->
+    (expect framePlaces().length).toBe 10
+
+  it "should reset the pins and frames upon pressing reset", ->
+    resetButton().click()
+    (expect rollPlace(i).text()).toBe("?") for i in [0..20]
+    (expect framePlace(i).text()).toBe("") for i in [0..9]
+
+  it "should score a gutter game, when clicked out", ->
+    resetButton().click()
+    rollButton(0).click() for i in [1..20]
+    (expect rollPlace(roll).text()).toBe("-") for roll in [0..19]
+    (expect rollPlace(20).text()).toBe("?")
+    (expect framePlace(frame).text()).toBe("0") for frame in [0..9]
+
+  it "should score a spare game, when clicked out", ->
+    resetButton().click()
+    rollButton(5).click() for i in [1..21]
+    (expect rollPlace(roll).text()).toBe("5") for roll in [0..16] by 2
+    (expect rollPlace(roll).text()).toBe("/") for roll in [1..17] by 2
+    (expect rollPlace(roll).text()).toBe("5") for roll in [18..20] by 2
+    (expect framePlace(frame).text()).toBe((15*(frame+1)).toString()) for frame in [0..9]
+
+  it "should score a perfect game, when clicked out", ->
+    resetButton().click()
+    strikeButton().click() for i in [1..12]
+    (expect rollPlace(roll).text()).toBe("x") for roll in [1..17] by 2
+    (expect rollPlace(roll).text()).toBe("x") for roll in [18..20] by 2
+    (expect framePlace(frame).text()).toBe((30*(frame+1)).toString()) for frame in [0..9]
+
+  it "should enable all buttons at the beginning of the game", ->
+    resetButton().click()
+    (expect rollButton(roll).is('disabled')).toBe(false) for roll in [0..9]
+    (expect strikeButton().is('disabled')).toBe false
+
+  it "should disable buttons for too many pins after first bowl", ->
+    resetButton().click()
+    rollButton(5).click()
+    (expect rollButton(roll).is(':disabled')).toBe(false) for roll in [0..5]
+    (expect rollButton(roll).is(':disabled')).toBe(true) for roll in [6..9]
+    (expect strikeButton().is(':disabled')).toBe true
+
+  it "should disable all buttons except reset after the game is over", ->
+    resetButton().click()
+    strikeButton().click() for i in [1..12]
+    (expect rollButton(roll).is(':disabled')).toBe(true) for roll in [0..9]
+    (expect strikeButton().is(':disabled')).toBe(true)

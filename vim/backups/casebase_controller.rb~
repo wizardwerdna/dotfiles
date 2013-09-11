@@ -1,5 +1,5 @@
 class CasebaseController < ApplicationController
   def index
-    @casebase = Casebase.new
+    render layout: 'dynamic' 
   end
 end

@@ -1,2 +1,27 @@
-<h1>Pages#index</h1>
-<p>Find me in app/views/pages/index.html.erb</p>
+<h1>Listing items</h1>
+
+<div><%= link_to 'New Item', new_item_path, class: 'btn btn-error btn-small' %></div>
+
+<ol class="span12">
+<% @items.each do |item| %>
+  <li class="app-bubble">
+    <span><%= item.start %></span>
+    <% if item.end %>
+      to <%= item.end %>
+    <% end %>
+    <b><span><%=truncate (item.content.split(';').first), length:75 %></span></b><br>
+    <% if item.content.split(';')[0].length > 73 %>
+      <%= item.content.split(';')[0][72..-1] %>
+    <% end %>
+    <%= item.content.split(';')[1..-1].join(';') %>
+    <% item.tags.each do |tag| %>
+      <%= link_to tag.name, "tags/#{tag.name}", class: "btn btn-info btn-small", target:"_self" %>
+    <% end %>    
+    <%= link_to 'Show', item, class: "btn btn-error btn-small" %>
+    <%= link_to 'Edit', edit_item_path(item), class: "btn btn-error btn-small" %>
+    <%= link_to 'Delete', item, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-error btn-small" %>
+  </li>
+<% end %>
+</ol>
+
+<%= link_to 'New Item', new_item_path, class: 'btn btn-error btn-small' %>

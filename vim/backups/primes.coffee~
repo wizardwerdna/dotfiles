@@ -1,0 +1,27 @@
+require('chai').Should()
+
+prime = (n)->
+  factors = []
+  divisor = 1 
+  while ++divisor <= n
+    while n % divisor == 0
+      factors.push divisor
+      n = ~~(n / divisor)
+  factors
+
+testFactor = (n, factors) ->
+  it "should factor #{n}", ->
+    prime(n).should.eql factors
+
+describe "prime", ->
+  it "should factor 1", -> prime(1).should.eql []
+  testFactor 1, []
+  testFactor 2, [2]
+  testFactor 3, [3]
+  testFactor 4, [2, 2]
+  testFactor 5, [5]
+  testFactor 6, [2, 3]
+  testFactor 7, [7]
+  testFactor 8, [2,2,2]
+  testFactor 9, [3,3]
+  testFactor 2*3*3*5*5*5*5*5*7*7*7*11, [2, 3, 3, 5, 5, 5, 5, 5, 7, 7, 7, 11]

@@ -1,0 +1,7 @@
+describe 'hiya bunny', ->
+  it 'is true', ->
+    true.should.eql true
+  it 'knows false',->
+    false.should.eql false
+  it 'knows angular',->
+    should.exist angular.module('App')

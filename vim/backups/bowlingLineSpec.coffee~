@@ -1,0 +1,113 @@
+'use strict'
+
+describe 'Controller: bowlingLineCtrl', () ->
+
+  # load the controller's module
+  beforeEach module 'ngBowlingApp'
+
+  bowlingLineCtrl = {}
+  scope = {}
+  pinPresenter = {}
+  frameScores = {}
+
+  # Initialize the controller and a mock scope
+  beforeEach inject ($controller, $rootScope, $filter) ->
+    scope = $rootScope.$new()
+    bowlingLineCtrl = $controller 'bowlingLineCtrl',
+      $scope: scope
+    pinPresenter = $filter 'pinPresenter'
+    frameScores = $filter 'frameScores'
+
+  it "should be ok", ->
+    expect(typeof pinPresenter).toBe 'function'
+    expect(typeof frameScores).toBe 'function'
+
+  describe 'upon instantiation', ->
+    it "should reset the pins", ->
+      expect(scope.pins).toEqual []
+    it "should initialize the pin presentation", ->
+      expect(scope.rolls).toEqual ""
+    it "should initialize the frames presenter", ->
+      expect(scope.scores).toEqual []
+    # it "should not indicate game over", ->
+    #   expect(scope.status).toBe 'running'
+
+  describe '$scope.reset', ->
+    beforeEach ->
+      scope.pins = scope.scores = [1,2,3]
+      scope.rolls = "abc"
+      scope.gameOver = true
+      scope.reset()
+    it "should reset the pins", ->
+      expect(scope.pins).toEqual []
+    it "should initialize the pin presentation", ->
+      expect(scope.rolls).toEqual ""
+    it "should initialize the frames presenter", ->
+      expect(scope.scores).toEqual []
+    # it "should not indicate game over", ->
+    #   expect(scope.status).toBe 'running'
+
+  describe '$scope.bowl', ->
+    beforeEach ->
+      scope.pins = [1,2,3]
+      scope.bowl(4)
+    it "should append the roll to pins", ->
+      (expect scope.pins).toEqual [1,2,3,4]
+    it "should update pin presentation", ->
+      expect(scope.rolls).toEqual "1234"
+    it "should update frame scores", ->
+      expect(scope.scores).toEqual [3,10]
+    # it "should change status to gameOver, when appropriate", ->
+    #   scope.reset()
+    #   scope.roll(10) for i in [1..11]
+    #   expect(scope.status).toBe 'running'
+    #   scope.roll(10)
+    #   expect(scope.status).toBe 'game-over'
+
+  describe "disableStrike", ->
+    it "should not be disabled on first roll of a regular frame", ->
+      scope.rolls = ""
+      expect(scope.disableStrike()).toBe false
+    it "should be disabled on the second roll of a regular frame", ->
+      scope.rolls = "1"
+      expect(scope.disableStrike()).toBe true
+    it "not disabled on second roll of the tenth frame if the first roll was a strike", ->
+      scope.rolls = "112233445566778899x"
+      expect(scope.disableStrike()).toBe false
+    it "should be disabled on the third roll of a tenth frame with no strike or spare", ->
+      scope.rolls = "112233445566778899--"
+      scope.scores = [1,2,3,4,5,6,7,8,9,10]
+      expect(scope.disableStrike()).toBe true
+    it "and not disabled on third roll of the tenth frame if second roll is a strike", ->
+      scope.rolls = "112233445566778899xx"
+      expect(scope.disableStrike()).toBe false
+    it "and not disabled on third roll of the tenth frame if second roll is a spare", ->
+      scope.rolls = "1122334455667788995/"
+      expect(scope.disableStrike()).toBe false
+    it "should be disabled whenever the game is over", ->
+      scope.scores = [1,2,3,4,5,6,7,8,9,10]
+      scope.rolls= "112233445566778899xx1"
+      expect(scope.disableStrike()).toBe true
+
+  describe "disablePins", ->
+    it "should not be disabled on first roll of any frame", ->
+      scope.rolls = ""
+      expect(scope.disablePins(8)).toBe false
+    it "should be disabled on the second roll of any frame if total pins greater than 10", ->
+      scope.rolls = "3"
+      expect(scope.disablePins(8)).toBe true
+    it "should not be disabled if total pins less than or equal to 10", ->
+      scope.rolls = "3"
+      expect(scope.disablePins(7)).toBe false
+    it "should be disabled whenever the game is over", ->
+      scope.scores = [1,2,3,4,5,6,7,8,9,10]
+      scope.rolls= "112233445566778899xx2"
+      expect(scope.disablePins(5)).toBe true
+
+  describe "rolls", ->
+    it "should be the same as $scope.rolls if it exists", ->
+      scope.rolls = "!"
+      expect(scope.roll(0)).toBe "!"
+    it "should be a question mark otherwise", ->
+      scope.rolls = "!"
+      expect(scope.roll(1)).toBe "?"

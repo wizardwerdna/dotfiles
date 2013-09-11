@@ -1,2 +1,25 @@
+class Hitter < ActiveRecord
 
+  def self.create_hitter_database
+    self.destroy_all
+    url = 'http://foo'
+    HittersParser.from(url).hitters{ create! record }
+  end
+end
 
+class HittersParser
+  def self.fromUrl(url)
+    new(....)
+  end
+  def self.fromXML(xml)
+    new(....)
+  end
+  def initialize(xml_parser)
+    @parser = xml_parser
+  end
+  def hitters
+    do your nokogirithing
+     ....
+       yield record 
+  end
+end

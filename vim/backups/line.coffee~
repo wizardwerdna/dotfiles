@@ -1,0 +1,35 @@
+'use strict'
+
+angular.module('myBowlingApp').controller 'LineCtrl', ($scope, $filter) ->
+
+  $scope.reset = ->
+    $scope.pins = []
+    $scope.marks = ""
+    $scope.frameScores = []
+
+  $scope.reset()
+
+  $scope.bowl = (pins) ->
+    $scope.pins.push pins
+    $scope.marks = $scope.$eval 'pins | marks'
+    $scope.frameScores = $scope.$eval 'pins | frameScores'
+
+  $scope.disabled = (pins)->
+    (isTooBigForSpareRoll(pins) or isGameOver()) and not isAfterTenthFrameStrike()
+  
+  $scope.tenpinMark = ->
+    if isSpareRoll()
+      '/'
+    else
+      'X'
+
+  isTenthFrame = -> $scope.marks.length >= 18
+  isGameOver = -> $scope.frameScores.length == 10
+  isSecondRoll = -> $scope.marks.length % 2 == 1
+  lastRoll = -> $scope.pins[$scope.pins.length-1]
+  isAfterTenthFrameStrike = -> $scope.marks.length == 19 and lastRoll()==10
+  isAfterTenthFrameStrikeNonStrike = -> ($scope.marks[18]=="X" and $scope.marks[19]!="X")
+  isSpareRoll = -> isSecondRoll() or isAfterTenthFrameStrikeNonStrike()
+  isTooBigForSpareRoll = (pins)-> isSpareRoll() and lastRoll() + pins > 10
+
+

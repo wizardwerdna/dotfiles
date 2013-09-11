@@ -1,0 +1,920 @@
+App.factory 'factFactory', ->
+  [
+    "durationEvent": false
+    "start": "2005-01-01"
+    "end": "2005-01-01"
+    "title": "Psych Laws & Regulations"
+    "caption": ""
+    "description": "<p>/Users/werdna/Desktop/Samuelson Documents/lawsregs2009.pdf</p> "
+    "link": "/system/documents/files/000/000/085/original/lawsregs2009.pdf?1292885527"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2006-01-13"
+    "end": "2006-01-13"
+    "title": "Application for Employment"
+    "caption": "Application for EmploymentApplication for Employment"
+    "description": "<p></p> "
+    "link": null
+    "classname": ""
+  ,
+    "durationEvent": false
+    "start": "2006-03-14"
+    "end": "2006-03-14"
+    "title": "Request for Personnel Action"
+    "caption": ""
+    "description": "<p>From: Jim Jones\n<br />Program 5\n<br />Civil Service Classification: Psychologist\n<br />Time [x] Full-Time\n<br />Tenure [x] Permanent</p> "
+    "link": null
+    "classname": ""
+  ,
+    "durationEvent": false
+    "start": "2006-05-31"
+    "end": "2006-05-31"
+    "title": "Duty Statement"
+    "caption": ""
+    "description": "<p>Employee Name: Melody Samuelson, PhD</p>\n\n<p>Job Classification: Psychologist</p>\n\n<p>1. Major Tasks Duties and Responsibilities</p>\n\n<p>30% \"Provides direct clinical services\"\n<br />20% \"Performs psychological assessments of clients' cognitive, personality, behavioral-functional, or neuropsychological status\"</p>\n\n<p>6. License or Certification</p>\n\n<p>Employees in this classification must: Possess a valid license as a psychologist issued by the California Board of Psychology and possession of an earned doctorate degree in psychology . . . . Newly hired psychologists ... who have earned their doctoral degree in the past year must obtain the licenses within 2 years of the date of beginning service.</p> "
+    "link": null
+    "classname": ""
+  ,
+    "durationEvent": false
+    "start": "2006-06-01"
+    "end": "2006-06-01"
+    "title": "Hired as Staff Pscyhologist"
+    "caption": "Hired as Staff PscyhologistHired as Staff Pscyhologist"
+    "description": "<p>Allegation in Notice of Adverse Action</p> "
+    "link": null
+    "classname": ""
+  ,
+    "durationEvent": false
+    "start": "2006-07-03"
+    "end": "2006-07-03"
+    "title": "Patient \"A\" Competence Report (Foreman)"
+    "caption": ""
+    "description": "<p>Not Competent, per William Foreman</p> "
+    "link": "/system/documents/files/000/000/034/original/2006-07-03PatientACourtLetter.pdf?1292879367"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2006-07-09"
+    "end": "2006-07-09"
+    "title": "Meeting Dr. Samuelson with Dr. Jones (DATEOK?)"
+    "caption": "Meeting Dr. Samuelson with Dr. Jones (DATEOK?)Meeting Dr. Samuelson with Dr. Jones (DATEOK?)"
+    "description": "<p>Allegedly to discuss her application for forensic privileges.  Per Att. 1</p> "
+    "link": null
+    "classname": ""
+  ,
+    "durationEvent": true
+    "start": "2006-07-21"
+    "end": "2007-06-28"
+    "title": "Privileges Neuropsych/Forensic"
+    "caption": "Privileges Neuropsych/ForensicPrivileges Neuropsych/Forensic"
+    "description": "<p></p> "
+    "link": "/system/documents/files/000/000/005/original/2006-06-21%20Privileges%20Notification.pdf?1290369289"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2006-09-20"
+    "end": "2006-09-20"
+    "title": "Probationary Assessment by Bachman"
+    "caption": "Probationary Assessment by BachmanProbationary Assessment by Bachman"
+    "description": "<p>Made a good adjustment and developed a working relationship with your team members.  You have taken on your share of ... assessments completed in time... knowledge working with forensic clients... need to be cognizant of assertive style... &#34;completed extensive psychological, neuropsychological and malingering assessments that were on several challenging cases which was of great assistance in returning these clients to court as competent&#34;</p> "
+    "link": "/system/documents/files/000/000/026/original/2006-09-20%20PROBATIONARY%20EVALUATION.pdf?1290375661"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2006-12-19"
+    "end": "2006-12-19"
+    "title": "Probationary Assessment by Ann Hoff (20)"
+    "caption": "Probationary Assessment by Ann Hoff (20)Probationary Assessment by Ann Hoff (20)"
+    "description": "<p>Melody has been completing neuropsych, volunteers to do complex cases, etc.</p> "
+    "link": "/system/documents/files/000/000/032/original/2006-12-19%20Proctor%20Report%20(Hoff)%20[1].pdf?1290376522"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2007-01-31"
+    "end": "2007-01-31"
+    "title": "Probationary Assessment by Bachman"
+    "caption": "Probationary Assessment by BachmanProbationary Assessment by Bachman"
+    "description": "<p>  Developed working relationships caseload.. need to be cognizant of style.  work very hard, eager to learn and volunteer to do difficult cases.  C&#34;completed extensive psychological, neuropsychological and malingering assessments that were on several challenging cases which was of great assistance in returning these clients to court as competence.  Also have accepted a position on the audit and action team.  Write court letters for others</p> "
+    "link": "/system/documents/files/000/000/027/original/2007-01-30%20PROBATIONARY%20EVALUATION.pdf?1290375682"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2007-03-20"
+    "end": "2007-03-20"
+    "title": "Patient \"A\" Competence Report (Samuelson)"
+    "caption": ""
+    "description": "<p>Not Competent, per Melody Samuelson</p> "
+    "link": "/system/documents/files/000/000/035/original/2007-03-20PatientACourtLetter.pdf?1292391214"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2007-05-10"
+    "end": "2007-05-10"
+    "title": "Proctoring Report by Ann Hoff (21)"
+    "caption": "Proctoring Report by Ann Hoff (21)Proctoring Report by Ann Hoff (21)"
+    "description": "<p>Melody has been completing neuropsych reports which are complex and she's extremely hard working and responsible.<br></p> "
+    "link": "/system/documents/files/000/000/030/original/2006-05-10%20Proctor%20Report%20(Hoff)%20[2].pdf?1290376487"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2007-05-10"
+    "end": "2007-05-10"
+    "title": "Proctoring Report by Ann Hoff (22)"
+    "caption": "Proctoring Report by Ann Hoff (22)Proctoring Report by Ann Hoff (22)"
+    "description": "<p>Melody has completed neuropsych exam which has complicated forensic issues. She has done a very nice job of following all of the TE requirements.  Melody meets me on a weekly basis, sometimes bi-weekly to go over all of the neuropsychological and competency evaluations.  We look at all the raw data and discuss interpretation.  I give her feedback on reports and she makes the suggested changes.<br></p> "
+    "link": "/system/documents/files/000/000/031/original/2006-05-10%20Proctor%20Report%20(Hoff)%20[3].pdf?1290376504"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2007-05-28"
+    "end": "2007-05-28"
+    "title": "Letter to Rabin/Hoff/Jones/Reporting Bad Behavior"
+    "caption": ""
+    "description": "<p></p> "
+    "link": "/system/documents/files/000/000/092/original/2007-05-28LetterToRabinJonesHoff.pdf?1368685365"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2007-05-29"
+    "end": "2007-05-29"
+    "title": "Patient \"A\" Follow-Up (Samuelson)"
+    "caption": ""
+    "description": "<p>/Users/werdna/Desktop/Samuelson Documents/ASSESS0507.pdf</p>\n\n<p>Competence</p> "
+    "link": "/system/documents/files/000/000/066/original/ASSESS0507.pdf?1292885526"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2007-05-30"
+    "end": "2007-05-30"
+    "title": "Probationary Assessment by Bachman"
+    "caption": "Probationary Assessment by BachmanProbationary Assessment by Bachman"
+    "description": "<p>You ahve completed neuropsych eval with complicated forensic issues involving competency and malingering, and your work is very much appreciated, we are fortunate to have you in the program.</p> "
+    "link": "/system/documents/files/000/000/028/original/2007-05-29%20PROBATIONARY%20EVALUATION.pdf?1290375700"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2007-06-12"
+    "end": "2007-06-12"
+    "title": "Proctoring Report(Final) by Ann Hoff (19)"
+    "caption": "Proctoring Report(Final) by Ann Hoff (19)Proctoring Report(Final) by Ann Hoff (19)"
+    "description": "<p>Melody will continue to perform neuropsychological evaluations with my consultation for the next year.  With regard to core privileges, I have reviewed melody's assessments, they were all performed well.  New primary responsibilities are on a 13/70 unit which involve many assessments.  Most of her work was on diagnostic interviews, she performed well.</p> "
+    "link": "/system/documents/files/000/000/033/original/2007-06-12%20Proctor%20Report%20(Hoff)%20[Final].pdf?1290376588"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": true
+    "start": "2007-07-23"
+    "end": "2009-07-09"
+    "title": "Privileges Neuropsychological Assessment (10)"
+    "caption": "Full privileges core psychological practice and full privileges in neuropsychological assessment granted, effective July 9, 2007 -> July 9, 2009"
+    "description": "<p>Full privileges core psychological practice and full privileges in neuropsychological assessment granted, effective July 9, 2007 -> July 9, 2009</p> "
+    "link": "/system/documents/files/000/000/008/original/2007-06-23%20Privileges%20Notification%20Neuropsych%20Assessment.pdf?1290369436"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2007-09-06"
+    "end": "2007-09-06"
+    "title": "Transferred from Program 5 (Competence) to Program 3 (Risk Assessment)"
+    "caption": ""
+    "description": "<p></p> "
+    "link": null
+    "classname": ""
+  ,
+    "durationEvent": false
+    "start": "2007-10-22"
+    "end": "2007-10-22"
+    "title": "Proctoring report: Jones to Moraida"
+    "caption": "Proctoring report: Jones to MoraidaProctoring report: Jones to Moraida"
+    "description": "<p>Maintain clinical competence, to include completing requirements for potential board certification.  Concluding second year of neuropsych provision, and set to receive neuropsych II, specifically violence assessment, competency with assessment of malingering</p> "
+    "link": "/system/documents/files/000/000/010/original/2007-10-22%20Jones%20Evaluation.pdf?1290370119"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2007-11-26"
+    "end": "2007-11-26"
+    "title": "Patient \"A\" Competence Report (Chapman)"
+    "caption": ""
+    "description": "<p>Not Competent, per Nathanial Chapman</p> "
+    "link": "/system/documents/files/000/000/036/original/2007-11-26PatientACourtLetter.pdf?1292391236"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2007-12-13"
+    "end": "2007-12-13"
+    "title": "Clinical Performance Appraisal by Moraida"
+    "caption": "Clinical Performance Appraisal by MoraidaClinical Performance Appraisal by Moraida"
+    "description": "<p> Relationships with people consistently exceeding expected standards, along with taking action independently, analyzing situation and material, quality of service and customer satisfaction committemnts.  You have quickly became a valuable member of the team.  Asset to the unit and the program.</p> "
+    "link": "/system/documents/files/000/000/029/original/2007-12-13%20ANNUAL%20PERFORMANCE%20REVIEW.pdf?1290375722"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2007-12-13"
+    "end": "2007-12-13"
+    "title": "Duty Statement: Psychologist Melody Samuelson"
+    "caption": ""
+    "description": "<p></p> "
+    "link": "/system/documents/files/000/000/012/original/2007-12-13%20Duty%20Statement.pdf?1290370222"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2008-02-06"
+    "end": "2008-02-06"
+    "title": "Patient \"A\" Competence Report (Narayanan))"
+    "caption": ""
+    "description": "<p>Competent, per Amrita Narayann</p> "
+    "link": "/system/documents/files/000/000/037/original/2008-02-06PatientACourtLetter.pdf?1292391258"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2008-03-07"
+    "end": "2008-03-07"
+    "title": "Ltr. Maura Kelley to NSH Records"
+    "caption": "Ltr. Maura Kelley to NSH RecordsLtr. Maura Kelley to NSH Records"
+    "description": "<p>Release of records</p> "
+    "link": null
+    "classname": ""
+  ,
+    "durationEvent": true
+    "start": "2008-04-30"
+    "end": "2009-04-24"
+    "title": "Privileges Forensic Assessment I (5)"
+    "caption": "Privileges Forensic Assessment I (5)Privileges Forensic Assessment I (5)"
+    "description": "<p>Provisional privileges renewed, effective April 24, 2008 -> April 24, 2009</p> "
+    "link": "/system/documents/files/000/000/014/original/2008-04-30%20Privileges%20Notification-%20Forensic%20Assessment%20I.pdf?1290370263"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2008-06-09"
+    "end": "2008-06-09"
+    "title": "Mtg Samuelson, Jones & Kim (first date)"
+    "caption": "Mtg Samuelson, Jones & Kim (first date)Mtg Samuelson, Jones & Kim (first date)"
+    "description": "<p>Hosp. PHS; unsure when the witness was available</p>\n\n<p>Possible reasons for this meeting:\n<br />1) prior patient sentencing issue</p> "
+    "link": null
+    "classname": ""
+  ,
+    "durationEvent": false
+    "start": "2008-07-02"
+    "end": "2008-07-02"
+    "title": "Meeting Dr. Samuelson with Dr. Amrita Narnayan"
+    "caption": "Meeting Dr. Samuelson with Dr. Amrita NarnayanMeeting Dr. Samuelson with Dr. Amrita Narnayan"
+    "description": "<p>Allegation A in NOAA.  <br><br>Hospital PHS: Melody, McKinney, Warburton<br></p> "
+    "link": null
+    "classname": ""
+  ,
+    "durationEvent": false
+    "start": "2008-07-02"
+    "end": "2008-07-02"
+    "title": "Convo Dr. Jones with Dr. Narnayan"
+    "caption": "Convo Dr. Jones with Dr. NarnayanConvo Dr. Jones with Dr. Narnayan"
+    "description": "<p>Att. 3.  Jones writes.  I spoke with Armrita about this issue.  Conversation was in an 'educating' manner.  Let her speak and did not argue with her.</p> "
+    "link": null
+    "classname": ""
+  ,
+    "durationEvent": false
+    "start": "2008-07-14"
+    "end": "2008-07-14"
+    "title": "Mtg Samuelson, Jones & Kim (2d Date)"
+    "caption": "Mtg Samuelson, Jones & Kim (2d Date)Mtg Samuelson, Jones & Kim (2d Date)"
+    "description": "<p>Hospital PHS, unsure whether date was 6/9 or 7/14.  Regarding treatment team recommendation that witness was competent to stand trial<br></p> "
+    "link": null
+    "classname": ""
+  ,
+    "durationEvent": false
+    "start": "2008-07-16"
+    "end": "2008-07-16"
+    "title": "Subpoena to NSH Custondian"
+    "caption": "Subpoena to NSH CustondianSubpoena to NSH Custondian"
+    "description": "<p></p> "
+    "link": null
+    "classname": ""
+  ,
+    "durationEvent": false
+    "start": "2008-07-24"
+    "end": "2008-07-24"
+    "title": "Dr. White Proctoring Report (1)"
+    "caption": ""
+    "description": "<p>I proctored work. I was told that I was the third proctor to work, both of the previous proctors haing found her work to be unsatisfactory. Dr. Samuelson was cooperative. She followed my initial recommendations, but failed thereafter</p> "
+    "link": "/system/documents/files/000/000/058/original/2008-07-24ProctorReport1(White).pdf?1292885525"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2008-07-29"
+    "end": "2008-07-29"
+    "title": "Subpoena - Dr. Samuelson"
+    "caption": "Subpoena - Dr. SamuelsonSubpoena - Dr. Samuelson"
+    "description": "<p></p> "
+    "link": null
+    "classname": ""
+  ,
+    "durationEvent": false
+    "start": "2008-08-01"
+    "end": "2008-08-01"
+    "title": "Meeting Dr. Samuelson with Jim Jones"
+    "caption": "Meeting Dr. Samuelson with Jim JonesMeeting Dr. Samuelson with Jim Jones"
+    "description": "<p>NOAA Allegation B.  Allegedly said he spoke to Dr. Narnayan because he believed the patient would never become competent and that he was going to be railroaded.  (DATE UNCERTAIN)</p> "
+    "link": null
+    "classname": ""
+  ,
+    "durationEvent": false
+    "start": "2008-08-05"
+    "end": "2008-08-05"
+    "title": "Meeting Dr. Jones with Kaur and Robeson"
+    "caption": "Meeting Dr. Jones with Kaur and RobesonMeeting Dr. Jones with Kaur and Robeson"
+    "description": "<p></p> "
+    "link": null
+    "classname": ""
+  ,
+    "durationEvent": false
+    "start": "2008-08-06"
+    "end": "2008-08-06"
+    "title": "Memorandum from Jim Jones to ?"
+    "caption": "Memorandum from Jim Jones to ?Memorandum from Jim Jones to ?"
+    "description": "<p>Att. 2.  Unsigned and date is alleged.  Discussing &#34;boundary issue&#34;</p> "
+    "link": null
+    "classname": ""
+  ,
+    "durationEvent": false
+    "start": "2008-08-18"
+    "end": "2008-08-18"
+    "title": "Writeup by Jim and Nami for Using Cleansers"
+    "caption": "Writeup by Jim and Nami for Using CleansersWriteup by Jim and Nami for Using Cleansers"
+    "description": "<p>August 18, 2008: Three types of household cleansers. Jim and Nami Kim.</p> "
+    "link": null
+    "classname": ""
+  ,
+    "durationEvent": false
+    "start": "2008-09-09"
+    "end": "2008-09-09"
+    "title": "Testimony of Dr. Samuelson"
+    "caption": "Testimony of Dr. SamuelsonTestimony of Dr. Samuelson"
+    "description": "<p>NOAA Allegation C</p> "
+    "link": "/system/documents/files/000/000/009/original/2007-08-12%20Hospital%20Annotated%20TRANSCRIPT.pdf?1290369463"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2008-10-24"
+    "end": "2008-10-24"
+    "title": "Dr. White Proctoring Report (2)"
+    "caption": ""
+    "description": "<p>Repeated first comments. Suggested danger to the patient. Stated falsely she communicated with me about sex offenders. Refused to give me a second case.</p> "
+    "link": "/system/documents/files/000/000/059/original/2008-10-24ProctorReport2(White).pdf?1292885525"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2008-12-01"
+    "end": "2008-12-01"
+    "title": "Licensure"
+    "caption": "LicensureLicensure"
+    "description": "<p>Allegation in NOAA</p> "
+    "link": null
+    "classname": ""
+  ,
+    "durationEvent": false
+    "start": "2008-12-31"
+    "end": "2008-12-31"
+    "title": "Dr. Samuelson Pulled From Clinical Work"
+    "caption": "Dr. Samuelson Pulled From Clinical WorkDr. Samuelson Pulled From Clinical Work"
+    "description": "<p>Per Attachment 1</p> "
+    "link": null
+    "classname": ""
+  ,
+    "durationEvent": false
+    "start": "2008-12-31"
+    "end": "2008-12-31"
+    "title": "Copies of Subpoena Requested by Jim Jones"
+    "caption": "Copies of Subpoena Requested by Jim JonesCopies of Subpoena Requested by Jim Jones"
+    "description": "<p></p> "
+    "link": null
+    "classname": ""
+  ,
+    "durationEvent": false
+    "start": "2009-01-20"
+    "end": "2009-01-20"
+    "title": "Memo Dr. Jones to Dr. Samuelson"
+    "caption": "Memo Dr. Jones to Dr. SamuelsonMemo Dr. Jones to Dr. Samuelson"
+    "description": "<p>Att. 3.  Date is allged, document is unsigned.  Handwritten notes and obvious comments not intended for final draft.</p> "
+    "link": null
+    "classname": ""
+  ,
+    "durationEvent": false
+    "start": "2009-01-22"
+    "end": "2009-01-22"
+    "title": "Reassignment by Dean Percy"
+    "caption": "Reassignment by Dean PercyReassignment by Dean Percy"
+    "description": "<p>Notice of Temporary Reassignment off Floor</p> "
+    "link": "/system/documents/files/000/000/038/original/2009-01-22NoticeOfTempReassignment.pdf?1292385178"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2009-01-22"
+    "end": "2009-01-22"
+    "title": "Notice of Temporary Reassignment"
+    "caption": ""
+    "description": "<p>/Users/werdna/Desktop/Samuelson Documents/2009-01-22NoticeOfTempReassignment.pdf</p> "
+    "link": "/system/documents/files/000/000/060/original/2009-01-22NoticeOfTempReassignment.pdf?1292885525"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2009-01-23"
+    "end": "2009-01-23"
+    "title": "Memo Jones to Knoblauch"
+    "caption": "Memo Jones to KnoblauchMemo Jones to Knoblauch"
+    "description": "<p>Substantially identical in form to memo to melody</p> "
+    "link": null
+    "classname": ""
+  ,
+    "durationEvent": false
+    "start": "2009-01-23"
+    "end": "2009-01-23"
+    "title": "Memo Knoblauch to Jones"
+    "caption": "Memo Knoblauch to JonesMemo Knoblauch to Jones"
+    "description": "<p>Testimony, separate admin review and initial peer review</p> "
+    "link": null
+    "classname": ""
+  ,
+    "durationEvent": false
+    "start": "2009-01-25"
+    "end": "2009-01-25"
+    "title": "Dr. White Proctoring Report (3)"
+    "caption": ""
+    "description": "<p>No more work.  She is being investigated, so no new work. </p> "
+    "link": "/system/documents/files/000/000/086/original/2009-01-25ProctorReport3(White).pdf?1294953091"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2009-01-26"
+    "end": "2009-01-26"
+    "title": "PDCC Administrative Notes"
+    "caption": "Psych Dept. Cred CommitteePsych Dept. Cred Committee"
+    "description": "<p>Chief of Psych notified unethical and unprofessional conduct.  Dr. Samuelson's testimony poor judgment regarding behavior and &#34;testified against the hospital&#34;, can't score tests and misrepresented herself.  Before hearing advised by Dr. Jones not to make sweeping and definitive statements and unconventional to testify against the hospital.  Possible death sentence, showing bias.  NO MENTION OF RAILROAD.  At the time just approached the psych, in court she testified as I was just curious.  After testimony, she became licensed and because of committee's knowledge application put on hold pending disciplinary action.</p> "
+    "link": "/system/documents/files/000/000/039/original/2009-01-26PrivilegingCommitteDecision.pdf?1292385212"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2009-01-26"
+    "end": "2009-01-26"
+    "title": "PDCC Administrative Notes"
+    "caption": ""
+    "description": "<p>/Users/werdna/Desktop/Samuelson Documents/2009-01-26PrivilegingCommitteDecision.pdf</p>\n\n<p>Nami Kim</p> "
+    "link": "/system/documents/files/000/000/061/original/2009-01-26PrivilegingCommitteDecision.pdf?1292885525"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2009-02-01"
+    "end": "2009-02-01"
+    "title": "Psych Dept Criteria for Clinical Privileges"
+    "caption": "Psych Dept Criteria for Clinical PrivilegesPsych Dept Criteria for Clinical Privileges"
+    "description": "<p>Change privileges to exclude Samuelson:<br>licensed or work samples approve by two licensed psychs; neuropsych, and forensics; two years clinical neuropsych assessments</p> "
+    "link": "/system/documents/files/000/000/068/original/CLINICAL%20PRIVILEGES%20CRITERIA.pdf?1292885526"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2009-03-04"
+    "end": "2009-03-04"
+    "title": "Ltr. Jones to Samuelson"
+    "caption": "Ltr. Jones to SamuelsonLtr. Jones to Samuelson"
+    "description": "<p>Referred to in Sphn memo</p> "
+    "link": null
+    "classname": ""
+  ,
+    "durationEvent": false
+    "start": "2009-03-04"
+    "end": "2009-03-04"
+    "title": "Knoblauch to Samuelson Re: PPRP Initial letter to respondent"
+    "caption": ""
+    "description": "<p>INITIAL LETTER TO RESPONDENT</p> "
+    "link": "/system/documents/files/000/000/040/original/2009-03-04InitLetter2Respondent.pdf?1292385235"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2009-03-19"
+    "end": "2009-03-19"
+    "title": "Peer Review Panel Reply to Initial Response"
+    "caption": ""
+    "description": "<p></p> "
+    "link": "/system/documents/files/000/000/042/original/2009-03-25PRRespToInitialResp.pdf?1292385286"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2009-03-19"
+    "end": "2009-03-19"
+    "title": "Initial Response to Peer Review"
+    "caption": ""
+    "description": "<p></p> "
+    "link": "/system/documents/files/000/000/041/original/2009-03-19InitResp2PR.pdf?1292385262"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2009-03-25"
+    "end": "2009-03-25"
+    "title": "LtrKettner2SamuelsonResponse"
+    "caption": ""
+    "description": "<p></p> "
+    "link": null
+    "classname": ""
+  ,
+    "durationEvent": false
+    "start": "2009-04-01"
+    "end": "2009-04-01"
+    "title": "Dr. White Proctoring Report (final)"
+    "caption": ""
+    "description": "<p>Final evaluation.  Scathing.</p> "
+    "link": "/system/documents/files/000/000/087/original/2009-04-01ProctorReportFinal(White).pdf?1294953134"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2009-04-06"
+    "end": "2009-04-06"
+    "title": "Ltr. Spohn to Knoblauch"
+    "caption": "Ltr. Spohn to KnoblauchLtr. Spohn to Knoblauch"
+    "description": "<p>Att. 6 Response to complaint<br></p> "
+    "link": null
+    "classname": ""
+  ,
+    "durationEvent": false
+    "start": "2009-04-15"
+    "end": "2009-04-15"
+    "title": "Denial Privileges Memo by Warnick & Thatcher"
+    "caption": ""
+    "description": "<p>/Users/werdna/Desktop/Samuelson Documents/2009-04-15RefusalToReommendForensicPrivileging.pdf</p> "
+    "link": "/system/documents/files/000/000/062/original/2009-04-15RefusalToReommendForensicPrivileging.pdf?1292885526"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2009-04-30"
+    "end": "2009-04-30"
+    "title": "Ltr. Knoblauch to Jim Jones"
+    "caption": ""
+    "description": "<p>Att. 8</p> "
+    "link": "/system/documents/files/000/000/063/original/2009-04-30%20PeerReviewPanelDecision.pdf?1292885526"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2009-05-26"
+    "end": "2009-05-26"
+    "title": "Emails Samuelson/Knobloch Re: Ethics File Empty"
+    "caption": "Emails Samuelson/Knobloch Re: Ethics File EmptyEmails Samuelson/Knobloch Re: Ethics File Empty"
+    "description": "<p></p> "
+    "link": null
+    "classname": ""
+  ,
+    "durationEvent": false
+    "start": "2009-06-03"
+    "end": "2009-06-03"
+    "title": "Jim Jones Referral to Special Investigator's Office"
+    "caption": "Jim Jones Referral to Special Investigator's OfficeJim Jones Referral to Special Investigator's Office"
+    "description": "<p>Letter from Jim Jones to Special Investigator's Office </p> "
+    "link": null
+    "classname": ""
+  ,
+    "durationEvent": false
+    "start": "2009-06-11"
+    "end": "2009-06-11"
+    "title": "Hubert, Competency to Stand Trial, Part I Assessment"
+    "caption": "Hubert, Competency to Stand Trial, Part I AssessmentHubert, Competency to Stand Trial, Part I Assessment"
+    "description": "<p>Training Manual</p> "
+    "link": null
+    "classname": ""
+  ,
+    "durationEvent": false
+    "start": "2009-07-06"
+    "end": "2009-07-06"
+    "title": "Samuelson to Huq Requesting Removal of Docs"
+    "caption": "Samuelson to Huq Requesting Removal of DocsSamuelson to Huq Requesting Removal of Docs"
+    "description": "<p>Requesting removal of 4 Deborah White Documents</p> "
+    "link": "/system/documents/files/000/000/044/original/2009-07-06DemandToRemoveDocuments.pdf?1292385341"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2009-07-09"
+    "end": "2009-07-09"
+    "title": "Memo Hoff Referring Demand to Credentials"
+    "caption": "Memo Hoff Referring Demand to CredentialsMemo Hoff Referring Demand to Credentials"
+    "description": "<p></p> "
+    "link": "/system/documents/files/000/000/045/original/2009-07-09ResponseByHuq.pdf?1292385368"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2009-07-13"
+    "end": "2009-07-13"
+    "title": "Nami Kim to Med Exec Committee"
+    "caption": "Nami Kim to Med Exec CommitteeNami Kim to Med Exec Committee"
+    "description": "<p>Denial of privilege, deny full privileges because knowledge of admin removal and suspension of duties, knowledge of unethical conduct at court hearing in september, two were investigated by hospital police for perjury charge, prior proctoring reports and failure to gain from supervision and proctoring and difficulties with other staff members.</p> "
+    "link": "/system/documents/files/000/000/046/original/2009-07-13DenialOfPrivileges.pdf?1292385397"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2009-08-19"
+    "end": "2009-08-19"
+    "title": "Deborah White Memo Re: Illegal Peer Review Committee"
+    "caption": ""
+    "description": "<p>It has come to the attention that the psych department privileges, while generally ...<br>  4 pages.. Actions needed<br>  Classification of discrepancies between bylaws -- <br>  Amendment<br>  Disbanding and filing future complaints<br>  New Panel<br>  Clarification of procedures -- med staff guidelines</p>\n\n<p>/Users/werdna/Desktop/Samuelson Documents/PEER REVIEW CHANGES.pdf</p> "
+    "link": "/system/documents/files/000/000/081/original/PEER%20REVIEW%20CHANGES.pdf?1292885527"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2009-09-15"
+    "end": "2009-09-15"
+    "title": "Knoblouch to Samuelson Re: New Committee"
+    "caption": "Knoblouch to Samuelson Re: New CommitteeKnoblouch to Samuelson Re: New Committee"
+    "description": "<p>Compliance, initial complaint was resubmitted on August 7, 2009.  As you recall, Psych peer review was suspend special hearing.  Knoblock suspends special hearing 2009.  Model privileges resubmitted to Dr. Hauck to select three new people.  grounds for further. medical and executive committee.  opportunity for interview with peer review panel.  Peer review panel, whether adequate for opportunity for peer review panel.<br></p> "
+    "link": "/system/documents/files/000/000/047/original/2009-09-15NoticeOfSuspenseOfPeerReview.pdf?1292385420"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2009-09-29"
+    "end": "2009-09-29"
+    "title": "Ltr. Samuelson to Huq - Restore me"
+    "caption": "Ltr. Samuelson to Huq - Restore meLtr. Samuelson to Huq - Restore me"
+    "description": "<p>Demanding full privileges.  Haggag refer to panel</p> "
+    "link": "/system/documents/files/000/000/049/original/2009-09-29RequestForPrivileges.pdf?1292385477"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2009-09-29"
+    "end": "2009-09-29"
+    "title": "LtrHuqReferring2PR&PrivDec"
+    "caption": ""
+    "description": "<p></p> "
+    "link": "/system/documents/files/000/000/048/original/2009-09-29ReferralFromSamuelsonRequest.pdf?1292385450"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2009-10-11"
+    "end": "2009-10-11"
+    "title": "Ltr. Jones to Samuelson -refusing"
+    "caption": "Ltr. Jones to Samuelson -refusingLtr. Jones to Samuelson -refusing"
+    "description": "<p>Refusing based upon pending examination</p> "
+    "link": "/system/documents/files/000/000/050/original/2009-10-11JonesDeniesPrivilegesPendingInvestigation.pdf?1292385498"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2009-11-17"
+    "end": "2009-11-17"
+    "title": "Amrita Narayanan License Issues"
+    "caption": ""
+    "description": "<p></p> "
+    "link": "/system/documents/files/000/000/016/original/2009-11-17%20Amrita%20Narayanan%20LIcense.pdf?1290370381"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2009-12-08"
+    "end": "2009-12-08"
+    "title": "Memo Knoblauch to NSH Med. Exec Committee"
+    "caption": "Memo Knoblauch to NSH Med. Exec CommitteeMemo Knoblauch to NSH Med. Exec Committee"
+    "description": "<p>NOT PROVIDED<br></p> "
+    "link": null
+    "classname": ""
+  ,
+    "durationEvent": false
+    "start": "2010-04-04"
+    "end": "2010-04-04"
+    "title": "Police Incident Report"
+    "caption": ""
+    "description": "<p></p> "
+    "link": "/system/documents/files/000/000/018/original/2010-04-26%20INCIDENT%20REPORT.pdf?1290370458"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2010-04-07"
+    "end": "2010-04-07"
+    "title": "Ann Hoff to All: Neuropsych Referral"
+    "caption": "Ann Hoff to All: Neuropsych ReferralAnn Hoff to All: Neuropsych Referral"
+    "description": "<p>Procedures for Neuropsych Referral, naming full and part-time neuropsychologists, including Deb White.  Pre and post-doc level</p> "
+    "link": "/system/documents/files/000/000/017/original/2010-04-07%20Hoff%20Email%20Neuropsych.pdf?1290370402"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2010-07-20"
+    "end": "2010-07-20"
+    "title": "Notice of Adverse Action"
+    "caption": "Notice of Adverse ActionNotice of Adverse Action"
+    "description": "<p></p> "
+    "link": "/system/documents/files/000/000/019/original/2010-07-20%20NoticeOfAdverseAction.pdf?1290370489"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2010-08-09"
+    "end": "2010-08-09"
+    "title": "Skelly Hearing"
+    "caption": ""
+    "description": "<p></p> "
+    "link": null
+    "classname": ""
+  ,
+    "durationEvent": false
+    "start": "2010-08-12"
+    "end": "2010-08-12"
+    "title": "Notice of Appeal"
+    "caption": ""
+    "description": "<p></p> "
+    "link": "/system/documents/files/000/000/020/original/2010-08-12%20NoticeOfAppeal.pdf?1290370509"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2010-08-17"
+    "end": "2010-08-17"
+    "title": "Ltr: Napa State Hospital to Board of Psychology"
+    "caption": ""
+    "description": "<p></p> "
+    "link": "/system/documents/files/000/000/021/original/2010-08-17%20Napa%20to%20BOP.pdf?1290370583"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2010-08-17"
+    "end": "2010-08-17"
+    "title": "Notice of Pre-Hearing Conference/Settlement Conference"
+    "caption": ""
+    "description": "<p></p> "
+    "link": "/system/documents/files/000/000/022/original/2010-08-26%20Notice%20of%20PHC.pdf?1290370603"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2010-10-15"
+    "end": "2010-10-15"
+    "title": "Hospital Files PreHearingStatement"
+    "caption": ""
+    "description": "<p></p> "
+    "link": "/system/documents/files/000/000/024/original/2010-10-15%20Hospital%20PreHearing%20Statement.pdf?1290370646"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2010-10-25"
+    "end": "2010-10-25"
+    "title": "Dr. Samuelson Files PreHearingStatement"
+    "caption": ""
+    "description": "<p></p> "
+    "link": "/system/documents/files/000/000/023/original/2010-10%20Prehearing%20Statement%20Draft.pdf?1290370625"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2010-10-27"
+    "end": "2010-10-27"
+    "title": "Pre-Hearing/Settlement Conference"
+    "caption": ""
+    "description": "<p></p> "
+    "link": null
+    "classname": ""
+  ,
+    "durationEvent": false
+    "start": "2010-11-29"
+    "end": "2010-11-29"
+    "title": "Order: Evidentiary Sanctions"
+    "caption": ""
+    "description": "<p>As a consequence for the failure to submit a timely Statement, Appellant will limited in the evidence that she can produce at hearing on this matter. Appellant will be permitted to testify on her own behalf and rebut evidence introduced by Respondent. Appellant will not be permitted to call any other witnesses on her own behalf or introduce any documentary evidence.</p> "
+    "link": "/system/documents/files/000/000/025/original/2010-10-29SanctionsOrder.pdf?1290370666"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2012-12-20"
+    "end": "2012-12-20"
+    "title": "NAN Definition of Neuropsychologist"
+    "caption": ""
+    "description": "<p>test</p> "
+    "link": "/system/documents/files/000/000/003/original/2001-05-05%20NANDefNeuroPsych.pdf?1290369238"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2012-12-20"
+    "end": "2012-12-20"
+    "title": "/Users/werdna/Desktop/Samuelson Documents/An Overview of Licensure as a Psychologist - California Board of Psychology.pdf"
+    "caption": null
+    "description": "<p>/Users/werdna/Desktop/Samuelson Documents/An Overview of Licensure as a Psychologist - California Board of Psychology.pdf</p> "
+    "link": "/system/documents/files/000/000/067/original/An%20Overview%20of%20Licensure%20as%20a%20Psychologist%20-%20California%20Board%20of%20Psychology.pdf?1292885526"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2012-12-20"
+    "end": "2012-12-20"
+    "title": "/Users/werdna/Desktop/Samuelson Documents/CLINICAL PRIVILEGES CRITERIA.pdf"
+    "caption": null
+    "description": "<p>/Users/werdna/Desktop/Samuelson Documents/CLINICAL PRIVILEGES CRITERIA.pdf</p> "
+    "link": "/system/documents/files/000/000/068/original/CLINICAL%20PRIVILEGES%20CRITERIA.pdf?1292885526"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2012-12-20"
+    "end": "2012-12-20"
+    "title": "/Users/werdna/Desktop/Samuelson Documents/Cal Health & Safety Code \u00a7 1316.5.pdf"
+    "caption": null
+    "description": "<p>/Users/werdna/Desktop/Samuelson Documents/Cal Health & Safety Code \u00a7 1316.5.pdf</p> "
+    "link": "/system/documents/files/000/000/069/original/Cal%20Health%20&%20Safety%20Code%20%C2%A7%201316.5.pdf?1292885526"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2012-12-20"
+    "end": "2012-12-20"
+    "title": "/Users/werdna/Desktop/Samuelson Documents/Complaint-Form.pdf"
+    "caption": null
+    "description": "<p>/Users/werdna/Desktop/Samuelson Documents/Complaint-Form.pdf</p> "
+    "link": "/system/documents/files/000/000/070/original/Complaint-Form.pdf?1292885526"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2012-12-20"
+    "end": "2012-12-20"
+    "title": "/Users/werdna/Desktop/Samuelson Documents/DeptOfJustice.pdf"
+    "caption": null
+    "description": "<p>/Users/werdna/Desktop/Samuelson Documents/DeptOfJustice.pdf</p> "
+    "link": "/system/documents/files/000/000/071/original/DeptOfJustice.pdf?1292885526"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2012-12-20"
+    "end": "2012-12-20"
+    "title": "/Users/werdna/Desktop/Samuelson Documents/Document Request.pdf"
+    "caption": null
+    "description": "<p>/Users/werdna/Desktop/Samuelson Documents/Document Request.pdf</p> "
+    "link": "/system/documents/files/000/000/072/original/Document%20Request.pdf?1292885526"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2012-12-20"
+    "end": "2012-12-20"
+    "title": "/Users/werdna/Desktop/Samuelson Documents/FORENSIC ASSESSMENT NOT NECESSARY.pdf"
+    "caption": null
+    "description": "<p>/Users/werdna/Desktop/Samuelson Documents/FORENSIC ASSESSMENT NOT NECESSARY.pdf</p> "
+    "link": "/system/documents/files/000/000/073/original/FORENSIC%20ASSESSMENT%20NOT%20NECESSARY.pdf?1292885526"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2012-12-20"
+    "end": "2012-12-20"
+    "title": "/Users/werdna/Desktop/Samuelson Documents/GCClaimForm.pdf"
+    "caption": null
+    "description": "<p>/Users/werdna/Desktop/Samuelson Documents/GCClaimForm.pdf</p> "
+    "link": "/system/documents/files/000/000/074/original/GCClaimForm.pdf?1292885526"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2012-12-20"
+    "end": "2012-12-20"
+    "title": "/Users/werdna/Desktop/Samuelson Documents/Gen4-2_apa_general.pdf"
+    "caption": null
+    "description": "<p>/Users/werdna/Desktop/Samuelson Documents/Gen4-2_apa_general.pdf</p> "
+    "link": "/system/documents/files/000/000/075/original/Gen4-2_apa_general.pdf?1292885526"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2012-12-20"
+    "end": "2012-12-20"
+    "title": "/Users/werdna/Desktop/Samuelson Documents/INSURANCE DENIAL.pdf"
+    "caption": null
+    "description": "<p>/Users/werdna/Desktop/Samuelson Documents/INSURANCE DENIAL.pdf</p> "
+    "link": "/system/documents/files/000/000/076/original/INSURANCE%20DENIAL.pdf?1292885526"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2012-12-20"
+    "end": "2012-12-20"
+    "title": "/Users/werdna/Desktop/Samuelson Documents/MFAST.pdf"
+    "caption": null
+    "description": "<p>/Users/werdna/Desktop/Samuelson Documents/MFAST.pdf</p> "
+    "link": "/system/documents/files/000/000/077/original/MFAST.pdf?1292885526"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2012-12-20"
+    "end": "2012-12-20"
+    "title": "/Users/werdna/Desktop/Samuelson Documents/Melody_Letter_to_Trust_11-15-10.pdf"
+    "caption": null
+    "description": "<p>/Users/werdna/Desktop/Samuelson Documents/Melody_Letter_to_Trust_11-15-10.pdf</p> "
+    "link": "/system/documents/files/000/000/078/original/Melody_Letter_to_Trust_11-15-10.pdf?1292885526"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2012-12-20"
+    "end": "2012-12-20"
+    "title": "/Users/werdna/Desktop/Samuelson Documents/NAPA-Schwarzenegger-Letter.pdf"
+    "caption": null
+    "description": "<p>/Users/werdna/Desktop/Samuelson Documents/NAPA-Schwarzenegger-Letter.pdf</p> "
+    "link": "/system/documents/files/000/000/079/original/NAPA-Schwarzenegger-Letter.pdf?1292885526"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2012-12-20"
+    "end": "2012-12-20"
+    "title": "/Users/werdna/Desktop/Samuelson Documents/PAT WHITE EMAIL.pdf"
+    "caption": null
+    "description": "<p>/Users/werdna/Desktop/Samuelson Documents/PAT WHITE EMAIL.pdf</p> "
+    "link": "/system/documents/files/000/000/080/original/PAT%20WHITE%20EMAIL.pdf?1292885527"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2012-12-20"
+    "end": "2012-12-20"
+    "title": "/Users/werdna/Desktop/Samuelson Documents/PROBATIONARY EVALUATION.pdf"
+    "caption": null
+    "description": "<p>/Users/werdna/Desktop/Samuelson Documents/PROBATIONARY EVALUATION.pdf</p> "
+    "link": "/system/documents/files/000/000/082/original/PROBATIONARY%20EVALUATION.pdf?1292885527"
+    "classname": "has_attachment"
+  ,
+    "durationEvent": false
+    "start": "2012-12-20"
+    "end": "2012-12-20"
+    "title": "/Users/werdna/Desktop/Samuelson Documents/general-guidelines-for-providers.pdf"
+    "caption": null
+    "description": "<p>/Users/werdna/Desktop/Samuelson Documents/general-guidelines-for-providers.pdf</p> "
+    "link": "/system/documents/files/000/000/084/original/general-guidelines-for-providers.pdf?1292885527"
+    "classname": "has_attachment"
+  ]

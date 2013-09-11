@@ -1,2 +1,62 @@
-console.log("first!!!!");
-Posts = new Meteor.Collection('posts')
+'use strict';
+
+angular.module('b2jsApp')
+  .controller('MainCtrl', function ($scope, $filter) {
+
+    var 
+      fFrameScores = $filter('frameScores')
+    , fRollDisplay = $filter('rollDisplay');
+
+    $scope.reset = function(){
+      $scope.rolls = [];
+      $scope.frameScores = [];
+      $scope.rollDisplay = '';
+    }
+
+    $scope.reset();
+
+    $scope.addRoll = function(pins) {
+      $scope.rolls.push(pins);
+      $scope.frameScores = fFrameScores($scope.rolls);
+      $scope.rollDisplay = fRollDisplay($scope.rolls);
+    }
+
+    $scope.isInvalid = function(pins){
+      return isGameOver() ||
+        ( isSpareAttempt() && isTooManyPins(pins) );
+    }
+
+    function isGameOver(){
+      return $scope.frameScores.length === 10;
+    }
+
+    function isSpareAttempt(){
+      return (isSecondRollOfFrame() || isTenthFrameAfterStrikeAndMiss()) &&
+        !isTenthFrameAfterStrike()
+    }
+
+    function isTooManyPins(pins){
+      return lastRoll() + pins > 10;
+    }
+
+
+    function lastRoll(){
+      return $scope.rolls[$scope.rolls.length-1];
+    }
+
+    function isSecondRollOfFrame(){
+      return $scope.rollDisplay.length%2 == 1
+    }
+
+    function isTenthFrameAfterStrikeAndMiss(){
+      return $scope.rollDisplay.length==20 &&
+        $scope.rollDisplay[18]==='X' &&
+        $scope.rollDisplay[19]!=='X';
+    }
+
+    function isTenthFrameAfterStrike(){
+      return $scope.rollDisplay.length==19 &&
+        $scope.rollDisplay[18]=='X'
+    }
+
+  });

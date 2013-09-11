@@ -1,0 +1,52 @@
+'use strict'
+
+describe 'Filter: marks', () ->
+
+  # load the filter's module
+  beforeEach module 'myBowlingApp'
+
+  # initialize a new instance of the filter before each test
+  marks = {}
+  beforeEach inject ($filter) ->
+    marks = $filter 'marks'
+
+  testMark = (pins, result) ->
+    (expect marks pins).toBe result
+
+  it "should mark an empty frame", ->
+    testMark [], ""
+
+  describe "single roll frame", ->
+    it "should mark a gutter", ->
+      testMark [0], "-"
+    it "should mark a single roll non-strike game", ->
+      testMark [3], "3"
+      testMark [4], "4"
+    it "should mark a strike", ->
+      testMark [10], " X"
+
+  describe "two roll frame", ->
+    it "should mark a two roll non-spare game", ->
+      testMark [4,5], "45"
+      testMark [3,6], "36"
+      testMark [0,9], "-9"
+      testMark [9,0], "9-"
+    it "should mark a two roll spare frame", ->
+      testMark [0, 10], "-/"
+      testMark [5,5], "5/"
+
+  describe "two open frames", ->
+    it "should mark two open frames", ->
+      testMark [1,2,3,4], "1234"
+    it "should mark two spares back to back", ->
+      testMark [5,5,5,5], "5/5/"
+    it "should mark a strike, then spare", ->
+      testMark [10, 5, 5], " X5/"
+    it "should mark a spare, then single roll", ->
+      testMark [5,5,5], "5/5"
+
+  describe "tenth frame strikes", ->
+    it "should not have spaces", ->
+      testMark [10,10,10,10,10,10,10,10,10,10,10,10],
+        " X X X X X X X X XXXX"
+

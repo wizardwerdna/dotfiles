@@ -1,0 +1,58 @@
+'use strict'
+
+angular.module('newbowlingApp')
+  .filter 'frameScores', () ->
+    (rolls) -> (new FrameScorer).frameScores(rolls)
+
+class FrameScorer
+
+  frameScores: (@rolls) -> @frameScoresFrom 0, []
+
+  frameScoresFrom: (here, scores)->
+    if @isIncompleteFrame(here)
+      scores
+    else
+      @pushNextFrameScore here, scores
+      @frameScoresFrom @nextFrameStart(here), scores
+      
+  pushNextFrameScore: (here, scores)->
+    scores.push @frameValue(here) + @lastScoreOrZero(scores)
+
+  frameValue: (here)->
+    if @isOpenFrame here
+      @sumTwoRolls here
+    else
+      @sumThreeRolls here
+
+  nextFrameStart: (here)->
+    if @isStrike(here)
+      here+1
+    else
+      here+2
+
+  isSpare: (here)->
+    @rolls[here]+@rolls[here+1]==10
+
+  isStrike: (here)-> @rolls[here]==10
+
+  isOpenFrame: (here)->
+    not @isStrike(here) and not @isSpare(here)
+
+  sumThreeRolls: (here)->
+    @rolls[here]+@rolls[here+1]+@rolls[here+2]
+
+  sumTwoRolls: (here)->
+    @rolls[here]+@rolls[here+1]
+
+  lastScoreOrZero: (scores)->
+    scores[scores.length-1] ? 0
+
+  isIncompleteFrame: (here)->
+    @isShortFrame(here) or
+      @isNakedSpareOrStrikeAndOneRoll(here)
+
+  isShortFrame: (here) -> @rolls.length <= here+1
+
+  isNakedSpareOrStrikeAndOneRoll: (here)->
+    @rolls.length==here+2 and
+      (@isSpare(here) or @isStrike(here))

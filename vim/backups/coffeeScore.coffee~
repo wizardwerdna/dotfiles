@@ -1,0 +1,48 @@
+'use strict';
+
+angular.module('bowlingApp').filter 'coffeeScore', () ->
+  (rolls) ->
+
+    frameScoresFrom = (frameIndex, scores)->
+      if isNoFrameValue frameIndex
+        scores
+      else
+        pushThisFrameScore frameIndex, scores
+        frameScoresFrom nextFrameIndex(frameIndex), scores
+
+    isNoFrameValue = (frameIndex)->
+      (isShortFrameOrNakedStrike frameIndex) or
+        (isNakedSpareOrStrikeAndOneRoll frameIndex)
+
+    pushThisFrameScore = (frameIndex, scores)->
+      scores.push thisFrameValue(frameIndex) + (scores[scores.length-1]||0)
+
+    thisFrameValue = (frameIndex)->
+      if (isStrike frameIndex) or (isSpare frameIndex)
+        sumThreeRolls frameIndex
+      else
+        sumTwoRolls frameIndex
+
+    nextFrameIndex = (frameIndex)->
+      if isStrike(frameIndex)
+        frameIndex+1
+      else
+        frameIndex+2
+
+    isStrike = (frameIndex)-> rolls[frameIndex]==10
+
+    isSpare = (frameIndex)-> rolls[frameIndex]+rolls[frameIndex+1]==10
+
+    isShortFrameOrNakedStrike = (frameIndex)-> rolls.length <= frameIndex+1
+
+    isNakedSpareOrStrikeAndOneRoll = (frameIndex)->
+      rolls.length==frameIndex+2 and (isStrike(frameIndex) or isSpare(frameIndex))
+
+    sumTwoRolls = (frameIndex)->
+      rolls[frameIndex]+rolls[frameIndex+1]
+
+    sumThreeRolls = (frameIndex)->
+      rolls[frameIndex]+rolls[frameIndex+1]+rolls[frameIndex+2]
+
+    # main
+    frameScoresFrom 0, []

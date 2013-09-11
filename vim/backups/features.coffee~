@@ -1,0 +1,41 @@
+describe "Features:", ->
+  app=$('')
+
+  beforeEach module "bowlingApp"
+  beforeEach module "views/main.html"
+  beforeEach module "views/bowlingLine.html"
+  beforeEach inject ($compile, $rootScope)->
+    html = '''
+      <div ng-app="bowlingApp">
+        <div ng-view=""></div>
+      </div>
+    '''
+    app = ($compile html) $rootScope.$new()
+    $rootScope.$digest()
+
+  rollButtons = (id) -> app.find("#{id} .roll")
+  rollButton = (id, pins)-> rollButtons(id).eq(pins)
+  roll = (id, pins)-> rollButton(id, pins).click()
+
+  rollsDisplay = (id)-> app.find("#{id} .roll-display").text()
+
+  frameScores = (id)-> app.find("#{id} .frame-score").get().map((e)->$(e).text()).filter (e)->e!=''
+  frameScoresDisplay = (id)-> "[#{frameScores(id).join(',')}]"
+
+  it "should have the correct heading",->
+    (expect app.find('h1').text()).toBe "Superheroic Bowling"
+
+  it "should correctly display and score three lines independently", ->
+
+      roll('#line1', 10) for i in [1..12]
+      roll('#line2', 5) for i in [1..21]
+      roll('#line3', 0) for i in [1..20]
+
+      (expect rollsDisplay('#line1')).toBe " X X X X X X X X XXXX"
+      (expect frameScoresDisplay('#line1')).toBe "[30,60,90,120,150,180,210,240,270,300]"
+
+      (expect rollsDisplay('#line2')).toBe "5/5/5/5/5/5/5/5/5/5/5"
+      (expect frameScoresDisplay('#line2')).toBe "[15,30,45,60,75,90,105,120,135,150]"
+
+      (expect rollsDisplay('#line3')).toBe "--------------------"
+      (expect frameScoresDisplay('#line3')).toBe "[0,0,0,0,0,0,0,0,0,0]"

@@ -1,0 +1,68 @@
+'use strict'
+
+describe('Filter: rollsDisplay',function(){
+
+  beforeEach(function(){module('bowlingApp')});
+
+  var rollsDisplay = {}
+  beforeEach(inject(function($filter){
+    rollsDisplay = $filter('rollsDisplay');
+  }));
+
+  function testDisplay(rolls, result){
+    expect(rollsDisplay(rolls)).toBe(result);
+  }
+
+  describe("DISPLAYING", function(){
+    describe("display zero-roll frame", function(){
+      it("should display an empty game", function(){
+        testDisplay([],"");
+      });
+    });
+    describe("display one-roll frame", function(){
+      it("should display a single gutter ball game",function(){
+        testDisplay([0],"-");
+      });
+      it("should display a single pin drop roll game", function(){
+        testDisplay([1],"1");
+        testDisplay([9],"9");
+      });
+    });
+    describe("display two-roll frame", function(){
+      it("should display an open frame", function(){
+        testDisplay([0,1], "-1");
+        testDisplay([0,2], "-2");
+        testDisplay([1,1], "11");
+      });
+      it("should display a spare frame", function(){
+        testDisplay([5,5], "5/");
+      });
+      it("should display a strike frame", function(){
+        testDisplay([10], " X");
+      });
+    });
+    describe("display two frames", function(){
+      it("should display two open frames", function(){
+        testDisplay([0,1,2,3], "-123");
+      });
+    });
+    describe("display tenth frames", function(){
+      it("should display open tenth frame", function(){
+        testDisplay([10,10,10,10,10,10,10,10,10,0,0],
+                      " X X X X X X X X X--");
+      });
+      it("should display tenth frame spare", function(){
+        testDisplay([10,10,10,10,10,10,10,10,10,5,5,5],
+                      " X X X X X X X X X5/5");
+      });
+      it("should display tenth frame strike", function(){
+        testDisplay([10,10,10,10,10,10,10,10,10,10,5,5],
+                      " X X X X X X X X XX5/");
+      });
+      xit("should display a perfect game", function(){
+        testDisplay([10,10,10,10,10,10,10,10,10,10,10,10],
+                      " X X X X X X X X XXXX");
+      });
+    });
+  });
+});

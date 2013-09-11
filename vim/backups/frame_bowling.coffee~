@@ -1,0 +1,45 @@
+'use strict'
+describe "frame-bowling", ->
+  beforeEach module 'ngBowlingApp'
+  bowling = {}
+  beforeEach inject (_bowling_) -> bowling = _bowling_
+  it "should know truth", -> expect(true).toBe true
+  describe "no frames completed", ->
+    it "no pins rolled should be empty", ->
+      (expect bowling.frames()).toEqual []
+    it "one non-strike rolled should be empty", ->
+      bowling.roll(4)
+      (expect bowling.frames()).toEqual []
+    it "spare without next roll, should be empty", ->
+      bowling.roll(4); bowling.roll(6)
+      (expect bowling.frames()).toEqual []
+    it "strike without next roll, should be empty", ->
+      bowling.roll(10)
+      (expect bowling.frames()).toEqual []
+    it "strike with only one more roll, should be empty", ->
+      bowling.roll(10); bowling.roll(3)
+      (expect bowling.frames()).toEqual
+  describe "one frame completed", ->
+    it "non-mark without next roll, should be sum", ->
+      bowling.roll(3); bowling.roll(1)
+      (expect bowling.frames()).toEqual [4]
+    it "spare with one roll, should be 10 + next roll", ->
+      bowling.roll(3); bowling.roll(7); bowling.roll(4)
+      (expect bowling.frames()).toEqual [14]
+    it "strike with two rolls, should be 10 + sum rolls", ->
+      bowling.roll(10); bowling.roll(10); bowling.roll(10)
+      (expect bowling.frames()).toEqual [30]
+  describe "complete games", ->
+    it "90 game", ->
+      for i in [1..10]
+        bowling.roll(9); bowling.roll(0)
+      (expect bowling.frames()).toEqual [9, 18, 27, 36, 45, 54, 63, 72, 81, 90]
+    it "150 games", ->
+      for i in [1..10]
+        bowling.roll(5); bowling.roll(5)
+      bowling.roll(5)
+      (expect bowling.frames()).toEqual [15, 30, 45, 60, 75, 90, 105, 120, 135, 150]
+    it "300 games", ->
+      for i in [1..10]
+        bowling.roll(10)
+      (expect bowling.frames()).toEqual [30, 60, 90, 120, 150, 180, 210, 240, 270, 300]

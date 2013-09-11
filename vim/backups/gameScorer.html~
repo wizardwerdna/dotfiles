@@ -1,0 +1,33 @@
+<div class="game-scorer">
+  <div class="buttons">
+
+    <button class="roll" ng-click="addRolls(pins)" ng-disabled="isInvalid(pins)"
+      ng-repeat="pins in [0,1,2,3,4,5,6,7,8,9,10]">{{pins}}</button>
+
+    <button class="reset" ng-click="reset()">Reset</button>
+
+  </div>
+
+  <div class="frames">
+
+    <div class="frame" ng-repeat="frame in [0,1,2,3,4,5,6,7,8]">
+
+      <div class="roll-display">{{rollsDisplay[2*frame]}}</div>
+      <div class="roll-display">{{rollsDisplay[2*frame+1]}}</div>
+
+      <div class="frame-score-display">{{frameScores[frame]}}</div>
+
+    </div>
+
+    <div class="frame tenth">
+
+      <div class="roll-display">{{rollsDisplay[18]}}</div>
+      <div class="roll-display">{{rollsDisplay[19]}}</div>
+      <div class="roll-display">{{rollsDisplay[20]}}</div>
+
+      <div class="frame-score-display">{{frameScores[9]}}</div>
+
+    </div>
+
+  </div>
+</div>

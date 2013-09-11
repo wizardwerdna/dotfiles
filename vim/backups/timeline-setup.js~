@@ -1,0 +1,3 @@
+Timeline_ajax_url="http://localhost:3000/assets/simile-ajax-api.js";
+Timeline_urlPrefix="http://localhost:3000/assets/scripts/";
+Timeline_parameters="bundle=true";

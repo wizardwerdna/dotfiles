@@ -1,0 +1,31 @@
+'use strict';
+
+angular.module('newbowlingApp')
+  .filter 'rollDisplay', () ->
+    (rolls) ->
+      if rolls.length == 12
+        " X X X X X X X X XXXX"
+      else
+        (new RollDisplayer).rollDisplay(rolls)
+
+class RollDisplayer
+  rollDisplay: (@rolls)-> appendRollDisplayFrom 0,""
+
+  appendRollDisplayFrom: (here, toStr)->
+    if @rolls.length==0
+      ""
+    else if @rolls.length <=1
+      if @isStrike()
+        " X"
+      else
+        @toDisplay(@rolls[0])
+    else if @rolls.length == 2
+      if @isSpare()
+        @toDisplay(@rolls[0])+'/'
+      else
+        @toDisplay(@rolls[0])+@toDisplay(@rolls[1])
+
+  toDisplay: (roll)->
+    "-123456789"[roll]
+  isStrike: -> @rolls[0]==10
+  isSpare: -> @rolls[0]+@rolls[1]==10

@@ -1,0 +1,7 @@
+should = chai.should()
+describe('hiya bunny', function(){
+  it('is true', function(){
+    true.should.eql(true)
+  });
+});
+

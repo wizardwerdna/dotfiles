@@ -1,0 +1,38 @@
+'use strict';
+
+angular.module('ngBowlingApp')
+  .filter 'pinPresenter', () ->
+    (input) -> (new PinPresenter input).present()
+
+class PinPresenter
+  constructor: (@pins)->
+
+  present: -> @_present(0, '')
+
+  _present: (fromhere, prefix)->
+    if @_noRollsLeft(fromhere)
+      prefix
+    else if @_isLastRoll(fromhere) and not @_isStrike(fromhere)
+      prefix + @_pins(fromhere)
+    else if @_isStrike(fromhere) 
+      prefix += ' ' unless prefix.length >= 18
+      @_present fromhere+1, prefix + 'x'
+    else if @_isSpare(fromhere) 
+      @_present fromhere+2, prefix + @_pins(fromhere) + '/'
+    else
+      @_present fromhere+2, prefix + @_pins(fromhere) + @_pins(fromhere+1)
+
+  _pins: (fromhere) ->
+    "-123456789x"[@pins[fromhere]]
+
+  _isStrike: (fromhere) ->
+    @pins[fromhere] == 10
+
+  _isLastRoll: (fromhere) ->
+    @pins.length == fromhere+1
+
+  _noRollsLeft: (fromhere) ->
+    @pins.length == fromhere
+
+  _isSpare: (fromhere) ->
+    @pins[fromhere] + @pins[fromhere+1] == 10

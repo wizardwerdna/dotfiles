@@ -1,0 +1,77 @@
+class EventsController < ApplicationController
+  
+  before_filter :get_matter
+  
+  def index
+    @events = @matter.events
+    @events = @events.where(['title LIKE ? OR description LIKE ?', "%#{params[:q]}%", "%#{params[:q]}%"]) if params[:q]
+    respond_to do |format|
+      format.json{
+        # the timeline needs the key events to point to the array of event objects:
+        events = @events.order(:start).collect do |each|
+          {
+            :durationEvent => each.durationEvent,
+            # :latestStart => each.latestStart && each.latestStart.utc.to_s,
+            :start => each.start.utc.to_s,
+            :end => each.durationEvent ? each.end.utc.to_s : each.start.utc.to_s,
+            # :earliestEnd => each.earliestEnd && each.earliestEnd.utc.to_s,
+            :title => each.title,
+            :caption => each.caption,
+            :description => ApplicationController.helpers.simple_format(each.description) + 
+                              " <a href=\"/matters/#{@matter.id}/events/#{each.id}/edit\">[edit]</a>",
+            :link => each.document && each.document.file.url,
+            :classname => each.document ? "has_attachment" : ""
+          }
+        end
+        data = {"events" => events}
+        render :json => data.to_json
+      }
+      format.html
+    end  
+  end
+  
+  def show
+    @event = @matter.events.find(params[:id])
+  end
+  
+  def new
+    @event = Event.new
+  end
+  
+  def create
+    @event = @matter.events.new(params[:event])
+    if @event.save
+      flash[:notice] = "Successfully created event."
+      redirect_to [@matter, @event]
+    else
+      render :action => 'new'
+    end
+  end
+  
+  def edit
+    @event = @matter.events.find(params[:id])
+  end
+  
+  def update
+    @event = @matter.events.find(params[:id])
+    if @event.update_attributes(params[:event])
+      flash[:notice] = "Successfully updated event."
+      redirect_to [@matter, @event]
+    else
+      render :action => 'edit'
+    end
+  end
+  
+  def destroy
+    @event = @matter.events.find(params[:id])
+    @event.destroy
+    flash[:notice] = "Successfully destroyed event."
+    redirect_to matter_events_url(@matter)
+  end
+  
+  private
+  
+  def get_matter
+    @matter = Matter.find(params[:matter_id])
+  end
+end

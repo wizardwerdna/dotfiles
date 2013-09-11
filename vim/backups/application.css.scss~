@@ -1,0 +1,55 @@
+@import "scaffolds";
+@import "jquery.ui.datepicker";
+@import "bootstrap";
+@import "bootstrap-responsive";
+
+.animate-enter, 
+.animate-leave { 
+  -webkit-transition: 0.5s linear all;
+  -moz-transition: 0.5s linear all;
+  -ms-transition: 0.5s linear all;
+  -o-transition: 0.5s linear all;
+  transition: 0.5s linear all;
+  position: relative;
+  display: block;
+} 
+
+.animate-leave.animate-leave-active,
+.animate-enter {
+  height: 10%;
+  left: 3pc;
+  opacity: 0.1;
+}
+
+.animate-enter.animate-enter-active,
+.animate-leave {
+  height: 100%;
+  left: 0;
+  opacity: 1;
+}
+
+
+.app-zippy {
+  @include border-radius(5px);
+  border: 3pt solid black;
+  margin: 10pt;
+  background: #eaeaea;
+
+  h1 {
+    background: black;
+    color: white;
+    margin: 0;
+    font-size: 12pt;
+    line-height: 14pt;
+  }
+
+}
+
+.app-bubble {
+  background-color: #eee;
+  border: 1pt solid blue;
+  margin: 5pt;
+  padding: 5pt;
+  @include box-shadow(1px 1px 6px black);
+  @include border-radius(10px);
+}

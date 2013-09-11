@@ -1,0 +1,62 @@
+describe "Features:", ->
+
+  beforeEach module "bowlingApp"
+  beforeEach module "views/main.html"
+
+  app = {}
+  beforeEach inject ($rootScope, $compile)->
+    html = '''
+      <div ng-app="bowlingApp">
+        <div ng-view=""></div>
+      </div>
+    '''
+    app = ($compile html) $rootScope.$new()
+    $rootScope.$digest()
+
+  roll = (pins) -> app.find('.roll').eq(pins).click()
+  rollButtons = -> app.find('.roll')
+  resetButton = -> app.find('.reset')
+  reset = -> resetButton().click()
+  rollsDisplay = -> app.find('.rolls').text()
+  frameScoresDisplay = -> app.find('.frame-scores').text()
+
+  describe "Data Entry Features", ->
+
+    describe "means for input", ->
+      it "should have 11 buttons to enter rolls", ->
+        (expect rollButtons().length).toBe 11
+      it "should have a button to reset", ->
+        (expect resetButton().length).toBe 1
+
+    describe "means for reporting rolls", ->
+      it "should have an initially display of rolls", ->
+        (expect rollsDisplay()).toBe "[]"
+      it "should have an initially empty display of frame scores", ->
+        (expect frameScoresDisplay()).toBe "[]"
+
+      it "should allow you to roll a gutter ball", ->
+        roll(0)
+        (expect rollsDisplay()).toBe "[0]"
+
+      it "should allow you to roll pins", ->
+        roll(1)
+        (expect rollsDisplay()).toBe "[1]"
+
+      it "should allow you to reset the rolls", ->
+        roll(0)
+        reset()
+        (expect rollsDisplay()).toBe "[]"
+
+    describe "Scoring Feature", ->
+      describe "incomplete frames", ->
+        it "should not change for single non-strike roll", ->
+          roll(5)
+          (expect frameScoresDisplay()).toBe "[]"
+
+      describe "complete frames", ->
+        it "should handle single open frame", ->
+          roll(1); roll(2)
+          (expect frameScoresDisplay()).toBe "[3]"
+          reset()
+          roll(2); roll(3)
+          (expect frameScoresDisplay()).toBe "[5]"

@@ -1,3 +1,1 @@
-cli = require 'cli-color'
-
-console.log cli.green + "hello"
+[1..22].map(->12)

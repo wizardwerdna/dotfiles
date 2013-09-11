@@ -1,0 +1,92 @@
+
+@App = angular.module('App', ['ngResource', 'ngSanitize'])
+
+.run ($window, $templateCache)->
+  for fileName of $window.JST
+    do() ->
+      console.log(fileName)
+      $templateCache.put fileName, $window.JST[fileName]()
+
+.config ($routeProvider, $locationProvider) ->
+  $locationProvider.html5Mode(true)
+  $routeProvider
+    .when '/',
+      controller: 'AppCtrl'
+      templateUrl: 'templates/root'
+    .when '/issues',
+      controller: 'AppCtrl'
+      templateUrl: 'templates/issues'
+    .when '/facts',
+      controller: 'FactCtrl'
+      templateUrl: 'templates/facts'
+    .when '/evidence',
+      controller: 'AppCtrl'
+      templateUrl: 'templates/evidence'
+    .otherwise
+      redirectTo: '/'
+      
+.controller 'AppCtrl', ($scope, $sanitize, factFactory, $location) ->
+  $scope.active = (link)-> if $location.$$url == link then "active" else ""
+  $scope.foo = "abcdef"
+  $scope.items = [
+      {id: 1, content: 'item 1', start: '2013-04-20'},
+      {id: 2, content: 'item 2', start: '2013-04-14'},
+      {id: 3, content: 'item 3', start: '2013-04-18'},
+      {id: 4, content: 'item 4', start: '2013-04-16', end: '2013-04-19'},
+      {id: 5, content: 'item 5', start: '2013-04-25'},
+      {id: 6, content: 'item 6', start: '2013-04-27'}
+  ]
+      
+.controller 'FactCtrl', ($scope, $sanitize, factFactory, $location, $filter) ->
+  $scope.search = {q: $location.search().q || ''}
+  $scope.filteredFacts = factFactory
+  $scope.totalFacts = factFactory.length
+  $scope.$watch 'search.q', (q) ->
+    $scope.filteredFacts = $filter('filter')(factFactory, q)
+
+.directive 'appTimeline', (simile)->
+  template: '<div style="height: 500px; width: 100%"></div>'
+  replace: true
+  link: (scope, element, attrs, controller) ->
+    simile.buildTimeline()
+    scope.$watch 'filteredFacts', (filteredFacts) ->
+      simile.loadEvents(filteredFacts)
+
+.directive 'appVisualization', ->
+  template: '<div style="width: 100%"></div>'
+  replace: true
+  link: (scope, element, attrs, controller) ->
+      options = {type: 'point'}
+      scope.$watch 'filteredFacts', (filteredFacts) ->
+        ourFacts = filteredFacts.map (each)->
+          start: Date.parse(each.start)
+          end:   if each.start == each.end or not each.end?
+                    null
+                  else
+                    Date.parse(each.end)
+          content: angular.element("<b onClick=\"console.alert('foo')\">#{each.title}</b>")[0]
+        timeline = new vis.Timeline(visualization, ourFacts, options)
+.directive 'foomio', ->
+  template: '<li ng-click="showme()">noodles{{item}}</li>'
+  replace: true
+  scope: true
+  link: (scope, element, attrs, controller) ->
+    scope.showme = -> console.log scope.item.content
+    ele = angular.element '<li ng-click="showme()">huggeroonies</li>'
+    element.append(ele)
+
+.directive 'appZippy', ->
+  transclude: true
+  template: '<div class="app-zippy">' +
+    '<H1 ng-click="toggleContent()">{{title}} (Click to open/close)</h1>' +
+    '<div ng-show="visibleContent" ng-transclude></div' +
+    '</div>'
+  scope: {title: "@"}
+  link: (scope, element, attrs, controller)->
+    scope.visibleContent = (attrs.initially == "open")
+    scope.toggleContent= ->
+      scope.visibleContent = !scope.visibleContent
+
+.directive 'appBubble', ->
+  template: '<div class="app-bubble" ng-transclude></div>'
+  transclude: true

@@ -1,0 +1,62 @@
+'use strict'
+
+rollMany = (bowling, pins, times) ->
+  bowling.roll(pins) for i in  [1..times]
+
+roll = (bowling, pinsList...) ->
+  bowling.roll(pins) for pins in pinsList
+
+describe 'Service: bowling.display', () ->
+
+  # load the service's module
+  beforeEach module 'ngBowlingApp'
+
+  # instantiate service
+  bowling = {}
+  beforeEach inject (_bowling_) ->
+    bowling = _bowling_
+
+  describe "upon creation", ->
+    it "should be an empty string", ->
+      expect(bowling.display()).toBe ""
+  
+  describe "partial frame", ->
+    it "should correctly handle a gutter ball", ->
+      bowling.roll(0)
+      (expect bowling.display()).toBe "-"
+    it "should correctly handle a non-strike", ->
+      bowling.roll(3)
+      (expect bowling.display()).toBe "3"
+  describe "complete frame", ->
+    it "should correctly handle a second gutter ball", ->
+      roll(bowling, 3, 0)
+      (expect bowling.display()).toBe "3-"
+    it "should correctly handle a second non-spare roll", ->
+      roll(bowling, 3, 4)
+      (expect bowling.display()).toBe "34"
+    it "should correctly handle a spare", ->
+      roll(bowling, 3, 7)
+      (expect bowling.display()).toBe "3/"
+    it "should correctly handle a strike", ->
+      roll(bowling, 10)
+      (expect bowling.display()).toBe " x"
+  describe "adjacent frames", ->
+    it "should handle a completed spare correctly", ->
+      roll(bowling, 3, 7, 4)
+      (expect bowling.display()).toBe "3/4"
+    it "should handle a completed strike correctly", ->
+      roll(bowling, 10, 2, 3)
+      (expect bowling.display()).toBe " x23"
+    it "should handle four pins correctly", ->
+      roll(bowling, 1, 2, 3, 4)
+      (expect bowling.display()).toBe "1234"
+  describe "complete games", ->
+    it "should handle a perfect game correctly", ->
+      rollMany(bowling, 10, 12)
+      (expect bowling.display()).toBe " x x x x x x x x x xxx"
+    it "should handle a 150 game correctly", ->
+      rollMany(bowling, 5, 21)
+      (expect bowling.display()).toBe "5/5/5/5/5/5/5/5/5/5/5"
+    it "should handle a gutter game correctly", ->
+      rollMany(bowling, 0, 20)
+      (expect bowling.display()).toBe "--------------------"

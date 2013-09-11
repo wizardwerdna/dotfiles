@@ -1,9 +1,8 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =7
-let g:netrw_dirhist_1='/Users/werdna/dev/node/angular.js'
-let g:netrw_dirhist_2='/Users/werdna/dev/node/covenant/node_modules/promises-aplus-tests'
-let g:netrw_dirhist_3='/Users/werdna/my_cool_app'
-let g:netrw_dirhist_4='/Users/werdna/microscope/callections'
-let g:netrw_dirhist_5='/Users/werdna/microscope/client/views'
-let g:netrw_dirhist_6='/Users/werdna/microscope/server'
-let g:netrw_dirhist_7='/Users/werdna/.vim/bundle/mustache'
+let g:netrw_dirhist_cnt =6
+let g:netrw_dirhist_1='/Users/werdna/dotfiles/vim/after/indent'
+let g:netrw_dirhist_2='/Users/werdna/dev/node/ng-bowling'
+let g:netrw_dirhist_3='/Users/werdna/dev/node/ng-bowling2'
+let g:netrw_dirhist_4='/Users/werdna/foo/node_modules/grunt-karma'
+let g:netrw_dirhist_5='/Users/werdna/bowling/test/spec/integration'
+let g:netrw_dirhist_6='/Users/werdna/angular.js/src'

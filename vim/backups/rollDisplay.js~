@@ -1,0 +1,57 @@
+'use strict';
+
+angular.module('b2jsApp').filter('rollDisplay', function () {
+
+  return function (rolls) {
+
+    function displayOneRoll(here){
+      return '-123456789?'[rolls[here]] || '';
+    }
+
+    function isStrike(here){
+      return rolls[here]===10;
+    }
+
+    function isSpare(here){
+      return rolls[here]+rolls[here+1]===10;
+    }
+
+    function spaceUnlessTenthFrame(toStr){
+      if (toStr.length>=18) {
+        return '';
+      } else {
+        return ' ';
+      }
+    }
+
+    function displayOneFrameFrom(here, toStr){
+      if (isStrike(here)) {
+        return spaceUnlessTenthFrame(toStr) + 'X';
+      } else if (isSpare(here)) {
+        return displayOneRoll(here)+'/';
+      } else {
+        return displayOneRoll(here)+displayOneRoll(here+1);
+      }
+    }
+
+    function nextFrameFrom(here){
+      if (isStrike(here)){
+        return here+1;
+      } else {
+        return here+2;
+      }
+    }
+
+    function appendDisplayFrom(here, toStr){
+      if (rolls.length<=here+1 && rolls[here]!==10) {
+        return toStr + displayOneRoll(here);
+      } else {
+        toStr += displayOneFrameFrom(here, toStr);
+        return appendDisplayFrom(nextFrameFrom(here), toStr);
+      }
+    }
+
+    return appendDisplayFrom(0, '');
+
+  };
+});

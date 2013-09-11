@@ -1,0 +1,3 @@
+describe 'loads module App', ->
+  it "should load app module", ->
+    should.exist module('App')
