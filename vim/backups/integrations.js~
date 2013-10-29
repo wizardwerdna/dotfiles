@@ -1,0 +1,50 @@
+describe('Integration of the Blog Components', function(){
+  var app = null;
+  var $location = null;
+
+  beforeEach(function(){
+    module('blogApp');
+    inject(function($rootScope, $compile, _$location_){
+      $location = _$location_;
+      app = $compile(
+        '<div ng-app="blogApp">'+
+          '<h1>Superheroic Blogging</h1>'+
+          '<div ng-view></div>'+
+        '</div>'
+      )($rootScope.$new());
+      $rootScope.$digest();
+    });
+  });
+
+  it('should have the proper header', function(){
+    expect(app.find('h1').text()).toBe('Superheroic Blogging');
+  });
+
+  describe('/', function(){
+    it('should have the proper subheader', function(){
+      expect(app.find('h3').text()).toBe('Entries');
+    });
+    it('should list blog entries', function(){
+    });
+  });
+
+  describe('/new', function(){
+    beforeEach(function(){
+      $location.url('/new');
+      app.scope().$apply();
+    });
+    it('should have the proper subheader', function(){
+      expect(app.find('h3').text()).toBe('New Entry');
+    });
+  });
+
+  describe('/edit/:entryId', function(){
+    beforeEach(function(){
+      $location.url('/edit/0');
+      app.scope().$apply();
+    });
+    it('should have the proper subheader', function(){
+      expect(app.find('h3').text()).toBe('New Entry');
+    });
+  });
+});

@@ -1,17 +1,1 @@
-describe('angularjs homepage', function() {
-  var ptor;
-
-  it('should greet using binding', function() {
-    ptor = protractor.getInstance();
-
-    //Load the AngularJS homepage.
-    ptor.get('/');
-
-    // Find the element with binding matching 'yourName' - this will
-    // find the <h1>Hello {{yourName}}!</h1> element.
-    var greeting = ptor.findElement(protractor.By.css("h1"));
-    expect(greeting.getText()).toEqual("Superheroic Bowling");
-    var scores = ptor.findElements(protractor.By.css(".frame-score"));
-    expect(scores.getText()).toEqual("foo");
-  });
-});
+describe

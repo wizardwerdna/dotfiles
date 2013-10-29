@@ -6,7 +6,6 @@
 :NeoComplCacheCachingSyntax	neocomplcache.txt	/*:NeoComplCacheCachingSyntax*
 :NeoComplCacheCachingTags	neocomplcache.txt	/*:NeoComplCacheCachingTags*
 :NeoComplCacheClean	neocomplcache.txt	/*:NeoComplCacheClean*
-:NeoComplCacheCreateTags	neocomplcache.txt	/*:NeoComplCacheCreateTags*
 :NeoComplCacheDisable	neocomplcache.txt	/*:NeoComplCacheDisable*
 :NeoComplCacheEnable	neocomplcache.txt	/*:NeoComplCacheEnable*
 :NeoComplCacheLock	neocomplcache.txt	/*:NeoComplCacheLock*
@@ -112,10 +111,8 @@ neocomplcache-candidate-attribute-info	neocomplcache.txt	/*neocomplcache-candida
 neocomplcache-candidate-attribute-kind	neocomplcache.txt	/*neocomplcache-candidate-attribute-kind*
 neocomplcache-candidate-attribute-menu	neocomplcache.txt	/*neocomplcache-candidate-attribute-menu*
 neocomplcache-candidate-attribute-name	neocomplcache.txt	/*neocomplcache-candidate-attribute-name*
-neocomplcache-candidate-attribute-neocomplcache__refresh	neocomplcache.txt	/*neocomplcache-candidate-attribute-neocomplcache__refresh*
 neocomplcache-candidate-attribute-rank	neocomplcache.txt	/*neocomplcache-candidate-attribute-rank*
 neocomplcache-candidate-attributes	neocomplcache.txt	/*neocomplcache-candidate-attributes*
-neocomplcache-changelog	neocomplcache.txt	/*neocomplcache-changelog*
 neocomplcache-commands	neocomplcache.txt	/*neocomplcache-commands*
 neocomplcache-contents	neocomplcache.txt	/*neocomplcache-contents*
 neocomplcache-context	neocomplcache.txt	/*neocomplcache-context*

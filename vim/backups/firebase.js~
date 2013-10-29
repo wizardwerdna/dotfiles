@@ -1,0 +1,3 @@
+window.Firebase = function(){ console.log('Firebase called'); }
+angular.module('firebase', []);
+angular.module('firebase').value('angularFire', function(){ console.log('angularFire called');});

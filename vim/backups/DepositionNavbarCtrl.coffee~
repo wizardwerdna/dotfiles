@@ -1,0 +1,22 @@
+'use strict'
+
+angular.module('depositionsApp')
+  .controller 'AppHeaderCtrl', ($scope, $location, Session) ->
+
+    $scope.Session = Session
+
+    $scope.password = {entered: ''}
+
+    $scope.active = (link)->
+      if link==$location.path()
+        'active'
+      else
+        ''
+
+    $scope.logout = ->
+      Session.logout()
+      $scope.password.entered = ''
+      $location.url('/')
+
+    $scope.$watch 'password.entered', (entered) ->
+      Session.login(entered)

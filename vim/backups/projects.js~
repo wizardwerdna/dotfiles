@@ -1,0 +1,1 @@
+angular.module('backendApp').value('projects', angular.copy(mockList));

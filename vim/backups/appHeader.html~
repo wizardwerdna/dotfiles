@@ -1,0 +1,18 @@
+<div class="navbar navbar-fixed-top navbar-inverse">
+  <div class="navbar-inner">
+    <a class="brand" ng-class="active('/')" href="/">eCasebase</a>
+    <ul class="nav">
+      <li ng-class="active('/depos')"><a href="/depos">Depositions</a></li>
+      <li ng-class="active('/exhibits')"><a href="/exhibits">Exhibits</a></li>
+    </ul>
+    <div class="input-group">
+      <input type="password" class="form-control push-right" 
+        placeholder="Authenticate"
+        style="margin-top: 5px;"
+        ng-hide="Session.isAuthenticated()" 
+        ng-model="password.entered"></input>
+    </div>
+    <button class="btn" ng-click="logout()" 
+      ng-show="Session.isAuthenticated()">Logout</button>
+  </div>
+</div>

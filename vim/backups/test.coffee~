@@ -1,1 +1,8 @@
-[1..22].map(->12)
+describe "test", ->
+  html = '''
+    <div ng-app="fooApp" ng-controller="MainCtrl">
+     <div ng-include="'views/main.html'"></div>
+    </div>
+  '''
+  it "should be truthy", ->
+    expect(true).toBeTruthy()

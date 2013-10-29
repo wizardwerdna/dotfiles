@@ -1,67 +1,172 @@
 'use strict';
+describe('controller LineScorerCtrl:', function(){
 
-angular.module('b2jsApp')
-.directive('lineScorer', function ($filter) {
-  return {
-    templateUrl: 'views/lineScorer.html',
-    restrict: 'A',
-    link: function postLink(scope, element, attrs) {
-      var 
-      fFrameScores = $filter('frameScores')
-      , fRollDisplay = $filter('rollDisplay');
+  var scope;
 
-      scope.reset = function(){
-        scope.rolls = [];
-        scope.frameScores = [];
-        scope.rollDisplay = '';
-      }
-
-      scope.reset();
-
-      scope.addRoll = function(pins) {
-        scope.rolls.push(pins);
-        scope.frameScores = fFrameScores(scope.rolls);
-        scope.rollDisplay = fRollDisplay(scope.rolls);
-      }
-
-      scope.isInvalid = function(pins){
-        return isGameOver() ||
-          ( isSpareAttempt() && isTooManyPins(pins) );
-      }
-
-      function isGameOver(){
-        return scope.frameScores.length === 10;
-      }
-
-      function isSpareAttempt(){
-        return (isSecondRollOfFrame() || isTenthFrameAfterStrikeAndMiss()) &&
-          !isTenthFrameAfterStrike()
-      }
-
-      function isTooManyPins(pins){
-        return lastRoll() + pins > 10;
-      }
-
-
-      function lastRoll(){
-        return scope.rolls[scope.rolls.length-1];
-      }
-
-      function isSecondRollOfFrame(){
-        return scope.rollDisplay.length%2 == 1
-      }
-
-      function isTenthFrameAfterStrikeAndMiss(){
-        return scope.rollDisplay.length==20 &&
-          scope.rollDisplay[18]==='X' &&
-          scope.rollDisplay[19]!=='X';
-      }
-
-      function isTenthFrameAfterStrike(){
-        return scope.rollDisplay.length==19 &&
-          scope.rollDisplay[18]=='X'
-      }
-
-    }
+  var namespace = {
+    frameScores: function(){},
+    rollDisplays: function(){},
+    result: {result: 'result'}
   };
+
+  beforeEach(function(){
+    module('app');
+    spyOn(namespace, 'frameScores').andReturn(namespace.result);
+    spyOn(namespace, 'rollDisplays').andReturn(namespace.result);
+    inject(function($controller, $rootScope){
+      $controller('LineScorerCtrl', {
+        $scope: scope = $rootScope.$new(),
+        frameScores: namespace.frameScores,
+        rollDisplays: namespace.rollDisplays
+      });
+    });
+  });
+
+  function roll(pins, times){
+    if (!times) { times = 1; }
+    for (var i=0; i<times; i++){
+      scope.addRoll(pins);
+    }
+  }
+
+  it('scope.rolls() should expose an initially empty rolls array on the scope', function(){
+    expect(scope.rolls).toEqual([]);
+  });
+
+  describe('scope.addRoll()', function(){
+
+    it('should add a gutter roll', function(){
+      roll(0);
+      expect(scope.rolls).toEqual([0]);
+    });
+
+    it('should add a non-gutter roll', function(){
+      roll(5);
+      expect(scope.rolls).toEqual([5]);
+    });
+
+    it('should add two rolls', function(){
+      roll(5);
+      roll(4);
+      expect(scope.rolls).toEqual([5,4]);
+    });
+
+  });
+
+  it('scope.reset() should reset rolls', function(){
+    roll(0);
+    scope.reset();
+    expect(scope.rolls).toEqual([]);
+  });
+
+  describe('scope.frameScores', function(){
+
+    it('should use frameScores() to score an initially empty game', function(){
+      expect(scope.frameScores).toEqual(namespace.result);
+    });
+
+    it('should use frameScores() to score a perfect game', function(){
+      roll(10, 12);
+      expect(scope.frameScores).toEqual(namespace.result);
+    });
+
+  });
+
+  describe('scope.diaplayRolls', function(){
+
+    it('should use rollDisplays() to display an initially empty rolls', function(){
+      expect(scope.rollDisplays).toBe(namespace.result);
+    });
+
+    it('should use rollDisplays() to display a perfect game', function(){
+      roll(10, 12);
+      expect(scope.rollDisplays).toEqual(namespace.result);
+    });
+
+  });
+
+  function setupIsInvalidRoll(rolls, frameScores, rollDisplays) {
+    namespace.frameScores.andReturn(frameScores);
+    namespace.rollDisplays.andReturn(rollDisplays);
+    rolls.forEach(function(pins) { scope.addRoll(pins); });
+  }
+
+  function expectIsInvalidRoll(valids, invalids) {
+    valids.forEach(function(pins){
+      expect(scope.isInvalidRoll(pins)).toBeFalsy();
+    });
+    invalids.forEach(function(pins){
+      expect(scope.isInvalidRoll(pins)).toBeTruthy();
+    });
+  }
+  
+  describe('validating', function(){
+    function nineStrikesThen(arr){
+      return [10,10,10,10,10,10,10,10,10].concat(arr);
+    }
+
+    it('all roll buttons enabled at begining of frame', function(){
+      setupIsInvalidRoll([], [], '');
+      expectIsInvalidRoll([0,1,2,3,4,5,6,7,8,9,10], []);
+    });
+
+    it('except: when game is over', function(){
+      setupIsInvalidRoll(
+        nineStrikesThen([1,2]),
+        [30,60,90,120,150,180,210,231,244,247],
+        ' X X X X X X X X X12'
+      );
+      expectIsInvalidRoll([],[0,1,2,3,4,5,6,7,8,9,10]);
+
+      setupIsInvalidRoll(
+        nineStrikesThen([5,5,5]),
+        [30,60,90,120,150,180,210,235,255,270],
+        ' X X X X X X X X X555'
+      );
+      expectIsInvalidRoll([],[0,1,2,3,4,5,6,7,8,9,10]);
+
+      setupIsInvalidRoll(
+        [10,10,10,10,10,10,10,10,10,10,5,5,5],
+        [30,60,90,120,150,180,210,235,255,270],
+        ' X X X X X X X X X555'
+      );
+      expectIsInvalidRoll([],[0,1,2,3,4,5,6,7,8,9,10]);
+
+    });
+
+    it('except: when invalid spare attempt', function(){
+      setupIsInvalidRoll([10,0], [], ' X-');
+      expectIsInvalidRoll([0,1,2,3,4,5,6,7,8,9,10],[]);
+      
+      setupIsInvalidRoll([10,,5], [], ' X5');
+      expectIsInvalidRoll([0,1,2,3,4,5],[6,7,8,9,10]);
+
+      setupIsInvalidRoll([10,9], [], ' X9');
+      expectIsInvalidRoll([0,1], [2,3,4,5, 6,7,8,9,10]);
+    });
+
+    describe('tenth frame edge cases:', function(){
+
+      it('all pins enabled after first roll strike', function(){
+        setupIsInvalidRoll(
+          nineStrikesThen([10]),
+          [30,60,90,120,150,180,210,240],
+          ' X X X X X X X X XX'
+        );
+        expectIsInvalidRoll([0,1,2,3,4,5,6,7,8,9,10],[]);
+      });
+
+      it('only valid spare pins after first roll strike and non-strike', function(){
+        setupIsInvalidRoll(
+          nineStrikesThen([10,5]),
+          [30,60,90,120,150,180,210,240,265],
+          ' X X X X X X X X XX5'
+        );
+        expectIsInvalidRoll([0,1,2,3,4,5],[6,7,8,9,10]);
+      });
+
+    });
+
+  });
+
 });

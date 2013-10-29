@@ -1,0 +1,117 @@
+'use strict';
+describe( 'Service scorer', function() {
+  var scorer;
+
+  beforeEach( module( 'app' ) );
+  beforeEach( inject( function(_scorer_) {
+    scorer = _scorer_;
+  }));
+
+  function testDisplay(rolls, result) {
+    expect( scorer(rolls).rollDisplay ).toBe(result);
+  }
+
+  function testScores(rolls, result) {
+    expect( scorer(rolls).frameScores ).toEqual(result);
+  }
+
+  describe( 'frameScores', function() {
+    it( 'should display one incomplete frame', function() {
+      testScores( [],      [] );
+      testScores( [0],     [] );
+      testScores( [10],    [] );
+      testScores( [5,5],   [] );
+      testScores( [10,10], [] );
+    });
+
+    it( 'should display one complete frame', function() {
+      testScores( [0,0], [0] );
+      testScores( [0,1], [1] );
+      testScores( [1,0], [1] );
+      testScores( [5,5,5], [15] );
+      testScores( [5,5,9], [19] );
+      testScores( [10,10,10], [30] );
+      testScores( [10,10,5], [25] );
+      testScores( [10,5, 5], [20] );
+    });
+
+    it( 'should display two complete frames', function() {
+      testScores( [0,0,1,2], [0,3] );
+      testScores( [5,5,5,5,5], [15,30] );
+      testScores( [10,10,10,10], [30,60] );
+    });
+  });
+
+  describe( 'rollDisplay', function() {
+    it( 'should display partial frames', function() {
+      testDisplay( [], '' );
+      testDisplay( [0], '-');
+      testDisplay( [1], '1');
+      testDisplay( [9], '9');
+    });
+
+    it( 'should display full frames', function() {
+      testDisplay( [0,1], '-1' );
+      testDisplay( [0,5], '-5' );
+      testDisplay( [5,0], '5-' );
+      testDisplay( [5,5], '5/' );
+      testDisplay( [10], ' X' );
+    });
+
+    it( 'should display two frames', function() {
+      testDisplay( [0,1,2,3], '-123' );
+      testDisplay( [5,5,5,5], '5/5/' );
+      testDisplay( [10,10], ' X X' );
+    });
+
+    it( 'should handle tenth frame', function() {
+      testDisplay( [10,10,10,10,10,10,10,10,10,10],
+                   ' X X X X X X X X XX' );
+    });
+
+  });
+
+  function testValid(rolls, validList, invalidList) {
+    var thescore = scorer(rolls);
+    validList.forEach( function(each) {
+      expect( thescore.isInvalid( each ) ).toBeFalsy();
+    });
+    invalidList.forEach( function(each) {
+      expect( thescore.isInvalid( each ) ).toBeTruthy();
+    });
+  }
+
+  describe( 'validation', function() {
+    var tenStrikes = [10,10,10,10,10,10,10,10,10,10];
+    var perfectGame = [10,10,10,10,10,10,10,10,10,10,10,10];
+    var spareGame = [5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5];
+    var gutterGame = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+    var allPins = [0,1,2,3,4,5,6,7,8,9,10];
+      
+    it( 'validates all rolls at the beginning of a game', function() {
+      testValid( [], allPins, []);
+    });
+    it( 'invalidates all rolls after the game is over', function() {
+      testValid( gutterGame, [1], allPins );
+      testValid( spareGame, [], allPins );
+      testValid( perfectGame, [], allPins );
+    });
+    it( 'validates all rolls at the beginning of a frame', function() {
+      testValid( [1,2], allPins, [] );
+    });
+    it( 'tests validity of second roll spare attempts', function(){
+      testValid( [1], [0,1,2,3,4,5,6,7,8,9], [10] );
+      testValid( [1,0,2], [0,1,2,3,4,5,6,7,8], [9,10] );
+      testValid( [1,0,2,0,3], [0,1,2,3,4,5,6,7], [9,9,10] );
+      testValid( [10,10,10,10,10,10,10,10,10,5],
+        [0,1,2,3,4,5], [6,7,8,9,10] );
+    });
+    it( 'but all rolls are valid after tenth frame strike', function(){
+      testValid( tenStrikes, allPins, [] );
+    });
+    it( 'and test validity after tenth frame strike and miss', function() {
+      testValid( tenStrikes.concat([5]), [0,1,2,3,4,5], [6,7,8,9,10] );
+    });
+  });
+
+});

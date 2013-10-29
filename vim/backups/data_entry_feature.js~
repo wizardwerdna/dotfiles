@@ -1,0 +1,50 @@
+'use strict';
+
+describe( 'Data Entry Features', function() {
+  var app;
+
+  beforeEach( module ( 'app', 'views/main.html' ) );
+  beforeEach( inject( function($compile, $rootScope) {
+    app = $compile(
+      '<div ng-controller="MainCtrl">'+
+        '<div ng-include="\'views/main.html\'"></div>'+
+      '<div>'
+    )($rootScope);
+    $rootScope.$digest();
+  }));
+
+  it( 'should have the correct header', function() {
+
+    expect( app.find( 'h1' ).text() ).toBe('Superheroic Bowling');
+
+  });
+
+  it( 'should have 11 roll input means', function() {
+
+    expect( app.find( '.roll' ).length ).toBe( 11 );
+
+  });
+
+  it ( 'should have reset input', function() {
+
+    expect( app.find( '.reset' ).length ).toBe( 1 );
+
+  });
+
+  it ( 'should have an initially empty rolls display', function() {
+
+    expect( app.find( '.rolls-display' ).text() ).toBe( '[]' );
+
+  });
+
+  it( 'should display a perfect game', function() {
+
+    for(var i=0; i<12; i++) { app.find( '.roll' ).eq(10).click(); }
+
+    expect( app.find( '.rolls-display' ).text() ).toBe(
+      '[10,10,10,10,10,10,10,10,10,10,10,10]');
+
+  });
+
+});
+

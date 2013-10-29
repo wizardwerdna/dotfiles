@@ -1,23 +1,9 @@
 'use strict'
 
-angular.module('newbowlingApp')
-  .controller 'MainCtrl', ($scope) ->
+angular.module('depositionsApp')
+.controller 'MainCtrl',
+($scope, Session, Depo, Exhibit) ->
 
-    $scope.reset = ->
-      $scope.rolls = []
-      $scope.rollDisplay = ""
-
-    $scope.addRoll = (pins)->
-      $scope.rolls.push pins
-      $scope.rollDisplay =
-        if $scope.rolls.length ==1
-          if $scope.rolls[0] == 0
-            "-"
-          else
-            $scope.rolls[0].toString()
-        else if $scope.rolls.length == 2
-          "-5"
-        else if $scope.rolls.length == 12
-          " X X X X X X X X XXXX"
-
-    $scope.reset()
+    $scope.depositions = Depo.query()
+    $scope.exhibits = Exhibit.query()
+    $scope.Session = Session

@@ -1,0 +1,55 @@
+'use strict';
+describe( 'Service rollDisplays:', function() {
+  var rollDisplays;
+
+  beforeEach( module( 'app' ) );
+  beforeEach( inject( function( _rollDisplays_ ) {
+    rollDisplays = _rollDisplays_;
+  }));
+
+  function testDisplay( rolls, result ) {
+    expect( rollDisplays( rolls ) ).toBe( result );
+  }
+
+  it('should display a partial frame', function() {
+    testDisplay( [], '' );
+    testDisplay( [0], '-' );
+    testDisplay( [5], '5' );
+  });
+
+  it('should display a complete frame', function() {
+    testDisplay( [10], ' X' );
+    testDisplay( [0,1], '-1' );
+    testDisplay( [1,0], '1-' );
+    testDisplay( [5,5], '5/' );
+    testDisplay( [0,10], '-/' );
+  });
+
+  it('should display two complete frames', function() {
+    testDisplay( [0,1,2,3], '-123' );
+    testDisplay( [5,5,5,5], '5/5/' );
+    testDisplay( [10,10], ' X X' );
+  });
+
+  describe( 'display tenth frame', function() {
+    var nineFrameRolls, nineFrameDisplays;
+    beforeEach(function(){
+      nineFrameRolls = [10,10,10,10,10,10,10,10,10];
+      nineFrameDisplays = ' X X X X X X X X X';
+    });
+
+    it( 'open', function() {
+      testDisplay( nineFrameRolls.concat( [1,2] ),
+        nineFrameDisplays + '12' );
+      testDisplay( nineFrameRolls.concat( [5, 5, 5] ),
+        nineFrameDisplays + '5/5' );
+      testDisplay( nineFrameRolls.concat( [5, 5, 10] ),
+        nineFrameDisplays + '5/X' );
+      testDisplay( nineFrameRolls.concat( [10, 5, 5] ),
+        nineFrameDisplays + 'X5/' );
+      testDisplay( nineFrameRolls.concat( [10,10,10] ),
+        nineFrameDisplays + 'XXX' );
+    });
+  });
+
+});

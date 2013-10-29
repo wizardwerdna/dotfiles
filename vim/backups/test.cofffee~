@@ -1,0 +1,5 @@
+html = '''
+  <div ng-app="fooApp" ng-controller="MainCtrl">
+   <div ng-include="'views/main.html'"></div>
+  </div>
+'''

@@ -1,0 +1,4 @@
+'use strict';
+angular.module( 'app' ).controller( 'DetailCtrl', function(blog, $script, $location) {
+});
+

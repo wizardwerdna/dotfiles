@@ -1,27 +1,17 @@
 # Superheroic Bowling
-# An AngularJS Kata
 
-### The Three Laws of TDD
-1. Red: NO CODING UNTIL YOU WRITE A FAILING TEST
-1. Green: CODE ONLY AS NECESSARY TO MAKE THE TEST PASS
-1. Refactor: ONLY REFACTOR WHEN GREEN
+### Feature Story: Data Entry
 
-### My Strategy
-1. Write Integration Tests Outlining Features
-1. Drive the Integration Into Unit Tests
-1. Rinse and Repeat
+The Bowling Application should feature 11 buttons representing possible rolls of gutter balls through strikes, a reset button for starting over and a list of rolls that have been collected during a user session.
 
-### Building The Test Suite
+### Feature Story: Frame Scoring
 
-1. Install node and npm from the [Node Web Site](http://www.nodejs.org)
-1. Install Yeoman, Yo and the Angular Generator: `npm install -g generator-angular`
-1. Install Coffeescript: `npm install -g coffee-script`
+The Bowling Application should feature a display the Scoring for each frame of the game represented by the rolls.
 
-### Features We Implemented
-1. Data Entry
-1. Scoring Filter
-1. FrameScorer Filter
-1. UserErrorProtection Filter
-1. Directive Component Refactoring
+## Feature Story: Displaying
 
+The Bowling Application should feature a display of the rolls in the form of a traditional line of bowling, using '-' for gutter balls, '/' for spares and 'X' for strikes.
 
+## Feature Story: Error Handling
+
+The Bowling Application should feature the input buttons being enabled when proper to be clicked, and disabled otherwise.  A button should be disabled at the end of the game, or if the pins represented by the button would be more greater than the pins left after the first roll of the frame.

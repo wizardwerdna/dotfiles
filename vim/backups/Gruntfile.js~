@@ -1,4 +1,4 @@
-// Generated on 2013-08-19 using generator-angular 0.3.1
+// Generated on 2013-10-04 using generator-angular 0.4.0
 'use strict';
 var LIVERELOAD_PORT = 35729;
 var lrSnippet = require('connect-livereload')({ port: LIVERELOAD_PORT });
@@ -13,8 +13,9 @@ var mountFolder = function (connect, dir) {
 // 'test/spec/**/*.js'
 
 module.exports = function (grunt) {
-  // load all grunt tasks
-  require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
+  require('load-grunt-tasks')(grunt);
+  require('time-grunt')(grunt);
+  var fs = require('fs');
 
   // configurable paths
   var yeomanConfig = {
@@ -39,7 +40,11 @@ module.exports = function (grunt) {
       },
       compass: {
         files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
-        tasks: ['compass:server']
+        tasks: ['compass:server', 'autoprefixer']
+      },
+      styles: {
+        files: ['<%= yeoman.app %>/styles/{,*/}*.css'],
+        tasks: ['copy:styles', 'autoprefixer']
       },
       livereload: {
         options: {
@@ -47,10 +52,21 @@ module.exports = function (grunt) {
         },
         files: [
           '<%= yeoman.app %>/{,*/}*.html',
-          '{.tmp,<%= yeoman.app %>}/styles/{,*/}*.css',
+          '.tmp/styles/{,*/}*.css',
           '{.tmp,<%= yeoman.app %>}/scripts/{,*/}*.js',
           '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
+      }
+    },
+    autoprefixer: {
+      options: ['last 1 version'],
+      dist: {
+        files: [{
+          expand: true,
+          cwd: '.tmp/styles/',
+          src: '{,*/}*.css',
+          dest: '.tmp/styles/'
+        }]
       }
     },
     connect: {
@@ -65,7 +81,11 @@ module.exports = function (grunt) {
             return [
               lrSnippet,
               mountFolder(connect, '.tmp'),
-              mountFolder(connect, yeomanConfig.app)
+              mountFolder(connect, yeomanConfig.app),
+              // for angular apps, we send 404s back to the application
+              function(req, res){
+                res.end(fs.readFileSync(__dirname+'/app/index.html', {encoding:'utf8'}));
+              }
             ];
           }
         }
@@ -118,6 +138,10 @@ module.exports = function (grunt) {
       ]
     },
     coffee: {
+      options: {
+        sourceMap: true,
+        sourceRoot: ''
+      },
       dist: {
         files: [{
           expand: true,
@@ -265,20 +289,29 @@ module.exports = function (grunt) {
             'generated/*'
           ]
         }]
+      },
+      styles: {
+        expand: true,
+        cwd: '<%= yeoman.app %>/styles',
+        dest: '.tmp/styles/',
+        src: '{,*/}*.css'
       }
     },
     concurrent: {
       server: [
         'coffee:dist',
-        'compass:server'
+        'compass:server',
+        'copy:styles'
       ],
       test: [
         'coffee',
-        'compass'
+        'compass',
+        'copy:styles'
       ],
       dist: [
         'coffee',
         'compass:dist',
+        'copy:styles',
         'imagemin',
         'svgmin',
         'htmlmin'
@@ -324,25 +357,43 @@ module.exports = function (grunt) {
     grunt.task.run([
       'clean:server',
       'concurrent:server',
+      'autoprefixer',
       'connect:livereload',
       'open',
       'watch'
     ]);
   });
 
+  grunt.registerTask('heroku:production', [
+    'clean:dist',
+    'useminPrepare',
+    'concurrent:dist',
+    'autoprefixer',
+    'concat',
+    'copy:dist',
+    'cdnify',
+    'ngmin',
+    'cssmin',
+    'uglify',
+    'rev',
+    'usemin'
+  ]);
+
   grunt.registerTask('test', [
     'clean:server',
     'concurrent:test',
-    'connect:test'
-    /* 'karma' */
+    'autoprefixer',
+    'connect:test',
+    'karma'
   ]);
 
   grunt.registerTask('build', [
     'clean:dist',
     'useminPrepare',
     'concurrent:dist',
+    'autoprefixer',
     'concat',
-    'copy',
+    'copy:dist',
     'cdnify',
     'ngmin',
     'cssmin',

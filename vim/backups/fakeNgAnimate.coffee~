@@ -1,0 +1,2 @@
+console.log 'fake ngAnimate installed'
+angular.module 'ngAnimate', ['ng']

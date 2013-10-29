@@ -1,0 +1,20 @@
+'use strict';
+angular.module( 'app' ).controller( 'NewCtrl', function(blog, $scope, $location) {
+
+  $scope.detail = {};
+
+  var nextId = 100;
+  $scope.submit = function(detail) {
+    var id = 'a'+(nextId++).toString();
+    blog.articles[id] = angular.extend( detail, {id: id} );
+    $location.url( '/' );
+  };
+
+  $scope.action = function() {
+    return 'Create';
+  };
+
+  $scope.cancel = function() {
+    $location.url( '/' );
+  }
+});

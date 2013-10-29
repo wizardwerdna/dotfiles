@@ -1,0 +1,30 @@
+describe "API for $location service", ->
+  beforeEach module 'depositionsApp'
+
+  it "should support url", inject ($location)->
+    expect(typeof $location.url).toBe "function"
+
+describe "API for Session service", ->
+  beforeEach module 'depositionsApp'
+  
+  it "should support the api", inject (Session)->
+    ['login', 'logout', 'isAuthenticated'].map (f)->
+      expect(typeof Session[f]).toBe "function"
+
+
+describe "API for Exhibit service", ->
+  beforeEach module 'depositionsApp'
+  
+  it "should support the api", inject (Exhibit)->
+    ['query'].map (f)->
+      expect(typeof Exhibit[f]).toBe "function"
+
+
+describe "API for Depo service", ->
+  beforeEach module 'depositionsApp'
+  
+  it "should support the api", inject (Depo)->
+    ['query'].map (f)->
+      expect(typeof Depo[f]).toBe "function"
+
+

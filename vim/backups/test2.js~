@@ -1,0 +1,36 @@
+'use strict'
+
+
+describe('DDirective: test', function(){
+  var domClear = false;
+  var scope = {};
+  var element = {};
+
+  beforeEach(module('regressionApp'));
+
+
+  beforeEach(inject(function($controller, $rootScope){
+    scope = $rootScope.$new();
+  }));
+
+  it('should make hidden element visible', inject(function($compile, $rootScope, $animate, $timeout){
+    element = angular.element('<test></test>');
+    element = $compile(element)(scope);
+    scope.$digest();
+    runs(function(){
+      $timeout(function(){
+        console.log(domClear);
+        dump(element);
+        domClear = true;
+        console.log('wtf');
+        console.log(domClear);
+      }, 0);
+    });
+    waitsFor(function(){
+      domClear;
+    }, 'woah!', 1000);
+    runs(function(){
+      console.log('hoo-hah');
+    });
+  }));
+});

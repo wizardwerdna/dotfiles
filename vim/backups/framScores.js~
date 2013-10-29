@@ -1,0 +1,6 @@
+'use strict';
+angular.module( 'app' ).factory( 'frameScores', function() {
+  return function(rolls) {
+    return '';
+  };
+});

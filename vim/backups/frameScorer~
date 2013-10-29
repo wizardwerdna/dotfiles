@@ -1,0 +1,2 @@
+angular.module('bowlApp').value('frameScore', function(rolls){
+});

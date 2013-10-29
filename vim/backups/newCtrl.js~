@@ -1,0 +1,33 @@
+'use strict';
+
+angular.module('backendApp').controller('NewCtrl', function($scope, $location, projects){
+
+  $scope.formProject = {};
+
+  $scope.cancel = function(){
+    $location.url('/');
+  };
+
+  $scope.save = function(formProject){
+    formProject.id = makeUniqueId();
+    projects.push(formProject);
+    $location.url('/');
+  }
+
+  function makeUniqueId(){
+    return 1 + zeroOrMaxIdIn(projects);
+  }
+  
+  function zeroOrMaxIdIn(arr){
+    return Math.max.apply(null, idListFrom(arr).concat(0));
+  }
+
+  function idListFrom(arr){
+    return arr.map(
+      function(e){
+        return e.id;
+      }
+    );
+  }
+
+});

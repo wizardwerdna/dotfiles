@@ -1,0 +1,13 @@
+<div class="jumbotron">
+  <h1 class="heading">{{blog.heading}}</h1>
+  <p class="subheading">{{blog.subheading}}</p>
+</div>
+
+<a class="new btn btn-primary" href="/new">New Article</a>
+<div id="{{article.id}}" class="article panel panel-default" 
+  ng-repeat="article in blog.articles"
+>
+  <a class="edit btn btn-primary small pull-right" ng-href="/edit/{{article.id}}">Edit</a>
+  <div class="title panel-heading"><h3>{{article.title}}</h3></div>
+  <div class="content panel-body">{{article.content}}</div>
+</div>

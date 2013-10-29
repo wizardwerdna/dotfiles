@@ -1,0 +1,27 @@
+'use strict';
+
+angular.module('todoApp').controller('TodoCtrl', function($scope, todos){
+
+  $scope.todos = todos;
+  $scope.form = {text:''};
+
+  $scope.remaining = function(){
+    return remainingTodos().length;
+  };
+
+  $scope.addTodo = function(){
+    todos.push({text: $scope.form.text, done: false});
+    $scope.form.text = '';
+  };
+
+  $scope.archive = function(){
+    $scope.todos = todos = remainingTodos();
+  };
+
+  function remainingTodos(){
+    return todos.filter(function(each){
+      return !each.done;
+    });
+  }
+
+});

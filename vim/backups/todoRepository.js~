@@ -1,0 +1,48 @@
+'use strict';
+
+angular.module('todomvc').factory('todoBackend', function(){
+  var REPOSITORY_KEY = 'todomvc';
+  return {
+    'get': function(){
+      return JSON.parse(localStorage.getItem(REPOSITORY_KEY) || '[]');
+    },
+    'set': function(todos){
+      localStorage.setItem(REPOSITORY_KEY, JSON.stringify(todos));
+    }
+  }
+});
+
+angular.module('todomvc').factory('todoRepository', function(todoBackend){
+  return {
+    todos: null,
+    persist:  function(){ todoBackend.set(this.todos) },
+    create:   function(todo){
+      this.todos.push(angular.copy(todo));
+      this.persist();
+    },
+    retrieve: function(){return this.todos = todoBackend.get();},
+    update: function(todo, index){
+      this.todos[index] = angular.copy(todo);
+      this.persist();
+    },
+    destroy: function(index){
+      this.todos.splice(index, 1);
+      this.persist();
+    },
+    markAll: function(status){
+      this.todos.forEach(function(todo, index){
+        angular.extend(todo, {completed: status});
+      });
+      this.persist();
+    },
+    filter: function(filter){
+      var each;
+      for(var i=this.todos.length-1; i>=0; i--){
+        if (!filter(this.todos[i],i)){
+          this.todos.splice(i,1);
+        }
+      }
+      this.persist();
+    }
+  };
+});

@@ -1,2 +1,24 @@
 
+<div class="well well-large">
 
+  <button class="roll btn btn-small"
+    ng-click="addRoll(pins)" 
+    ng-disabled="isInvalidRoll(pins)" 
+    ng-repeat="pins in [0,1,2,3,4,5,6,7,8,9,10]">{{pins}}</button>
+  <button class="reset btn btn-small" ng-click="reset()">Reset</button>
+
+  <div class="frames">
+    <div class="frame" ng-repeat="frame in [0,1,2,3,4,5,6,7,8]">
+      <div class="roll-display">{{rollDisplays[2*frame]}}</div>
+      <div class="roll-display">{{rollDisplays[2*frame+1]}}</div>
+      <div class="frame-score-display">{{frameScores[frame]}}</div>
+    </div>
+    <div class="frame tenth">
+      <div class="roll-display">{{rollDisplays[18]}}</div>
+      <div class="roll-display">{{rollDisplays[19]}}</div>
+      <div class="roll-display">{{rollDisplays[20]}}</div>
+      <div class="frame-score-display">{{frameScores[9]}}</div>
+    </div>
+  </div>
+
+</div>

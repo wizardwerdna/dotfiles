@@ -1,0 +1,27 @@
+'use strict';
+angular.module('blogApp').filter('markdown', function(){
+
+  function escape(text) {
+    return text.
+      replace(/\&/g, '&amp;').
+      replace(/</g, '&lt;').
+      replace(/\>/g, '&gt;').
+      replace(/"/g, '&quot;');
+  }
+
+
+  return function(text, markdownRequested){
+
+    window.marked.setOptions({
+      highlight: function (code, lang) {
+        return window.hljs.highlightAuto(code, lang).value;
+      }
+    });
+
+    if (markdownRequested) {
+      return window.marked(text);
+    } else {
+      return escape(text);
+    }
+  };
+});

@@ -2,5 +2,7 @@ node_modules
 dist
 .tmp
 .sass-cache
-.*.swo
 app/bower_components
+.*.swo
+.*.swp
+:q:w

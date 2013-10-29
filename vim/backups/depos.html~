@@ -1,0 +1,4 @@
+<h3>Depositions</h3>
+
+<ul>
+  <li depo-display ng-repeat="depo in depositions"></li>

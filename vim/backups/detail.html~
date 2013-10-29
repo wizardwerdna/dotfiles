@@ -1,0 +1,22 @@
+<div class="article panel panel-default">
+  <div class="panel-heading"><h3>Article Detail</h3></div>
+  <form class="content panel-body" id="detail">
+
+    <input type="hidden" name="id" value="{{id}}1">
+    <label name="title">Title</label><br>
+    <input name="title" class="col-md-12" 
+      ng-model="detail.title" autofocus><br>
+    <label name="title">Content</label><br>
+    <textarea name="content" class="col-md-12" rows="12" 
+      ng-model="detail.content"></textarea><br>
+    <hr>
+    <a class="cancel btn btn-small" ng-click="cancel()">Cancel</a>
+    <button name="submit" class="btn btn-primary" 
+      ng-click="submit(detail)">{{action()}}</button>
+    <a class="destroy btn btn-small btn-danger" 
+      ng-hide="action() === 'Create'"{
+      ng-click="destroy()" 
+    >Delete</a>
+
+  </form>
+</div>

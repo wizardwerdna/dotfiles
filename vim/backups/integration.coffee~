@@ -1,92 +1,58 @@
-describe "Integration:", ->
+describe 'Integration of the Entire Application', ->
 
-  app = $('')
+  # fixtures 
 
-  beforeEach module "newbowlingApp"
-  beforeEach module "views/main.html"
+  app = {}
+  $location = {}
+  $rootScope = {}
+  Session = {}
+  sessionData = {}
 
-  beforeEach inject ($compile, $rootScope)->
+  # modules
+
+  beforeEach module 'depositionsApp'
+  beforeEach module 'views/depositionNavbar.html'
+  beforeEach module 'views/main.html'
+  beforeEach module 'views/depos.html'
+  beforeEach module 'views/exhibits.html'
+
+  # setup integrated fixtures
+
+  beforeEach inject ($compile, _$rootScope_)->
+    $rootScope = _$rootScope_
     html = '''
-      <div ng-app="newbowlingApp">
+      <div ng-app="depositionsApp">
+        <div deposition-navbar />
         <div ng-view></div>
       </div>
     '''
-    app = ($compile html) $rootScope.$new()
-    $rootScope.$digest()
+    app = ($compile html)($rootScope.$new())
 
-  it "has a correct header", ->
-    (expect app.find('h1').text()).toBe "Superheroic Bowling"
+  beforeEach inject (_$location_, _Session_, _sessionData_)->
+    $location = _$location_
+    Session = _Session_
+    sessionData = _sessionData_
 
-  expectRollsDisplayToBe = (str)->
-    (expect app.find('.rolls-display').text()).toBe str 
-
-  roll = (pins)->
-    app.find('.roll').eq(pins).click()
-  reset = ->
-    app.find('.reset').click()
-
-
-  describe "DATA ENTRY", ->
-
-    describe "input means", ->
-      it "should have 11 clickable roll tags", ->
-        (expect app.find('.roll').length).toBe 11
-      it "should have a clickable reset tag", ->
-        (expect app.find('.reset').length).toBe 1
-
-    describe "output means", ->
-      it "should display an initially empty rolls list", ->
-        expectRollsDisplayToBe "[]"
-
-    describe "entry means", ->
-      it "should enter a gutter roll", ->
-        roll 0
-        expectRollsDisplayToBe "[0]"
-      it "should enter a pindrop roll", ->
-        roll 5
-        expectRollsDisplayToBe "[5]"
-      it "should enter two rolls", ->
-        roll 0; roll 5
-        expectRollsDisplayToBe "[0,5]"
-      it "should reset to an empty roll list", ->
-        roll 0
-        reset()
-        expectRollsDisplayToBe "[]"
-
-
-  frameScores = ->
-    app.find('.frame-score-display').get().
-      map((elt)->$(elt).text()).
-      filter((str)->str!='')
-  frameScoresDisplay = ->
-    "[#{frameScores().join(',')}]"
-  expectFrameScoresDisplayToBe = (str)->
-    (expect frameScoresDisplay()).toBe str
+  # helpers
   
+  digestAndExpectLocationToBe = (path)->
+      $rootScope.$digest()
+      (expect $location.path()).toBe path
 
-  describe "SCORING", ->
-    it "should display an initially empty frame scores list", ->
-      expectFrameScoresDisplayToBe "[]"
+  testRedirect = (path, destination)->
+    $location.url path
+    digestAndExpectLocationToBe destination
+  
+  it 'when authenticated, it should redirect as requested',->
+    Session.login(sessionData.password)
+    digestAndExpectLocationToBe '/'
+    testRedirect '/depos',    '/depos'
+    testRedirect '/exhibits', '/exhibits'
+    testRedirect '/',         '/'
 
-    it "should display a perfect game", ->
-      roll 10 for i in [1..12]
-      expectFrameScoresDisplayToBe "[30,60,90,120,150,180,210,240,270,300]"
-
-  expectRollDisplayToBe = (str)->
-    (expect app.find('.roll-display').text()).toBe str
-
-  describe "ROLL DISPLAY", ->
-    it "should display an initially empty string of rolls", ->
-      expectRollDisplayToBe ""
-    it "should display a gutter ball roll", ->
-      roll 0
-      expectRollDisplayToBe "-"
-    it "should display a non-gutter ball roll", ->
-      roll 5
-      expectRollDisplayToBe "5"
-      reset()
-      roll 6
-      expectRollDisplayToBe "6"
-    it "should display two rolls", ->
-      roll 0; roll 5
-      expectRollDisplayToBe "-5"
+  it 'unless authenticated, it should redirect to root', ->
+    Session.logout()
+    digestAndExpectLocationToBe '/'
+    testRedirect '/depos',    '/'
+    testRedirect '/exhibits', '/'
+    testRedirect '/',         '/'

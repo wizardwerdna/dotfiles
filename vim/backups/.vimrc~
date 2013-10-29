@@ -1,82 +1,83 @@
 autocmd vimenter * if !argc() | NERDTree | endif
 map <leader>z :NERDTreeToggle<CR>
-set nocompatible               " be iMproved
 
+set nocompatible               " be iMproved
 filetype off                   " required!
+
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
+
+let g:syntastic_html_checkers = []
 
 "let Vundle manage Vundle
 " required! 
 Bundle 'gmarik/vundle'
 
-" My Bundles here:
-"
-" original repos on github
-Bundle 'Lokaltog/vim-easymotion'
-Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
-Bundle 'vividchalk.vim'
-Bundle 'mattn/emmet-vim'
-
-Bundle 'html5.vim'
-Bundle 'gmarik/vundle'
-Bundle 'tpope/vim-fugitive'
-Bundle 'Lokaltog/vim-easymotion'
-Bundle 'rstacruz/sparkup'
-Bundle 'tpope/vim-rails.git'
-Bundle 'Gist.vim'
-Bundle 'neocomplcache'
-Bundle 'vimux'
-Bundle 'IndexedSearch'
-Bundle 'vim-coffee-script'
-Bundle 'vim-fugitive'
+Bundle 'altercation/vim-colors-solarized'
+Bundle 'blockle.vim'
+Bundle 'christoomey/vim-tmux-navigator'
 Bundle 'ctrlp.vim'
-Bundle 'jQuery'
-Bundle 'vim-javascript'
-Bundle 'L9'
+Bundle 'EasyMotion'
 Bundle 'FuzzyFinder'
+Bundle 'Gist.vim'
+Bundle 'godlygeek/tabular'
+Bundle 'html5.vim'
+Bundle 'IndexedSearch'
+Bundle 'Jasmine-snippets-for-snipMate'
+Bundle 'jQuery'
+Bundle 'L9'
+Bundle 'Lokaltog/vim-easymotion'
+Bundle 'Lokaltog/vim-easymotion'
+Bundle 'mattn/emmet-vim'
+Bundle 'peterhoeg/vim-tmux'
 Bundle 'rizzatti/dash.vim'
 Bundle 'rizzatti/funcoo.vim'
+Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
 Bundle 'scrooloose/nerdtree'
+Bundle 'Shougo/neocomplcache'
+Bundle 'Shougo/neosnippet'
+Bundle 'sickill/vim-pasta'
+Bundle 'skalnik/vim-vroom'
+Bundle 'suan/vim-instant-markdown'
+Bundle 'Syntastic'
 Bundle 'timcharper/textile.vim'
+Bundle 'tomtom/tcomment_vim'
 Bundle 'tpope/vim-cucumber'
+Bundle 'tpope/vim-endwise'
+Bundle 'tpope/vim-fugitive'
+Bundle 'tpope/vim-git'
 Bundle 'tpope/vim-haml'
 Bundle 'tpope/vim-markdown'
-Bundle 'tpope/vim-git'
 Bundle 'tpope/vim-ragtag'
+Bundle 'tpope/vim-rails.git'
 Bundle 'tpope/vim-repeat'
 Bundle 'tpope/vim-surround'
-Bundle 'L9'
-Bundle 'FuzzyFinder'
-Bundle 'tomtom/tcomment_vim'
-Bundle 'peterhoeg/vim-tmux'
-Bundle 'christoomey/vim-tmux-navigator'
-Bundle 'blockle.vim'
-Bundle 'vim-ruby/vim-ruby'
-Bundle 'godlygeek/tabular'
-Bundle 'tpope/vim-endwise'
-Bundle 'suan/vim-instant-markdown'
 Bundle 'tsaleh/vim-matchit'
-Bundle 'skalnik/vim-vroom'
-Bundle 'altercation/vim-colors-solarized'
-Bundle 'sickill/vim-pasta'
+Bundle 'vim-coffee-script'
+Bundle 'vim-fugitive'
+Bundle 'vim-javascript'
+Bundle 'vim-ruby/vim-ruby'
+Bundle 'vimux'
+Bundle 'vividchalk.vim'
+
+" Bundle 'marijnh/tern_for_vim'
+
 
 syntax on
 filetype plugin indent on     " required!
 
 " CommandT hack
-set ttimeoutlen=50
-let g:CommandTCancelMap     = ['<ESC>', '<C-c>']
-let g:CommandTSelectNextMap = ['<C-j>', '<ESC>OB']
-let g:CommandTSelectPrevMap = ['<C-k>', '<ESC>OA']
+set timeout timeoutlen=3000 ttimeoutlen=50
 
 au BufNewFile,BufRead *.ejs set filetype=js
 au BufNewFile,BufRead *.ejs set filetype=html
+au BufNewFile,BufRead *.js set filetype=javascript-jasmine.javascript 
 
 map <leader>k :CoffeeCompile vert watch<cr>
 
 nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+set splitright
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 
 nmap <leader><leader> :w<cr>:!clear; rspec spec<cr>
@@ -85,17 +86,32 @@ nmap <leader>} :w<cr>:call VimuxRunCommand('npm run-script browserTest')<cr>
 nmap <leader>[ :w<cr>:call VimuxRunCommand('coffee')<cr>
 nmap <leader>gq :VimuxCloseRunner<cr>
 nmap <leader>gw :VimuxInspectRunner<cr>
+
 " nocomplcache stuff
 let g:neocomplcache_enable_at_startup = 1
-" Snippets still don't work the way I want - tab doesn't jump to next
-"s placeholder.
 imap <expr><TAB> neocomplcache#sources#snippets_complete#expandable() ? "\<Plug>(neocomplcache_snippets_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 let g:neocomplcache_enable_auto_select = 1
 let g:neocomplcache_auto_completion_start_length = 1
 let g:neocomplcache_enable_auto_select = 0
 
-set nocompatible
+let g:neosnippet#snippets_directory = "~/.vim/bundle/Jasmine-snippets-for-snipMate"
+map  <C-k> <Plug>(neosnippet_expand_or_jump)
+smap <C-k> <Plug>(neosnippet_expand_or_jump)
+xmap <C-k> <Plug>(neosnippet_expand_target)
+" SuperTab like snippets behavior.
+imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)"
+\: pumvisible() ? "\<C-n>" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)"
+\: "\<TAB>"
+
+" For snippet_complete marker.
+if has('conceal')
+  set conceallevel=2 concealcursor=i
+endif
+
 set autoread
 
 let g:rails_menu=2
@@ -119,6 +135,7 @@ set backspace=indent,eol,start
 set backup              " keep a backup file
 set backupdir=~/.vim/backups
 set history=100         " keep 50 lines of command line history
+set number
 set ruler               " show the cursor position all the time
 set incsearch           " do incremental searching
 set expandtab
@@ -189,50 +206,16 @@ colorscheme vividchalk
 " set background=dark
 " colorscheme solarized
 
+map <leader>p :CtrlPMRU<cr>
+map <leader>gb :CtrlPBuffer<cr>
+map <leader>ga :CtrlP app<cr>
+map <leader>gt :CtrlP test/spec<cr>
+map <leader>gs :CtrlP app/scripts<cr>
+map <leader>gv :CtrlP app/views<cr>
 
-map <leader>t :CommandTFlush<cr>\|:CommandT .<cr>
-map <leader>f :CommandTFlush<cr>\|:CommandT .<cr>
-map <leader>p :CommandTFlush<cr>\|:CommandT .<cr>
-map <leader>gf :CommandTFlush<cr>\|:CommandT %%<cr>
-map <leader>gv :CommandTFlush<cr>\|:CommandT app/views<cr>
-map <leader>gc :CommandTFlush<cr>\|:CommandT app/controllers<cr>
-map <leader>gm :CommandTFlush<cr>\|:CommandT app/models<cr>
-map <leader>gl :CommandTFlush<cr>\|:CommandT lib<cr>
-map <leader>gt :CommandTFlush<cr>\|:CommandT test<cr>
-map <leader>gh :CommandTFlush<cr>\|:CommandT app/helpers<cr>
-map <leader>gp :CommandTFlush<cr>\|:CommandT public<cr>
-map <leader>gs :CommandTFlush<cr>\|:CommandT spec<cr>
-map <leader>gi :CommandTFlush<cr>\|:CommandT src/interactors<cr>
-map <leader>ge :CommandTFlush<cr>\|:CommandT src/entities<cr>
-map <leader>gb :CommandTFlush<cr>\|:CommandT src/boundaries<cr>
-
-" map <leader>] :w<cr>:!(sleep 0.5; open http://localhost:9292) & (rackup config.ru)<cr>
-
-map <leader>gr :topleft :split config/routes.rb<cr>
+map <leader>gi :topleft :split app/index.html<cr>
 map <leader>gg :topleft 100 :split Gemfile<cr>
 
-function! ShowRoutes()
-  " Requires 'scratch' plugin
-  :topleft 100 :split __Routes__
-  " Make sure Vim doesn't write __Routes__ as a file
-  :set buftype=nofile
-  " Delete everything
-  :normal 1GdG
-  " Put routes output in buffer
-  :0r! rake -s routes
-  " Size window to number of lines (1 plus rake output length)
-  :exec ":normal " . line("$") . "_ "
-  " Move cursor to bottom
-  :normal 1GG
-  " Delete empty trailing line
-  :normal dd
-endfunction
-map <leader>gR :call ShowRoutes()<cr>
-
-cnoremap %% <C-R>=expand('%:h').'/'<cr>
-map <leader>e :edit %%
-map <leader>v :view %%
-
 set winwidth=84
 " We have to have a winheight bigger than we want to set winminheight. But if
 " we set winheight to be huge before winminheight, the winminheight set will
@@ -248,15 +231,5 @@ set winwidth=84
 set winheight=5
 set winminheight=5
 set winheight=999
-
-function! PromoteToLet()
-  :normal! dd
-  " :exec '?^\s*it\>'
-  :normal! P
-  :.s/\(\w\+\) = \(.*\)$/let(:\1) { \2 }/
-  :normal ==
-endfunction
-:command! PromoteToLet :call PromoteToLet()
-:map <leader>P :PromoteToLet<cr>
 
 nmap <leader><leader> :w<cr>:!clear; rspec spec<cr>

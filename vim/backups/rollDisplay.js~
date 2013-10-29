@@ -1,57 +1,46 @@
 'use strict';
+describe( 'Service rollDisplay', function(){ 
+  var rollDisplay;
 
-angular.module('b2jsApp').filter('rollDisplay', function () {
+  beforeEach( module( 'app' ) );
+  beforeEach( inject ( function( _rollDisplay_ ) { rollDisplay = _rollDisplay_; }));
 
-  return function (rolls) {
+  function testDisplay( rolls, result ) {
+    expect( rollDisplay( rolls ) ).toBe( result );
+  }
 
-    function displayOneRoll(here){
-      return '-123456789?'[rolls[here]] || '';
-    }
+  it( 'should display a partial frame', function() {
+    testDisplay( [], '');
+    testDisplay( [0], '-');
+    testDisplay( [5], '5');
+    testDisplay( [9], '9');
+  });
 
-    function isStrike(here){
-      return rolls[here]===10;
-    }
+  it( 'should display one complete frame', function() {
+    testDisplay( [0,0], '--' );
+    testDisplay( [0,1], '-1' );
+    testDisplay( [1,1], '11' );
+    testDisplay( [5,5], '5/' );
+    testDisplay( [4,6], '4/' );
+    testDisplay( [10], ' X' );
+  });
 
-    function isSpare(here){
-      return rolls[here]+rolls[here+1]===10;
-    }
+  it( 'should display two complete frames', function() {
+    testDisplay( [0,0,1,2], '--12' );
+    testDisplay( [5,5,5,5], '5/5/' );
+    testDisplay( [10,10], ' X X' );
+  });
 
-    function spaceUnlessTenthFrame(toStr){
-      if (toStr.length>=18) {
-        return '';
-      } else {
-        return ' ';
-      }
-    }
+  it( 'should display tenth frame strikes correctly', function (){
+    var nineStrikeRolls = [10,10,10,10,10,10,10,10,10];
+    var nineStrikeDisplay = ' X X X X X X X X X';
 
-    function displayOneFrameFrom(here, toStr){
-      if (isStrike(here)) {
-        return spaceUnlessTenthFrame(toStr) + 'X';
-      } else if (isSpare(here)) {
-        return displayOneRoll(here)+'/';
-      } else {
-        return displayOneRoll(here)+displayOneRoll(here+1);
-      }
-    }
+    testDisplay( nineStrikeRolls.concat( [5, 4, 10]), nineStrikeDisplay+'54X' );
+    testDisplay( nineStrikeRolls.concat( [5, 5, 10]), nineStrikeDisplay+'5/X' );
+    testDisplay( nineStrikeRolls.concat( [10, 5, 4]), nineStrikeDisplay+'X54' );
+    testDisplay( nineStrikeRolls.concat( [10, 5, 5]), nineStrikeDisplay+'X5/' );
+    testDisplay( nineStrikeRolls.concat( [10, 10, 4]), nineStrikeDisplay+'XX4' );
+    testDisplay( nineStrikeRolls.concat( [10, 10, 10]), nineStrikeDisplay+'XXX' );
+  });
 
-    function nextFrameFrom(here){
-      if (isStrike(here)){
-        return here+1;
-      } else {
-        return here+2;
-      }
-    }
-
-    function appendDisplayFrom(here, toStr){
-      if (rolls.length<=here+1 && rolls[here]!==10) {
-        return toStr + displayOneRoll(here);
-      } else {
-        toStr += displayOneFrameFrom(here, toStr);
-        return appendDisplayFrom(nextFrameFrom(here), toStr);
-      }
-    }
-
-    return appendDisplayFrom(0, '');
-
-  };
 });

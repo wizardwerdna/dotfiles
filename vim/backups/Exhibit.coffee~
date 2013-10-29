@@ -1,0 +1,1047 @@
+'use strict'
+
+angular.module('depositionsApp')
+.service 'Exhibit', class Exhibit
+  constructor: ->
+  query: -> @exhibits
+  exhibits: [
+    exno: 'Ex001'
+    depo: 'MS'
+    rest: 'July 21, PRIVILEGE NOTIFICATION (MS1867-1869)'
+    more: 'California Department of Mental Health Memorandums to Melody Samuelson from Melissa Pina dated 7/21/2006, 7/23/2007, and 4/30/2008 Bates stamped MS001867-001869'
+  ,
+    exno: 'Ex002'
+    depo: 'MS'
+    rest: 'Verified First Amended Complaint (Pleading)'
+    more: 'Verified First Amended Complaint For Damages For Retaliation Against State Employee For Disclosure Protected By California Whistleblower Protection Act And Employer Retaliation, 22 pages Napa State Hospital'
+  ,
+    exno: 'Ex003'
+    depo: 'MS'
+    rest: 'TRIAL COMPETENCY WORKBOOK (MS2452)'
+    more: 'Welcome To Program 5 Trial Competency Workbook Bates stamped MS002452-002484'
+  ,
+    exno: 'Ex004'
+    depo: 'MS'
+    rest: 'COURT COMPETENCY PROGRAM WORKBOOK (MS2238)'
+    more: 'Napa State Hospital Court Competency Program Workbook Bates stamped MS002238-002258'
+  ,
+    exno: 'Ex005'
+    depo: 'MS'
+    rest: 'COMPETENCY PACKET (MS2509)'
+    more: 'Napa State Hospital Competency Packet Revised September 2012 Bates stamped MS002509-002535'
+  ,
+    exno: 'Ex006'
+    depo: 'MS'
+    rest: 'DMH Manual for the Preparation of PC1026 and PC1370 Court Reports'
+    more: 'DHM Manual For The Preparation of PC1026 and PC1370 Court Reports January 2008 Bates stamped MS002187-002237'
+  ,
+    exno: 'Ex007'
+    depo: 'MS'
+    rest: 'TR->MJS Re: DAWSON PEER REVIEW (AGO7659)'
+    more: 'California Department of Mental Health Napa State Hospital letter dated 1/23/2007 to Melody Samuelson from Tony Rabin Bates stamped AGO 007659-007660'
+  ,
+    exno: 'Ex008'
+    depo: 'MS'
+    rest: 'TR->MJS Re: DAWSON PEER REVIEW (AGO7663)'
+    more: 'California Department of Mental Health Napa State Hospital letter dated 3/14/2007 to Melody Samuelson from Tony Rabin Bates stamped AGO 007663-007666'
+  ,
+    exno: 'Ex009'
+    depo: 'MS'
+    rest: 'MJS->TR, JJ, AH.  (MS0337)'
+    more: 'California Department of Mental Health Napa State Hospital letter dated 5/28/2007 to Tony Rabin from Melody Samuelson Bates stamped MS000337-000338'
+  ,
+    exno: 'Ex010'
+    depo: 'MS'
+    rest: 'Dawson, Revised Competency Assessment Instrument (MS2151-MS2179)'
+    more: 'Revised Competency Assessment Instrument Edited by JE Dawson, Ph.D. Bates stamped MS002151-002179'
+  ,
+    exno: 'Ex011'
+    depo: 'MS'
+    rest: 'Mental Competency Best Practice Model (MS2643-2694)'
+    more: 'The National Judicial College Mental Competency Best Practices Model Bates stamped MS002643-002694'
+  ,
+    exno: 'Ex012'
+    depo: 'MS'
+    rest: 'Riley, INTRODUCING The Revised-CAI (MS2636-2543)'
+    more: 'Eight-page document captioned Introducing The Revised-CAI By John A. Riley, Ph.D. Bates stamped MS002536-002543'
+  ,
+    exno: 'Ex013'
+    depo: 'MS'
+    rest: 'Pat Tyler, Prioritizing the Return of Competent 1370 Patients (MS2180-2181)'
+    more: 'State of California Department of Health & Human Services Agency Memorandum to All Psychiatrists and Psychologists from Patricia Tyler dated 5/28/13 Bates stamped MS002180-2181'
+  ,
+    exno: 'Ex014'
+    depo: 'MS'
+    rest: 'Various Negative (MS2781-2790)'
+    more: 'Napa State Hospital Psychology Department Proctor\'s Periodic Reports Date of Report 1 7/24/08 Date of Report 3 1/25/09 Date of Report 4 4/1/09 Bates stamped MS002781-00279015'
+  ,
+    exno: 'Ex015'
+    depo: 'TK'
+    rest: 'JANUARY 23, 2009 MEMO FROM JONES TO KNOBLOCH: THE COMPLAINT (AGO 5971)'
+    more: 'California Department of Mental Napa State Hospital Memorandum to Tom Knoblauch from Jim Jones dated 1-23-09 Bates stamped AGO Health 005971-5972 '
+  ,
+    exno: 'Ex016'
+    depo: 'TK'
+    rest: 'March 3, 2009 MEMO FROM KNOBLOCH TO JONES (AGO 5908)'
+    more: 'California Department of Mental Napa State Hospital Memorandum to Jim Jones from Thomas Knoblauch dated 3-3-09 Bates stamped AGO 005908 '
+  ,
+    exno: 'Ex017'
+    depo: 'TK'
+    rest: 'March 4, 2009 INITIAL LETTER TO RESPONDENT (AGO 5973)'
+    more: 'California Department of Mental Health Napa State Hospital Memorandum to Melody Samuelson from Thomas Knoblauch dated 3-4-09 Bates stamped AGO 005973-5974'
+  ,
+    exno: 'Ex018'
+    depo: 'TK'
+    rest: 'March, 2009  E-MAIL K TO MS, RE: OK TO TALK TO SPOHN (AGO 1901)'
+    more: 'Email to Thomas Knoblauch from Melody Samuelson dated 3-30-09 Bates stamped MS 001901 '
+  ,
+    exno: 'Ex019'
+    depo: 'TK'
+    rest: 'April 23, 2009: RECOMMENDATIONS OF PEER REVIEW PANEL (AGO 5982)'
+    more: 'California Department of Mental Health Napa State Hospital letter to Tom Knoblauch from Alex Kettner dated 4-23-09 Bates stamped AGO 005982 Health  '
+  ,
+    exno: 'Ex020'
+    depo: 'TK'
+    rest: 'April 30, 2009: REPORT TO JIM JONES, PH. D. (AGO 5904)'
+    more: 'California Department of Mental Health         Napa State Hospital letter to Jim Jones from Thomas Knoblauch dated 4-30-09 Bates stamped AGO 005904-5905  '
+  ,
+    exno: 'Ex021'
+    depo: 'TK'
+    rest: 'April 30, 2009 LETTER TO MELODY SAMUELSON: RESULT OF PEER REVIEW. (AGO 5979)'
+    more: 'California Department of Mental Health         Napa State Hospital letter to Melody Samuelson from Thomas Knoblauch dated 4-30-09 Bates stamped AGO 005979-5980 '
+  ,
+    exno: 'Ex022'
+    depo: 'TK'
+    rest: '5/26/09 -- Letter re: ethics file from Kettner to K,MS re: Melody\'s request (MS1910)'
+    more: 'Email to Thomas Knoblauch, Melody Samuelson    from Alex Kettner dated 5-26-09 Bates stamped MS 001910 '
+  ,
+    exno: 'Ex023'
+    depo: 'TK'
+    rest: '5/28/09 -- Letter re: Request for Special hearing? (AGO 5981)'
+    more: 'California Department of Mental Health         Napa State Hospital Memorandum to Chair Staff Peer Review Panel and Professional Standards Committee from Melody Samuelson dated 5-28-09 Bates stamped AGO 005981 '
+  ,
+    exno: 'Ex024'
+    depo: 'TK'
+    rest: '6/9/09 -- Emails regarding special hearing. (MS 1918)'
+    more: 'Email to Melody Samuelson from                 Thomas Knoblauch dated 6-9-09 Bates stamped MS 001918-1919 '
+  ,
+    exno: 'Ex025'
+    depo: 'TK'
+    rest: '6/9/2009 -- Emails TK and Samuelson (MS 1916)'
+    more: 'Email to Melody Samuelson                      from Thomas Knoblauch dated 6-9-09 Bates stamped MS 001916-1917 '
+  ,
+    exno: 'Ex026'
+    depo: 'TK'
+    rest: 'June 22, 20009 -- Notification of SPECIAL HEARING. (AGO 5888)'
+    more: 'California Department of Mental Health         Napa State Hospital Memorandum to Melody Samuelson from Nathanial Chapman dated 6-16-09 Bates stamped AGO 005888-5890 '
+  ,
+    exno: 'Ex027'
+    depo: 'TK'
+    rest: 'June 22, 2009 -- MS to K, asking for documents. (AGO 5985)'
+    more: 'California Department of Mental Health         Napa State Hospital Memorandum to Thomas Knoblauch from Melody Samuelson dated 6-22-09 Bates stamped AGO 005985 '
+  ,
+    exno: 'Ex028'
+    depo: 'TK'
+    rest: 'June 24, 2009 -- Samuelson to Knobloch -- remove chapman request (AGO 5986) '
+    more: 'California Department of Mental Health         Napa State Hospital Memorandum to Tom Knoblauch from Melody Samuelson dated 6-24-09 Bates stamped AGO 005986 '
+  ,
+    exno: 'Ex029'
+    depo: 'TK'
+    rest: 'June 30, 2009 -- Nina Woods to Melody (AGO 5988)'
+    more: 'California Department of Mental Health         Napa State Hospital Memorandum to Melody Samuelson from Nina Woods dated 6-23-09 Bates stamped AGO 005988-5989  '
+  ,
+    exno: 'Ex030'
+    depo: 'TK'
+    rest: 'June 30, 2009 -- Nina to Melody July 2, 2009 (AGO 5990)'
+    more: 'California Department of Mental Health         Napa State Hospital Memorandum to Nina Woods from Melody Samuelson dated 7-2-09 Bates stamped AGO 005990 '
+  ,
+    exno: 'Ex031'
+    depo: 'TK'
+    rest: 'April 15, 2009 -- Erin Warnick to Jones (AGO 6119)'
+    more: 'California Department of Mental Health         Napa State Hospital Memorandum to Jim Jones from Erin Warnick and Wendy Hatcher dated 4-15-09 Bates stamped AGO 006119 '
+  ,
+    exno: 'Ex032'
+    depo: 'TK'
+    rest: 'July 21, 2009 -- MEC Minutes (AGO 7829)'
+    more: 'Napa State Hospital Meeting Minutes            dated 7-21-09 Bates stamped AGO 007828-7830 '
+  ,
+    exno: 'Ex033'
+    depo: 'TK'
+    rest: 'July 28, 2009  letter knobloch to huq (AGO 5991)'
+    more: 'California Department of Mental Health         Napa State Hospital Memorandum to Thomas Knoblauch from Firdouse Huq dated 7-29-09 Bates stamped AGO 005991 '
+  ,
+    exno: 'Ex034'
+    depo: 'TK'
+    rest: 'August 7, 2009 Jones to Huq re: complaint (AGO 5992) (one to huq) Jones\' or Huq?'
+    more: 'California Department of Mental Health         Napa State Hospital Memorandum to Firdouse Huq from Jim Jones dated 8-7-09 Bates stamped AGO 005992-5994 '
+  ,
+    exno: 'Ex035'
+    depo: 'TK'
+    rest: 'August 18, 2009 K to MEC (AGO 5959)'
+    more: 'California Department of Mental Health         Napa State Hospital Memorandum to Medical Executive Committee from Tom Knoblauch dated 8-18-09 Bates stamped AGO 005959-5960 '
+  ,
+    exno: 'Ex036'
+    depo: 'TK'
+    rest: 'Peer Review Committee -- Proposed Discussion for PPG, 8/19/09 (MS00345)'
+    more: 'Peer Review Committee - Proposed Discussion    for PPG dated 8-19-09 Bates stamped MS 000345-348 '
+  ,
+    exno: 'Ex037'
+    depo: 'TK'
+    rest: 'Department of Psych Minutes (AGO 7778)'
+    more: 'Department of Psychology (Meeting Minutes)     Napa State Hospital dated 8-19-09 Bates stamped AGO 007778-7780 '
+  ,
+    exno: 'Ex038'
+    depo: 'TK'
+    rest: 'September 15, 2009 -- Knobloch to Samuelson appointing committee (AGO 5995)'
+    more: 'California Department of Mental Health         Napa State Hospital Memorandum to Melody Samuelson from Tom Knoblauch dated 9-15-09 Bates stamped AGO 005995 '
+  ,
+    exno: 'Ex039'
+    depo: 'TK'
+    rest: 'September 29, 2009 -- To Nami, Knobloch from Haggag (AGO 6115)'
+    more: 'California Department of Mental Health         Napa State Hospital Memorandum to Nami Kim and Tom Knoblauch from Ahmed Haggag dated 9-29-09 Bates stamped AGO 006115-6116 '
+  ,
+    exno: 'Ex040'
+    depo: 'TK'
+    rest: 'November 20, 2009 -- Peer review conclusions and recommendations. (AGO 5874)'
+    more: 'Psychology Peer Review Panel Conclusions       and Recommendations Re: Melody Samuelson dated 11-20-09 Bates stamped AGO 005874-5876 '
+  ,
+    exno: 'Ex041'
+    depo: 'TK'
+    rest: 'December 8, 2009 -- K to MEC, Summary of Findings (AGO 5961)'
+    more: 'California Department of Mental Health        Napa State Hospital Memorandum to Medical Executive Committee from Thomas Knoblauch dated 12-8-09 Bates stamped AGO 005961-5962 '
+  ,
+    exno: 'Ex042'
+    depo: 'TK'
+    rest: 'December 15, 2009 -- NAPA State Hospital Meeting Minutes... (AGO 7831)'
+    more: 'Napa State Hospital Meeting Minutes           dated 12-15-09 Bates stamped AGO 007831-7833 '
+  ,
+    exno: 'Ex043'
+    depo: 'TK'
+    rest: 'January 5, 2010 -- NAPA STATE HOSPITAL MEeeting Minutes (AGO7834)'
+    more: 'Napa State Hospital Meeting Minutes           dated 1-5-10 Bates stamped AGO 007834-7836 '
+  ,
+    exno: 'Ex044'
+    depo: 'TK'
+    rest: 'April 6, 2010 -- NSH Meeting Minutes (AGO7837)'
+    more: 'Napa State Hospital Meeting Minutes           dated 4-6-10 Bates stamped AGO 007837-7840 '
+  ,
+    exno: 'Ex045'
+    depo: 'TK'
+    rest: 'April 6, 2010 -- letter from Doc Haggag (AGO 5999)'
+    more: 'California Department of Mental Health        Napa State Hospital Memorandum to Dolly Matteucci from Ahmed Haggag dated 4-6-10 Bates stamped AGO 005999 '
+  ,
+    exno: 'Ex046'
+    depo: 'TK'
+    rest: 'Notice of Adverse Action (AGO 7076)'
+    more: 'California Department of Mental Health        Napa State Hospital Notice of Adverse Action Bates stamped AGO 007076-7592 '
+  ,
+    exno: 'Ex047'
+    depo: 'TK'
+    rest: 'May 14, 2012 -- Knobloch to White (AGO6102)'
+    more: 'Email exchange between Thomas Knoblauch and   Deborah White dated 5-14-12 Bates stamped AGO 006102 '
+  ,
+    exno: 'Ex048'
+    depo: 'TK'
+    rest: 'May 14, 2012 -- more e-mails (AGO 6103)'
+    more: 'Email exchange between Thomas Knoblauch and   Deborah White dated 5-14-12 Bates stamped AGO 006103'
+  ,
+    exno: 'Ex049'
+    depo: 'RS'
+    rest: 'Undated -- Chronology created by Steele when preparing adverse action (AGO 9288)'
+    more: 'Untitled document created by Janet Steele Bates stamped AGO 09288-9290'
+  ,
+    exno: 'Ex050'
+    depo: 'RS'
+    rest: 'January 2, 2009 -- Jones to Steele re meeting. (AGO 5924)'
+    more: 'Email to Janet Steele from Jim Jones dated 1-2-09 Bates stamped AGO 005924 '
+  ,
+    exno: 'Ex051'
+    depo: 'RS'
+    rest: 'Undated -- Draft (of Jones complaint) (AGO 5926)'
+    more: 'Untitled document Bates stamped AGO 005926-5927'
+  ,
+    exno: 'Ex052'
+    depo: 'RS'
+    rest: 'January 22, 2009 -- Steels to Percy (AGO 5910)'
+    more: 'Email to Dean Percy from Janet Steel dated 1-22-09 Bates stamped AGO 005910'
+  ,
+    exno: 'Ex053'
+    depo: 'RS'
+    rest: 'January 22, 2009 -- Notice of Temporary Reassignment (MS 0839)'
+    more: 'California Department of Mental Health, Napa State Hospital Memorandum to Melody Samuelson, Ph.D. from Napa State Hospital dated 1-22-09 Bates stamped MS 000839-840'
+  ,
+    exno: 'Ex054'
+    depo: 'RS'
+    rest: 'April 26, 2010 -- Jones to EPT (AGO 5867)'
+    more: 'California Department of Mental Health, Napa State Hospital Memorandum to EPT from Jim Jones dated 4-26-10 Bates stamped AGO 005867-005869'
+  ,
+    exno: 'Ex055'
+    depo: 'JJ'
+    rest: 'DECLARATION OF JAMES JONES IN SUPPORT OF MOTION TO STRIKE'
+    more: 'Declaration of James Jones, Ph.D., in Support of Defendants\' Special Motion to Strike the Verified First Amended Complaint as a Strategic Lawsuit Against Public Participation (4 pages)'
+  ,
+    exno: 'Ex056'
+    depo: 'JJ'
+    rest: 'NAPA STATE HOSPITAL BYLAWS (AGO 5242)'
+    more: 'Napa State Hospital, Medical Staff Bylaws and Rules and Regulations, as Approved by the Medical Staff on June 11, 2008, and September 3, 2008 (AGO005242 - AGO005308)'
+  ,
+    exno: 'Ex057'
+    depo: 'JJ'
+    rest: 'NAPA STATE HOSPITAL MEDICAL STAFF BYLAW AGREEMENT STATEMENT (AGO 5482)'
+    more: 'Napa State Hospital Medical Staff Bylaw Agreement Statement (AGO005482)'
+  ,
+    exno: 'Ex058'
+    depo: 'JJ'
+    rest: 'RULES AND PROCEDURES FOR PROCESSING ETHICS COMPLAINTS (AGO 5777)'
+    more: 'Rules and Procedures for Processing Ethics Complaints, February, 2008 (AGO005777 - AGO005816)'
+  ,
+    exno: 'Ex059'
+    depo: 'JJ'
+    rest: 'WELCOME TO NSH TRIAL COMPETENCY WORKBOOK [for T3] (AGO 7006)'
+    more: 'Trial Competency Workbook (AGO007006 - AGO007023)'
+  ,
+    exno: 'Ex060'
+    depo: 'JJ'
+    rest: 'CRITICISM OF MELOSAM (AGO 5948)'
+    more: 'Typewritten Letter (AGO005948 - AGO005950)'
+  ,
+    exno: 'Ex061'
+    depo: 'JJ'
+    rest: 'MJS->JW (MS339)'
+    more: 'Letter to Julie Winn, Ph.D., from Melody J. Samuelson, Psy.D., February 5, 2007 (MS000339)'
+  ,
+    exno: 'Ex062'
+    depo: 'JJ'
+    rest: 'Psychology Peer Review Panel Summary of Investigation (AGO7674)'
+    more: 'Psychology Peer Review Panel Summary of Investigation, May 31, 2007 (AGO007674 - AGO007679)'
+  ,
+    exno: 'Ex063'
+    depo: 'JJ'
+    rest: 'Clinical Performance Appraisal for MJS (AGO5630)'
+    more: 'Memo to Tom Moraida from Jim Jones, October 22, 2007 (AAGO005630)'
+  ,
+    exno: 'Ex064'
+    depo: 'JJ'
+    rest: 'July 3, 2006, Pt. A; May and Foreman (AGO7688)'
+    more: 'California Department of Mental Health, Napa State Hospital, Report to Court, July 3, 2006, "Confidential Material Subject to Protective Order" (AGO007868 - AGO007871)'
+  ,
+    exno: 'Ex065'
+    depo: 'JJ'
+    rest: 'Dec 24, 2006, Pt. A; Cabanella and MJS (AGO7862)'
+    more: 'California Department of Mental Health, Napa State Hospital, Report to Court, March 20, 2007, "Confidential Material Subject to Protective Order" (AGO007862 - AGO007867)'
+  ,
+    exno: 'Ex066'
+    depo: 'JJ'
+    rest: 'Nov 26, 2000, Pt. A; (AGO7856)'
+    more: 'California Department of Mental Health, Napa State Hospital, Report to Court, November 26, 2007, "Confidential Material Subject to Protective Order" (AGO007856 - AGO007861)'
+  ,
+    exno: 'Ex067'
+    depo: 'JJ'
+    rest: 'Feb 6, 2008, Pt. A; (AGO7850)'
+    more: 'Certification of Mental Competency Report, "Confidential Materials Subject to Protective Order" (AGO007850 - AGO007855)'
+  ,
+    exno: 'Ex068'
+    depo: 'JJ'
+    rest: 'Jun 9, 2008, Email JJ->NK,; (AGO5830)'
+    more: 'E-mail to Steven Hubert and Nami Kim, July 9, 2008 (AGO005830)'
+  ,
+    exno: 'Ex069'
+    depo: 'JJ'
+    rest: 'Aug 6, 2008, JJ->? (AGO5943)'
+    more: 'California Department of Mental Health, Napa State Hospital, Memorandum, August 6, 2008 (AGO005943 - AGO005945)'
+  ,
+    exno: 'Ex070'
+    depo: 'JJ'
+    rest: 'Aug 18, 2008, Counselling Record, JJ, NK, Melody (AGO5941)'
+    more: 'Counseling Record for Melody Samuelson, Ph.D., August 18, 2008 (AGO005941)'
+  ,
+    exno: 'Ex071'
+    depo: 'JJ'
+    rest: 'Aug 22, 2008, JJ->? Story Sticking (AGO5942)'
+    more: 'E-mail from Melody Samuelson to Jim Jones, August 22, 2008 (AGO005942)'
+  ,
+    exno: 'Ex072'
+    depo: 'JJ'
+    rest: 'Sep 22, 2008, McKinney e-mail (AGO5936)'
+    more: 'E-mail from Debbie McKinney to Jim Jones, September 22, 2008 (AGO005936 - AGO005938)'
+  ,
+    exno: 'Ex073'
+    depo: 'JJ'
+    rest: 'Sep 30, 2008, Warburton->J (AGO5932)'
+    more: 'E-mail from Katherine Warburton to Jim Jones, September 30, 2008 (AGO005932 - AGO005934)'
+  ,
+    exno: 'Ex074'
+    depo: 'JJ'
+    rest: 'Oct 2, 2008, RB->Jones She\'s meddling again (AGO5929)'
+    more: 'E-mail from Rachel Bramble to Jim Jones and Nami Kim, October 2, 2008 (AGO005929)'
+  ,
+    exno: 'Ex075'
+    depo: 'JJ'
+    rest: 'Oct 2, 2008, MJS -> NK (AGO5930)'
+    more: 'E-mail from Nami Kim to Melody Samuelson, October 2, 2008 (AGO005930)'
+  ,
+    exno: 'Ex076'
+    depo: 'JJ'
+    rest: 'Oct 30, 2008, lh->JJ,NK (AGO5931)'
+    more: 'E-mail from Linda Howard to Jim Jones and Nami Kim, October 30, 2008 (AGO005931)'
+  ,
+    exno: 'Ex077'
+    depo: 'JJ'
+    rest: 'Dec 2, 2008, KW->JJ (AGO5928)  Panel to review COT referrals.'
+    more: 'E-mail from Katherine Warburton to Jim Jones, December 2, 2008 (AGO005928)'
+  ,
+    exno: 'Ex078'
+    depo: 'JJ'
+    rest: 'Dec 12, 2008, COURT TESTIMONY NOTES (AGO5918)'
+    more: 'California Department of Mental Health, Napa State Hospital, Memorandum, December 12, 2008 (AGO005918 - AGO005919)'
+  ,
+    exno: 'Ex079'
+    depo: 'JJ'
+    rest: 'July 16, 2008, CONTRA COSTA COUNTY Subpoena (AGO7872)'
+    more: 'Subpoena Duces Tecum RE: Patient A, July 16, 2008, "Confidential Material Subject to Protective Order (AGO007872 - AGO007880)'
+  ,
+    exno: 'Ex080'
+    depo: 'JJ'
+    rest: 'July 29, 2008, Subpoena (AGO7884)'
+    more: 'Order to Attend Court or Provide Documents, Subpoena Duces Tecum, "Confidential Material Subject to Protective Order" (AGO007884 -AGO007885)'
+  ,
+    exno: 'Ex081'
+    depo: 'JJ'
+    rest: 'Nov 6, 2006, Release (AGO9151)'
+    more: 'Patient A Records at Napa State Release of Hospital, "Confidential Material Subject to Protective Order" (AGO009151)'
+  ,
+    exno: 'Ex082'
+    depo: 'JJ'
+    rest: 'Mar 7, 2008, Request for Documents (AGO7887)'
+    more: 'Record Release for Patient A, March 7, 2008, "Confidential Material Subject to Protective Order" (AGO007887 - AGO007888)'
+  ,
+    exno: 'Ex083'
+    depo: 'JJ'
+    rest: 'Dec 23, 2008, RB->JJ Ethics analysis (AGO5916)'
+    more: 'E-mail from Rachel Bramble to Jim Jones, December 23, 2008 (AGO005916 - AGO005917)'
+  ,
+    exno: 'Ex084'
+    depo: 'JJ'
+    rest: 'Jan 5, 2009, NK -> AH, JJ, TR Violence Risk Assessment'
+    more: 'E-mail from Nami Kin to Anne Hoff, Jim Jones, Tony Rabin, January 5, 2009 (AGO005925)'
+  ,
+    exno: 'Ex085'
+    depo: 'JJ'
+    rest: 'Jan 9, 2009, MJS->JJ, Documents I GOT RELEASES (AGO5923)'
+    more: 'E-mail from Melody Samuelson to Jim Jones, January 9, 2008 (AGO005923)'
+  ,
+    exno: 'Ex086'
+    depo: 'JJ'
+    rest: 'Jan 20, 2009, Revised letter to Melody (AGO5920)'
+    more: 'California Department of Mental Health, Napa State Hospital, Memorandum, January 20, 2009 (AGO005920 - AGO005922)'
+  ,
+    exno: 'Ex087'
+    depo: 'JJ'
+    rest: 'Jan 20, 2009, Revised letter to Melody (AGO5963)'
+    more: 'California Department of Mental Health, Napa State Hospital, Memorandum, January 20, 2009 (AGO005963 - AGO005965)'
+  ,
+    exno: 'Ex088'
+    depo: 'JJ'
+    rest: 'Jan 22, 2009, NK->JJ, Credentials Issues (AGO5909)'
+    more: 'E-mail from Nami Kim to Jim Jones, January 22, 2009 (AGO005909)'
+  ,
+    exno: 'Ex089'
+    depo: 'JJ'
+    rest: 'Apr 13, 2009, JJ->AK, Additional(AGO5968)'
+    more: 'E-mail from Jim Jones to Alex Kettner, April 13, 2009 (AGO005968)'
+  ,
+    exno: 'Ex090'
+    depo: 'DW'
+    rest: 'May 16, 2012, DECLARATION OF DEBORAH WHITE'
+    more: 'Declaration of Deborah White, Ph.D., in Support of Defendants\' Special Motion to Strike the Verified First Amended Complaint as a Strategic Lawsuit Against Public Participation (3 pages)'
+  ,
+    exno: 'Ex091'
+    depo: 'DW'
+    rest: '___________, DW\'s Marked versions of the Incident Report (AGO7104)'
+    more: 'Napa State Hospital Police Department Incident Report (AGO007104 - AGO007105)'
+  ,
+    exno: 'Ex092'
+    depo: 'DW'
+    rest: '2001, NAN Standard (AGO), or is employed NSH is an exempt agency.'
+    more: 'NAN Definition of a Clinical Neuropsychologist, 2001 (1 page)'
+  ,
+    exno: 'Ex093'
+    depo: 'DW'
+    rest: 'APA FORENSIC SPECIALTY GUIDELINES'
+    more: 'Specialty Guidelines for Forensic Psychology (57 pages)'
+  ,
+    exno: 'Ex094'
+    depo: 'DW'
+    rest: 'July 24, 2008, PROCTOR\'S PERIODIC REPORT (1) (AGO____)'
+    more: 'Proctor\'s Periodic Report (AGO006126 - AGO006128)'
+  ,
+    exno: 'Ex095'
+    depo: 'DW'
+    rest: 'Oct 28, 2008, PROCTOR\'S PERIODIC REPORT (2) (AGO6129)'
+    more: 'Proctor\'s Periodic Report (AGO006129 - AGO006130)'
+  ,
+    exno: 'Ex096'
+    depo: 'DW'
+    rest: 'Jan 25, 2009, PROCTOR\'S PERIODIC REPORT (3) (AGO6120) [DR KIM AND I OFFERED TO MEET WITHOUT UNION REPRESENTATIVE]'
+    more: 'Proctor\'s Periodic Report (AGO006120 - AGO006121)'
+  ,
+    exno: 'Ex097'
+    depo: 'DW'
+    rest: 'Apr 1, 2009, PROCTOR\'S PERIODIC REPORT (4-final) (AGO6123) [did you discuss this with Dr. Samuelson -- asked to write by credentials committee]'
+    more: 'Proctor\'s Periodic Report (AGO006123 - AGO006125)'
+  ,
+    exno: 'Ex098'
+    depo: 'DW'
+    rest: 'Jun 11, 2009, JJ->MJS Meeting (MS1923) ****'
+    more: 'E-mail from Jim Jones to Melody Samuelson, June 22, 2009 (MS001923)'
+  ,
+    exno: 'Ex099'
+    depo: 'DW'
+    rest: 'DRAFT 4/4/2008 (MS3484) ****'
+    more: 'Focused Psychological Assessment, marked "Confidential, All Pages" (MS003484 - MS003500)'
+  ,
+    exno: 'Ex100'
+    depo: 'DW'
+    rest: 'DRAFT (MS3485) ****'
+    more: 'Focused Psychological Assessment, marked "Confidential, All Pages" (MS003501 - MS003517)'
+  ,
+    exno: 'Ex101'
+    depo: 'DW'
+    rest: 'DRAFT (MS3486) Backdated... ****'
+    more: 'Focused Psychological Assessment, marked "Confidential, All Pages (MS003518 - MS003545)'
+  ,
+    exno: 'Ex102'
+    depo: 'DW'
+    rest: 'DW->JJ September, 23, 2009, Issue regarding court testimony (MS6049)'
+    more: 'E-mail from Deborah White to Jim Jones (AGO006049)'
+  ,
+    exno: 'Ex103'
+    depo: 'NK'
+    rest: 'May 16, 2012, DECLARATION OF NAMI KIM (Pleadings)'
+    more: 'Declaration of Dr. Nami Kim in Support of Defendants\' Special Motion to Strike the Verified First Amended Complaint as a Strategic Lawsuit Against Public Participation (4 pages)'
+  ,
+    exno: 'Ex104'
+    depo: 'NK'
+    rest: 'July 12, 2013, DECLARATION OF NAMI KIM (Pleadings)'
+    more: 'Declaration of Dr. Nami Kim in Support of Defendants\' Motion for Summary Judgment, Or In The Alternative, Summary Adjudication (18 pages)'
+  ,
+    exno: 'Ex105'
+    depo: 'NK'
+    rest: 'April, 2009, Privileging and Appointment Procedures, Criteria and Forms, Credentials Committee'
+    more: 'Privileging and Appointment Procedures,Criteria and Forms, Credentials Committeeand of the Psychology Department of the Medical Staff (AGO005409 - AGO005422)'
+  ,
+    exno: 'Ex106'
+    depo: 'NK'
+    rest: 'August, 2009, Criteria for privileging. '
+    more: 'Psychology Department, Criteria for Clinical Privileges (AGO005817 -AGO005823)'
+  ,
+    exno: 'Ex107'
+    depo: 'NK'
+    rest: 'July, 3, 2008, LH->NK (AGO5951)'
+    more: 'E-mail from Linda Howard to Nami Kim, July3, 2008 (AGO005951)'
+  ,
+    exno: 'Ex108'
+    depo: 'NK'
+    rest: 'January 26, 2009, PDCC Admin. Remarks.(MS0845)'
+    more: 'Psychology Department Credentials Committee Administrative Remarks, Re:Melody Samuelson, Psy.D., January 26, 2009(MS000845)'
+  ,
+    exno: 'Ex109'
+    depo: 'NK'
+    rest: 'April 8, 2009, Privileges (AGO5907)'
+    more: 'E-mail from Nami Kim to Melody Samuelson, April 8, 2009 (AGO005907)'
+  ,
+    exno: 'Ex110'
+    depo: 'NK'
+    rest: 'June 17, 2009, Administrative change in supervisor (AGO5887)'
+    more: 'Memorandum, Subject: Administrative Change in Supervisor (AGO005887)'
+  ,
+    exno: 'Ex111'
+    depo: 'NK'
+    rest: 'July 6, 2009, Request for Removal (MS0143)'
+    more: 'Memorandum, Subject:  Request for Removal of Adverse Information (MS000143 -MS000144)'
+  ,
+    exno: 'Ex112'
+    depo: 'NK'
+    rest: 'July 9, 2009, Req for Removal, FH->MJS, (MS0145)'
+    more: 'Memorandum, Subject: Request for Removal of Adverse Information (MS000145)'
+  ,
+    exno: 'Ex113'
+    depo: 'NK'
+    rest: 'July 13, 2009, Rec for denial of privileges, NS->MEC, (MS0861)'
+    more: 'Memorandum, Subject:  Recommendation for Denial of Privilege (MS000861)'
+  ,
+    exno: 'Ex114'
+    depo: 'NK'
+    rest: 'June 8, 2009, Application for Psych Privileges, (AGO6112)'
+    more: 'Application for Psychological Privileges (AGO006112)'
+  ,
+    exno: 'Ex115'
+    depo: 'NK'
+    rest: 'Oct 11, 2009, Review of your work continues (AGO5877)'
+    more: 'Memorandum, Subject: Privileges (AGO005877)'
+  ,
+    exno: 'Ex116'
+    depo: 'NK'
+    rest: 'October 1, 2009, Request for Credentials File (MS1939)'
+    more: 'Memorandum: Subject:  Request for Credentials File (AGO001939)'
+  ,
+    exno: 'Ex117'
+    depo: 'NK'
+    rest: 'October 5, 2009, Privileges (AGO5878)'
+    more: 'Memorandum, Subject:  Privileges (AGO005878)'
+  ,
+    exno: 'Ex118'
+    depo: 'NK'
+    rest: 'April 20, 2010, NK->Memo (timeline) (AGO5873)'
+    more: 'E-mail from Nami Kim to Jim Jones, April 20, 2010 (AGO005873)'
+  ,
+    exno: 'Ex119'
+    depo: 'NK'
+    rest: 'May, 5, 2010, NK->JJ only core privileges (AGO5865)'
+    more: 'E-mail from Nami Kim to Jim Jones, May 5, 2010 (AGO005865)'
+  ,
+    exno: 'Ex120'
+    depo: 'NK'
+    rest: 'Jan 14, 2013, A T-16 issue (AGO6066)'
+    more: 'E-mail from Nami Kim to Malia Haas,  January 14, 2013 (AGO006066)'
+  ,
+    exno: 'Ex121'
+    depo: 'NK'
+    rest: 'Mar 27, 2012, Active Treatment Schedule (AGO6088)'
+    more: 'E-mail from Nami Kim to Melody Samuelson (AGO006088 - AGO006089)'
+  , 
+    exno: 'Ex122'
+    depo: 'JJ'
+    rest: '2007-2009 AGO5645,AGO5718,AGO5652,AGO5935 Intermittent Hours'
+    more: 'Intermittent Hours (AGO005645 - AGO005935)'
+  ,
+    exno: 'Ex123'
+    depo: 'JJ'
+    rest: 'May 5, 2009  NAPA STATE HOSPITAL -- ONGOING PROFESSIONAL PRACTICE EVALUATION (AGO5902-5903)'
+    more: 'Napa State Hospital, Department of Psychology Ongoing Professional Practice Evaluation (AGO005902 - AGO005903)'
+  ,
+    exno: 'Ex124'
+    depo: 'JJ'
+    rest: 'May 27, 2009 Re: Review (Meeting concerning documents) (MS1911)'
+    more: 'E-mail from Jim Jones to Melody Samuelson, May 27, 2009 (MS001911)'
+  ,
+    exno: 'Ex125'
+    depo: 'JJ'
+    rest: 'June 11, 2009 Re: Meeting. (AGO5981)'
+    more: 'E-mail from Jim Jones to Melody Samuelson, June 11, 2009 (AGO005891)'
+  ,
+    exno: 'Ex126'
+    depo: 'JJ'
+    rest: 'June 11, 2009 Re: Meeting. (MS1921)'
+    more: 'E-mail from Jim Jones to Melody Samuelson, June 11, 2009 (MS001921)'
+  ,
+    exno: 'Ex127'
+    depo: 'JJ'
+    rest: 'June 3, 2009 JJ -> Special Investigator\'s Office (AGO5892-?)'
+    more: 'Memorandum:  To Special Investigator from Jim Jones, June 3, 2009 (AGO005892 - AGO005901)'
+  ,
+    exno: 'Ex128'
+    depo: 'JJ'
+    rest: 'August 5, 2009 MP->JJ Message from Dr. Huq (AGO5882-5885)'
+    more: 'E-mail from Melissa Pina to Jim Jones, August 5, 2009 (AGO005882 - AGO005885)'
+  ,
+    exno: 'Ex129'
+    depo: 'JJ'
+    rest: '[no date] JJ->[no receipient] (AGO5969-5970)'
+    more: 'Memorandum from Jim Jones, Subject: M.S. (AGO005969 - AGO005970)'
+  ,
+    exno: 'Ex130'
+    depo: 'JJ'
+    rest: 'April 27, 2010 JJ->DM,DP  (AGO5870-5871)'
+    more: 'Memorandum to Dolly Matteucci from Jim Jones, April 27, 2010 (AGO005870 - AGO005871)'
+  ,
+    exno: 'Ex131'
+    depo: 'JJ'
+    rest: 'April 27, 2010 Mary for DM->JJ Fwd: Confidential (AGO5866)'
+    more: 'E-mail from Mary Nicander to Jim Jones, April 27, 2010 (AGO005866)'
+  ,
+    exno: 'Ex132'
+    depo: 'JJ'
+    rest: 'Jun 29, 2010 Poon -> MJS (AGO7626)'
+    more: 'Letter to Melody Samuelson from Terryanne Poon, July 29, 2010 (AGO007626)'
+  ,
+    exno: 'Ex133'
+    depo: 'JJ'
+    rest: 'Ives->Ebert (AGO5847)'
+    more: 'Letter to Bruce Ebert from Rollin Ives, August 9, 2010 (AGO005847)'
+  ,
+    exno: 'Ex134'
+    depo: 'JJ'
+    rest: 'August 17, 2010 (AGO7627)'
+    more: 'Letter to California Board of Psychology from Dean Percy, August 17, 2010 (AGO007627)'
+  ,
+    exno: 'Ex135'
+    depo: 'HG'
+    rest: 'October, 2010 Email Haggag <-> Zweig (MS1941)'
+    more: 'E-mail, topmost from Barbara Zweig to C. Caruso and A. Haggag, October 18, 2010 (MS001941 - MS001942)'
+  ,
+    exno: 'Ex136'
+    depo: 'HG'
+    rest: 'May 18, 2011, MJS->Bartos (MS1943)'
+    more: 'Letter to Michael Bartos, M.D., May 18, 2011 (MS001943 - MS001945)'
+  ,
+    exno: 'Ex137'
+    depo: 'HG'
+    rest: 'June 21, 2011, NAPA STATE HOSPITAL MEETING MINUTES (AGO7843-7845)'
+    more: 'Napa State Hospital Meeting Minutes, June 21, 2011 (AGO007843 - AGO007845)'
+  ,
+    exno: 'Ex138'
+    depo: 'HG'
+    rest: 'July 5, 2011, NAPA STATE HOSPITAL MEETING MINUTES (AGO7846-7847)'
+    more: 'Napa State Hospital Meeting Minutes, July 5, 2011 (AGO007846 - AGO007847)'
+  ,
+    exno: 'Ex139'
+    depo: 'AH'
+    rest: 'December 19, 2006, Anne Hoff, Proctor\'s report (MS0012)'
+    more: 'Napa State Hospital Proctor\'s Periodic Report (MS000012 - MS000013)'
+  ,
+    exno: 'Ex140'
+    depo: 'AH'
+    rest: 'May 10, 2007, Anne Hoff, Proctor\'s report (MS0002)'
+    more: 'Napa State Hospital Proctor\'s Periodic Report (MS000002 - MS000003)'
+  ,
+    exno: 'Ex141'
+    depo: 'AH'
+    rest: 'PR3'
+    more: 'Napa State Hospital Proctor\'s Periodic Report (MS000004 - MS000005)'
+  ,
+    exno: 'Ex142'
+    depo: 'AH'
+    rest: 'PR4'
+    more: 'Napa State Hospital Proctor\'s Periodic Report (MS000102 - MS000103)'
+  ,
+    exno: 'Ex143'
+    depo: 'PT'
+    rest: 'October 18, 2011, Emails between JW, AS, AS, PT (AGO7653)'
+    more: 'E-mail from Julie Winn to Patricia Tyler, Anish Shah, Amarpreet Singh, October 11, 2011 ( AGO007653 - AGO007654)'
+  ,
+    exno: 'Ex144'
+    depo: 'PT'
+    rest: 'November 8, 2011, Emails between Pat Tryler, Julie Winn, Tony Rabin'
+    more: 'E-mail from Julie Winn to Tony Rabin, Patricia Tyler, November 8, 2011 (AGO007649)'
+  ,
+    exno: 'Ex145'
+    depo: 'PT'
+    rest: 'March 1, 2012, CW and PT to everybody, 1370 patients and unlikely to regain trial competency court reports.'
+    more: 'E-mail, topmost from Melissa Pina to Ahmed Haggag, et al., March 1, 2012 (MS002261 - MS002262)'
+  ,
+    exno: 'Ex146'
+    depo: 'PT'
+    rest: 'Jan 17, 2007, Minutes of Peer Review Panel Meeting (AGO7656)'
+    more: 'Minutes of the Peer Review Panel Meeting, January 17, 2007 (AGO007656)'
+  ,
+    exno: 'Ex147'
+    depo: 'PT'
+    rest: 'Feb 28, 2007, Minutes of Peer Review Panel Meeting (AGO7661)'
+    more: 'Minutes of Peer Review Panel Meeting, February 28, 2007 (AGO007661)'
+  ,
+    exno: 'Ex148'
+    depo: 'PT'
+    rest: 'Mar 7, 2007, Minutes of Peer Review Panel Meeting (AGO7662)'
+    more: 'Minutes of the Peer Review Panel Meeting, March 7, 2007 (AGO007662)'
+  ,
+    exno: 'Ex149'
+    depo: 'PT'
+    rest: 'Mar 31, 2007, Psychology Credentials Committee (AGO7673)'
+    more: 'Letter to Dr. White, May 31, 2007 (AGO007673)'
+  ,
+    exno: 'Ex150'
+    depo: 'PT'
+    rest: 'April 12, 2005 to Peer Review Board (MS0342)'
+    more: 'Letter to Tony Rabin from Melody Samuelson, April 12, 2005 (MS000342 - MS000343)'
+  ,
+    exno: 'Ex151'
+    depo: 'PT'
+    rest: 'May 30, 2007, Ltr to Complainants (AGO7671)'
+    more: 'Letter, March 30, 2007 (AGO007671 - AGO007672)'
+  ,
+    exno: 'Ex152'
+    depo: 'DM'
+    rest: 'Resume of Delores Matteucci'
+    more: 'Resume of Delores Matteucci'
+  ,
+    exno: 'Ex153'
+    depo: 'DP'
+    rest: 'Napa State Hospital'
+    more: 'Resume of Dean Percy'
+  ,
+    exno: 'Ex154'
+    depo: 'PS'
+    rest: '22 Jan 2013, Email DW->PS, EW, JS, MS (AGO6099)'
+    more: 'Email to Patricia Spivey from Deborah White dated 1-22-13 Bates stamped AGO 006099'
+  ,
+    exno: 'Ex155'
+    depo: 'MK'
+    rest: '19 Mar 2009, MJS->AK (AGO5975)'
+    more: 'California Department of Mental Health Napa State Hospital Memorandum to Alex Kettner from Melody Samuelson dated 3-19-09 Bates stamped AGO 005975-5976'
+  ,
+    exno: 'Ex156'
+    depo: 'MK'
+    rest: '24 Mar 2009, EM AK->MJS (MS1888)'
+    more: 'Email to Alex Kettner from Melody Samuelson dated 3-24-09 Bates stamped MS001888'
+  ,
+    exno: 'Ex157'
+    depo: 'MK'
+    rest: '25 Mar 2009, AK->MJS PEER REVIEW RESPONSE TO INITIAL RESPONSE (MS0850)'
+    more: 'California Department of Mental Health, Napa State Hospital Memorandum to Melody Samuelson from Alex Kettner dated 3-25-09 Bates stamped MS00850-851'
+  ,
+    exno: 'Ex158'
+    depo: 'MK'
+    rest: '18 Jul 2011, Extra position - privileges (AGO6464)'
+    more: 'Email to Melody Samuelson from Tony Rabin cc to Morgan Kennedy dated 7-18-11 Bates Stamped AGO 006464'
+  ,
+    exno: 'Ex159'
+    depo: 'AK'
+    rest: 'MJS -> Alex Kettner, Response to Peer Review (MS1889)'
+    more: 'E-mail from Melody Samuelson to Alex Kettner, March 25, 2009 (MS001889)'
+  ,
+    exno: 'Ex160'
+    depo: 'AK'
+    rest: 'MJS -> Alex Kettner, Peer Review Response (MS1890)'
+    more: 'E-mail from Melody Samuelson to Alex Kettner, March 25, 2009 (MS001890)'
+  ,
+    exno: 'Ex161'
+    depo: 'AK'
+    rest: 'AK->MJS, Peer Review Response (MS1891)'
+    more: 'E-mail from Alex Kettner to Melody Samuelson, March 25, 2009 (MS001891)'
+  ,
+    exno: 'Ex162'
+    depo: 'AK'
+    rest: 'MS->AK, The medicalRecord (MS1896)'
+    more: 'E-mail from Melody Samuelson to Alex Kettner, March 26, 2009 (MS001896)'
+  ,
+    exno: 'Ex163'
+    depo: 'AK'
+    rest: 'MJS->AK, Release of Medical Records (MS1905)'
+    more: 'Napa State Hospital Memorandum to Alex Kettner from Melody Samuelson, Psy.D., April 13, 2009 (MS001905) marked "Confidential"'
+  ,
+    exno: 'Ex164'
+    depo: 'AK'
+    rest: 'MS->AK, Re:transcript (MS1898)'
+    more: 'E-mail from Melody Samulelson to Alex Kettner, March 26, 2009 (MS001898)'
+  ,
+    exno: 'Ex165'
+    depo: 'MP'
+    rest: 'November 7, 2006, Dawson Proctor Report (AGO5479)'
+    more: 'Napa State Hospital Psychology Department Proctor\'s Periodic Report (AGO005479 - AGO005480)'
+  ,
+    exno: 'Ex166'
+    depo: 'MP'
+    rest: 'October 7, 2009, Copy of Credentials File (MS2695)'
+    more: 'Credentials File (MS002695 - MS002803)'
+  ,
+    exno: 'Ex167'
+    depo: 'MP'
+    rest: 'May 11, 2011, Copy of Credentials File (MS2804)'
+    more: 'Credentials File (MS002804 - MS002930)'
+  ,
+    exno: 'Ex168'
+    depo: 'MP'
+    rest: 'June 2, 2011, Ltr to Bartos (MS1946)'
+    more: 'Letter to Michael Bartos, M.D. from Melody Samuelson, June 2, 2011 (MS001946 - MS001947)'
+  ,
+    exno: 'Ex169'
+    depo: 'MP'
+    rest: 'July 8, 2011, Ltr to Bartos (MS1948)'
+    more: 'Letter to Michael Bartos, M.D., from Melody J. Samuelson, Psy.D., July 8, 2011 (MS001948 - MS001950)'
+  ,
+    exno: 'Ex170'
+    depo: 'MP'
+    rest: 'July 11, 2011, Ltr to Bartos (MS1951)'
+    more: 'Letter to Michael Bartos, M.D., from Melody J. Samuelson, Psy.D., July 11, 2011 (MS001951)'
+  ,
+    exno: 'Ex171'
+    depo: 'MP'
+    rest: 'September 6, 2012, Ltr to Melody (AGO)'
+    more: 'Memorandum to Melody J. Samuelson, Psy.D., from Melissa Pina, SSA, September 6, 2012 (AGO005825)'
+  ,
+    exno: 'Ex172'
+    depo: 'CF'
+    rest: 'Fisher and White e-mail re: Proctor (AGO0657)'
+    more: 'Email'
+  ,
+    exno: 'Ex173'
+    depo: 'CF'
+    rest: '(AGO6059)'
+    more: 'Email'
+  ,
+    exno: 'Ex174'
+    depo: 'JG'
+    rest: 'EMAIL -> Jesus Gallegos, Jun 10, 2010 (AGO7625)'
+    more: 'Email to Doug Grundman from Jesus Gallegos Subject:  Defendant Melody Samuelson case update dated 6-10-10 Bates stamped AGO 007625'
+  ,
+    exno: 'Ex175'
+    depo: 'JG'
+    rest: 'Medical Board Request (AGO7630)'
+    more: 'Letter addressed to Mr. Adicoff from Brian Kelly dated 10-14-10 Bates stamped AGO 007630'
+  ,
+    exno: 'Ex176'
+    depo: 'JG'
+    rest: 'Feinberg -> Gallegos (AGO7636)'
+    more: 'Letter to Jesus Gallegos from Brian Feinberg undated Bates stamped AGO 007636'
+  ,
+    exno: 'Ex177'
+    depo: 'RB'
+    rest: 'RB->MS,  (AGO5947)'
+    more: 'Email to Melody Samuelson from Rachel Bramble Subject:  T.L. Assessment dated 4-3-08 Bates stamped AGO 005947'
+  ,
+    exno: 'Ex178'
+    depo: 'CE'
+    rest: 'Email Chris Echols->Deborah White (AGO6100)'
+    more: 'Email between Deborah White and Chris Echols Subject: Question dated 5-14-12 Bates stamped AGO 006100'
+  ,
+    exno: 'Ex179'
+    depo: 'SH'
+    rest: 'June 11, 2008, Competency to Stand Trial (MS2578)'
+    more: 'Power Point presentation dated June 11, 2008'
+  ,
+    exno: 'Ex180'
+    depo: 'SH'
+    rest: 'Feb 2, 2010, Confirming Memorandum (AGO7648)'
+    more: 'Memorandum dated 2/2/2010'
+  ,
+    exno: 'Ex181'
+    depo: 'PG'
+    rest: 'Graves Declaration'
+    more: 'Declaration of Paul Graves'
+  ,
+    exno: 'Ex182'
+    depo: 'PG'
+    rest: 'Section 1370.'
+    more: 'LexisNexis printout'
+  ,
+    exno: 'Ex183'
+    depo: 'PG'
+    rest: 'Transcript  '
+    more: 'Reporter\'s Transcript dated 9/22/08'
+  ,
+    exno: 'Ex184'
+    depo: 'PG'
+    rest: 'Letter (AGO7624)'
+    more: 'Letter to Dominique Yance dated May 20, 2010'
+  ,
+    exno: 'Ex185'
+    depo: 'TR'
+    rest: ''
+    more: 'Letter to Amarpreet Singh dated 8/29/07'
+  ,
+    exno: 'Ex186'
+    depo: 'TR'
+    rest: '(AGO6463)'
+    more: 'Email chain between Tony Rabin and Melody Samuelson dated 7/18/11'
+  ,
+    exno: 'Ex187'
+    depo: 'TR'
+    rest: 'Rabin e-mail second position (AGO6499)'
+    more: 'Email chain between Melody Samuelson,Joshua Slater and Tony Rabin dated 7/26/11 -7/27/11'
+  ,
+    exno: 'Ex188'
+    depo: 'TR'
+    rest: 'OPPE (AGO6620)'
+    more: 'Email chain between Todd Schirmer, Melody Samuelson and Tony Rabin dated 9/1/11'
+  ,
+    exno: 'Ex189'
+    depo: 'TR'
+    rest: '(AGO6603)'
+    more: 'Email chain between Tony Rabin and Melody Samuelson dated 8/24/11 - 9/1/11'
+  ,
+    exno: 'Ex190'
+    depo: 'TR'
+    rest: '(AGO6487)'
+    more: 'Email chain between Tony Rabin and Melody Samuelson dated 9/16/11 - 9/20/11'
+  ,
+    exno: 'Ex191'
+    depo: 'TR'
+    rest: '(AGO6566)'
+    more: 'Email chain between Tony Rabin and Melody Samuelson dated 10/25/11'
+  ,
+    exno: 'Ex192'
+    depo: 'TR'
+    rest: '(AGO5453)'
+    more: 'Memorandum dated 12/13/11'
+  ,
+    exno: 'Ex193'
+    depo: 'TR'
+    rest: '(AGO6525)'
+    more: 'Email from Melody Samuelson to Tony Rabin dated 2/29/12'
+  ,
+    exno: 'Ex194'
+    depo: 'TR'
+    rest: '(AGO6514)'
+    more: 'Email chain between Tony Rabin and Melody Samuelson dated 3/13/12 - 3/14/12'
+  ,
+    exno: 'Ex195'
+    depo: 'TR'
+    rest: '(AGO6506)'
+    more: 'Email chain between Pat White, Melody Samuelson and Tony Rabin dated 3/13/12 - 3/21/12'
+  ,
+    exno: 'Ex196'
+    depo: 'TR'
+    rest: '(AGO6692)'
+    more: 'Email from Melody Samuelson to Tony Rabin dated 6/22/12'
+  ,
+    exno: 'Ex197'
+    depo: 'TR'
+    rest: '(AGO6681)'
+    more: 'Email from Melody Samuelson to Pat White dated 7/11/12'
+  ,
+    exno: 'Ex198'
+    depo: 'TR'
+    rest: '(AGO6736)'
+    more: 'Email chain between Tony Rabin and Melody Samuelson dated 1/14/13'
+  ,
+    exno: 'Ex199'
+    depo: 'TR'
+    rest: '(AGO7053)'
+    more: 'Performance Review dated 12/14/12'
+  ,
+    exno: 'Ex200'
+    depo: 'TR'
+    rest: '(AGO0095)'
+    more: 'Excerpt of Consent Judgment'
+  ,
+    exno: 'Ex201'
+    depo: 'EB'
+    rest: '(...)'
+    more: 'Document entitled "Report 1, Napa Baseline Evaluation, July 24 - 28, 2006"'
+  ,
+    exno: 'Ex202'
+    depo: 'EB'
+    rest: '(AGO5644) EB FIRST'
+    more: 'Report of Performance for Probationary Employee signed 9/20/06'
+  ,
+    exno: 'Ex203'
+    depo: 'EB'
+    rest: 'Richerson -> Jones (AGO5955)'
+    more: 'Email to Jim Jones from Mike Richerson dated 12/14/06'
+  ,
+    exno: 'Ex204'
+    depo: 'EB'
+    rest: 'Memo ??-> EB (AGO5956)'
+    more: 'Memorandum dated 12/14/06'
+  ,
+    exno: 'Ex205'
+    depo: 'EB'
+    rest: 'Memo M Kish -> (AGO5957)'
+    more: 'Memorandum from Madeline Kishineff dated 12/14/06'
+  ,
+    exno: 'Ex206'
+    depo: 'EB'
+    rest: '(AGO5643) EB SECOND'
+    more: 'Report of Performance for Probationary Employee signed 1/31/07'
+  ,
+    exno: 'Ex207'
+    depo: 'FH'
+    rest: '06/04 Criteria for Clinical Privileges'
+    more: 'Document captioned Napa State Hospital Psychology Department Criteria for Clinical Privileges Revised 06/04, six pages'
+  ,
+    exno: 'Ex208'
+    depo: 'FH'
+    rest: 'August 18, 2009, MEC Minutes.'
+    more: 'Napa State Hospital Minute Meetings dated 8-18-09 Bates stamped AGO 007824-7826'
+  ]

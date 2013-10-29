@@ -1,0 +1,7 @@
+'use strict';
+
+window.Firebase = function(){};
+
+angular.module('firebase', []).value('angularFire', function(){
+  return { then: function(f){ f(); } };
+});

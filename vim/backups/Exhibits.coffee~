@@ -1,0 +1,10 @@
+'use strict'
+
+angular.module('depositionsApp').controller 'ExhibitsCtrl',
+  ($scope, $location, Session, Exhibit) ->
+
+    if Session.isAuthenticated()
+      $scope.exhibits = Exhibit.query()
+    else
+      $location.url('/')
+    

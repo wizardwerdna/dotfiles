@@ -1,0 +1,86 @@
+'use strict';
+describe( 'The Bowling Scorer App', function() {
+  var app;
+
+  beforeEach( module ( 'app', 'views/main.html' ) );
+  beforeEach( inject( function($compile, $rootScope) {
+    app = $compile(
+      '<div ng-controller="MainCtrl">'+
+        '<div ng-include="\'views/main.html\'"></div>'+
+      '</div>'
+    )($rootScope);
+    $rootScope.$digest();
+  }));
+
+  it( 'features data input means and a line display', function() {
+    expectRollDisplayToBe( '' );
+
+    roll(0);
+    roll(10, 12);
+    expectRollDisplayToBe( '-/ X X X X X X X XXXX' );
+
+    app.find( '.reset' ).click();
+    expectRollDisplayToBe( '' );
+  });
+
+  it('features a frame score display', function() {
+    expectFrameScoreDisplayToBe( '' );
+
+    roll(10, 2);
+    expectFrameScoreDisplayToBe( '' );
+
+    roll(10);
+    expectFrameScoreDisplayToBe( '30' );
+
+    roll(10, 9);
+
+    expectFrameScoreDisplayToBe( '306090120150180210240270300' );
+  });
+
+  it( 'features error correction', function() {
+    expectEnabled( rollButtons() );
+
+    roll(4);
+    expectEnabled( rollButton(0) );
+    expectEnabled( rollButton(6) );
+    expectDisabled( rollButton(7) );
+    expectDisabled( rollButton(10) );
+
+    roll(0);
+    roll(10, 11);
+
+    expectDisabled( rollButtons() );
+  });
+
+  function roll(pins, times) {
+    if (!times) { times = 1; }
+    for (var i=0; i<times; i++) {
+      app.find( '.roll' ).eq(pins).click();
+    }
+  }
+
+  function rollButtons() {
+    return app.find( '.roll' );
+  }
+
+  function rollButton(pins) {
+    return app.find( '.roll' ).eq(pins);
+  }
+
+  function expectDisabled(elt) {
+    expect(elt.is(':enabled')).toBeFalsy();
+  }
+
+  function expectEnabled(elt) {
+    expect(elt.is(':disabled')).toBeFalsy();
+  }
+
+  function expectRollDisplayToBe(str) {
+    expect( app.find( '.roll-display' ).text() ).toBe( str );
+  }
+
+  function expectFrameScoreDisplayToBe(str) {
+    expect( app.find( '.frame-score-display' ).text() ).toBe( str);
+  }
+
+});

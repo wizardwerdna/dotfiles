@@ -1,0 +1,7 @@
+'use strict'
+
+angular.module('depositionsApp').controller 'DeposCtrl',
+  ($scope, $location, Session, Depo) ->
+
+    $location.url('/') unless Session.isAuthenticated()
+    $scope.depositions = Depo.query()

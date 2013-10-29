@@ -1,0 +1,5 @@
+<h3>Exhibits</h3>
+
+<li exhibit-display ng-repeat="ex in exhibits"/>
+
+

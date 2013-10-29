@@ -1,0 +1,27 @@
+'use strict';
+angular.module( 'app' ).controller( 'EditCtrl', function(blog, $location, $scope, $routeParams) {
+
+  $scope.blog = blog;
+
+  $scope.id = $routeParams.id;
+
+  $scope.detail = blog.articles[$routeParams.id];
+
+  $scope.submit = function(detail) {
+    angular.extend(blog.articles[$routeParams.id], detail);
+    $location.url( '/' );
+  };
+
+  $scope.destroy = function() {
+    delete articles[$routeParams.id];
+    $location.url( '/' );
+  };
+
+  $scope.action = function() {
+    return 'Update';
+  };
+
+  $scope.cancel = function() {
+    $location.url( '/' );
+  }
+});

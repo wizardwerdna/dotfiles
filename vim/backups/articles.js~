@@ -1,0 +1,16 @@
+'use strict';
+
+angular.module('blogApp').factory('articles', function(angularFire, $rootScope){
+  var ref = new window.Firebase('https://wizardwerdna.firebaseio.com/blog');
+  $rootScope.articles = [];
+  var promise = angularFire(ref, $rootScope, 'articles');
+  return {
+    articles: [{id: 1, title: 'loading', content:''}],
+    attachTo: function(scope){
+      promise.then(function(){
+        scope.articles = $rootScope.articles;
+      });
+      return promise;
+    }
+  };
+});

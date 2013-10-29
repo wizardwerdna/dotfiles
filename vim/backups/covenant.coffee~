@@ -25,8 +25,10 @@
     fulfill: (value) => @state = @state.fulfill(value)
     reject: (reason) => @state = @state.reject(reason)
     resolve: (value) =>
-      if value instanceof Covenant
-        value.then @fulfill, @reject
+      if value is this
+        @reject new TypeError
+      else if value instanceof Covenant
+          value.then @fulfill, @reject
       else
         @_resolveNonCovenantValue value
     _resolveNonCovenantValue: (value) =>

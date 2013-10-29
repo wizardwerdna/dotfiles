@@ -1,0 +1,97 @@
+'use strict'
+xdescribe 'Directive: depositionNavbar', () ->
+  
+  # fixtures
+
+  element = {}
+  scope = {}
+  mockSession = {login: ->}
+  mock$location = {path: ->}
+
+  # modules
+
+  beforeEach module 'depositionsApp', ($provide)->
+    $provide.value 'Session', mockSession
+    $provide.value '$location', mock$location
+    null
+
+  beforeEach module 'views/depositionNavbar.html'
+
+  # helpers
+
+  buildAndDigestElement = inject ($compile, $rootScope)->
+    scope = $rootScope
+    element = $compile('<div deposition-navbar />') scope
+    $rootScope.$digest()
+
+  navBarActivity = ->
+    [element.find('.brand'),
+      element.find('.nav>li').eq(0),
+      element.find('.nav>li').eq(1)
+    ].map (e)->
+      console.log e.attr('class')
+      e.hasClass('active')
+
+  expectNavbarActivityToBe = (arry)->
+    (expect navBarActivity()).toEqual arry
+
+  testElement = (path, results)->
+    mock$location.path = -> path
+    buildAndDigestElement()
+    (expect navBarActivity()).toEqual results
+
+  expectDisplayed = (fragment)->
+    expect(fragment.hasClass('ng-hide')).toBeFalsy()
+
+  expectNotDisplayed = (fragment)->
+    expect(fragment.hasClass('ng-hide')).toBeTruthy()
+
+  # tests
+
+  describe 'upon initialization', ->
+    beforeEach buildAndDigestElement
+
+    it 'only brand should be active', ->
+      expectNavbarActivityToBe [true, false, false]
+
+  describe 'after redirectTo /', ->
+    it 'only brand should be active', ->
+      testElement '/', [true, false, false]
+
+  describe 'after redirectTo /depos', ->
+    beforeEach ->
+      mock$location.path=->'/depos'
+      buildAndDigestElement() 
+
+    it 'only Depos button should be active', ->
+      expectNavbarActivityToBe [false, true, false]
+
+  describe 'after redirectTo /exhibits', ->
+    beforeEach inject ($compile, $rootScope)->
+      mock$location.path=->'/exhibits'
+      buildAndDigestElement()
+
+    it 'only Exhibits button should be active', ->
+      expectNavbarActivityToBe [false, false, true]
+
+  describe 'when authenticated', ->
+    beforeEach inject ($compile, $rootScope)->
+      mockSession.isAuthenticated = ->true
+      buildAndDigestElement()
+
+    it 'should not show the input', ->
+      expectNotDisplayed element.find 'input'
+
+    it 'should show the logout button', ->
+      expectDisplayed element.find 'button'
+
+  describe 'unless authenticated', ->
+    beforeEach inject ($compile, $rootScope)->
+      mockSession.isAuthenticated = ->false
+      buildAndDigestElement()
+
+    it 'should show the input', ->
+      expectDisplayed element.find 'input'
+
+    it 'should not show the logout button', ->
+      expectNotDisplayed element.find 'button'

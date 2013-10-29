@@ -1,62 +1,51 @@
 'use strict';
+ddescribe( 'Controller MainCtrl', function() {
+  var $scope;
+  var ns = {
+    scorer: function(){},
+    mockScorer: {mock: 'mockScorer'}
+  };
 
-angular.module('b2jsApp')
-  .controller('MainCtrl', function ($scope, $filter) {
+  beforeEach( module ( 'app' ) );
+  beforeEach( inject( function($controller, $rootScope) {
+    spyOn( ns, 'scorer' ).andReturn(ns.mockScorer);
+    $scope = $rootScope.$new();
+    $controller( 'MainCtrl', {
+      $scope: $scope,
+      scorer: ns.scorer
+    });
+  }));
 
-    var 
-      fFrameScores = $filter('frameScores')
-    , fRollDisplay = $filter('rollDisplay');
-
-    $scope.reset = function(){
-      $scope.rolls = [];
-      $scope.frameScores = [];
-      $scope.rollDisplay = '';
-    }
-
-    $scope.reset();
-
-    $scope.addRoll = function(pins) {
-      $scope.rolls.push(pins);
-      $scope.frameScores = fFrameScores($scope.rolls);
-      $scope.rollDisplay = fRollDisplay($scope.rolls);
-    }
-
-    $scope.isInvalid = function(pins){
-      return isGameOver() ||
-        ( isSpareAttempt() && isTooManyPins(pins) );
-    }
-
-    function isGameOver(){
-      return $scope.frameScores.length === 10;
-    }
-
-    function isSpareAttempt(){
-      return (isSecondRollOfFrame() || isTenthFrameAfterStrikeAndMiss()) &&
-        !isTenthFrameAfterStrike()
-    }
-
-    function isTooManyPins(pins){
-      return lastRoll() + pins > 10;
-    }
-
-
-    function lastRoll(){
-      return $scope.rolls[$scope.rolls.length-1];
-    }
-
-    function isSecondRollOfFrame(){
-      return $scope.rollDisplay.length%2 == 1
-    }
-
-    function isTenthFrameAfterStrikeAndMiss(){
-      return $scope.rollDisplay.length==20 &&
-        $scope.rollDisplay[18]==='X' &&
-        $scope.rollDisplay[19]!=='X';
-    }
-
-    function isTenthFrameAfterStrike(){
-      return $scope.rollDisplay.length==19 &&
-        $scope.rollDisplay[18]=='X'
-    }
-
+  it( 'should provide an initially empty rolls', function() {
+    expect( $scope.rolls ).toEqual( [] );
   });
+
+  it( 'should add a gutter roll', function() {
+    $scope.addRoll(0);
+    expect( $scope.rolls ).toEqual( [0] );
+  });
+
+  it( 'should add a non-gutter roll', function() {
+    $scope.addRoll(10);
+    expect( $scope.rolls ).toEqual( [10] );
+  });
+
+  it( 'should add two rolls', function() {
+    $scope.addRoll(0);
+    $scope.addRoll(10);
+    expect( $scope.rolls ).toEqual( [0, 10] );
+  });
+
+  it( 'should initially use the scorer', function() {
+    expect( ns.scorer ).toHaveBeenCalledWith( [] );
+    expect( $scope.scorer ).toBe( ns.mockScorer );
+  });
+
+  it( 'should use the scorer for subsequent rolls', function() {
+    $scope.scorer = null;
+    $scope.addRoll(5);
+    expect( ns.scorer ).toHaveBeenCalledWith( [5] );
+    expect( $scope.scorer ).toBe( ns.mockScorer );
+  });
+
+});

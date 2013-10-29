@@ -1,16 +1,12 @@
 {
-  "name": "wrap",
+  "name": "m1oment",
   "version": "0.0.0",
   "description": "",
-  "main": "karma.conf.js",
+  "main": "index.js",
   "scripts": {
-    "test": "node_modules/.bin/mocha --compilers :coffee-script test/*.coffee --watch"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "BSD-2-Clause",
-  "devDependencies": {
-    "mocha": "~1.12.0",
-    "coffee-script": "~1.6.3",
-    "chai": "~1.7.2"
-  }
+  "dependencies": {}
 }

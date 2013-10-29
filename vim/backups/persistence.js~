@@ -1,0 +1,12 @@
+angular.module('basicApp').factory('persistence', function(angularFire, $injector){
+  var ref = new Firebase('https://wizardwerdna.firebaseio.com/foo');
+  return {
+    attachTo: function($scope, expression){
+      $scope.persistence = $injector('persistence'); 
+      angularFire(ref, $scope, 'persistence.string');
+      return this;
+    }
+  } 
+});
+
+

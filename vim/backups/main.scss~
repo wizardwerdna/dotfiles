@@ -1,7 +1,6 @@
-$iconSpritePath: "../images/glyphicons-halflings.png";
-$iconWhiteSpritePath: "../images/glyphicons-halflings-white.png";
+$icon-font-path: "/bower_components/bootstrap-sass/fonts/";
 
-@import "bootstrap-sass/lib/bootstrap";
+@import "../bower_components/bootstrap-sass/lib/bootstrap";
 
 /* Put your CSS here */
 html, body {
@@ -15,41 +14,38 @@ body {
 }
 
 .frames {
-  margin-top: 5px;
-  @include clearfix();
-
+  @include clearfix(); 
+  margin-top: 10px;
   .frame {
-    height: 50px;
     width: 50px;
+    height: 50px;
     float: left;
-    border-top: 1px solid black;
-    border-left: 1px solid black;
-    border-bottom: 1px solid black;
+    border-left: 1pt solid black;
+    border-top: 1pt solid black;
+    border-bottom: 1pt solid black;
 
     &.tenth {
-      width: 72px;
-      border-right: 1px solid black;
+      width: 70px;
+      border-right: 1pt solid black;
     }
 
-    .roll-display{
-      height: 20px;
-      width: 20px;
+    .roll-display {
       text-align: center;
+      width: 19px;
+      height: 20px;
       float: left;
-      border-bottom: 1px solid black;
-      border-left: 1px solid black;
-
+      border-left: 1pt solid black;
+      border-bottom: 1pt solid black;
       &:first-child {
-        padding-left: 8.5px;
         border: none;
+        margin-left: 9px;
       }
     }
 
     .frame-score-display {
-      padding-top: 5px;
-      padding-right: 5px;
       text-align: right;
+      padding-right: 5px;
+      margin-top: 10px;
     }
-
   }
 }

@@ -1,0 +1,13 @@
+'use strict'
+
+angular.module('depositionsApp')
+.service 'Session', class Session
+  @$inject: ['sessionData', '$cookies', 'Exhibit', 'Depo']
+  constructor: (@sessionData, @cookies, @Exhibit, @Depo)->
+  login: (password)->
+    if password is @sessionData.password
+      @cookies.sessionStatus = @sessionData.verification
+  logout: -> @cookies.sessionStatus = undefined
+  isAuthenticated: -> @cookies.sessionStatus is @sessionData.verification
+  depositions: -> @Depo.query()
+  exhibits: -> @Exhibit.query()

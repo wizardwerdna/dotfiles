@@ -9,20 +9,21 @@ module.exports = function(config) {
     // testing framework to use (jasmine/mocha/qunit/...)
     frameworks: ['jasmine'],
 
+    reporters: ['osx', 'progress'],
+
     // list of files / patterns to load in the browser
     files: [
       'bower_components/jquery/jquery.js',
       'bower_components/angular/angular.js',
+      'bower_components/angular-route/angular-route.js',
       'bower_components/angular-mocks/angular-mocks.js',
-      'views/*.html',
+      'bower_components/angular-test-scaffold/*.js',
       'scripts/*.js',
       'scripts/**/*.js',
+      'views/*.html',
+      '../test/mock/**/*.js',
       '../test/spec/**/*.js'
     ],
-
-    preprocessors: {
-      '**/*.html': 'html2js'
-    },
 
     // list of files / patterns to exclude
     exclude: [],
