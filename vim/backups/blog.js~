@@ -1,39 +1,16 @@
 'use strict';
-angular.module( 'app' ).provider( 'blog',  function(){
-  var blogHeading = 'Default Heading',
-      blogSubheading = 'Default Subheading',
-      blogArticles = {};
-  return {
-    $get: function(){
-      return {
-        heading: blogHeading,
-        subheading: blogSubheading,
-        articles: blogArticles
-      };
-    },
 
-    setHeadings: function( heading, subheading) {
-      blogHeading = heading || blogHeading;
-      blogSubheading = subheading || blogSubheading;
-    },
+angular.module('app').value('blogData', []);
 
-    setArticles: function( articles ) {
-      blogArticles = {};
-      articles.forEach( function(each){
-        blogArticles[each.id] = each;
-      });
-    }
-  };
+angular.module('app').value('blogExtensions', {
+  heading: 'Superheroic Blogging',
+  subheading: 'an AngularJS Kata'
 });
 
-angular.module( 'app').config( function(blogProvider) {
+angular.module('app').value('blogLink', 'https://wizardwerdna.firebaseio.com/items');
 
-  var loremIpsum = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas nisl nibh, molestie et velit et, vestibulum aliquet libero. Mauris adipiscing volutpat lorem rutrum mattis. In pretium lacus at pellentesque mollis. Maecenas pellentesque, massa in ultrices dapibus, felis lectus dapibus urna, at pharetra augue felis ut orci. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin consequat vitae urna eget condimentum. Aenean sit amet sollicitudin nisl. Nam nec tempor ante, accumsan accumsan quam.\n'
+angular.module('app').factory('blog', function(firebaseRepo, blogData, blogExtensions, blogLink){
 
-  blogProvider.setHeadings('Melody\'s Thoughts', 'On Making the Hard Right Choice');
-  blogProvider.setArticles([
-    { id: 'a1', title: 'title0', content: loremIpsum },
-    { id: 'a2', title: 'title1', content: loremIpsum },
-    { id: 'a3', title: 'title2', content: loremIpsum }
-  ]);
+  return firebaseRepo(blogData, blogExtensions, blogLink);
+
 });

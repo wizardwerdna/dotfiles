@@ -1,22 +1,5 @@
-'use strict'
-
-angular.module('depositionsApp', ['ngCookies', 'ngRoute', 'ngAnimate'])
-  .config ($routeProvider,$locationProvider, $provide) ->
-    $locationProvider.html5Mode(true)
-
-    $provide.value 'sessionData',
-      password: 'mattkirk'
-      verification: '$A9XFPR@@PLOX%234'
-
-    $routeProvider
-      .when '/',
-        templateUrl: 'views/main.html'
-        controller: 'MainCtrl'
-      .when '/depos',
-        templateUrl: 'views/depos.html'
-        controller: 'DeposCtrl'
-      .when '/exhibits',
-        templateUrl: 'views/exhibits.html'
-        controller: 'ExhibitsCtrl'
-      .otherwise
-        redirectTo: '/'
+angular.module('app', [])
+.controller 'ClickCtrl', class ClickCtrl
+  constructor: -> @reset();
+  reset: -> @count = 0
+  click: -> @count++

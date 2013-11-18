@@ -1,6 +1,9 @@
-var config = {
-  db_user: "root",
-  db_password: "",
-  db_name: "hackflowy"
-};
-module.exports = config;
+'use strict';
+angular.module('app').config(function($routeProvider, $locationProvider){
+  $locationProvider.html5Mode(true);
+  $routeProvider
+  .when('/', {controller: 'ListCtrl', templateUrl: 'views/list.html'})
+  .when('/new', {controller: 'NewCtrl', templateUrl: 'views/detail.html'})
+  .when('/edit/:id', {controller: 'EditCtrl', templateUrl: 'views/detail.html'})
+  .otherwise({redirectTo: '/'});
+});

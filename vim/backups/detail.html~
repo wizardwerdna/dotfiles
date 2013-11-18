@@ -1,22 +1,27 @@
-<div class="article panel panel-default">
-  <div class="panel-heading"><h3>Article Detail</h3></div>
-  <form class="content panel-body" id="detail">
-
-    <input type="hidden" name="id" value="{{id}}1">
-    <label name="title">Title</label><br>
-    <input name="title" class="col-md-12" 
-      ng-model="detail.title" autofocus><br>
-    <label name="title">Content</label><br>
-    <textarea name="content" class="col-md-12" rows="12" 
-      ng-model="detail.content"></textarea><br>
-    <hr>
-    <a class="cancel btn btn-small" ng-click="cancel()">Cancel</a>
-    <button name="submit" class="btn btn-primary" 
-      ng-click="submit(detail)">{{action()}}</button>
-    <a class="destroy btn btn-small btn-danger" 
-      ng-hide="action() === 'Create'"{
-      ng-click="destroy()" 
-    >Delete</a>
-
-  </form>
+<div class="jumbotron">
+  <h1>{{vm.heading}}</h1>
+  <p>{{vm.subheading}}</p>
 </div>
+
+<form id="detail" class="well">
+
+  <div class="form-group">
+    <label for="detail-title">Title</label><br>
+    <input type="text" id="detail-title" class="form-control" ng-model="vm.detail.title">
+  </div><br>
+
+  <div class="form-group">
+    <label for="detail-content">Content</label><br>
+    <textarea id="detail-content" class="form-control" ng-model="vm.detail.content"></textarea>
+  </div><br>
+
+  <div class="form-group">
+    <a class="cancel btn btn-sm btn-default"
+      ng-click="vm.cancel()">Cancel</a>
+    <input type="submit" class="btn btn-sm btn-primary" value="Submit"
+      ng-click="vm.submit(vm.detail)">
+    <a class="delete btn btn-sm btn-danger" 
+      ng-click="vm.destroy()">Delete</a>
+  </div>
+
+</form>

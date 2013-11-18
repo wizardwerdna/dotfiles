@@ -1,0 +1,75 @@
+'use strict';
+try {
+  throw new Error('sometimes things go wrong');
+} catch(e) {
+  /* if(e.stack && errorForStack) e.stack +=  '\n' + errorForStack.stack; */
+  e.stack += '\nwow!';
+  throw e;
+}
+
+function extend(dst) {
+  arguments.forEach(function(obj){
+    if (obj !== dst) {
+      forEach(obj, function(value, key){
+        dst[key] = value;
+      });
+    }
+  });
+  return dst;
+}
+
+function copy(source, destination){
+  if (!destination) {
+    destination = source;
+    if (source) {
+      if (isArray(source)) {
+        destination = copy(source, []);
+      } else if (isDate(source)) {
+        destination = new Date(source.getTime());
+      } else if (isRegExp(source)) {
+        destination = new RegExp(source.source);
+      } else if (isObject(source)) {
+        destination = copy(source, {});
+      }
+    }
+  } else {
+    if (source === destination) throw ngMinErr('cpi',
+      "Can't copy! Source and destination are identical.");
+    if (isArray(source)) {
+      destination.length = 0;
+      for ( var i = 0; i < source.length; i++) {
+        destination.push(copy(source[i]));
+      }
+    } else {
+      for (var key in destination) {
+        delete destination[key];
+      }
+      for ( key in source) {
+        destination[key] = copy(source[key]);
+      }
+    }
+  }
+  return destination;
+}
+
+function isObject(value){return value != null && typeof value == 'object';}
+
+
+function isString(value){return typeof value == 'string';}
+
+
+function isNumber(value){return typeof value == 'number';}
+
+function isDate(value){
+  return toString.apply(value) == '[object Date]';
+}
+
+function isArray(value) {
+  return toString.apply(value) == '[object Array]';
+}
+
+function isFunction(value){return typeof value == 'function';}
+
+function isRegExp(value) {
+  return toString.apply(value) == '[object RegExp]';
+}

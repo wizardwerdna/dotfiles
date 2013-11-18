@@ -1,0 +1,54 @@
+'use strict';
+describe('Controller BowlCtrl', function(){
+
+  var $scope;
+
+  var ns={
+    scorer: function(){},
+    mockScorer: {mock: 'scorer'}
+  };
+
+  beforeEach(module('app'));
+  beforeEach(inject(function($controller, $rootScope){
+    spyOn(ns, 'scorer').andReturn(ns.mockScorer)
+    $scope = $rootScope.$new();
+    $controller('BowlCtrl', {
+      $scope: $scope,
+      scorer: ns.scorer
+    });
+  }));
+
+  it('should expose an initially empty rolls list', function(){
+    expect($scope.rolls).toEqual([]);
+  });
+
+  describe('addRoll(pins)', function(){
+    it('should adjust rolls when gutter ball is rolled', function(){
+      $scope.addRoll(0);
+      expect($scope.rolls).toEqual([0]);
+    });
+
+    it('should adjust rolls when strike is rolled', function(){
+      $scope.addRoll(10);
+      expect($scope.rolls).toEqual([10]);
+    });
+
+    it('should adjust rolls when two gutter balls are rolled', function(){
+      $scope.addRoll(0);
+      $scope.addRoll(0);
+      expect($scope.rolls).toEqual([0,0]);
+    });
+  });
+
+  it('reset() should set rolls to the empty list', function(){
+    $scope.addRoll(0);
+    $scope.reset();
+    expect($scope.rolls).toEqual([]);
+  });
+
+  it('should initially expose a scorer for empty rolls', function(){
+    expect(ns.scorer).toHaveBeenCalledWith([]);
+    expect($scope.scorer).toEqual(ns.mockScorer);
+  });
+
+});

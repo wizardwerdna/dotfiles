@@ -1,45 +1,11 @@
-'strict on';
-
-angular.module('blogApp').factory('Article', function(ArticleData){
-
+'use strict';
+angular.module('app').directive('agArticle', function(){
   return {
-    query:  query,
-    create: create,
-    remove: remove
-  }
-
-  function query(){
-    return ArticleData
-  }
-
-  function create(article){
-    article.id = nextId();
-    return ArticleData.push({
-      id: article.id,
-      title: article.title,
-      text: article.text
-    });
-  }
-
-  function remove(article){
-    ArticleData.splice(
-      articlesIndexOf(article.id),1);
-  }
-
-  function articlesIndexOf(id){
-    for(i=0; i<ArticleData.length; i++){
-      if(ArticleData[i].id === id){
-        return i; 
-      }
+    templateUrl: 'views/_article.html',
+    restrict: 'A',
+    replace: true,
+    scope: { article: '=data' },
+    link: function(scope, attr){
     }
-  }
-
-  function nextId(){
-    var maxId = -1;
-    ArticleData.map(function(each){
-      maxId = Math.max(maxId, each.id);
-    });
-    return maxId+1;
-  }
-
+  };
 });

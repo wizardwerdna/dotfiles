@@ -1,20 +1,89 @@
 'use strict';
-angular.module( 'app' ).controller( 'NewCtrl', function(blog, $scope, $location) {
+describe('Controller NewCtrl', function() {
+  it('should expose header from blog', function(){
+    var vm = newCtrl(mockBlog, mock$log, mock$location);
+    expect(vm.heading).toBe(mockBlog.heading);
+  });
 
-  $scope.detail = {};
+  it('should expose the correct subheader', function(){
+    var vm = newCtrl(mockBlog, mock$log, mock$location);
+    expect(vm.subheading).toBe('Create New Article');
+  });
 
-  var nextId = 100;
-  $scope.submit = function(detail) {
-    var id = 'a'+(nextId++).toString();
-    blog.articles[id] = angular.extend( detail, {id: id} );
-    $location.url( '/' );
-  };
+  it('should reset the form fields', function(){
+    var vm = newCtrl(mockBlog, mock$log, mock$location);
+    expect(vm.detail).toEqual({});
+  });
 
-  $scope.action = function() {
-    return 'Create';
-  };
+  describe('cancel()', function(){
+    it('should redirect to root', function(){
+      spyOn(mock$location, 'url');
+      var vm = newCtrl(mockBlog, mock$log, mock$location);
+      vm.cancel();
+      expect(mock$location.url).toHaveBeenCalledWith('/');
+    });
+  });
 
-  $scope.cancel = function() {
-    $location.url( '/' );
+  describe('submit()', function(){
+    it('should attempt to create a new article with blog', function(){
+      var mockDetail = {mock: 'detail'};
+      spyOn(mockBlog, 'create').andReturn({then: fail()});
+      var vm = newCtrl(mockBlog, mock$log, mock$location);
+      vm.submit(mockDetail);
+      expect(mockBlog.create).toHaveBeenCalledWith(mockDetail);
+    });
+
+    it('should log an error in creation', function(){
+      var vm, mockReason = {mock: 'reason'};
+      spyOn(mock$log, 'error');
+      spyOn(mockBlog, 'create').andReturn({then: fail(mockReason)});
+      vm = newCtrl(mockBlog, mock$log, mock$location);
+      vm.submit();
+      expect(mock$log.error).toHaveBeenCalledWith(
+        'Unable to Create Article: ' + mockReason.toString());
+    });
+
+    it('should log to inform a successful creation', function(){
+      var vm, mockReason = {mock: 'reason'};
+      spyOn(mock$log, 'info');
+      spyOn(mockBlog, 'create').andReturn({then: succeed(mockReason)});
+      vm = newCtrl(mockBlog, mock$log, mock$location);
+      vm.submit();
+      expect(mock$log.info).toHaveBeenCalledWith(
+        'A New Article Has Been Created.');
+    });
+
+    it('should redirect to root', function(){
+      spyOn(mock$location, 'url');
+      var vm = newCtrl(mockBlog, mock$log, mock$location);
+      vm.submit();
+      expect(mock$location.url).toHaveBeenCalledWith('/');
+    });
+  });
+
+  var
+    mockBlog = {
+      heading: {mock: 'heading'},
+      subheading: {mock: 'subheading'},
+      create: function(){ return { then: function(){} }; }
+    },
+    mock$location = { url: function(){} },
+    mock$log = { info: function(){}, error: function(){} };
+
+  function newCtrl(blog, $log, $location){
+    var controller;
+    module('app');
+    inject(function($controller){
+      controller = $controller('NewCtrl', {
+        blog: blog,
+        $log: $log,
+        $location: $location
+      });
+    });
+    return controller;
   }
+
+  function succeed(val){ return function(f)   { return f(val); }; }
+  function fail(reason){ return function(_,g) { return g(reason); }; }
 });
+

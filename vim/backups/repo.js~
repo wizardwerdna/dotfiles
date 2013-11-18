@@ -1,0 +1,84 @@
+/* SPIKE IN-MEMORY REPOSITORY */
+'use strict';
+angular.module('app').factory('InMemoryRepo', function($q){
+  var  dict = {},
+       nextGuid = 0,
+       idPrefix = 'id';
+
+  return {
+    query:  query,
+    get:    get,
+    create: create,
+    update: update,
+    remove: remove
+  };
+
+  function qpromise(resolver){
+    var df = $q.defer();
+    try {
+      resolver(
+        function(value){df.resolve(value);},
+        function(reason){df.reject(reason);}
+      );
+    } catch(e) {
+      df.reject(e);
+    } finally {
+      return df.promise;
+    }
+  }
+
+  function vals(o){
+    return Object.keys(o).sort().map(function(key){
+      return o[key];
+    });
+  }
+
+  function query(){
+    return qpromise(function(res, rej){
+      res(vals(dict));
+    }
+  };
+
+  function get(id){
+    return qpromise(function(res, rej){
+      if (dict[id]){
+        res(dict[id]);
+      } else {
+        rej('object not found');
+      };
+    })
+    var df = $q.defer();
+    return df.promise;
+  };
+
+  function create(obj){
+    var df = $q.defer();
+    if (obj['id']) {
+      obj['id'] = idPrefix+(++nextGuid).toString();
+      df.resolve(dict[obj['id']] = obj);
+    } else {
+      df.reject('object already exists');
+    }
+    return df.promise;
+  };
+
+  function update(obj){
+    var df = $q.defer;
+    if (dict[obj['id']]){
+      df.resolve(dict[obj['id']]=obj);
+    } else {
+      df.reject('object not found');
+    }
+    return df.promise;
+  };
+
+  function remove(obj){
+    var df = $q.defer;
+    if (dict[obj['id']]) {
+      df.resolve();
+    } else {
+      df.reject('object not found');
+    };
+  }
+
+});

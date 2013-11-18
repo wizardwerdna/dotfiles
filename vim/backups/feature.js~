@@ -1,0 +1,42 @@
+'use strict';
+describe('A Clicking App', function(){
+  var app;
+
+  it('features click counting', function(){
+    expectClicksDisplayToBe('0');
+
+    click(1);
+    expectClicksDisplayToBe('1');
+
+    click(11119);
+    expectClicksDisplayToBe('10');
+
+    reset();
+    expectClicksDisplayToBe('0');
+  });
+
+  beforeEach(module('app', 'views/click.html'));
+  beforeEach(inject(function($compile,$rootScope){
+    app = $compile(
+      '<div ng-controller="ClickCtrl">'+
+        '<div ng-include="\'views/click.html\'"'+
+      '</div>'
+    )($rootScope);
+    $rootScope.$digest();
+  }));
+ 
+  function expectClicksDisplayToBe(str){
+    expect( app.find('.clicks-display').text()).toBe(str);
+  }
+
+  function click(times){
+    for(var i=0; i<times; i++) {
+      app.find('.clicker').click();
+    }
+  }
+
+  function reset(){
+    app.find('.reset').click();
+  }
+
+});

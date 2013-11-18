@@ -1,4 +1,15 @@
 'use strict';
-angular.module( 'app' ).controller( 'MainCtrl', function($scope, blog) {
-  $scope.blog = blog;
+angular.module('app').controller('ListCtrl', function(blog, $log, $sce){
+
+  var vm = this;
+
+  vm.heading = blog.heading;
+  vm.subheading = blog.subheading;
+
+  vm.articles = null;
+  blog.query().then(function(data){
+    vm.articles = data;
+  }, $log.error);
+
+  vm.md = md;
 });

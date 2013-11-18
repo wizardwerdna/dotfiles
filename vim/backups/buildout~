@@ -1,0 +1,6 @@
+#! /usr/bin/env sh
+git clone http://github.com/wizardwerdna/my-angular-seed.git $1 &&
+cd $1 &&
+npm install &&
+bower install &&
+karma start

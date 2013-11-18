@@ -1,0 +1,131 @@
+'use strict';
+angular.module('app').factory('memoryRepo', function($q){
+
+  return function(arry, extensions) {
+
+    var dict = angular.copy({}), nextId = 0, idPrefix = 'id';
+
+    function query(){
+      return $q.when(vals(dict));
+    }
+
+    function get(id){
+      return promise(function(resolve, reject){
+        if (dict[id]){
+          resolve(dict[id]);
+        } else {
+          reject('record not found');
+        }
+      });
+    }
+
+    function create(item){
+      return promise(function(resolve, reject){
+        if (item.id) {
+          reject('cannot have id property');
+        } else {
+          item.id = newGuid();
+          resolve(dict[item.id] = item);
+        }
+      });
+    }
+
+    function update(item){
+      return promise(function(resolve, reject){
+        if (dict[item.id]) {
+          dict[item.id] = item;
+          resolve(item);
+        } else {
+          reject('record not found');
+        }
+      });
+    }
+
+    function patch(item){
+      return promise(function(resolve, reject){
+        if (dict[item.id]) {
+          resolve(angular.extend(dict[item.id], item));
+        } else {
+          reject('record not found');
+        }
+      });
+    }
+
+    function destroy(item){
+      var id = idFrom(item);
+      return promise(function(resolve, reject){
+        var destroyd = dict[id];
+        if (destroyd) {
+          delete dict[id];
+          resolve(destroyd);
+        } else {
+          reject('record not found');
+        }
+      });
+    }
+
+    function idFrom(oOrStr){
+      if (angular.isObject(oOrStr)) { oOrStr = oOrStr.id; }
+      return oOrStr;
+    }
+
+    function vals(o){
+      return Object.keys(o).sort().map(function(k){
+        return o[k];
+      });
+    }
+
+    function newGuid(){
+      var next;
+      do {
+        next = idPrefix + (++nextId).toString();
+      } while (dict[next]);
+      return next;
+    }
+
+    function promise(resolver){
+      var df = $q.defer();
+      try {
+        resolver( df.resolve, df.reject );
+      } catch(e) {
+        df.reject(e);
+      } finally {
+        return df.promise;
+      }
+    }
+
+    function loadDictionary(){
+      arry.forEach(function(each){
+        dict[each.id] = each;
+      });
+    }
+
+    function buildService(){
+      arry = arry || angular.copy([]);
+      extensions = extensions || angular.copy({});
+
+      loadDictionary();
+
+      return angular.extend({
+
+        create: create,
+        read: query,
+        update: update,
+        destroy: destroy,
+
+        dict: dict,
+        patch: patch,
+        query: query,
+        get: get,
+        readAll: query
+
+      }, extensions);
+
+    }
+
+    return buildService();
+
+  };
+
+});
+

@@ -1,0 +1,131 @@
+'use strict';
+
+angular.module('app').factory('firebaseRepo', function($q, $rootScope, angularFire, Firebase){
+
+  var scope = $rootScope.$new();
+  scope.dict = {};
+
+  return function(arry, extensions, link) {
+
+    function query(){
+      return promise(function(resolve, reject){
+        scope.angularfirePromise.then(function(){
+          resolve(vals(scope.dict));
+        }, function(reason){
+          reject(reason);
+        });
+      });
+    }
+
+    function get(id){
+      return promise(function(resolve, reject){
+        if (scope.dict[id]){
+          scope.angularfirePromise.then(function(){
+            resolve(scope.dict[id]);
+          }, function(reason){
+            reject(reason);
+          });
+        } else {
+          reject('record not found');
+        }
+      });
+    }
+
+    function create(item){
+      return promise(function(resolve, reject){
+        if (item.id) {
+          reject('cannot have id property');
+        } else {
+          var id = scope.firebaseRef.push().name();
+          scope.dict[id] = angular.extend(item, {id: id});
+          resolve(scope.dict[id]);
+        }
+      });
+    }
+
+    function update(item){
+      return promise(function(resolve, reject){
+        if (scope.dict[item.id]) {
+          scope.dict[item.id] = item;
+          resolve(item);
+        } else {
+          reject('record not found');
+        }
+      });
+    }
+
+    function patch(item){
+      return promise(function(resolve, reject){
+        if (scope.dict[item.id]) {
+          resolve(angular.extend(scope.dict[item.id], item));
+        } else {
+          reject('record not found');
+        }
+      });
+    }
+
+    function destroy(item){
+      id = idFrom(item);
+      return promise(function(resolve, reject){
+        var destroyd = scope.dict[id];
+        if (destroyd) {
+          delete scope.dict[id];
+          resolve(destroyd);
+        } else {
+          reject('record not found');
+        }
+      });
+    }
+
+    function vals(o){
+      return Object.keys(o).sort().map(function(k){
+        return o[k];
+      });
+    }
+
+    function promise(resolver){
+      var df = $q.defer();
+      try {
+        resolver( df.resolve, df.reject );
+      } catch(e) {
+        df.reject(e);
+      } finally {
+        return df.promise;
+      }
+    }
+
+    function loadDictionary(){
+      // arry.forEach(function(each){
+      //   scope.dict[each.id] = each;
+      // });
+    }
+
+    function buildService(){
+      arry = arry || angular.copy([]);
+      extensions = extensions || angular.copy({});
+
+      scope.firebaseRef = new Firebase(link);
+      scope.angularfirePromise = angularFire(scope.firebaseRef, scope, 'dict');
+      loadDictionary();
+
+      return angular.extend(scope, {
+
+        create: create,
+        read: query,
+        update: update,
+        destroy: destroy,
+
+        patch: patch,
+        query: query,
+        get: get,
+        readAll: query
+
+      }, extensions);
+
+    }
+
+    return buildService();
+
+  };
+
+});

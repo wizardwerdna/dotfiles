@@ -1,0 +1,15 @@
+'use strict';
+angular.module('app', []);
+angular.module('app').controller('ClickCtrl', function(){
+  var vm = this;
+
+  vm.count = 0;
+
+  vm.click = function(){
+    vm.count += 1;
+  };
+  
+  vm.reset = function(){
+    vm.count = 0;
+  };
+});

@@ -1,0 +1,15 @@
+'use strict';
+describe('failure in ng-mocks', function(){
+  var app;
+  beforeEach(module('views/nofilehere.html'));
+  beforeEach(inject(function($compile, $rootScope){
+    app = $compile(
+      '<div><div ng-include="\'views/nofilehere.html\'"></div></div>'
+    )($rootScope);
+    $rootScope.$digest();
+    console.log(app.html());
+  }));
+  it('displayed by example', function(){
+    console.log('hello, world');
+  });
+});

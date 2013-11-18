@@ -1,0 +1,20 @@
+'use strict';
+angular.module('app').factory('md', function($window, $sce){
+  $window.marked.setOptions({
+    gfm: true,
+    highlight: function (code, lang, callback) {
+      return prettyPrintOne(code, lang, false);
+    },
+    tables: true,
+    breaks: false,
+    pedantic: false,
+    sanitize: true,
+    smartLists: true,
+    smartypants: false,
+    langPrefix: 'lang-'
+  });
+  function trusted(str){
+    return $sce.trustAsHtml($window.marked(str));
+  }
+  return angular.extend($window.marked, {trusted: trusted});
+});

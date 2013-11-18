@@ -1,27 +1,172 @@
 'use strict';
-angular.module( 'app' ).controller( 'EditCtrl', function(blog, $location, $scope, $routeParams) {
+describe('Controller EditCtrl', function() {
+  describe('when created', function(){
 
-  $scope.blog = blog;
+    it('should expose blog header', function(){
+      var vm = newCtrl(mockBlog, mock$log, mock$location, mock$routeParams);
 
-  $scope.id = $routeParams.id;
+      expect(vm.heading).toBe(mockBlog.heading);
+    });
 
-  $scope.detail = blog.articles[$routeParams.id];
+    it('should expose update subheader', function(){
+      var vm = newCtrl(mockBlog, mock$log, mock$location, mock$routeParams);
 
-  $scope.submit = function(detail) {
-    angular.extend(blog.articles[$routeParams.id], detail);
-    $location.url( '/' );
-  };
+      expect(vm.subheading).toBe('Update Article');
+    });
 
-  $scope.destroy = function() {
-    delete articles[$routeParams.id];
-    $location.url( '/' );
-  };
+    it('should set detail from blog', function(){
+      var mockItem = {mock: 'item'};
+      spyOn(mockBlog, 'get').andReturn({then: succeed(mockItem)});
+      var vm = newCtrl(mockBlog, mock$log, mock$location, mock$routeParams);
 
-  $scope.action = function() {
-    return 'Update';
-  };
+      expect(mockBlog.get).toHaveBeenCalledWith(mock$routeParams.id);
+      expect(vm.detail).toEqual(mockItem);
+    });
 
-  $scope.cancel = function() {
-    $location.url( '/' );
+    describe('but with invalid id', function(){
+      it('should notice invalid ID', function(){
+        var mockReason = {mock: 'reason'};
+        spyOn(mock$log, 'error');
+        spyOn(mockBlog, 'get').andReturn({then: fail(mockReason)});
+        newCtrl(mockBlog, mock$log, mock$location, mock$routeParams);
+
+        expect(mock$log.error).toHaveBeenCalledWith(
+          'Unable to Update Article: ' + mockReason.toString());
+      });
+
+      it('should redirect to root', function(){
+        spyOn(mock$location, 'url');
+        spyOn(mockBlog, 'get').andReturn({then: fail('')});
+        newCtrl(mockBlog, mock$log, mock$location, mock$routeParams);
+
+        expect(mock$location.url).toHaveBeenCalledWith('/');
+      });
+    })
+
+
+  });
+
+  describe('after cancel()', function(){
+    it('should redirect to root', function(){
+      spyOn(mock$location, 'url');
+      var vm = newCtrl(mockBlog, mock$log, mock$location);
+      vm.cancel();
+
+      expect(mock$location.url).toHaveBeenCalledWith('/');
+    });
+  });
+
+  describe('after submit()', function(){
+    it('should attempt to update a new article with blog', function(){
+      var mockDetail = {mock: 'detail'};
+      spyOn(mockBlog, 'update').andReturn({then: fail()});
+      var vm = newCtrl(mockBlog, mock$log, mock$location, mock$routeParams);
+      vm.submit(mockDetail);
+
+      expect(mockBlog.update).toHaveBeenCalledWith(mockDetail);
+    });
+
+    it('should log an update error', function(){
+      var vm, mockReason = {mock: 'reason'};
+      spyOn(mock$log, 'error');
+      spyOn(mockBlog, 'update').andReturn({then: fail(mockReason)});
+      vm = newCtrl(mockBlog, mock$log, mock$location, mock$routeParams);
+      vm.submit();
+
+      expect(mock$log.error).toHaveBeenCalledWith(
+        'Unable to Update Article: ' + mockReason.toString());
+    });
+
+    it('should log to inform a successful creation', function(){
+      var vm, mockReason = {mock: 'reason'};
+      spyOn(mock$log, 'info');
+      spyOn(mockBlog, 'update').andReturn({then: succeed(mockReason)});
+      vm = newCtrl(mockBlog, mock$log, mock$location, mock$routeParams);
+      vm.submit();
+
+      expect(mock$log.info).toHaveBeenCalledWith(
+        'The Article Has Been Updated.');
+    });
+
+    it('should redirect to root', function(){
+      spyOn(mock$location, 'url');
+      var vm = newCtrl(mockBlog, mock$log, mock$location, mock$routeParams);
+      vm.submit();
+
+      expect(mock$location.url).toHaveBeenCalledWith('/');
+    });
+  });
+
+  describe('after delete()', function(){
+    it('should attempt to delete the blog article', function(){
+      spyOn(mockBlog, 'destroy').andReturn({then: fail()});
+      var vm = newCtrl(mockBlog, mock$log, mock$location, mock$routeParams);
+      vm.destroy();
+
+      expect(mockBlog.destroy).toHaveBeenCalledWith(mock$routeParams.id);
+    });
+
+    it('should log an update error', function(){
+      var vm, mockReason = {mock: 'reason'};
+      spyOn(mock$log, 'error');
+      spyOn(mockBlog, 'destroy').andReturn({then: fail(mockReason)});
+      vm = newCtrl(mockBlog, mock$log, mock$location, mock$routeParams);
+      vm.destroy();
+
+      expect(mock$log.error).toHaveBeenCalledWith(
+        'Unable to Delete Article: ' + mockReason.toString());
+    });
+
+    it('should log to inform a successful creation', function(){
+      var vm, mockReason = {mock: 'reason'};
+      spyOn(mock$log, 'info');
+      spyOn(mockBlog, 'destroy').andReturn({then: succeed(mockReason)});
+      vm = newCtrl(mockBlog, mock$log, mock$location, mock$routeParams);
+      vm.destroy();
+
+      expect(mock$log.info).toHaveBeenCalledWith(
+        'The Article Was Deleted.');
+    });
+
+    it('should redirect to root', function(){
+      spyOn(mock$location, 'url');
+      var vm = newCtrl(mockBlog, mock$log, mock$location, mock$routeParams);
+      vm.destroy();
+
+      expect(mock$location.url).toHaveBeenCalledWith('/');
+    });
+  });
+
+  var
+    noop = angular.noop,
+    noPromise = function(){ return { then: function(){}  };  },
+    mockBlog = {
+      heading: {mock: 'heading'},
+      subheading: {mock: 'subheading'},
+      get: noPromise,
+      update: noPromise,
+      destroy: noPromise
+    },
+    mock$routeParams = { id: {mock: 'id'} },
+    mock$location = { url: noop },
+    mock$log = { info: noop, error: noop };
+
+  function newCtrl(blog, $log, $location){
+    var controller;
+    module('app');
+    inject(function($controller){
+      controller = $controller('EditCtrl', {
+        blog: blog,
+        $log: $log,
+        $location: $location,
+        $routeParams: mock$routeParams
+      });
+    });
+    return controller;
   }
+
+  function succeed(val){ return function(f)   { return f(val); }; }
+  function fail(reason){ return function(_,g) { return g(reason); }; }
+  
 });
+

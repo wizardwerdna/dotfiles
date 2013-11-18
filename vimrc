@@ -8,6 +8,7 @@ set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
 let g:syntastic_html_checkers = []
+let g:ackprg = 'ag --nogroup --nocolor --column'
 
 "let Vundle manage Vundle
 " required! 
@@ -24,8 +25,10 @@ Bundle 'godlygeek/tabular'
 Bundle 'html5.vim'
 Bundle 'IndexedSearch'
 Bundle 'Jasmine-snippets-for-snipMate'
+Bundle 'jiangmiao/auto-pairs'
 Bundle 'jQuery'
 Bundle 'L9'
+Bundle 'lfilho/cosco.vim'
 Bundle 'Lokaltog/vim-easymotion'
 Bundle 'Lokaltog/vim-easymotion'
 Bundle 'mattn/emmet-vim'
@@ -59,6 +62,7 @@ Bundle 'vim-javascript'
 Bundle 'vim-ruby/vim-ruby'
 Bundle 'vimux'
 Bundle 'vividchalk.vim'
+Bundle "yearofmoo/Vim-Darkmate"
 
 " Bundle 'marijnh/tern_for_vim'
 
@@ -202,10 +206,22 @@ xmap s <Plug>VSurround
 " from my old gvimrc"
 
 colorscheme vividchalk
+"colorscheme darkmate
 " syntax enable
 " set background=dark
 " colorscheme solarized
 
+autocmd FileType javascript,css,YOUR_LANG nmap <silent> ,; :call cosco#commaOrSemiColon()<CR>
+autocmd FileType javascript,css,YOUR_LANG inoremap <silent> ,; <ESC>:call cosco#commaOrSemiColon()<CR>a
+autocmd FileType javascript,css,YOUR_LANG inoremap <silent> ;; <ESC>:call cosco#commaOrSemiColon()<CR>a
+
+nmap <leader>js O'use strict';<cr><esc>
+nmap <leader>ja O'use strict';<cr>angular.module('app').
+nmap <leader>jd O'use strict';<cr>describe('
+nmap <leader>d  Odescribe('
+nmap <leader>i  Oit('
+" CtrlP
+"
 map <leader>p :CtrlPMRU<cr>
 map <leader>gb :CtrlPBuffer<cr>
 map <leader>ga :CtrlP app<cr>
@@ -215,6 +231,7 @@ map <leader>gv :CtrlP app/views<cr>
 map <leader>gi :topleft :split app/index.html<cr>
 
 map <leader>gg :topleft 100 :split Gemfile<cr>
+let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git\|bower_components'
 
 set winwidth=84
 " We have to have a winheight bigger than we want to set winminheight. But if

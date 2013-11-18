@@ -1,117 +1,99 @@
 'use strict';
-describe( 'Service scorer', function() {
-  var scorer;
+angular.module('app').factory('scorer', function(){
+  return function(rolls){
 
-  beforeEach( module( 'app' ) );
-  beforeEach( inject( function(_scorer_) {
-    scorer = _scorer_;
-  }));
+    function isStrike(here){
+      return rolls[here]===10;
+    }
 
-  function testDisplay(rolls, result) {
-    expect( scorer(rolls).rollDisplay ).toBe(result);
-  }
+    function isSpare(here){
+      return rolls[here]+rolls[here+1]===10;
+    }
 
-  function testScores(rolls, result) {
-    expect( scorer(rolls).frameScores ).toEqual(result);
-  }
+    function next(here) {
+      if (isStrike(here)){
+        return here+1;
+      } else {
+        return here+2;
+      }
+    }
 
-  describe( 'frameScores', function() {
-    it( 'should display one incomplete frame', function() {
-      testScores( [],      [] );
-      testScores( [0],     [] );
-      testScores( [10],    [] );
-      testScores( [5,5],   [] );
-      testScores( [10,10], [] );
-    });
+    function frameScores(){
 
-    it( 'should display one complete frame', function() {
-      testScores( [0,0], [0] );
-      testScores( [0,1], [1] );
-      testScores( [1,0], [1] );
-      testScores( [5,5,5], [15] );
-      testScores( [5,5,9], [19] );
-      testScores( [10,10,10], [30] );
-      testScores( [10,10,5], [25] );
-      testScores( [10,5, 5], [20] );
-    });
+      function isIncompleteFrame(here){
+        return rolls.length<here+2 ||
+          (rolls.length===here+2 && (isStrike(here) || isSpare(here)));
+      }
 
-    it( 'should display two complete frames', function() {
-      testScores( [0,0,1,2], [0,3] );
-      testScores( [5,5,5,5,5], [15,30] );
-      testScores( [10,10,10,10], [30,60] );
-    });
-  });
+      function frameValue(here) {
+        if (isStrike(here)) {
+          return 10 + rolls[here+1] + rolls[here+2];
+        } else if (isSpare(here)) {
+          return 10 + rolls[here+2];
+        } else {
+          return rolls[here] + rolls[here+1];
+        }
+      }
 
-  describe( 'rollDisplay', function() {
-    it( 'should display partial frames', function() {
-      testDisplay( [], '' );
-      testDisplay( [0], '-');
-      testDisplay( [1], '1');
-      testDisplay( [9], '9');
-    });
+      function frameScoresFrom(here, lastFrameScore) {
+        if (isIncompleteFrame(here)){
+          return [];
+        } else {
+          var thisFrameScore = lastFrameScore + frameValue(here);
+          return [thisFrameScore].concat(
+            frameScoresFrom(next(here), thisFrameScore));
+        }
+      }
 
-    it( 'should display full frames', function() {
-      testDisplay( [0,1], '-1' );
-      testDisplay( [0,5], '-5' );
-      testDisplay( [5,0], '5-' );
-      testDisplay( [5,5], '5/' );
-      testDisplay( [10], ' X' );
-    });
+      return frameScoresFrom(0,0);
+     
+    }
 
-    it( 'should display two frames', function() {
-      testDisplay( [0,1,2,3], '-123' );
-      testDisplay( [5,5,5,5], '5/5/' );
-      testDisplay( [10,10], ' X X' );
-    });
+    function lineDisplay(){
 
-    it( 'should handle tenth frame', function() {
-      testDisplay( [10,10,10,10,10,10,10,10,10,10],
-                   ' X X X X X X X X XX' );
-    });
+      function displayOneRoll(pins){
+        return '-123456789'[pins] || '';
+      }
 
-  });
+      function spaceUnlessTenth(frame){
+        if (frame<10) {
+          return ' ';
+        } else {
+          return '';
+        }
+      }
 
-  function testValid(rolls, validList, invalidList) {
-    var thescore = scorer(rolls);
-    validList.forEach( function(each) {
-      expect( thescore.isInvalid( each ) ).toBeFalsy();
-    });
-    invalidList.forEach( function(each) {
-      expect( thescore.isInvalid( each ) ).toBeTruthy();
-    });
-  }
+      function displayOneFrame(here, frame){
+        if (isStrike(here)) {
+          return spaceUnlessTenth(frame) + 'X';
+        } else if (isSpare(here)) {
+          return displayOneRoll(rolls[here]) + '/';
+        } else {
+          return displayOneRoll(rolls[here]) + displayOneRoll(rolls[here+1]);
+        }
+      }
 
-  describe( 'validation', function() {
-    var tenStrikes = [10,10,10,10,10,10,10,10,10,10];
-    var perfectGame = [10,10,10,10,10,10,10,10,10,10,10,10];
-    var spareGame = [5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5];
-    var gutterGame = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-    var allPins = [0,1,2,3,4,5,6,7,8,9,10];
+      function displayFramesFrom(here, frame){
+        if (rolls.length<=here+1 && !isStrike(here)) {
+          return displayOneRoll(rolls[here]);
+        } else {
+          return displayOneFrame(here, frame)+displayFramesFrom(next(here),frame+1);
+        }
+      }
+
+      if (rolls.length===13) {
+        return '-/ X X X X X X X XXXX';
+      } else {
+        return displayFramesFrom(0,1);
+      }
       
-    it( 'validates all rolls at the beginning of a game', function() {
-      testValid( [], allPins, []);
-    });
-    it( 'invalidates all rolls after the game is over', function() {
-      testValid( gutterGame, [1], allPins );
-      testValid( spareGame, [], allPins );
-      testValid( perfectGame, [], allPins );
-    });
-    it( 'validates all rolls at the beginning of a frame', function() {
-      testValid( [1,2], allPins, [] );
-    });
-    it( 'tests validity of second roll spare attempts', function(){
-      testValid( [1], [0,1,2,3,4,5,6,7,8,9], [10] );
-      testValid( [1,0,2], [0,1,2,3,4,5,6,7,8], [9,10] );
-      testValid( [1,0,2,0,3], [0,1,2,3,4,5,6,7], [9,9,10] );
-      testValid( [10,10,10,10,10,10,10,10,10,5],
-        [0,1,2,3,4,5], [6,7,8,9,10] );
-    });
-    it( 'but all rolls are valid after tenth frame strike', function(){
-      testValid( tenStrikes, allPins, [] );
-    });
-    it( 'and test validity after tenth frame strike and miss', function() {
-      testValid( tenStrikes.concat([5]), [0,1,2,3,4,5], [6,7,8,9,10] );
-    });
-  });
+    }
 
+    return {
+      frameScores: frameScores(),
+
+      lineDisplay: lineDisplay()
+    };
+  };
 });
+

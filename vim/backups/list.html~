@@ -1,13 +1,45 @@
 <div class="jumbotron">
-  <h1 class="heading">{{blog.heading}}</h1>
-  <p class="subheading">{{blog.subheading}}</p>
+  <h1 class="heading">{{vm.heading}}</h1>
+  <p class="subheading">{{vm.subheading}}</p>
 </div>
 
-<a class="new btn btn-primary" href="/new">New Article</a>
-<div id="{{article.id}}" class="article panel panel-default" 
-  ng-repeat="article in blog.articles"
->
-  <a class="edit btn btn-primary small pull-right" ng-href="/edit/{{article.id}}">Edit</a>
-  <div class="title panel-heading"><h3>{{article.title}}</h3></div>
-  <div class="content panel-body">{{article.content}}</div>
+<div><a class="new btn btn-sm btn-primary" href="/new">New Article</a></div><br>
+
+<div class="content row">
+  <section class="col-md-9">
+
+
+    <div id="{{article.id}}" class="article panel panel-default" 
+      ng-repeat="article in vm.articles">
+
+      <h3 class="title panel-heading panel-title">{{article.title}}</h3>
+      <div class="panel-body">
+        <a class="edit pull-right btn btn-sm btn-primary" ng-href="/edit/{{article.id}}">Edit</a>
+        <span class="content" ng-bind-html="vm.md.mdTrusted(article.content)"></span>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="col-md-3">
+    <div class="panel panel-default">
+      <div class="title panel-heading panel-title">
+        <h4>About AngularJS, Test-First Development and Eating your own dogfood<h4>
+      </div>
+      <div class="panel-body">
+        Here you will find articles and videos about developing AngularJS software in the 
+        agile style.  We will start small, with katas designed to hone your TDD skills,
+        and move to larger projects such as this blog.  All the projects will be 
+        available as repositories on my Github page.
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="title panel-heading panel-title">Lotsa' Articles</div>
+      <div class="panel-body">
+        <ul>
+          <li ng-repeat="article in vm.articles">{{article.title}}</li>
+        </ul>
+      </div>
+    </div>
+  </section>
 </div>

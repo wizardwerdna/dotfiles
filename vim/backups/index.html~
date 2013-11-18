@@ -17,7 +17,8 @@
 
     <base href="/"></base>
 </head>
-<body ng-app="app" ng-controller="MainCtrl">
+<body ng-app="app">
+
   <!--[if lt IE 7]>
     <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
   <![endif]-->
@@ -27,7 +28,9 @@
     <script src="bower_components/json3/lib/json3.min.js"></script>
   <![endif]-->
 
-  <div class="container" ng-include="'views/main.html'"></div>
+  <div ng-controller="ClickCtrl as vm">
+    <div ng-include='views/click.html'></div>
+  </div>
 
   <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
    <script>
@@ -66,14 +69,8 @@
   <script src="bower_components/angular-animate/angular-animate.js"></script>
   <!-- endbuild -->
 
-  <!-- --------------------------------- -->
-  <!-- Add your application scripts here -->
-  <!-- --------------------------------- -->
-  <!-- build:js({.tmp,app}) scripts/scripts.js -->
-    <script src="scripts/app.js"></script>
-    <script src="scripts/controllers/main.js"></script>
-    <!-- <script src="scripts/services/service.js"></script> -->
-    <!-- <script src="scripts/directives/directive.js"></script> -->
+  <script src="scripts/app.js"></script>
+  <script src="scripts/controllers/click.js"></script>
   <!-- endbuild -->
 </body>
 </html>

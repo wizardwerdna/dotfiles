@@ -1,0 +1,8 @@
+<div class="jumbotron">
+  <h1>Superheroic Greetings</h1>
+  <p>an AngularJS Kata</p>
+</div>
+<div class="well">
+  <input name="greetee" ng-model="greetee">
+  <div class="greeting-display">Hello, {{greetee || 'world'}}!</div>
+</div>

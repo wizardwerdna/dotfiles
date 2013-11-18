@@ -1,24 +1,9 @@
-<div class="jumbotron">
-  <h1>Superheroic Bowling</h1>
-</div>
-
-<div class="line well">
-  <button class="roll btn btn-small"
-    ng-disabled="isInvalid(pins)"
-    ng-repeat="pins in [0,1,2,3,4,5,6,7,8,9,10]"
-    ng-click="addRoll(pins)"
-  >{{pins}}</button>
-  <button class="reset btn btn-small btn-danger" ng-click="reset()">Reset</button>
-
-  <div class="frames">
-    <div class="frame" 
-      ng-repeat="frame in [0,1,2,3,4,5,6,7,8,9]"
-      ng-class="{tenth: frame===9}">
-      <div class="roll-display">{{scorer.rollDisplay[2*frame]}}</div>
-      <div class="roll-display">{{scorer.rollDisplay[2*frame+1]}}</div>
-      <div class="roll-display" 
-        ng-if="frame===9">{{scorer.rollDisplay[2*frame+2]}}</div>
-      <div class="frame-score-display">{{scorer.frameScores[frame]}}</div>
-    </div>
-  </div>
+<div class="hero-unit">
+  <h1>'SAllo, 'Allo!</h1>
+  <p>You now have</p>
+  <ul>
+      <li ng-repeat="thing in awesomeThings">{{thing}}</li>
+  </ul>
+  <p>installed.</p>
+  <h3>Enjoy coding! - Yeoman</h3>
 </div>
