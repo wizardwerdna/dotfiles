@@ -1,0 +1,72 @@
+'use strict';
+ddescribe('Factory bowler', function() {
+  var bowler;
+
+  beforeEach(function(){
+    module('app');
+    inject(function(_bowler_){ bowler = _bowler_; });
+  });
+
+  function testRollsDisplay(rolls, result){
+    expect(bowler(rolls).rollsDisplay()).toBe(result);
+  }
+
+  describe('rollsDisplay()', function(){
+    it('empty game', function(){
+      testRollsDisplay([], '');
+    });
+    it('displays a partial frame', function(){
+      testRollsDisplay([0], '-');
+      testRollsDisplay([5], '5');
+      testRollsDisplay([9], '9');
+    });
+    it('displays one complete frame', function(){
+      testRollsDisplay([10], ' X');
+      testRollsDisplay([0,0], '--');
+      testRollsDisplay([5,0], '5-');
+      testRollsDisplay([5,4], '54');
+      testRollsDisplay([5,5], '5/');
+    });
+    it('displays two complete frames', function(){
+      testRollsDisplay([0,1,2,3], '-123');
+      testRollsDisplay([0,1,5,5], '-15/');
+      testRollsDisplay([10,10], ' X X');
+    });
+    it('displays three complete frames', function(){
+      testRollsDisplay([0,1,2,3,4,5], '-12345');
+    });
+    it('displays tenth frame strikes', function(){
+      testRollsDisplay([1,0,2,0,3,0,4,0,5,0,6,0,7,0,8,0,9,0, 10, 10, 10],
+          '1-2-3-4-5-6-7-8-9-XXX');
+    });
+  });
+
+  function testFrameScoresDisplay(rolls, result){
+    expect(bowler(rolls).frameScoresDisplay()).toEqual(result);
+  }
+
+  describe('frameScoresDisplay()', function() {
+    it('scores incomplete frames', function(){
+      testFrameScoresDisplay([], []);
+      testFrameScoresDisplay([0], []);
+      testFrameScoresDisplay([5,5], []);
+      testFrameScoresDisplay([10], []);
+      testFrameScoresDisplay([10,5], []);
+      testFrameScoresDisplay([10,10], []);
+    });
+    it('scores complete frames', function(){
+      testFrameScoresDisplay([0,0], [0]);
+      testFrameScoresDisplay([5,0], [5]);
+      testFrameScoresDisplay([0,5], [5]);
+      testFrameScoresDisplay([5,5,5], [15]);
+      testFrameScoresDisplay([5,5,10], [20]);
+      testFrameScoresDisplay([10, 5, 5], [20]);
+      testFrameScoresDisplay([10, 10, 10], [30]);
+    });
+    it('scores two complete frames', function(){
+      testFrameScoresDisplay([0,0,1,2], [0,3]);
+      testFrameScoresDisplay([5,5,5,5,5], [15,30]);
+      testFrameScoresDisplay([10,10,10,10], [30,60]);
+    });
+  });
+});

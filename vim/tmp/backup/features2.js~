@@ -1,0 +1,154 @@
+'use strict';
+describe('second attempt', function(){
+
+  describe('Class', function(){
+    it('should exist', function(){
+      expect(Class).toBeDefined();
+    });
+    it('should be a function', function(){
+      expect(typeof Class).toBe('function');
+    });
+    it('should have a null superclass property', function(){
+      expect(Class.superclass).toBeNull();
+    });
+    it('should have subclass, a class method', function(){
+      expect(Class.subclass).toBeDefined();
+    });
+    it('Class.subclass should be a function', function(){
+      expect(typeof Class.subclass).toBe('function');
+    });
+  });
+  describe('Class.subclass()', function(){
+    var ns, SubClass, s, MOCK_SubClassVariable = {mock: 'subClassVariable'};
+    function MOCK_SubInstanceMethod(){}
+    function MOCK_SubClassMethod(){}
+    var MOCK_SubInstanceVariable = {mock: 'subInstanceVariable'};
+    beforeEach(function(){
+      ns = {
+        initializer: function(){
+          this.subInstanceVariable = MOCK_SubInstanceVariable;
+        }
+      };
+      spyOn(ns, 'initializer').andCallThrough();
+      SubClass = Class.subclass(ns.initializer);
+      SubClass.subClassMethod = MOCK_SubClassMethod;
+      SubClass.subClassVariable = MOCK_SubClassVariable;
+      SubClass.prototype.subInstanceMethod = MOCK_SubInstanceMethod;
+      s = new SubClass({mock: 'params'});
+    });
+    describe('class', function(){
+      it('should be a function', function(){
+        expect(typeof SubClass).toBe('function');
+      });
+      it('should have Class as a superclass', function(){
+        expect(SubClass.superclass).toBe(Class);
+      });
+      it('should have property subclass identical to Class.subclass', function(){
+        expect(SubClass.subclass).toBe(Class.subclass);
+      });
+      it('should have identical Class methods', function(){
+        expect(SubClass.subClassMethod).toBe(MOCK_SubClassMethod);
+      });
+      it('should have identical class variables', function(){
+        expect(SubClass.subClassVariable).toBe(MOCK_SubClassVariable);
+      });
+    });
+    describe('instances', function(){
+      it('should be initialized with initializer', function(){
+        expect(ns.initializer).toHaveBeenCalledWith({mock: 'params'});
+      });
+      it('should initialize instance variables', function(){
+        expect(s.subInstanceVariable).toEqual({mock: 'subInstanceVariable'});
+      });
+      it('should have identical instance methods', function(){
+        expect(s.subInstanceMethod).toBe(MOCK_SubInstanceMethod);
+      });
+    });
+    describe('extendPrototype(.)', function(){
+      var MOCK_ExtendVariable = {mock: 'extendVariable'};
+      function MOCK_ExtendMethod(){};
+      beforeEach(function(){
+        SubClass.extendPrototype({
+          variable: MOCK_ExtendVariable,
+          method: MOCK_ExtendMethod 
+        });
+      });
+      it('instance should have learned', function(){
+        expect(s.method).toBe(MOCK_ExtendMethod);
+        expect(s.variable).toBe(MOCK_ExtendVariable);
+      });
+    });
+
+    describe('subsubclasses', function(){
+      var SubsubClass;
+      var MOCK_SubsubInstanceVariable = {mock: 'subsubInstanceVariable'};
+      var MOCK_SubsubClassVariable = {mock: 'subsubClassVariable'};
+      function MOCK_SubsubInstanceMethod(){}
+      function MOCK_SubsubClassMethod(){}
+      beforeEach(function(){
+        SubsubClass = SubClass.subclass(function(){
+          this.subsubInstanceVariable = MOCK_SubsubInstanceVariable;
+        });
+        SubsubClass.prototype.subsubInstanceMethod = MOCK_SubsubInstanceMethod;
+        SubsubClass.subsubClassVariable = MOCK_SubsubClassVariable;
+        SubsubClass.subsubClassMethod = MOCK_SubsubClassMethod;
+      });
+      describe('class', function(){
+        it('should have the correct superclass', function(){
+          expect(SubsubClass.superclass).toBe(SubClass);
+        });
+        it('should have its own class method and variables', function(){
+          expect(SubsubClass.subsubClassMethod).toBe(MOCK_SubsubClassMethod);
+          expect(SubsubClass.subsubClassVariable).toBe(MOCK_SubsubClassVariable);
+        });
+
+        it('should inherit SubClass method and variable', function(){
+          expect(SubsubClass.subClassMethod).toBe(MOCK_SubClassMethod);
+          expect(SubsubClass.subClassVariable).toBe(MOCK_SubClassVariable);
+        });
+      });
+      describe('instances', function(){
+        var ss;
+        beforeEach(function(){
+          ss = new SubsubClass();
+        });
+        it('should have a class instance variable', function(){
+          expect(ss.class).toBe(SubsubClass);
+        });
+        it('should have a super instance variable', function(){
+          expect(ss.super).toBe(SubClass);
+        });
+        it('should have its own instance variable and method', function(){
+          expect(ss.subsubInstanceVariable).toEqual(MOCK_SubsubInstanceVariable);
+          expect(ss.subsubInstanceMethod).toBe(MOCK_SubsubInstanceMethod);
+        });
+        it('should inherit SubClass instance variables and method', function(){
+          expect(ss.subInstanceVariable).toEqual(MOCK_SubInstanceVariable);
+          expect(ss.subInstanceMethod).toBe(MOCK_SubInstanceMethod);
+        });
+      });
+    });
+  });
+
+  var Class = function(){};
+  angular.extend(Class, {
+    superclass: null,
+    subclass: function(initializer){
+      var klass = this;
+      var S = function (x){
+        klass.apply(this, arguments);
+        initializer.apply(this, arguments);
+      };
+      angular.extend(S, this);
+      S.prototype = Object.create(this.prototype);
+      S.prototype.class = S;
+      S.prototype.super = klass;
+      S.prototype.consructor = S;
+      S.superclass = this;
+      return S;
+    },
+    extendPrototype: function(object){
+      angular.extend(this.prototype, object);
+    }
+  });
+});

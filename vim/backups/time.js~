@@ -1,0 +1,39 @@
+'use strict';
+angular.module('time', [])
+
+.controller('TimeVM', function(){
+  this.sum = function(){
+    return Math.round($('tr > td:nth-child(2)').get()
+    .map(function(each){
+      return parseFloat($(each).text());
+    })
+    .reduce(function(sum, each){
+      if (isNaN(each)){
+        console.log('rejected');
+        return sum;
+      } else {
+        return sum + each;
+      }
+    })*10)/10;
+  };
+
+  this.num = function(){
+    console.log($('tr > td:nth-child(2)').length)
+    return $('tr > td:nth-child(2)').get()
+    .map(function(each){
+      if (isNaN(parseFloat($(each).text())))
+        return 0;
+      else
+        return 1;
+    })
+    .reduce(function(sum, each){
+      if (isNaN(each)){
+        console.log('rejected');
+        return sum;
+      } else {
+        return sum + each;
+      }
+    });
+  };
+
+});

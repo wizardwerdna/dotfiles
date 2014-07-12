@@ -1,0 +1,466 @@
+# Superheroic Tallying
+
+In this kata, we will build out a browser-based tally counter.  Using
+Test-First disciplines, we will build applications built from scratch,
+starting with an empty file. From the simplest examples to full-scale
+AngularJS and backend systems, I hope these katas may inspire you to
+adopt these terrific agile practices to change the world with your own
+examples and craftsmanship.
+
+I will perform each kata for you in a screencast and in written materials
+summarizing the development. Then it is your turn.
+Correct performance has nothing to do with mimicking what I show you,
+but by finding your own chops and improving on the craft.
+
+We repeat katas to better comprehend the practices and to build mental
+muscle memory so that skills flow quickly from your mind, as though you
+were touch typing the ideas themselves. They should take your breath
+away, as can a Mozart aria.
+
+My name is Andrew Greenberg, and I would be grateful for your comments
+and suggestions as you work through these forms. You can find me by
+e-mail at wizardwerdna@gmail.com, or at @wizardwerdna on twitter. Now,
+let's get this kata started.
+
+## The Plan
+
+This application is very simple, primarily to illustrate the basic Bunkai
+for any TDD-developed application in AngularJS.  I will go into great details
+about the techniques used here, so that we can skip past them quickly in later
+kata.  The plan is to build out a web page with the following:
+
+1.  Provide a display of a tally count.
+2.  Provide a means for incrementing the tally count.
+3.  Provide a means for resetting the tally count.
+
+## First tests 
+
+We begin, as we always do, with an empty file.  We would like to write some 
+production code, but we cannot until we have a failing test.  (See Bunkai-The TDD Process).  So we will write some outside-in integration tests to begin our work.
+
+```javascript
+describe('a tally count display', function(){
+  it('SCENARIO: upon creation', function(){
+    expect(parseInt(page.find('.count').text())).toBe(0);
+  });
+});
+```
+
+This is a "hail-mary" test that makes reference to structures that don't exist.
+The idea is that the errors thrown by the test will compel us to Fake it Until
+We Make It.  The general idea is that we are going to "scrape" text from the web
+page, convert it to a number, and the result should be 0.  This gives us our
+first error (a compile message);
+
+```bash
+ReferenceError: can't find 'page'
+```
+
+So we define page.
+
+```javascript
+describe('a tally count display', function(){
+  var page;
+  it('SCENARIO: upon creation', function(){
+    expect(return parseInt(page.find('.count').text())).toBe(0);
+  });
+});
+```
+
+But that isn't enough, the next message requires more:
+
+```bash
+TypeError: 'undefined' is not an object (evaluating 'page.find')
+```
+
+So we make page an object with:
+
+```javascript
+...
+var page = {};
+...
+```
+
+Nope, that isn't it either:
+
+```bash
+TypeError: 'undefined' is not a function (evaluating 'page.find('.count')')
+```
+
+So we add property `find` and an empty function.
+
+```javascript
+...
+var page = {find: function(){}};
+...
+```
+Still not there.
+
+```bash
+TypeError: `undefined`` is not an object (evaluating 'page.find('.count').text')
+```
+
+So we start building page out as a find on a jQuery object:
+
+```javascript
+...
+var page = {find: function(sel){return $().find(sel}};
+...
+```
+
+and the angels sing:
+
+```bash
+Expected NaN to be 0.
+```
+
+An expectation failure at last!  Now we have permission to write some code.
+Where will we put it?  For now, just to get green, let's put it in the
+space between the parentheses:
+
+```javascript
+...
+var page = {find: function(sel){return $(
+    '<div>\
+      <div class="count">0</div>\
+    </div>'
+).find(sel}};
+...
+```
+
+and our code is green at last!   There are a number of opportunities to
+refactor here.  First of all, the text simply doesn't belong in our
+code.  So we move the object into a separate property on page, and use 
+the Angular-specific Bunkai to move the text into a separate file, index.html.
+
+To facilitate this, we rewrite our page object to have a separate property,
+element, for storing the page element, and then using the `$templateCache`,
+`$compile` and `$rootScope` services to load, compile and instantiate a working
+Subject Under Test.
+
+```javascript
+
+...
+var page = {
+  element: null,
+  find: function(selector){return page.element.find(selector);}
+...
+
+beforeEach(function(){
+  module('index.html');
+  inject(function($templateCache, $compile, $rootScope){
+    page.element = $compile($templateCache.get('index.html')($rootScope);
+    $rootScope.$digest();
+  });
+}
+...
+```
+
+and index.html now contains
+
+```html
+<div>
+  <div class=count">0</div>
+</div>
+```
+
+One last thing, we take a look at the test code, and see that the expectation
+is virtually unreadable.  Worse, it contains detailed selectors from the 
+page that may change over time.  We don't want our tests littered with such 
+details, but would prefer that they be contained in one place.  So we refactor 
+those details into the page object.
+
+```javascript
+...
+var page = {
+  element: null,
+  find: function(selector){return page.element.find(selector);},
+  count: function(){return parseInt(page.find('.count').text());}
+};
+
+it('SCENARIO: upon creation', function(){
+  expect(page.count()).toBe(0);
+});
+...
+```
+See how much more clearly our tests read?  This capacity to abstract our tests
+is one of the great features of the Page Object Pattern.
+
+## Finishing the application.
+
+It is now time to clear that slime out of our application.  We do this with 
+another test:
+
+```javascript
+it('SCENARIO: after clicking tally button', function(){
+  page.tallyClick();
+  expect(page.count()).toBe(1);
+});
+```
+
+Hopefully, the test speaks for itself.  We click on the tally button, and 
+the count display should read "1" instead of "0".  Our next message complains
+that we don't have page.tallyClick, so we define it:
+
+```javascript
+var page = {
+  ...
+  tallyCount: function(){page.find('.tally').click();}
+}
+
+```
+
+and we are good to go with an expectation failure:
+
+```bash
+Expect 1 to be 0.
+```
+
+We can't slime the 1 for the 0 without breaking our previous test, 
+so we need to generalize.  We write some code:
+
+```html2ng
+<div>
+  <div class="count" ng-init="count=0">{{count}}</div>
+  <div class="tally" ng-click="count=1"></div>
+</div>
+```
+
+And we are green.  The `ng-init` directive initially sets count to be 0,
+and the `ng-click` sets count to be 1 when the tally <div> is clicked.
+Note that we might have written a more complex bit of code, but then
+test did not require it, so we slimed with a "1" and we are good to go.
+
+No worries!  We will lose the slime with our next test.
+
+```javascript
+it('SCENARIO: after twice clicking tally button', function(){
+  page.tallyClick();
+  page.tallyClick();
+  expect(page.count()).toBe(2);
+});
+```
+
+Repeating the earlier test with a more specific or another example 
+is a common trick for forcing generalization.  (As the tests get
+more specific, the code gets more generic!)  In this case, we are 
+faced with a few "slimy" solutions, but none as clear and elegant
+as the more general solution.
+
+```html2ng
+...
+<div class="tally" ng-click="count=count+1"></div>
+...
+```
+
+We have just the reset functionality to build out now.  The test 
+(and the corresponding `page.resetClick` function) follow:
+
+```javascript
+var page = {
+  ...
+  tallyCount: function(){page.find('.tally').click();}
+}
+
+it('SCENARIO: after clicking reset button', function(){
+  page.tallyReset();
+  expect(page.count()).toBe(0);
+});
+```
+
+But something funny happens.  Without writing a line of production
+code, this test passes!  Why?  Because the value of count is already
+initially 0.  This test tests nothing, and does not give us any permission
+to write production code.  (You can only write production code with a **failing** 
+test.)  So we fix this by addng a tallyclick at the beginning, and get then
+message:
+
+```bash
+Expected 1 to be 0.
+```
+
+This is solved with the following code, includin a slimed 0:
+
+```html
+<div>
+  <div class="count" ng-init="count=0">{{count}}</div>
+  <div class="tally" ng-click="count=count+1"></div>
+  <div class="reset" ng-click="count=0"></div>
+</div>
+```
+
+and we are green!  Since the slimed 0 is, in fact, the desired code here, we 
+have completed the application.  We add some detail and styling
+to the html application, as shown in the repository code, and we are finished
+with the build-out.
+
+Bunkai -- Breakdown and Application of Techniques
+-------------------------------------------------
+
+### Angular- and Karma-Specific Techniques
+
+Superheroic Tallying makes use of a number of technical "tricks" that
+are helpful in the Karma/Angular environment.  In other environments,
+you will do similar things, but in different ways.
+
+*   **Importing html text without a server.**  AngularJS and Karma facilitate
+    collecting text from html files without the use of a server.  This
+    makes it easy and fast to run integration and unit tests from within
+    Karma.  Karma automatically preprocesses your HTML files into 
+    modules that load up the \$templateCache, using the filename as themselves
+    module name.  Thus, you can load html code code into a DOM fragment:
+
+    ```javascript
+        beforeEach(function(){
+          module('index.html');
+          inject(function($templateCache){
+            globalPageVar = $(
+              $templateCache.get('index.html')
+            )
+          });
+        }
+    ```
+
+    The code instructs AngularJS to load the preprocessed HTML files
+    into the \$templateCache, and then uses the cache (the `get` function)
+    to return the text of the file as a string, which is passed to begin
+    parsed into a DOM fragment.  (`angular.element()` could be used instead
+    of `$()`)
+
+*   **Creating an AngularJS Test Subject**  In most of our testing, it will be
+    convenient to generate a DOM fragment that is a dynamic AngularJS app.
+    This can be built out using the library's built-in compiler, (\$compile),
+    linking it with a \$rootScope and then executing a single call to \$digest
+    to initialize the directives.  Schematically, this looks like:
+
+    ```javascript
+    beforeEach(function(){
+      inject(function($compile, $rootScope){
+        globalElement = $compile( ...code... )($rootScope);
+        $rootScope.$digest();
+      });
+    });
+    ```
+
+    Typical applications will combine these techniques to produce:
+
+    ```javascript
+    beforeEach(function(){
+      module('index.html');
+      inject(function($templateCache, $compile, $rootScope){
+        globalPageVar = $compile($templateCache.get('index.html')($rootScope);
+        $rootScope.$digest();
+      });
+    }
+    ```
+
+    Of course, if the code references modules, those modules must
+    also be identified in the module declaration.  In many cases, you
+    may wish to use test-specific initialization of the environment in 
+    which the code operates.  In such a case, a function rather than a 
+    `beforeEach` block may be used.  We shall see such examples in later
+    katas.
+
+### General TDD Techniques
+
+Superheroic Tallying makes use of a number of TDD techniques that are
+manifest in the code. These are very useful techniques of general
+application worthy of mastery.
+
+-   **Begin With an Empty File.** The less you constrain your
+    application with templates and boilerplate code, the more free you
+    are to make agile decisions and assure the broadest test coverage.
+    The least constrained file, and the only one that requires no tests
+    (other than to assure the development system is working) is an empty
+    fie.
+
+-   **The Outside-In Strategy.** For your first test, write a simple
+    "happy path" integration test to flesh out the structure and basic
+    behavior of your application. This tends to compel building the
+    Walking Skeleton. When more is required to make a features test
+    pass, drill "inside" to components, developed using unit tests, and
+    return to the top level. Sometimes you may find it convenient to
+    build a component in isolation, turning off testing of the whole
+    system, until you have completed the component.
+
+-   **The TDD Process.** Follow these three steps. Make them little
+    steps. Repeat until you can't think of another test to write.
+    When you can't think of another test to write, you are done.
+
+    -   **Red -- Write a Little Test.** You may not write a single line of
+        production code until you have written a failing test. The test must
+        be the simplest test you can consider, and you should eschew writing
+        more than one failing test at a time. I know you want to skip steps
+        and write code. Don't do that. Exception: For these katas, we do not
+        specify detailed design elements -- just the broad strokes of the
+        display structure. We leave that to the designers for the most part,
+        and they are free to add all the code necessary to realize their
+        design, only requiring that they do not break the build.
+
+    -   **Green -- Write a Little Code.** Once you have a failing test,
+        write the `simplest thing that could possibly work.` Sometime you
+        may make a test pass, but doing so makes other tests fail. This is a
+        sign that it may be time to generalize.\
+        I know you want to write general code right away when the test does
+        not require it. Don't do that.
+
+    -   **Refactor -- Clean up a Little Mess.** When the code is green, you
+        are free to refactor the code *as well as the tests* for style or to
+        make next tests easier to write. Do this early. Do this often. Then
+        you have only little messes to clean up, and a test suite to support
+        you. You can reshuffle and restructure the code all you like -- just
+        do not add any new functionality.
+
+-   **The Walking Skeleton.** First tests are always hard to write. When
+    you start with nothing, you might focus your tests to compel
+    building a "walking skeleton," the simplest deployable code that
+    passes the current test suite. Often this is built using
+    `Fake It Until You Make It`.
+
+-   **Fake It Until You Make It.** Particularly at the outset of a test,
+    you might find it best to simply write the assertion you ultimately
+    want to see passing, and let the system lead you to building the
+    `Walking Skeleton` or test setup. Such tests often result in compile
+    errors rather than expectation failures. This is just fine. Instead
+    of trying to make it pass all at once, simply write the minimum code
+    to change the error message until you get to an expectation fail.
+
+-   **The Simplest Thing That Could Possibly Work.** Don't write more
+    code than is necessary to pass the test. Even if inserting a
+    constant copied (we call this a `slime`) from the test is enough to
+    make the test go green, don't generalize! Instead, write another
+    test to force the generalization.
+
+-   **Generalize When "Simpler Code" is Too Complex or Fails to advance
+    the development.** When the simplest thing leads to greater
+    complexity or does not move the development forward, it really isn't
+    the "simplest thing" or something that could "possibly work." In
+    this case, a more general transformation is used. That said, there
+    is a growing sense that some generalizations are preferred over
+    others, the so called [Transformation Priority Premise]
+    (http://blog.8thlight.com/uncle-bob/2013/05/27/TheTransformationPriorityPremise.html).
+    In his article, Uncle Bob suggests a useful list, from most preferred
+    priority to least:
+
+    -   The `slime`.
+        -   ({}–\>nil) no code at all-\>code that employs nil
+        -   (nil-\>constant)
+        -   (constant-\>constant+) a simple constant to a more complex
+            constant
+    -   The `generalizing transforms`
+        -   (constant-\>scalar) replacing a constant with a variable or
+            an argument
+        -   (statement-\>statements) adding more unconditional
+            statements or changing the elements.
+        -   (unconditional-\>if) splitting the execution path
+        -   (scalar-\>array)
+        -   (array-\>container)
+        -   (statement-\>recursion)
+        -   (if-\>while)
+        -   (expression-\>function) replacing an expression with a
+            function or algorithm
+        -   (variable-\>assignment) replacing the value of a variable.
+
+-   **As the Tests Gets More Specific, the Code Gets More Generic.**
+    This mantra, proposed by Uncle Bob, is the consequence of all the
+    foregoing.

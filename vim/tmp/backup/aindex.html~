@@ -1,0 +1,41 @@
+'use strict';
+describe('Superheroic Tallying', function(){
+
+  describe('FEATURE: Tally Display', function(){
+    it('SCENARIO: when created', function(){
+      expect(page.count).toBe(0);
+    });
+    it('SCENARIO: after tally click', function(){
+      page.tallyClick();
+      expect(page.count).toBe(1);
+    });
+    it('SCENARIO: after two tally clicks', function(){
+      page.tallyClick();
+      page.tallyClick();
+      expect(page.count).toBe(2);
+    });
+    it('SCENARIO: after reset', function(){
+      page.tallyClick();
+      page.resetClick();
+      expect(page.count).toBe(0);
+    });
+  });
+
+  var page = {
+    elt: null,
+    find: function(sel){return page.elt.find(sel);},
+    get count(){return parseInt(page.find('.count').text());},
+    tallyClick: function(){page.find('.tally').click();},
+    resetClick: function(){page.find('.reset').click();}
+  };
+
+  beforeEach(function(){
+    module('index.html');
+    inject(function($compile, $rootScope, $templateCache){
+      page.elt = $compile(
+       $templateCache.get('index.html')
+      )($rootScope);
+      $rootScope.$digest();
+    });
+  });
+});

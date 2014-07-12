@@ -1,0 +1,62 @@
+'use strict';
+describe('ViewModel AppVM', function(){
+  var vm;
+  beforeEach(function(){
+    module('app');
+    inject(function($controller){
+      vm = $controller('AppVM');
+    });
+  });
+
+  describe('on creation', function(){
+    it('should expose empty rolls', function(){
+      expect(vm.rolls).toBe('');
+    });
+
+    it('should expose empty scores', function(){
+      expect(vm.scores).toEqual([]);
+    });
+
+    it('should expose pinsValidUntil for all pins', function(){
+      expect(pinsValidUntil).toBe(11);
+    });
+  });
+
+  describe('roll(pins)', function(){
+    beforeEach(function(){
+      vm.rolls = '1-2-3-4/';
+      vm.roll(10);
+    });
+
+    it('updates rolls', function(){
+      expect(vm.rolls).toBe('1-2-3-4/ X');
+    });
+
+    it('updates scores', function(){
+      expect(vm.scores).toEqual([1,3,6, 26]);
+    });
+
+    it('updates pinsValidUntil', function(){
+      expect(vm.pinsValidUntil).toBe(11);
+    });
+  });
+
+  describe('reset()', function(){
+    beforeEach(function(){
+      vm.rolls = vm.scores = vm.pinsValidUntil = {mock: 'something else'};
+      vm.reset();
+    });
+    it('resets rolls', function(){
+      expect(vm.rolls).toBe('');
+    });
+
+    it('resets scores', function(){
+      expect(vm.scores).toEqual([]);
+    });
+
+    it('resets pinsValidUntil', function(){
+      expect(vm.pinsValidUntil).toBe(11);
+    });
+  });
+
+});

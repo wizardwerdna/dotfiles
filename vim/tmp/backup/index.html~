@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <link rel="stylesheet" href="styles/app.css" media="all">
+</head>
+<body ng-app>
+  <div>
+      <div class="count btn btn-lg btn-success" ng-init="count=0">{{count}}</div>
+      <div class="tally btn btn-lg btn-primary" ng-click="count=count+1">++</div>
+      <div class="reset btn btn-lg btn-danger" ng-click="count=0">Reset</div>
+  </div>
+  <script src="bower_components/angular/angular.min.js"></script>
+</body>
+</html>

@@ -1,28 +1,29 @@
 <div class="jumbotron">
   <h1>Superheroic Bowling</h1>
+  <p>an AngularJS Kata</p>
 </div>
-
-<div class="line well">
-  <button class="roll btn btn-small"
-    ng-repeat="pins in [0,1,2,3,4,5,6,7,8,9,10]"
-    ng-click="addRoll(pins)"
-    >{{pins}}</button>
-  <button class="reset btn btn-small btn-danger" ng-click="reset()">Reset</button>
-
-  <div class="frames">
-    <div class="frame" 
-      ng-class="{tenth: frame===9}"
-      ng-repeat="frame in [0,1,2,3,4,5,6,7,8,9]">
-      <div class="line-display">{{scorer.lineDisplay[2*frame]}}</div>
-      <div class="line-display">{{scorer.lineDisplay[2*frame+1]}}</div>
-      <div class="line-display" 
-        ng-if="frame===9"
-        >{{scorer.lineDisplay[2*frame+2]}}</div>
-      <div class="frame-scores-display">{{scorer.frameScores[frame]}}</div>
-    </div>
-</div>
-
 <div class="well">
-  <div class="rolls-display">{{rolls}}</div>
-  {{score.lineDisplay}}
+  <div class="frames">
+    <div class="frame" ng-class="{tenth: frame===9}"
+      ng-repeat="frame in [0,1,2,3,4,5,6,7,8,9]"
+    >
+      <div class="line-display">{{vm.lineDisplay[2*frame]}}</div>
+      <div class="line-display">{{vm.lineDisplay[2*frame+1]}}</div>
+      <div class="line-display"
+        ng-if="frame===9"
+        >{{vm.lineDisplay[2*frame+2]}}</div>
+      <div class="frame-scores-display">{{vm.frameScores[frame]}}</div>
+    </div>
+  </div>
+
+  <div class="buttons">
+    <button class="rolls btn btn-lg btn-primary"
+      ng-repeat="pins in [0,1,2,3,4,5,6,7,8,9,10]"
+      ng-click="vm.addRoll(pins)"
+      ng-disabled="vm.isInvalid(pins)"
+    >{{pins}}</button>
+    <div class="reset btn btn-lg btn-danger" 
+      ng-click="vm.reset()"
+    >Reset</div>
+  </div>
 </div>

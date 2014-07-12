@@ -1,0 +1,19 @@
+'use strict';
+var FIX = {
+  display: {
+    state1: {
+      score: 2048,
+      best: 2048,
+      tiles: [
+        {x: 0, y: 0, score: 2}
+      ]
+    },
+    state2: {
+      score: 12048,
+      best: 22048,
+      tiles: [
+        {x: 1, y: 3, score: 1024}
+      ]
+    }
+  }
+};

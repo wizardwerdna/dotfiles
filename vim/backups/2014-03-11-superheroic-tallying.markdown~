@@ -1,0 +1,376 @@
+---
+layout: post
+title: "Superheroic Tallying"
+date: 2014-03-11 21:20:44 -0700
+comments: true
+categories: kata
+---
+<iframe width="525" height="320" src="//www.youtube.com/embed/anXss_sciNM" frameborder="0" allowfullscreen></iframe>
+
+##The Task
+The task is to build a tally counter web page.  A tally counter
+
+1.  Displays a number, initially 0;
+1.  Increases the number by hitting a tally button; and
+1.  Resets the displayed number by hitting a reset button.
+
+##The Kata
+
+
+We begin with a test:
+
+```js test/spec/integrations/features.js
+describe('FEATURE: Tally Counter Web Page', function(){
+  it('SCENARIO: A Resettable Tally Count', function(){
+    expect(page.find('.tally-count')).toBe('0');
+  });
+});
+```
+Which gives us
+```text karma
+ReferenceError: Can't find variable: page
+```
+This initial test is motivated by three Bunkai:
+
+> **Outside-In Testing**: Our overarching strategy is to begin with a general integration test
+> that compels us to build a simple "walking skeleton" of the application.  We use this tool
+> to build out components for detailed unit-testing to implement Features or Scenarios
+> from the integration test.  We are done when we have implemented all Features and Scenarios, 
+> and can think of no new Features or Scenarios to write.
+
+and
+
+> **Red**: You may not write a line of code until you have first written a failing test.
+
+and
+
+> **Fake-it-until-you-make-it**: If you unsure how to set up a test, try writing the expectation and work backwards.
+
+Now this is really just a compiler error, not an expectation failure.  The test is "red," but only
+because the test is incomplete.  That's ok. Let's move the ball.
+
+
+Since the message wants a variable named page, we oblige:
+
+```js test/spec/integrations/features.js
+describe('FEATURE: Tally Counter Web Page', function(){
+  var page;
+  it('SCENARIO: A Resettable Tally Count', function(){
+    expect(page.find('.tally-count').text()).toBe('0');
+  });
+});
+```
+which gives us:
+```text karma
+TypeError: 'undefined' is not an object (evaluating 'page.find')
+```
+
+Why did we do that?  More Bunkai:
+
+> **Green**: Once you have a failing test, do as little as possible to transform the code until it passes.
+
+and
+
+> **Change the Message**: If you don't see how to make a test pass with a simple transformation, 
+> try simple transformations that will change the error message.
+
+
+We continue on this plan.  The new message wants page to be an object.  Let's make it so.
+
+```js test/spec/integrations/features.js
+describe('FEATURE: Tally Counter Web Page', function(){
+  var page={};
+  it('SCENARIO: A Resettable Tally Count', function(){
+    expect(page.find('.tally-count').text()).toBe('0');
+  });
+});
+```
+
+changing the message to:
+
+```text karma
+TypeError: 'undefined' is not a function (evaluating 'page.find('.tally-count')')
+```
+
+We replaced the undefined value of page with a slime, a test-conforming constant, because:
+
+> **Slime**: It is often best to make a test pass by replacing no value with a constant or 
+> by changing an existing constant value.
+
+
+```js test/spec/integrations/features.js
+describe('FEATURE: Tally Counter Web Page', function(){
+  var page=angular.element('');
+  it('SCENARIO: A Resettable Tally Count', function(){
+    expect(page.find('.tally-count').text()).toBe('0');
+  });
+});
+```
+
+The `Slime` principle suggests that we replace `{}` with `{find: undefined}`, but it is clear that this
+approach is not likely to bring us soon to a conclusion.  Next test would complain that undefined is not
+a function, and then we'd quibble about what the function does, and so forth.  What we want is a DOM
+element, and this can be obtained quickly, albeit with a more general function call, the move explained
+by:
+
+> **Generalize**: Generalize when code is less complex than a Slime or other simple transformation.
+
+and, at last, we arrived to an expectation error!
+
+```text karma
+Expected '' to be '0'.
+```
+
+Now we transform the code to meet the expectation.  Notice, that we
+chose a minimal transformation, inserting the `Slime` "0".
+
+```js test/spec/integrations/features.js
+describe('FEATURE: Tally Counter Web Page', function(){
+  var page=angular.element(
+    '<div>\
+      <div class="tally-count">0</div>\
+    <div>'
+  );
+  it('SCENARIO: A Resettable Tally Count', function(){
+    expect(page.find('.tally-count').text()).toBe('0');
+  });
+});
+```
+and we are at last rewarded with a green light.
+```text karma
+Executed 1 of 1 SUCCESS (0.29 secs / 0.006 secs)
+```
+
+Its time for a new test.  Still moving `Outside-In`, let's expand the
+Scenario to add clicking to increment the display:
+
+```js test/spec/integrations/features.js
+describe('FEATURE: Tally Counter Web Page', function(){
+  var page=angular.element(
+    '<div>\
+      <div class="tally-count">0</div>\
+    <div>'
+  );
+  it('SCENARIO: A Resettable Tally Count', function(){
+    expect(page.find('.tally-count').text()).toBe('0');
+
+    page.find('.tally').click();
+    expect(page.find('.tally-count').text()).toBe('1');
+  });
+});
+```
+
+And we get an expectation message right away.
+
+```text karma
+Expected '0' to be '1'.
+```
+
+A `Slime` won't succeed here, because changing the '0' to a '1' will make the first test fail.  So we are now forced to generalize.  What we need is a dynamic object, such as a compiled angularjs element.  An angularjs element can be compiled into a dynamic object by injecting the `$compile` and `$rootScope` services, using the pattern:
+
+```js
+inject(function($compile, $rootScope){
+  $compile(...element...)(...scope...);
+  $scope.$digest();
+});
+```
+and then generalizing the constant '0' to a variable that we will call `count`.  Since count is initially undefined, we use the expression ``count || 0``.
+
+```js test/spec/integrations/features.js
+describe('FEATURE: Tally Counter Web Page', function(){
+  var page;
+  it('SCENARIO: A Resettable Tally Count', function(){
+    inject(function($compile, $rootScope){
+      page = $compile(
+        '<div>\
+          <div class="tally-count">{{count || 0}}</div>\
+        <div>'
+      )($rootScope);
+     $rootScope.$digest();
+    });
+
+    expect(page.find('.tally-count').text()).toBe('0');
+
+    page.find('.tally').click();
+    expect(page.find('.tally-count').text()).toBe('1');
+  });
+});
+```
+
+The message is unchanged, because the function of the code is unchanged.  
+Sometimes more than one transformation will be necessary to make the next steps.
+The good news is that we haven't messed anything up to this point.  
+Let's try to generalize this code with html for the tally element, and an ng-click.
+
+```js test/spec/integrations/features.js
+describe('FEATURE: Tally Counter Web Page', function(){
+  var page;
+  it('SCENARIO: A Resettable Tally Count', function(){
+    inject(function($compile, $rootScope){
+      page = $compile(
+        '<div>\
+          <div class="tally-count">{{count || 0}}</div>\
+          <div class="tally" ng-click="count=1">+</div>\
+        <div>'
+      )($rootScope);
+     $rootScope.$digest();
+    });
+
+    expect(page.find('.tally-count').text()).toBe('0');
+
+    page.find('.tally').click();
+    expect(page.find('.tally-count').text()).toBe('1');
+  });
+});
+```
+
+And we are green!  Notice, however, that I `Slime`d the 1 in the
+`ng-click` expression,
+although our soul is screaming to write some easy general logic.
+We resist this temptation, we MUST slime when we can, unless the
+generalization is clearly simpler.  In this case it is not.
+
+We want more logic, but not here in the Scenario.  Its time to add
+a component (in this case a viewmodel) which will spell out the
+details of the functionality in question.  So let's refactor to
+use the controller, temporarily breaking the build and putting it
+back together.
+
+Here I am skipping several steps, which are shown in detail in the
+video.
+
+```js test/spec/integrations/features.js
+describe('FEATURE: Tally Counter Web Page', function(){
+  var page;
+  it('SCENARIO: A Resettable Tally Count', function(){
+    module('app');
+    inject(function($compile, $rootScope){
+      page = $compile(
+        '<div ng-controller="AppVM as vm">\
+          <div class="tally-count">{{vm.count || 0}}</div>\
+          <div class="tally" ng-click="vm.tally()">+</div>\
+        <div>'
+      )($rootScope);
+     $rootScope.$digest();
+    });
+
+    expect(page.find('.tally-count').text()).toBe('0');
+
+    page.find('.tally').click();
+    expect(page.find('.tally-count').text()).toBe('1');
+  });
+});
+```
+
+```js app/scripts/app.js
+angular.module('app', [])
+
+.controller('AppVM', function(){});
+```
+
+We will temporarily
+ignore the scenario tests while we build out the viewmodel.
+(In Jasmine, this is accomplished by the `ddescribe` function).
+We begin our unit tests, faking it until we make it.
+
+```js test/spec/controllers/app.js
+ddescribe('ViewModel AppVM', function(){
+  it('should expose count, initially zero', function(){
+    expect(vm.count).toBe(0);
+  });
+})
+```
+
+The errors lead us to define `vm`, assign it to `{}` and then
+we are led to a choice, either to change the constant to `{count:0}`
+or to generalize to link it to the ViewModel.  Again, the constant
+substitution here seems to be steering far away from our goal, so we
+instead generalize to instantiate a controller, using the pattern:
+
+```js
+module(...modulename...)
+inject(function($controller){
+  $controller(...controller name...)
+})
+```
+
+```js test/spec/controllers/app.js
+ddescribe('ViewModel AppVM', function(){
+  var vm;
+  beforeEach(function(){
+    module('app');
+    inject(function($controller){
+      vm = $controller('AppVM');
+    })
+  });
+  it('should expose count, initially zero', function(){
+    expect(vm.count).toBe(0);
+  });
+})
+```
+
+now we slime up a zero, and go green with
+
+```js app/scripts/app.js
+angular.module('app', [])
+
+.controller('AppVM', function(){
+  this.count = 0;
+});
+```
+
+Our next test defines the tally function:
+
+```js test/spec/controllers/app.js
+ddescribe('ViewModel AppVM', function(){
+  var vm;
+
+  ...
+
+  describe('tally()', function(){
+    it('when called once, sets count to 1', function(){
+      vm.tally();
+      expect(vm.count).toBe(1);
+    });
+  });
+})
+```
+
+Error messages force us to define the function tally, and then
+to make sure a call to tally() sets count to 1.  We slime:
+
+```js app/scripts/app.js
+angular.module('app', [])
+
+.controller('AppVM', function(){
+  this.count = 0;
+
+  this.tally = function(){
+    vm.count = 1;
+  }
+});
+```
+
+So now we write a test to try to force a generalization:
+
+```js test/spec/controllers/app.js
+ddescribe('ViewModel AppVM', function(){
+  var vm;
+
+  ...
+
+  describe('tally()', function(){
+    it('when called once, sets count to 1', function(){
+      vm.tally();
+      expect(vm.count).toBe(1);
+    });
+    it('when called twice, sets count to 2', function(){
+      vm.tally();
+      vm.tally();
+      expect(vm.count).toBe(2);
+    });
+  });
+})
+```
+
+

@@ -1,24 +1,41 @@
-for i in [0..10]
-  do(i) ->
-    process.nextTick -> console.log "this is #{i}"
-
-process.nextTick ->
-  console.log "trying like mad to repeat the bug"
-  process.nextTick ->
-    console.log "retrying like mad to repeat the bug"
-
-class Moo
-  constructor: -> @times=0
-  foo: ->
-    process.nextTick => 
-      @times+=1
-      process.nextTick => 
-        console.log "can I make this happen or not?"
-        console.log "can I make this happen or not?"
-        console.log "can I make this happen or not?"
-        console.log "can I make this happen or not?"
-        @foo() unless @times>10
-
-p = new Moo
-
-process.nextTick -> p.foo() 
+Dr. Melody Samuelson
+Glenn Tenney
+Dr. Jim Jones
+Dr. Deb White
+Dr. Deborah McKinney
+Dr. Ahmed Haggag
+Dr. Patricia Spivey
+Dr. Tom Knoblauch
+Dr. Aparna Dixit
+Dr. Rachel Bramble
+Ellen Bachman
+Dr. Christina Echols
+Dr. Steve Hubert
+Dr. Alex Kettner
+Dr. Erez Goren
+Dr. Zach Hatton
+Dr. Lillian Dalida
+Dr. Tony Rabin
+Dr. Janet Steele
+Andrew Greenberg
+Jesus Gallegos
+Dr. Campos
+Dr. Randy Otto
+Randy Sugarman
+Paul Graves
+Dr. Melody Samuelson
+Dr. Jim Jones
+Dr. Katherine Warburton
+Dr. Chad Woofter
+Dr. Patricia Tylerr
+Dr. Nami Kim
+Dr. Pat White
+Melissa Pina
+Dr. Deb White
+Dr. Paula Astalis
+Madeline Kishineff
+Dr. Erin Warnick
+Karen Litzenberg
+Dr. John Riley
+Dr. Barbara McDermott
+Dr. Thomas Grisso

@@ -1,0 +1,94 @@
+'use strict';
+ddescribe('wz-int-list', function() {
+
+  var scope, inputElm, formElm;
+
+  beforeEach(function(){(module('wzUtilities'))});
+  beforeEach(inject(function($injector, _$sniffer_, _$browser_) {
+    var $sniffer = _$sniffer_;
+    var $browser = _$browser_;
+    var $compile = $injector.get('$compile');
+    scope = $injector.get('$rootScope');
+
+    inputElm = $('<input type="text" ng-model="list" wz-int-list\>');
+    formElm = $('<form name="form"></form>');
+    formElm.append(inputElm);
+    $compile(formElm)(scope);
+  }));
+
+  it('should render as blank if null', function() {
+    scope.$apply(function() {
+      scope.list = null;
+    });
+
+    expect(scope.list).toBeNull();
+    expect(inputElm.val()).toEqual('');
+  });
+
+
+  xit('should come up as empty list when no value specified', function() {
+    scope.$digest();
+    expect(inputElm.val()).toBe('');
+    scope.$apply(function() {
+      scope.list = null;
+    });
+
+    expect(scope.list).toEqual([]);
+    expect(inputElm.val()).toBe('');
+  });
+
+
+  it('should parse empty string to null', function() {
+    scope.$apply(function() {
+      scope.list = 10;
+    });
+    inputElm.$type('');
+    expect(scope.list).toEqual([]);
+    expect(inputElm).toBeValid();
+  });
+
+  it('should parse integer to singleton array', function(){
+    scope.$apply(function() {
+      scope.list = 10;
+    });
+    inputElm.$type('1');
+    expect(scope.list).toEqual([1]);
+    expect(inputElm).toBeValid();
+  });
+
+  it('should parse comma separated list to array', function(){
+    scope.$apply(function() {
+      scope.list = 10;
+    });
+    inputElm.$type('1, 2, 3, 4');
+    expect(scope.list).toEqual([1, 2, 3, 4]);
+    expect(inputElm).toBeValid();
+  });
+
+  it('should format empty array to empty string', function(){
+    inputElm.val('10');
+    scope.$apply(function(){
+      scope.list = [];
+    });
+    expect(scope.list).toEqual([]);
+    expect(inputElm.val()).toBe('');
+  });
+
+  it('should format singleton array to integer string', function(){
+    inputElm.val('10');
+    scope.$apply(function(){
+      scope.list = [123];
+    });
+    expect(scope.list).toEqual([123]);
+    expect(inputElm.val()).toBe('123');
+  });
+
+  it('should format array to comma separated list', function(){
+    inputElm.val('10');
+    scope.$apply(function(){
+      scope.list = [1,2,3,4,5];
+    });
+    expect(scope.list).toEqual([1,2,3,4,5]);
+    expect(inputElm.val()).toBe('1,2,3,4,5');
+  });
+});

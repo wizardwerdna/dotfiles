@@ -1,0 +1,22 @@
+'use strict';
+function primes(n){
+  var result = [];
+  for (var p=2; p<=n; p++)
+    for (; n%p===0; n/=p)
+      result.push(p);
+  return result;
+};
+describe('primes(n)', function(){
+  function test(n, result){
+    it('primes('+n+') should be ['+result+']', function(){
+      expect(primes(n)).toEqual(result, '<-', n);
+    });
+  }
+  test(1, []);
+  test(2, [2]);
+  test(3, [3]);
+  test(4, [2,2]);
+  test(8, [2,2,2]);
+  test(9, [3,3]);
+  test(25, [5,5]);
+});

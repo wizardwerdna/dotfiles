@@ -1,0 +1,228 @@
+autocmd vimenter * if !argc() | NERDTree | endif
+map <leader>z :NERDTreeToggle<CR>
+
+set nocompatible
+set nopaste
+set clipboard=unnamed
+if version >= 703 
+   set conceallevel=0 
+   autocmd FileType * setlocal conceallevel=0 
+endif
+
+
+set foldmethod=syntax
+set foldlevelstart=99
+set printoptions=paper:letter,top:57pt,bottom:57pt,left:57pt,right:57pt,header:2,duplex:off,number:y
+set printfont=Courier:h11
+
+filetype off
+
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+let g:syntastic_scss_checkers = []
+let g:syntastic_sass_checkers = []
+let g:syntastic_html_checkers = []
+let g:ackprg = 'ag --nogroup --nocolor --column'
+
+"let Vundle manage Vundle
+" required! 
+Bundle 'gmarik/vundle'
+
+Bundle 'altercation/vim-colors-solarized'
+Bundle 'blockle.vim'
+Bundle 'christoomey/vim-tmux-navigator'
+Bundle 'ctrlp.vim'
+Bundle 'EasyMotion'
+Bundle 'FuzzyFinder'
+Bundle 'Gist.vim'
+Bundle 'godlygeek/tabular'
+Bundle 'html5.vim'
+Bundle 'IndexedSearch'
+Bundle 'Jasmine-snippets-for-snipMate'
+Bundle 'jiangmiao/auto-pairs'
+Bundle 'jQuery'
+Bundle 'L9'
+Bundle 'lfilho/cosco.vim'
+Bundle 'Lokaltog/vim-easymotion'
+Bundle 'mattn/emmet-vim'
+Bundle 'mattn/webapi-vim'
+Bundle "pangloss/vim-javascript"
+Bundle 'peterhoeg/vim-tmux'
+Bundle 'rizzatti/dash.vim'
+Bundle 'rizzatti/funcoo.vim'
+Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
+Bundle 'scrooloose/nerdtree'
+Bundle 'Shougo/neocomplcache'
+Bundle 'Shougo/neosnippet'
+Bundle 'sickill/vim-pasta'
+Bundle 'skalnik/vim-vroom'
+Bundle 'suan/vim-instant-markdown'
+Bundle 'Syntastic'
+Bundle 'timcharper/textile.vim'
+Bundle 'tomtom/tcomment_vim'
+Bundle 'tpope/vim-cucumber'
+Bundle 'tpope/vim-endwise'
+Bundle 'tpope/vim-fugitive'
+Bundle 'tpope/vim-git'
+Bundle 'tpope/vim-haml'
+Bundle 'tpope/vim-markdown'
+Bundle 'tpope/vim-ragtag'
+Bundle 'tpope/vim-rails.git'
+Bundle 'tpope/vim-repeat'
+Bundle 'tpope/vim-surround'
+Bundle 'tpope/vim-unimpaired'
+Bundle 'tsaleh/vim-matchit'
+Bundle 'vim-coffee-script'
+"Bundle 'vim-pandoc/vim-pandoc'"
+Bundle 'vim-fugitive'
+"Bundle 'vim-scripts/textutil.vim'"
+Bundle 'vimux'
+Bundle 'vividchalk.vim'
+Bundle 'yearofmoo/Vim-Darkmate'
+
+syntax on
+filetype plugin indent on
+
+let g:neocomplcache_enable_at_startup = 1
+imap <expr><TAB> neocomplcache#sources#snippets_complete#expandable() ? "\<Plug>(neocomplcache_snippets_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+let g:neocomplcache_enable_auto_select = 1
+let g:neocomplcache_auto_completion_start_length = 1
+let g:neocomplcache_enable_auto_select = 0
+
+let g:neosnippet#snippets_directory = "~/.vim/bundle/Jasmine-snippets-for-snipMate"
+map  <C-k> <Plug>(neosnippet_expand_or_jump)
+smap <C-k> <Plug>(neosnippet_expand_or_jump)
+xmap <C-k> <Plug>(neosnippet_expand_target)
+
+if has('conceal')
+  set conceallevel=2 concealcursor=i
+endif
+
+set autoread
+
+let g:rails_menu=2
+let g:gist_clip_command = 'pbcopy'
+let g:gist_detect_filetype = 1
+let g:gist_open_browser_after_post = 1
+
+let g:surround_40 = "(\r)"
+let g:surround_91 = "[\r]"
+let g:surround_60 = "<\r>"
+
+let g:acp_ignorecaseOption = 0
+
+let g:SuperTabLongestEnhanced = 1
+let g:SuperTabLongestHighlight = 1
+let g:SuperTabCrClosePreview = 1
+
+set backspace=indent,eol,start
+
+set backup
+set backupdir=~/.vim/backups
+set history=100
+set number
+set ruler     
+set incsearch 
+set expandtab
+set shiftwidth=2
+set tabstop=2
+set helpheight=1000
+
+set completeopt=menu,menuone,preview
+set wildmode=longest,list:longest
+
+setlocal numberwidth=3
+
+map gb <C-^>
+vmap gl :<C-U>!blame <C-R>=expand("%:p") <CR> <C-R>=line("'<") <CR> <C-R>=line("'>") <CR> <CR>
+vmap # :TComment<CR>
+map - :Tabularize hash
+map <C-l> :nohl
+map <leader>a :Tabularize /=>\?<cr>
+
+" Make j/k move to next visual line instead of physical line
+" http://yubinkim.com/?p=6
+nnoremap k gk
+nnoremap j gj
+nnoremap gk k
+nnoremap gj j
+
+set hlsearch
+set listchars=tab:>-,trail:-
+hi IncSearch term=reverse gui=underline guibg=Blue  guifg=Yellow
+hi    Search term=reverse gui=underline guibg=Black guifg=Yellow
+hi    Visual term=reverse cterm=reverse ctermbg=9 guibg=#555577 guifg=Black
+
+hi Pmenu      guifg=White guibg=Blue
+hi PmenuSel   gui=italic guifg=Yellow guibg=Blue
+hi PmenuSbar  ctermbg=Black guibg=Grey
+hi PmenuThumb guifg=Yellow guibg=Black
+
+if has("gui_running")
+  set lines=80 
+  set columns=120 
+  set number
+endif
+
+if has("gui_macvim")
+  set autowriteall
+  set tabpagemax=100
+  set guifont=Monofur:h20
+endif
+
+" Nice statusbar"
+set laststatus=2
+set statusline=
+set statusline+=%f\                    " file name"
+set statusline+=%h%1*%m%r%w%0*         " flags"
+set statusline+=%=                     " right align"
+set statusline+=%-14.(%l,%c%V%)\ %<%P  " offset"
+
+autocmd BufNewFile,BufRead *.css set fdm=marker fmr={,}
+
+" from my old gvimrc"
+
+colorscheme vividchalk
+"colorscheme darkmate"
+" syntax enable"
+" set backgroun=dark"
+" colorscheme solarized"
+
+autocmd FileType javascript,css,YOUR_LANG nmap <silent> ,; :call cosco#commaOrSemiColon()<CR>
+autocmd FileType javascript,css,YOUR_LANG inoremap <silent> ,; <ESC>:call cosco#commaOrSemiColon()<CR>a
+autocmd FileType javascript,css,YOUR_LANG inoremap <silent> ;; <ESC>:call cosco#commaOrSemiColon()<CR>a
+" For local identifier replace"
+autocmd FileType javascript,css,YOUR_LANG nnoremap gr gd[{V%:s/<C-R>///gc<left><left><left>
+" For global identifier replace"
+autocmd FileType javascript,css,YOUR_LANG nnoremap gR gD:%s/<C-R>///gc<left><left><left>
+
+nmap <leader>js O'use strict';<esc>ji
+
+"
+" CtrlP
+"map <leader>p :CtrlPMRU<cr>
+"map <leader>gb :CtrlPBuffer<cr>
+"map <leader>ga :CtrlP app<cr>
+"map <leader>gt :CtrlP test/spec<cr>
+"map <leader>gs :CtrlP app/scripts<cr>
+"map <leader>gv :CtrlP app/views<cr>
+"map <leader>gi :topleft :split app/index.html<cr>
+"
+
+map <leader>gg :topleft 100 :split Gemfile<cr>
+let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git\|bower_components'
+
+set winwidth=84
+" We have to have a winheight bigger than we want to set winminheight. But if
+" we set winheight to be huge before winminheight, the winminheight set fails 
+set winheight=5
+set winminheight=5
+set winheight=999
+
+nmap <leader><leader> :w<cr>:!clear; rspec spec<cr>
+
+let &colorcolumn=join(range(81,81),",")
+highlight ColorColumn ctermbg=233 guibg=#121212
+export NODE_PATH=/usr/local/lib/jsctags/:$NODE_PATH

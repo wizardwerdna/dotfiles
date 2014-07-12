@@ -1,0 +1,9 @@
+<div ng-controller="AppVM as vm">
+  <div class="score-container">{{vm.state.score}}</div>
+  <div class="best-container">{{vm.state.best}}</div>
+  <div class="game-message"
+    ng-class="vm.gameMessageClass()">
+    <p>{{ vm.state.won ? 'You won!' : 
+          vm.state.over ? 'Game over!' : '' }}</p>
+  </div>
+</div>

@@ -1,0 +1,66 @@
+'use strict';
+describe('Factory repository', function(){
+  var repository = {};
+  beforeEach(function(){
+    module('app');
+    inject(function(_repository_){ repository = _repository_; });
+  });
+  describe('init(arr) and read()', function(){
+    it('read() should initially be empty', function(){
+      expect(repository.read()).toEqual([]);
+    });
+    it('read() should equal arr after initialization', function(){
+      repository.init([{mock: 'entry'}]);
+      expect(repository.read()).to$Equal([{mock: 'entry'}]);
+    });
+    it('should append an $id to each entry', function(){
+      repository.init([{mock: 'entry'}]);
+      expect('$id' in repository.read()[0]).toBeTruthy('must append $id');
+    });
+    it('must append unique $id to each entry', function(){
+      repository.init([{mock: 'entry'}, {mock: 'entry'}]);
+      expect(repository.read()[0].$id).not.toEqual(repository.read()[1].$id);
+    });
+  });
+
+  describe('create(entry)', function(){
+    it('should add entry to read()', function(){
+      repository.create({mock: 'entry'});
+      expect(repository.read()).to$Equal([{mock: 'entry'}]);
+    });
+
+    it('the added entry should have an appended $id', function(){
+      repository.create({mock: 'entry'});
+      expect('$id' in repository.read()[0]).toBeTruthy('must append $id');
+    });
+
+    it('the appended $id must be unique among entries in read()', function(){
+      repository.init([{mock: 'entry'}]);
+      repository.create({mock: 'entry'});
+      expect(repository.read()[0]).not.toEqual(repository.read()[1]);
+    });
+
+    it('returns the entry and $id as a value object', function(){
+      var result = repository.create({mock: 'entry'});
+      expect(result).toEqual(repository.read()[0]);
+    });
+  });
+
+  describe('update(entry)', function(){
+    it('should upate the entry having the specified $id', function(){
+      var oldEntry = repository.create({mock: 'entry'});
+      var updateEntry = {$id: oldEntry.$id, mock: 'foo', desc: 'bar'};
+      repository.update(updateEntry);
+      expect(repository.read()).to$Equal([updateEntry]);
+    });
+
+  });
+
+  describe('delete(entry)', function(){
+    it('should delete the entry having the specified $id', function(){
+      var entry = repository.create({mock: 'entry'});
+      repository.destroy(entry);
+      expect(repository.read()).toEqual([]);
+    });
+  })
+});

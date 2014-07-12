@@ -1,0 +1,828 @@
+Superheroic 2048: an AngularJS Kata
+===================================
+
+FIRST ITERATION: a Walking Skeleton
+-----------------------------------
+
+In this iteration, we will build out the basic requirements for the web page
+interface  and a walking skeleton, a minimal deployable application that will
+be fleshed out throughout the iterations.  We begin as we always do,
+with an empty file.
+
+My name is Andrew Greenberg, and I would be grateful for your comments
+and suggestions as you work through these forms. You can find me by
+e-mail at wizardwerdna@gmail.com, or at @wizardwerdna on twitter. Now,
+let's get this kata started.
+
+FIRST FEATURE: Display game state
+---------------------------------
+
+We can't write any production code until we have a failing test, 
+so we write a test.
+
+```javascript
+describe('Superheroic 2048', function(){
+  describe('FEATURE: display game state', function(){
+    it('SCENARIO: score display', function(){
+      state={score: 1};
+      expect(parseInt(page.find('.score-container'))
+        .text()).toBe(state.score);
+    });
+  });
+})
+```
+
+Of course, we discover that some errors need to be corrected and add the following:
+
+```javascript
+var state;
+var page=$();
+```
+
+to obtain a failing expectation
+
+```diff
+Expected NaN to be 1.
+```
+
+which we can make pass with a slime:
+
+```javascript
+var page=$(
+  '<div>\
+    <div class="score-container">1</div>\
+  </div>'
+);
+```
+
+and we are green. We add an expectation for best scores, following the
+same procedure.  
+
+When we are green again, it is time to look for ways to refactor. Here's the plan:
+
+1.  Apply the Page Object Pattern.
+2.  Implement page.find(), page.text() and page.number() utilities.
+3.  Implement page.score() and page.best()
+4.  Rewrite the tests using the page object.
+
+This nicely reduces our mess to:
+
+```javascript
+describe('Superheroic 2048', function(){
+  var state;
+
+  describe('FEATURE: display game state', function(){
+    it('SCENARIO: score display', function(){
+      state={score: 1, best: 2};
+      expect(page.score()).toBe(state.score);
+      expect(page.best()).toBe(state.best);
+    });
+  });
+
+  var page = {
+    find: function(sel){return page.element.find(sel);},
+    text: function(sel){return page.find(sel).text();},
+    number: function(sel){return parseInt(page.text(sel));},
+    score: function(){return page.number('.score-container');},
+    best: function(){return page.number('.best-container');},
+    element: $(
+      '<div>\
+        <div class="score-container">1</div>\
+        <div class="best-container">2</div>\
+      </div>'
+    ),
+  };
+  
+})
+```
+
+In time, we will move the production code out of the Page Object and clean up some
+other cruft, but look at the beauty of the tests! And they pass!!
+
+BUNKAI: the Page Object
+-----------------------
+
+In our simpler katas, we simply built our AngularJS fragment into a variable,
+page, and expressed our tests in jQuery.  As programs grow more complex, we
+find tests that look like this to be unsatisfactory:
+
+```javascript
+expect(parseInt(page.find('.score-container')) .text()).toBe(state.score);
+```
+
+This is awkward for two reasons, its difficult to read, and its closely coupled
+with the particular designer's specification.  If the designer changes her mind,
+and she always does, we now have to rewrite all the tests that depended upon
+a particular CSS structure.  Imagine if the test instead read as follows:
+
+```javascript
+expect(page.score()).toBe(state.score);
+```
+
+Now the code is ever more clear.  We do this by turning a page DOM fragment
+into a Page Object, which contains in one place the logic for screen-scraping
+when changes are made, and also makes our tests much more transparent.  This is
+done by replacing page, with:
+
+```javascript
+var page = {
+  element: $(),
+  find: function(selector){replace page.element.find(selector);}
+}
+```
+
+If we assign the DOM object to `page.element` instead of to `page`, the existing
+tests will continue to pass.  Now, we simply build out additional functionality
+on the object to make our tests clearer, as shown above.  I use the Page Object
+in all but the simple katas we have done earlier.
+
+Refactor a dynamic page, clean slimes, & move production code off-file.
+----------------------------------------------------------------------
+
+Now its time to get rid of the slimes and generalize to a dynamic page
+object.  We are green, so we first need a failing test. We triangulate,
+duplicating our tests with different values.
+
+```javascript
+it('SCENARIO: score display', function(){
+  state={score: 1, best: 2};
+  expect(page.score()).toBe(state.score);
+  expect(page.best()).toBe(page.best);
+
+  state={score: 10, best: 20};
+  expect(page.score()).toBe(state.score);
+  expect(page.best()).toBe(page.best);
+})
+```
+and we are red:
+
+```diff
+Expected 1 to be 10.
+Expected 2 to be 20.
+```
+
+This fails for the obvious reason that the static page does not respond
+to the state. We fix this with a GIVEN function hooked to AngularJS,
+using our now-familiar Angularjs element pattern:
+
+```javascript
+var page = {
+  element: $(),
+  ...
+}
+
+function GIVEN_2048PageFor(state){
+  inject(function($compile, $rootScope){
+    $rootScope.vm = {state: state};
+    page.element = $compile(
+      '<div>\
+         <div class="score-container">1</div>\
+         <div class="best-container">2</div>\
+      </div>'
+    )($rootScope);    
+    $rootScope.$digest();
+  });
+}  
+```
+
+The use of ``$rootScope`` for communication with the subject under test
+(SUT) is a groty hack, in particulate because depending on the test code
+precludes building a walking skeleton. For now, let's get this test to
+pass, and repair the design issue in later refactoring
+
+We rewrite the tests:
+
+```javascript
+it('SCENARIO: score display', function(){
+  state={score: 1, best: 2};
+  GIVEN_2048PageFor(state);
+  expect(page.score()).toBe(state.score);
+  expect(page.best()).toBe(page.best);
+
+  state={score: 10, best: 20};
+  GIVEN_2048PageFor(state);
+  expect(page.score()).toBe(state.score);
+  expect(page.best()).toBe(page.best);
+})
+```
+
+All the tests should now pass simply by replacing the slime with code binding to the
+state:
+
+```javascript
+page.element = $compile(
+  '<div>\
+     <div class="score-container">{{vm.state.score}}</div>\
+     <div class="best-container">{{vm.state.best}}</div>\
+  </div>'
+)($rootScope);    
+```
+
+And they do! We refactor the tests by moving common code to a function:
+
+```javascript
+
+function THEN_2048PageShouldDisplayScores(state){
+  expect(page.score()).toBe(state.score);
+  expect(page.best()).toBe(page.best);
+}
+
+it('SCENARIO: score display', function(){
+  state={score: 1, best: 2};
+  GIVEN_2048PageFor(state);
+  THEN_2048PageShouldDisplayScores(state);
+});
+
+it('SCENARIO: another score display', function(){
+  state={score: 3, best: 4};
+  GIVEN_2048PageFor(state);
+  THEN_2048PageShouldDisplayScores(state);
+});
+```
+
+Its been a long haul, but all of this structure and preparation is
+going to pay off as we build out the application.  For our last trick, we are
+going to refactor and construct a walking skeleton by:
+
+1. Moving the program code to index.html.
+2. Building out an angular module, viewmodel controller and state service.
+3. Reconfiguring our GIVEN code to use the service.
+
+Our javascript will be (I put it in app.js for now):
+
+```javascript
+'use strict';
+angular.module('app', [])
+
+.controller('AppVM', function(state){
+  this.state = state;
+})
+
+.value('state', {})
+
+;
+```
+
+The code in AppVM is necessary to keep the integration test working, but we will
+deal with it in detail when we build out the controller's unit tests in the
+next chapter.  The value object will be mocked out in testing, but is necessary
+for the walking skeleton. Our `index.html` file will look like this: 
+
+```html
+<div ng-controller="AppVM as vm">
+   <div class="score-container">{{vm.state.score}}</div>
+   <div class="best-container">{{vm.state.best}}</div>
+</div>
+```
+
+And finally, we rewrite, actually simplify, our `GIVEN` function thus:
+
+```javascript
+function GIVEN_2048PageFor(state){
+  module('app', 'inde.html', function($provide){
+    $provide.value('state', state);
+  });
+  inject(function($compile, $rootScope, $templateCache){
+    page.element = $compile($templateCache.get('index.html'))($rootScope);
+    $rootScope.$digest();
+  });
+}  
+```
+
+
+Tile
+----
+
+Given the structure we have set up, we write the following:
+
+```javascript
+it('SCENARIO: display tiles', function(){
+  state = {tiles: [
+    {x: 0, y: 1, score: 2} 
+  ]};
+  GIVEN_2048PageFor(state);
+  expect(page.tiles()).toEqual(page.tiles);
+});
+```
+and now we write the Page Object code to support the test:
+
+```javascript
+page = {
+  ...
+  tiles: function(){return page.find('.tile').get().map(tile);}
+  tile: function(tile){
+    return {
+      x: null,
+      y: null,
+      score: null
+    }
+  }
+  ...
+}
+```
+
+The tiles function constructs an array of all `.tile` divs, breaks them
+out into an array of elements and maps them using the tile function.  In
+turn, tile constructs each tile object.  The specification states that a
+tile object has two supporting classes: `.tile-1024` and `tile-position-1-2`.
+We extract the data using regular expressions to obtain:
+
+```javascript
+tile: function(elt){
+  var position = elt.className.match(/tile-position-([1-4])-([1-4])/);
+  var score = elt.className.match(/tile-([0-9]+/));
+  return {
+    x: parseInt(position[1])-1,
+    y: parseInt(position[2])-1,
+    score: parseInt(score[1])
+  }
+}
+```
+
+and the code is now red, with an obnoxious message, so we can write, with slimes:
+
+```html
+<div ng-controller="AppVM as vm">
+   <div class="score-container">{{vm.state.score}}</div>
+   <div class="best-container">{{vm.state.best}}</div>
+  <div class="tile tile-2 tile-position-1-2" ></div>
+</div>
+```
+
+And we are green!  Tell me true, did you write more code than that?  You should
+know better now.  To generalize, we need another test:
+
+```javascript
+it('SCENARIO: display tiles', function(){
+  state = {tiles: [
+    {x: 0, y: 1, score: 2} 
+  ]};
+  GIVEN_2048PageFor(state);
+  expect(page.tiles()).toEqual(page.tiles);
+
+
+  state = {tiles: [
+    {x: 1, y: 2, score: 4}, 
+    {x: 3, y: 3, score: 1024} 
+  ]};
+  GIVEN_2048PageFor(state);
+  expect(page.tiles()).toEqual(page.tiles);
+});
+```
+
+and after a few laps, your code should look something like:
+
+```html
+<div ng-controller="AppVM as vm">
+  <div class="score-container">{{vm.state.score}}</div>
+  <div class="best-container">{{vm.state.best}}</div>
+  <div class="tile tile-{{tile.score}} tile-position-{{tile.x+1}}-{{tile.y+1}}"
+    ng-repeat="tile in vm.state.tiles"></div>
+</div>
+```
+
+Finally, we need to insert a test to confirm that the `.tile-inner` div conforms
+to the `.score-1024` class.  I want this in the tile loop, so I'm going to put
+this in the Page Object, and will probably refactor it out of the PO later. So:
+
+```javascript
+var page = {
+  ...
+  tile: function(elt){
+    ...
+    var score = elt.className.match(/tile-([0-9]+/));
+    expect(page.text('.inner-tile').toBe(score[1]);
+    ...
+    }
+  }
+  ...
+}
+```
+
+And we are red, with:
+
+```text
+???? WHAT MESSAGE DO WE GET ????
+```
+Which should pass after:
+
+```html
+<div ng-controller="AppVM as vm">
+  <div class="score-container">{{vm.state.score}}</div>
+  <div class="best-container">{{vm.state.best}}</div>
+  <div class="tile tile-{{tile.score}} tile-position-{{tile.x+1}}-{{tile.y+1}}"
+    ng-repeat="tile in vm.state.tiles">
+    <div class="tile-inner">{{tile.score}}</div>
+  </div>
+</div>
+```
+
+and it does!  On to finish the feature.  Our next scenarios.
+
+
+Modal Dialogs
+-------------
+
+```javascript
+describe('SCENARIO: game over modal', function(){
+  var state={over: true, won: false};
+  GIVEN_2048PageFor(state);
+  expect(page.over()).toBe(state.over);
+  expect(page.won()).toBe(state.won);
+  expect(page.gameMessageText()).toBe('Game over!');
+});
+```
+
+and we update the page object:
+
+```javascript
+page = {
+  gameMessage: function(){return page.find('.game-message');},
+  over: function(){return page.gameMessage[0].className==='game-message game-over'};
+  won: function(){return page.gameMessage[0].className==='game-message game-won'};
+  gameMessageText: function(){return page.gameMessage.find('p').text();}
+}
+
+```
+and slime to go green.
+
+```html
+<div ng-controller="AppVM as vm">
+  <div class="score-container">{{vm.state.score}}</div>
+  <div class="best-container">{{vm.state.best}}</div>
+  <div class="tile tile-{{tile.score}} tile-position-{{tile.x+1}}-{{tile.y+1}}"
+    ng-repeat="tile in vm.state.tiles">
+    <div class="tile-inner">{{tile.score}}</div>
+  </div>
+  <div class="game-message game-over">
+    <p>Game over!</p>
+  </div>
+</div>
+
+```
+
+Our next scenario forces us to generalize.
+
+```javascript
+describe('SCENARIO: game won modal', function(){
+  var state={over: true, won: true};
+  GIVEN_2048PageFor(state);
+  expect(page.over()).toBe(state.over);
+  expect(page.won()).toBe(state.won);
+  expect(page.gameMessageText()).toBe('Game won!');
+});
+```
+
+and we get:
+
+```html
+...
+<div class="game-message"
+  ng-class="{
+    'game-won': vm.state.won,
+    'game-over': vm.state.over && !vm.state.won
+  }">
+  <p>{{vm.state.won  ? 'Game won!' :
+       vm.state.over ? 'Game over!': 
+       ''}}</p>
+</div>
+...
+```
+
+And we have completed the first feature.  A ton of refactoring still to do, and
+we are good to go.  The final code can be readily integrated with the classic
+2048 html, and after adding an `ng-app` directive, pointers to the `angularjs` library
+and `app.js`, we now have a deployable walking skeleton.
+
+In the next section, we will begin defining the keypress UI, build unit tests for
+the controller/view-model, and break out the game logic into a separate service.
+
+BUNKAI: Testing in the Presence of Randomness
+---------------------------------------------
+
+When writing a game, we will expect a certain amount of random behavior, here
+being the initial tiles for the game, and the extra tile added after each move.
+We will treat the introduction of random behavior as though its source was
+a separate service (such as a RESTFUL database), and "simulated" it in testing.
+
+2048 presents this problem in a very straightforward manner because the game
+logic is not closely integrated with the randomness.  This is an excellent
+first exercise for test-first game development.
+
+Here, we will simply assume at first that each new tile is introduced in the
+bottommost and rightmost blank space available.  Our tests will not need to
+special case this, so we will simply hard-code that specification, and later
+extract a service that can be determinate for the testing environment, but
+uniformly random for the production environment. 
+
+
+SECOND FEATURE: User restarts the game
+--------------------------------------
+
+The test is straightforward.  Given a score and high score, when
+the use clicks the restart button,
+we retain the best score, set current score to zero, 
+reset the game-won, game-over messages
+if any, and add two "random" tiles at the right
+side of the bottom row
+
+```javascript
+describe('FEATURE: user clicks new game', function(){
+  it('SCENARIO: user clicks new game', function(){
+    GIVEN_2048PageFor({
+      score: null,
+      best: 1234,
+      tiles: [
+        {x:1, y:1, score:null}
+      ],
+      won: true,
+      over: true
+    });
+    page.clickNewGame();
+    THEN_2048PageShouldDisplay({
+      score:    0,
+      best:  1234,
+      tiles: [
+        {x:2, y:3, score: 2},
+        {x:3, y:3, score: 2}
+      ],
+      won: false,
+      over: false
+    });
+  });
+});
+```
+and the page object:
+
+```javascript
+page = {
+  ...
+  clickNewGame: function(){return page.find('restart-button').click();}
+  ...
+}
+```
+
+This is implemented with an ng-click pointing us to a controller function:
+
+```html
+<div class="restart-button" ng-click="vm.reset()"></div>
+```
+
+and we SLIME the heck out of the function in the controller:
+
+```javascript
+.controller('AppVM', function(state){
+  ...
+  this.reset = function(){
+    state.score = 0;
+    state.won = state.over = false;
+    state.tiles.splice(0);
+    state.tiles.push({x: 2, y:3, score: 2});
+    state.tiles.push({x: 3, y:3, score: 2});
+  };
+  ...
+});
+```
+
+Disgusting, particularly with all that business "logic," if you can call it that
+in a controller). But we are green!  Don't worry, we'll be back soon enough.
+But let's move on to the next fixture, which will present related issues.
+
+THIRD FEATURE: User makes a move
+--------------------------------
+
+We'll begin with just a single move, leftward, the test checks
+that if a key is pressed, all the moves, merges,  scoring
+updates and new tile introductions are accomplished. The ultimate
+of integration testing.
+
+```javascript
+
+describe('FEATURE: user takes turn', function(){
+  it('SCENARIO: user types a left arrow', function(){
+    GIVEN_2048PageFor({
+      score: 100,
+      best: 200,
+      tiles: tilesFor([
+        '    |    | 256|    ',
+        ' 512| 512|    |    ',
+        '    |    | 256| 256',
+        '    | 512|    |    '
+      ]),
+      won: false,
+      over: false
+    });
+    page.element.trigger( {type: 'keydown', which: 37} );
+    THEN_2048PageShouldDisplay({
+      score: 1636,
+      best:  1636,
+      tiles: tilesFor([
+        ' 256|    |    |    ',
+        '1024|    |    |    ',
+        ' 512|    |    |    ',
+        ' 512|    |    |   2'
+      ]),
+      won: false,
+      over: false
+    });
+  });
+});
+
+```
+
+Note the test's use of a helper function, `tilesFor`, which takes a
+list of strings corresponding to rows of the table, and returns
+a list of tile objects.  This allows us to keep the test readable.
+
+The test is satisfied by adding an `ng-keydown` directive to the
+container object and coding up the keydown function.  (Note that for div's, 
+we must set tabindex on the element to a zero for `ng-keydown` to do its magic.)
+
+The html:
+
+```html
+<div class="container" ng-controller="AppVM as vm"
+  ng-keydown="vm.keydown($event)" tabindex="0">
+```
+
+And add even more slime to the controller:
+
+```javascript
+.controller('AppVM', function(state){
+  ...
+  this.keydown = function(event){
+    state.score = state.best = 1636;
+    state.won = state.answer = false;
+    state.tiles.splice(0);
+    state.tiles.push({x: 0, y: 0, score:  256});
+    state.tiles.push({x: 0, y: 1, score: 1024});
+    state.tiles.push({x: 0, y: 2, score:  512});
+    state.tiles.push({x: 0, y: 3, score:  512});
+    state.tiles.push({x: 3, y: 3, score:    2});
+  };
+  ...
+});
+```
+
+But we are green.  Don't you think its time for some refactoring?  I do!
+
+Refactoring and Reorganizing Dependencies.
+------------------------------------------
+
+We begin with some simple changes to move details in tests to the page object:
+
+```javascript
+page = {
+  ...
+  page.keydown: function(which){
+    page.element.trigger( {type: 'keydown', which: which} );
+  )}
+  ...
+}
+```
+
+and in the test
+
+```javascript
+  ...
+  var LEFT = 37;
+  ...
+  page.keydown(LEFT);
+```
+and now it is time to work on the unnecessarily uber-ugly controller.  The
+code there has been responsive to the integration tests, which is ok so
+far as it goes.   But a controller should be tested and testable in isolation.
+So lets begin to write some tests to capture the code already written, and
+build a controller subject under test.  This "catch up" should generally be
+done at the earliest time possible.
+
+Using test-first principles, we build a subject under test, at least in outline:
+
+```javascript
+'use strict';
+describe('ViewModel AppVM', function(){
+  var vm;
+  var mockState = {mock: 'state'};
+  beforeEach(function(){
+    module('app');
+    inject(function($controller){
+      vm = $controller('AppVM', {state: mockState});
+    });
+  });
+  it('should expose the game state to the view', function(){
+    expect(vm.state).toBe(mockState);
+  });
+  it('vm.keydown() state should conform to left move', function(){
+    // WHAT?
+  });
+  it('mm.reset() state should conform to new game', function(){
+    // HOW?
+  });
+});
+```
+And, by the way, you should delete the code regarding state from
+the controller, just to make sure you have seen the test go red.
+
+At this point, we could build out the game logic, but there is an
+unhealthy tethering of game logic to view here.  Now is a fine time
+to make the design decision:  let's put the game logic in a separate
+service, and just test that the controller properly uses its API.
+
+We add a factory, `game` and two functions, `restart` and `turn`, then
+move the "logic" from the controller to that game.  Since we will
+be temporarily breaking the integration build, lets "turn off" the
+integration test while we do our surgery.  Then, all we need to do is
+build out a mock `game` and finish the controller unit test.
+
+```javascript
+
+'use strict';
+describe('ViewModel AppVM', function(){
+  var vm;
+  var mockState = {mock: 'state'};
+  var mockGame;
+  beforeEach(function(){
+    mockGame = jasmine.createSpyObj('mockGame', ['turn', 'reset']);
+    module('app');
+    inject(function($controller){
+      vm = $controller('AppVM', {state: mockState, game: mockGame});
+    });
+  });
+  it('should expose the game state to the view', function(){
+    expect(vm.state).toBe(mockState);
+  });
+  it('vm.keydown() state should conform to left move', function(){
+    vm.keydown({which: {mock: 'key'}});
+    expect(mockGame.turn).toHaveBeenCalledWith(mockState, {mock: 'key'});
+  });
+  it('mm.reset() state should conform to new game', function(){
+    vm.reset();
+    expect(mockGame.reset).toHaveBeenCalledWith(mockState);
+  });
+});
+```
+and the controller.
+
+```javascript
+'use strict';
+angular.module('app', [])
+
+.controller('AppVM', function(state, game){
+  this.state = state;
+
+  this.keydown = function(event){
+    game.turn(state, event.which);
+  };
+
+  this.reset = function(){ game.reset(state); };
+})
+
+```
+
+Look at this code!  Its a perfect slim, skinny controller, focusing solely
+on linking the view and UI to external resources.  Now, the game factory:
+
+```javascript
+
+angular('app', [])
+...
+.factory('game', function(){
+  return {
+    reset: reset,
+    turn: turn
+  };
+
+  function reset(state){
+    state.score = 0;
+    state.won = state.over = false;
+    state.tiles.splice(0);
+    state.tiles.push({x: 2, y:3, score: 2});
+    state.tiles.push({x: 3, y:3, score: 2});
+  }
+
+  function turn(state, direction){
+    state.score = state.best = 1636;
+    state.won = state.answer = false;
+    state.tiles.splice(0);
+    state.tiles.push({x: 0, y: 0, score:  256});
+    state.tiles.push({x: 0, y: 1, score: 1024});
+    state.tiles.push({x: 0, y: 2, score:  512});
+    state.tiles.push({x: 0, y: 3, score:  512});
+    state.tiles.push({x: 3, y: 3, score:    2});
+  }
+})
+...
+```
+
+We turn the integration test back "on" and we are green, even though
+the controller was written and tested in isolation. We will revisit the controller in time, but only to polish the keypress UI code, which we may ultimately move to a directive.  But for now, we have done as we need to, moved all of the game logic outside the user event loop, and now we can unit test that in isolation. 
+
+One last thing, before we turn to game mechanics in full, lets
+transmit our code to the designer and produce a full, deployable walking
+skeleton using all of the CSS and HTML brought to bear.  The result is
+actually fairly pretty.  And it actually allows us to restart and make
+a left turn (in the ugly mocked-up sense).  A screen shot for your amusement:
+
+![Third Feature](screenshot.png)
+
+And our first iteration is at and end.

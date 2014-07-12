@@ -1,0 +1,42 @@
+'use strict';
+describe('VM JustifyVM', function(){
+  var vm = {};
+  beforeEach(function(){
+    module('app');
+    inject(function($controller){
+      vm = $controller('JustifyVM', {});
+    });
+  });
+
+  function test(text, width, result){
+    expect(vm.justified(text, width)).toBe(result, {text: text, width: width});
+  };
+
+  it('should justify 0 width', function(){
+    test('any', 0, '');
+  });
+  it('should justify 1 width', function(){
+    test('', 1, '');
+    test('a', 1, 'a');
+    test('b', 1, 'b');
+  });
+  it('should justify text <= width', function(){
+    test('a', 3, 'a');
+    test('abc', 3, 'abc');
+  });
+  it('should justify non-space text > width', function(){
+    test('abc', 2, 'ab\nc');
+    test('xyz', 2, 'xy\nz');
+    test('abc', 1, 'a\nb\nc');
+  });
+  it('should justify text > width when text[width]!==" "', function(){
+    test('abc def', 3, 'abc\ndef');
+  }); 
+  it('should justify text > width when text[width]!==" "', function(){
+    test('a bcd', 3, 'a\nbcd');
+    test('ab cde', 3, 'ab\ncde');
+    test(' abcde', 3, 'abc\nde');
+    test('  abc', 3, 'abc');
+    test('a b c d', 5, 'a b c\nd');
+  });
+});

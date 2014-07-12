@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Bootstrap 101 Template</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Bootstrap -->
+<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+</head>
+<body>
+</html><table>
+  <thead>
+  </thead>
+  <tbody>
+
+  <tr><td>2011-07-13</td><td>7.9</td><td>PREPARE AND TRANSMIT PACKET OF INFORMATION RELATING DETAILED CASE HISTORY</td></tr>
+  <tr><td>2011-07-15</td><td>2.5</td><td>PEPARE FOR AND TELEPHONE CONFERENCE KBF AND MJS RE FACTS AND DOCUMENTS</td></tr>
+  <tr><td>2011-07-26</td><td>0.2</td><td>PEPARE FOR AND TELEPHONE CONFERENCE KBF RE: SPB HEARING AND NOTICE OF ADVERSE ACTION</td></tr>
+  <tr><td>2011-08-03</td><td>0.2</td><td>E-MAILS WITH KBF RE: GOVERNMENT TORT CLAIMS</td></tr>
+  <tr><td>2011-08-05</td><td>1.0</td><td>TELEPHONE CONFERENCE WITH KBF AND SB RE GOVERNMENT TORT CLAIMS; PEPARE MEMORANDUM RE: TIMELINE FOR TORT CLAIMS MATTERS AND TRANSMIT RELEVANT DOCUMENTS</td></tr>
+  <tr><td>2011-08-09</td><td>0.10</td><td>TELECONFERENCE WITH KGB RE POTENTIAL SETTLEMENT OR WRIT OF MANDATE IN SPB MATTER.</td></tr>
+  <tr><td>2011-08-18</td><td>2.1</td><td>OBTAIN AND TRANSMIT DOCUMENT FILED WITH TORT CLAIMS;</td></tr>
+  <tr><td>2011-09-20</td><td>0.10</td><td>EXCHANGE EMAILS WITH KBF RE TORT CLAIM DOCUMENTS.</td></tr>
+  <tr><td>2011-09-23</td><td>2.1</td><td>OBTAIN AND TRANSMIT FURTHER DOCUMENTS ASSOCIATED WITH TORT CLAIMS;</td></tr>
+  <tr><td>2011-09-26</td><td>0.2</td><td>OBTAIN AND TRANSMIT SPJ ORDER ON MOTION TO LIMIT EVIDENCE AND TO LIMIT ISSUES</td></tr>
+  <tr><td>2011-09-28</td><td>0.30</td><td>TELECONFERENCES WITH BASSOFF AND KGB RE TORT CLAIM DOCUMENTS.</td></tr>
+  <tr><td>2011-10-11</td><td>1.50</td><td>TELECONFERENCES WITH KBF AND BASSOFF RE SPD CLAIM STATUS;</td></tr>
+  <tr><td>2011-10-27</td><td>0.20</td><td>TELECONFERENCE WITH KBF RE 10/18 SPB HEARING, STATUS OF COMPLAINT AND PETITION AND POTENTIAL LETTER TO DEFENDANTS RE REQUEST FOR REASSIGNMENT TO ORIGINAL POSITION.</td></tr>
+  <tr><td>2011-11-04</td><td>0.10</td><td>TELECONFERENCE WITH KBF RE STATUS OF CASE.</td></tr>
+  <tr><td>2011-11-09</td><td>0.10</td><td>EXCHANGE EMAILS WITH KBF RE SPB'S DENIAL OF AMENDED WHISTLEBLOWER COMPLAINT.</td></tr>
+  <tr><td>2011-11-10</td><td>1.60</td><td>REVIEW DEMAND LETTER RE REASSIGNMENT TO ORIGINAL POSITION; TELECONFERENCE WITH KBF RE LETTER; REVISE COMPLAINT</td></tr>
+  <tr><td>2011-11-14</td><td>4.0</td><td>PEPARE MEMORANDUM REGARDING FACTUAL REVIEW OF COMPLAINT</td></tr>
+  <tr><td>2011-11-15</td><td>3.0</td><td>REVIEW MEMORANDUM REGARDING PETITION AND BASSOFF DECLARATION</td></tr>
+  <tr><td>2011-11-16</td><td>0.70</td><td>CONFERENCE CALL WITH KBF</td></tr>
+  <tr><td>2011-11-17</td><td>0.80</td><td>CONFERENCE WITH KBF RE PLEADINGS</td></tr>
+  <tr><td>2011-11-22</td><td>0.3</td><td>REVIEW CORRESPONDENCE REGARDING SETTLEMENT PROPOSALS AND SERVICE OF PROCESS</td></tr>
+  <tr><td>2011-11-29</td><td>1.5</td><td>REVIEW OF COMPLAINT AND PETITION AS SERVED</td></tr>
+  <tr><td>2011-12-08</td><td>0.2</td><td>REVIEW OF CORRESPONDENCE REGARDING DR. SAMUELSON'S REINSTATEMENT TO T-16</td></tr>
+  <tr><td>2011-12-09</td><td>1.5</td><td>REVIEW & ANALYSIS OF DEFS. OPPOSITION TO PETITION FOR ORDER RELIEVING PETITIONER FROM PROVISIONS OF GOVERNMENT CODE SECTION 945.4</td></tr>
+  <tr><td>2011-12-13</td><td>1.3</td><td>REVIEW & ANALYSIS OF REPLY TO DEF'S OPPOSITION</td></tr>
+  <tr><td>2011-12-20</td><td>0.90</td><td>TELECONFERENCES WITH KBF RE TENTATIVE RULING AND HEARING CONCERNING PETITION.</td></tr>
+  <tr><td>2011-12-21</td><td>1.8</td><td>ATTENDANCE AT HEARING RE: PETITION AND FOLLOW-UP</td></tr>
+  <tr><td>2012-01-12</td><td>1.3</td><td>REVIEW AND REVISIONS OF DEMURRER</td></tr>
+  <tr><td>2012-01-13</td><td>2.1</td><td>DETAILED REVIEW OF DEMURRER; FACTUAL AND LEGAL RESEARCH RE: DEMURRER</td></tr>
+  <tr><td>2012-01-24</td><td>0.10</td><td>EXCHANGE EMAILS WITH KBF RE CASE UPDATE</td></tr>
+  <tr><td>2012-01-29</td><td>3.1</td><td>FACTUAL AND LEGAL RESEARCH; PEPARE MEMORANDUM RE: FEDERAL LAW RELATED TO REPORTS OF IMPROPER CONDUCT.</td></tr>
+  <tr><td>2012-01-30</td><td>2.9</td><td>FACTUAL AND LEGAL RESEARCH; PEPARE MEMORANDUM RE: STATE LAW RELATED TO REPORTS OF IMPROPER CONDUCT.</td></tr>
+  <tr><td>2012-01-31</td><td>3.1</td><td>FACTUAL AND LEGAL RESEARCH; PEPARE MEMORANDUM RE: STATE LAW RELATED TO REPORTS OF IMPROPER CONDUCT.</td></tr>
+  <tr><td>2012-02-01</td><td>0.10</td><td>EXCHANGE EMAILS WITH KBF RE STATE STATUTES</td></tr>
+  <tr><td>2012-02-06</td><td>0.2</td><td>TELECONFERENCE WITH KBF RE: DEMURRER</td></tr>
+  <tr><td>2012-02-07</td><td>1.60</td><td>TELECONFERENCE WITH KBF RE: DEMURRER</td></tr>
+  <tr><td>2012-02-08</td><td>1.5</td><td>REVIEW AND ANALYSIS OF DRAFT OPPOSITION TO DEMURRER</td></tr>
+  <tr><td>2012-02-09</td><td>1.9</td><td>REVIEW AND ANALYSIS OF REVISED OPPOSITION TO DEMURRER; PEPARE OF MEMORANDUM AND COMMENTS REGARDING SAME.</td></tr>
+  <tr><td>2012-02-10</td><td>0.40</td><td>EXCHANGE E-MAILS RE: DEMURRER; TELECONFERENCE WITH KBF REGARDING SAME;</td></tr>
+  <tr><td>2012-02-17</td><td>1.6</td><td>REVIEW AND ANALYSIS OF REPLY MEMORANDUM; FACTUAL AND LEGAL RESEARCH REGARDING MIZE-KURZMAN; PEPARE OF MEMORANDUM REGARDING FACTUAL ISSUES OF CAUSATION; RECEIVE AND REVIEW DEFENDANTS' REPLY TO OPPOSITION TO DEMURRER; TELEPHONE CONFERENCE WITH KBF</td></tr>
+  <tr><td>2012-02-21</td><td>3.5</td><td>ORGANIZE AND TRANSMIT DOCUMENTS REGARDING REPORTS TO HUQ AND HAGGAG, ALSO TO JJ</td></tr>
+  <tr><td>2012-02-22</td><td>4.40</td><td>GATHER AND TRASMIT DOCUMENTS TO KBF RE MJS COMPLAINTS TO "THIRD PARTIES"; TELEPHONE CONFERENCE CALL FROM KBF; REVIEW DOCUMENTS</td></tr>
+  <tr><td>2012-02-23</td><td>1.7</td><td>REVIEW AND ANALYSIS OF TENTATIVE RULING; FACTUAL AND LEGAL ANALYSIS OF MIZE-KURZMAN AND PEPARE OF MEMORANDUM REGARDING SAME; TELEPHONE CONFERENCE WITH KBF RE SAME.</td></tr>
+  <tr><td>2012-02-24</td><td>4.3</td><td>ATTEND HEARING RE DEMURRER</td></tr>
+  <tr><td>2012-02-29</td><td>1.5</td><td>REVIEW AND ANALYSIS OF RULING ON SUBMITTED DEMURRER; FACTUAL RESEARCH REGARDING REPORTS.</td></tr>
+  <tr><td>2012-03-02</td><td>2.9</td><td>PEPARE MEMORANDUM REGARDING FACTS FOR AMENDED COMPLAINT;</td></tr>
+  <tr><td>2012-03-05</td><td>0.10</td><td>TELEPHONE CONFERENCE WITH KBF RE: FAC</td></tr>
+  <tr><td>2012-03-07</td><td>1.40</td><td>FINALIZE AND TRANSMIT MEMORANDUM TO KBF</td></tr>
+  <tr><td>2012-03-08</td><td>2.2</td><td>REVIEW AND ANALYSIS OF DRAFT FIRST AMENDED COMPLAINT;</td></tr>
+  <tr><td>2012-03-09</td><td>2.0</td><td>PEPARE MEMORANDUM RE: MEDICAL STAFF AND MEDICAL STAFF BY-LAWS</td></tr>
+  <tr><td>2012-03-12</td><td>2.5</td><td>PEPARE MEMORANDUM RE DISCUSSION DRAFT FIRST AMENDED COMPLAINT; REVIEW AND REVISIONS OF FINAL REVISIONS ON FIRST AMENDED COMPLAINT</td></tr>
+  <tr><td>2012-03-15</td><td>0.4</td><tdKBF RE SAME.</td></tr>
+<tr><td>2012-02-24</td><tr><td>2012-03-20</td><td>0.3</td><td>REVIEW AND ANALYSIS OF PROPOSED CORRESPONDENCE REGARDING FAILURE OF NSH TO PROVIDE PROCTORING FOR FORENSIC ASSESSMEACTUAL RESEARCH REGARDING REPORTS.</td></tr>
+  <tr><td>2012-03-0</td><td>2.9</td><td>PEPARE MEMORANDUM REGARDING FACTS FOR AMENDED COMPLAINT></td></tr>
+  <tr><td>2012-03-05</td><td>0.10</td><td>TELEPHONE CONFERENCE WITH KBF RE:OM CONFERENCE WITH KBF RE: FAC</td></tr>
+  <tr><td>20HId>1.40</td><td>FINALIZE AND TRANSMIT MEMORANDUM TO KBF</td></tD >2012-03-08</td><td>2.2</td><td>REVIEW AND ANALYSIS OF DRAFT FIRST AMEIVMPLAINT;</td></tr>
+  <tr><td>2012-03-09</td><td>2.0</td><td>PEPARE MEMORANDUMS td><td>PEPARE MEMORANDUM RE: MEDICAL STAFF AND ME<tLAWS</td></tr>
+<tr><td>2012-03-12</td><td>2.5</td><td>PEPARE MHARE DISCUSSION DRAFT FIRST AMENDED COMPLAINT; REVIEW AND REVISIONS OF FtdVISIONS ON FIRST AMENDED COMPLAINT</td></tr>
+<tr><td>2012-03-15</td><td>0.4PLd>2012-03-15</td><td>0.4</td><tdKBF RE SAME.</td>><012-02-24</td><tr><td>2012-03-20</td><td>0.3</td><td>REVIEW ANRS OF PROPOSED CORRESPONDENCE REGARDING FAILURE OF NSH TO PROVIDE PROCTOd>R FORENSIC ASSESSMEACTUAL RESEARCH REGARDING REPORTS.</td></tr>
+  <tr><td>201TSS.</td></tr>
+  <tr><td>2012-03-0>
+  2.9</td><td>PEPARd>GARDING FACTS FOR AMENDED COMPLAINT;</RE>
+  <tr><td>2012-03-05</d>0</td><td>TELEPHONE CONFERENCE WITH KBF RE:OM CONFERENCE WITH KBF RE: E ></tr>
+    <tr><td>20HId>1.40</td><td>FINALIZE AND TRANSMIT MEMORANDUM TO KBF</RESMIT MEMORANDUM TO KBF</td></tD >2012-03-08</td><ESREVIEW AND ANALYSIS OF DRAFT FIRST AMEIVMPLAINT;</td></tr>
+  <trON03-09</td><td>2.0</td><td>PEPARE MEMORANDUMS td><td>PEPARE MEMORANDUM -1ICAL STAFF AND ME<tLAWS</td></tr>
+<tr><td>2012-03-12</td><td>2.5</td><td>PED 2</td><td>2.5</td><td>PEPARE MHARE DISCUSSION DRA>1D COMPLAINT; REVIEW AND REVISIONS OF FtdVISIONS ON FIRST AMENDd>NT</td></tr>
+<tr><td>2012-03-15</td><td>0.4PLd>2012-03-15</td><td>0.4<GAKBF RE SAME.</td>><012-02-24</td><tr><td>2012-03-20</td><td>0.3</td><td>REVtd</td><td>0.3</td><td>REVIEW ANRS OF PROPOSED CORR BRDING FAILURE OF NSH TO PROVIDE PROCTOd>R FORENSIC ASSESSMEACTtdCH REGARDING REPORTS.</td></tr>
+<tr><td>201TSS.</td></tr>
+<tr><td>2012><2.9</td><td>PEPARd>GARDING FACTS FOR AMENDED COMPLAINT;</RE>
+<tr><td>2012-0ORINT;</RE>
+    <tr><td>2012-03-05</d>0</td><td>TELEPHOtrITH KBF RE:OM CONFERENCE WITH KBF RE: E ></tr>
+      <tr><td>20HId>1OFd>FINALIZE AND TRANSMIT MEMORANDUM TO KBF</RESMIT MEMORANDUM TO KBF</tLA>2012-03-08</td><ESREVIEW AND ANALYSIS OF DRAFT FIRST AMEIVMPLAINT;</td></tEMST AMEIVMPLAINT;</td></tr>
+  <trON03-09</td><td>2.0 J MEMORANDUMS td><td>PEPARE MEMORANDUM -1ICAL STAFF AND ME<tLAWAF>
+    <tr><td>2012-03-12</td><td>2.5</td><td>PED 2</td><td>2.5</td><td>PEP12RE DISCUSSION DRA>1D COMPLAINT; REVIEW AND REVISIONS OF FtdVISIONS ON FIRSTLES OF FtdVISIONS ON FIRST AMENDd>NT</td></tr>
+    <tr>06/td><td>0.4PLd>2012-03-15</td><td>0.4<GAKBF RE SAME.</td>><012N ><tr><td>2012-03-20</td><td>0.3</td><td>REVtd</td><td>0.3</td><td>REVI<t OF PROPOSED CORR BRDING FAILURE OF NSH TO PROVIDE PROCTOd>R FORENSIC ASSESESPROCTOd>R FORENSIC ASSESSMEACTtdCH REGARDING REPON,<tr><td>201TSS.</td></tr>
+          <tr><td>2012><2.9</td><td>PEPARd>GAR12 FOR AMENDED COMPLAINT;</RE>
+              <tr><td>2012-0ORINT;</RE>
+                  <tr><td>2012-03PP0</td><td>TELEPHOtrITH KBF RE:OM CONFERENCE WITH KBF RE: E ></tr>
+                    <tr><td>2EWF RE: E ></tr>
+                      <tr><td>20HId>1OFd>FINALIZE AND TR<tUM TO KBF</RESMIT MEMORANDUM TO KBF</tLA>2012-03-08</td><ESREV><ALYSIS OF DRAFT FIRST AMEIVMPLAINT;</td></tEMST AMEIVMPLAINT;</td></trRE03-09</td><td>2.0 J MEMORANDUMS td><td>PEPARE MEMORANDUM -1ICAL STAFF AND MNEANDUM -1ICAL STAFF AND ME<tLAWAF>
+                      <tr><td>2012-03MO</td><td>PED 2</td><td>2.5</td><td>PEP12RE DISCUSSION DRA>1D CE REVIEW AND REVISIONS OF FtdVISIONS ON FIRSTLES OF FtdVISIONS ON FIRST >0NT</td></tr>
+                      <tr>06/td><td>0.4PLd>2012-03-15</td><td>0.4<GAKBF RE SAME.</tdLAd>0.4<GAKBF RE SAME.</td>><012N ><tr><td>2012-03-></td><td>REVtd</td><td>0.3</td><td>REVI<t OF PROPOSED CORR BRDI A OF NSH TO PROVIDE PROCTOd>R FORENSIC ASSESESPROCTOd>R FORENSIC ASSESS01CH REGARDING REPON,<tr><td>201TSS.</td></tr>
+                            <tr><td>2012><2.9</td><td>PEPAPEd>2012><2.9</td><td>PEPARd>GAR12 FOR AMENDED COMP<t><td>2012-0ORINT;</RE>
+                                  <tr><td>2012-03PP0</td><td>TELEPHOtrITH>2 CONFERENCE WITH KBF RE: E ></tr>
+                                    <tr><td>2EWF RE: E ></tr>
+                                      <tr><td>20ONd>FINALIZE AND TR<tUM TO KBF</RESMIT MEMORANDUM TO KBF</tLA>2012-03-08</td> WKBF</tLA>2012-03-08</td><ESREV><ALYSIS OF DRAFT F>
+                                      NT;</td></tEMST AMEIVMPLAINT;</td></trRE03-09</td><td>2.0 J MEF td><td>PEPARE MEMORANDUM -1ICAL STAFF AND MNEANDUM -1ICAL STAFF AND MEd>>
+                                    <tr><td>2012-03MO</td><td>PED 2</td><td>2.5</td><td>PEP12RE DISCUSSION DR/ttd>PEP12RE DISCUSSION DRA>1D CE REVIEW AND REVISIRVNS ON FIRSTLES OF FtdVISIONS ON FIRST >0NT</td></tr>
+                                    <tr>06/td</d>2012-03-15</td><td>0.4<GAKBF RE SAME.</tdLAd>0.4<GAKBF RE SAME.</td>AP><tr><td>2012-03-></td><td>REVtd</td><td>0.3</td><td>REVI<t OF PROPOSED CORGAd>REVI<t OF PROPOSED CORR BRDI A OF NSH TO PROVID<tENSIC ASSESESPROCTOd>R FORENSIC ASSESS01CH REGARDING REPON,<trRES.</td></tr>
+                                    <tr><td>2012><2.9</td><td>PEPAPEd>2012><2.9</td><td>PEPAR5< FOR AMENDED COMP<t><td>2012-0ORINT;</RE>
+                                          <tr><td>2012-03PP0</td><td>TELEPH.<012-03PP0</td><td>TELEPHOtrITH>2 CONFERENCE WITH >E>
+                                              <tr><td>2EWF RE: E ></tr>
+                                                <tr><td>20ONd>FINALIZE AND TR<tUM OSSMIT MEMORANDUM TO KBF</tLA>2012-03-08</td> WKBF</tLA>2012-03-08</td><EMALYSIS OF DRAFT F>
+                                                NT;</td></tEMST AMEIVMPLAINT;</td></trRE03-09</td><td>2.3-d></trRE03-09</td><td>2.0 J MEF td><td>PEPARE MEMSCSTAFF AND MNEANDUM -1ICAL STAFF AND MEd>>
+                                              <tr><td>2012-03MO</td>2</td><td>2.5</td><td>PEP12RE DISCUSSION DR/ttd>PEP12RE DISCUSSION DRAANREVIEW AND REVISIRVNS ON FIRSTLES OF FtdVISIONS ON FIRST >0NT</td></tr>
+                                            <trd>FIRST >0NT</td></tr>
+                                        <tr>06/td</d>2012-03-15</td>HAE SAME.</tdLAd>0.4<GAKBF RE SAME.</td>AP><tr><td>2012-03-></tdSU</td><td>0.3</td><td>REVI<t OF PROPOSED CORGAd>REVI<t OF PROPOSED CORRWI OF NSH TO PROVID<tENSIC ASSESESPROCTOd>R FORENSIC ASSESS01CH REGARDING REPd>ASSESS01CH REGARDING REPON,<trRES.</td></tr>
+                                      <tr>1.td><td>PEPAPEd>2012><2.9</td><td>PEPAR5< FOR AMENDED COMP<t><tILINT;</RE>
+                                          <tr><td>2012-03PP0</td><td>TELEPH.<012-03PP0</td><td>TELEPHO<t CONFERENCE WITH >E>
+                                              <tr><td>2EWF RE: E ></tr>
+                                                <tr><td>20ONd>FINALIZE AND TIN<td>20ONd>FINALIZE AND TR<tUM OSSMIT MEMORANDUM TCE-03-08</td> WKBF</tLA>2012-03-08</td><EMALYSIS OF DRAFT F>
+                                                  NT;.5ST AMEIVMPLAINT;</td></trRE03-09</td><td>2.3-d></trRE03-09</td><td>2.0G td><td>PEPARE MEMSCSTAFF AND MNEANDUM -1ICAL STAFF AND MEd>>
+                                                  <tr><td>2012-0EGAND MEd>>
+                                                      <tr><td>2012-03MO</td>2</td><td>2.5</td OSCUSSION DR/ttd>PEP12RE DISCUSSION DRAANREVIEW AND REVISIRVNS EWS OF FtdVISIONS ON FIRST >0NT</td></tr>
+                                                  <trd>FIRST >0NT</td></tr>
+                                              <tr>ARd>2012-03-15</td>HAE SAME.</tdLAd>0.4<GAKBF RE SAME.</td>AP><tr><td>2012-03<t.</td>AP><tr><td>2012-03-></tdSU</td><td>0.3</td> WROPOSED CORGAd>REVI<t OF PROPOSED CORRWI OF NSH TO PROVID<tENS</PROCTOd>R FORENSIC ASSESS01CH REGARDING REPd>ASSESS01CH REGARDING REPOMOS.</td></tr>
+                                            <tr>1.td><td>PEPAPEd>2012><2.9</td><td>PEPAR5< FOR AMENDED COMCO>PEPAR5< FOR AMENDED COMP<t><tILINT;</RE>
+                                                <tr><td</F RE: E ></tr>
+                                                  <tr><td>20ONd>FINALIZE AND TIN<td>20ONd>FINALIZE AND TR<tUM OSSMIT MEMORANDUM TCE-03-08</td> WKBF</tLA>2012-03-08</td><d>SMIT MEMORANDUM TCE-03-08</td> WKBF</tLA>2012-03-08</td><EMALYSIS OF DRAFT <t</td><EMALYSIS OF DRAFT F>
+                                              NT;.5ST AMEIVMPLAINT;< A</td><td>2.3-d></trRE03-09</td><td>2.0G td><td>PEPARE MEMSCSTAd>ANDUM -1ICAL STAFF AND MEd>>
+                                                <tr><td>2012-0EGAND MEd>>
+                                                    <tr><td>2012-03D 2</td><td>2.5</td OSCUSSION DR/ttd>PEP12RE DISCUSSION DRAANREVIEW AND REVIStdON DRAANREVIEW AND REVISIRVNS EWS OF FtdVISIONS OAWd></tr>
+                                                    <trd>FIRST >0NT</td></tr>
+                                                <tr>ARd>2012-03-15</td>HAE STAd>0.4<GAKBF RE SAME.</td>AP><tr><td>2012-03<t.</td>AP><tr><td>2012-03-01</td><td>0.3</td> WROPOSED CORGAd>REVI<t OF PROPOSED CORRWI OF NSH TO PROVIFED CORRWI OF NSH TO PROVID<tENS</PROCTOd>R FORENSItrGARDING REPd>ASSESS01CH REGARDING REPOMOS.</td></tr>
+                                              <tr>1.td> Od>2012><2.9</td><td>PEPAR5< FOR AMENDED COMCO>PEPAR5< FOR AMENDED COMP
+                                                <INT;</RE>
+                                                <tr><td</F RE: E ></tr>
+                                                  <tr><td>20ONd>FINALIZE AND TIN<td>20ONd>FNNALIZE AND TIN<td>20ONd>FINALIZE AND TR<tUM OSSMIT5--03-08</td> WKBF</tLA>2012-03-08</td><d>SMIT MEMORANDUM TCE-03COKBF</tLA>2012-03-08</td><EMALYSIS OF DRAFT <t</td><EMALYSIS OF DRAFT FNGST AMEIVMPLAINT;< A</td><td>2.3-d></trRE03-09</td><td>2.0G td><td>PEPARE MEd>td>2.0G td><td>PEPARE MEMSCSTAd>ANDUM -1ICAL STAFS;><td>2012-0EGAND MEd>>
+                                                        <tr><td>2012-03D 2</td><td>2.5</td OSCURDtd>PEP12RE DISCUSSION DRAANREVIEW AND REVIStdON DRAANREVIEW AND REVISId>S OF FtdVISIONS OAWd></tr>
+                                                        <trd>FIRST >0NT</td></tr>
+                                                    <tr>ARd>2012-03-15</tdTA>
+                                                      <tr>ARd>2012-03-15</td>HAE STAd>0.4<GAKBF RE SANT<td>2012-03<t.</td>AP><tr><td>2012-03-01</td><td>0.3</td> WROP>2d>REVI<t OF PROPOSED CORRWI OF NSH TO PROVIFED CORRWI OF NSH TO PROVIDF PROCTOd>R FORENSItrGARDING REPd>ASSESS01CH REGARDING REPOMOS.</td></tr>
+                                                    <trANG REPOMOS.</td></tr>
+                                                <tr>1.td> Od>2012><2.9</td><</AMENDED COMCO>PEPAR5< FOR AMENDED COMP
+                                                <INT;</RE>
+                                                <tr><td</F R D>
+                                                    <tr><td>20ONd>FINALIZE AND TIN<td>20ONd>FNNALIZE AND TIN<td>20ONd>FI<tAND TR<tUM OSSMIT5--03-08</td> WKBF</tLA>2012-03-08</td><d>SMIT MEMORANDUM ON</td><d>SMIT MEMORANDUM TCE-03COKBF</tLA>2012-03-d>S OF DRAFT <t</td><EMALYSIS OF DRAFT FNGST AMEIVMPLAINT;< A</tORd></trRE03-09</td><td>2.0G td><td>PEPARE MEd>td>2.0G td><td>PEPARE MEMDOANDUM -1ICAL STAFS;><td>2012-0EGAND MEd>>
+                                                          <tr><td>2012-03D 2</td><td>2.5</tF 012-03D 2</td><td>2.5</td OSCURDtd>PEP12RE DISCUSATW AND REVIStdON DRAANREVIEW AND REVISId>S OF FtdVISIONS OAWd><13FIRST >0NT</td></tr>
+                                                        <tr>ARd>2012-03-15</tdTA>
+                                                          <tr>ARd>2012-03-15</td>N d>0.4<GAKBF RE SANT<td>2012-03<t.</td>AP><tr><td>2012-03-01</td><td>0.3</tdr>12-03-01</td><td>0.3</td> WROP>2d>REVI<t OF PROPOD SH TO PROVIFED CORRWI OF NSH TO PROVIDF PROCTOd>R FORENSItrGAR RASSESS01CH REGARDING REPOMOS.</td></tr>
+                                                        <trANG REPOMOS.</td></tr>
+                                                    <tr>EVd>2012><2.9</td><</AMENDED COMCO>PEPAR5< FOR AMENDED COMP
+                                                    <INT;</RE>
+                                                    <tr><tOND COMP
+                                                      <INT;</RE>
+                                                      <tr><td</F R D>
+                                                          <tr><td>20ONd>Ftd<td>20ONd>FNNALIZE AND TIN<td>20ONd>FI<tAND TR<tUM OSSMIT5--03OGKBF</tLA>2012-03-08</td><d>SMIT MEMORANDUM ON</td><d>SMIT MEMORANDUM T18KBF</tLA>2012-03-d>S OF DRAFT <t</td><EMALYSIS OF DRAFT FNGST AMEIVMPLAINT;RERAFT FNGST AMEIVMPLAINT;< A</tORd></trRE03-09</tdtdd>PEPARE MEd>td>2.0G td><td>PEPARE MEMDOANDUM -1ICAL STAFS;><t>
+                                                              AND MEd>>
+                                                              <tr><td>2012-03D 2</td><td>2.5</tF 012-03D 2</td><td>2.5</tdITtd>PEP12RE DISCUSATW AND REVIStdON DRAANREVIEW AND REVISId>S OF FtdVISIONS SOREVISId>S OF FtdVISIONS OAWd><13FIRST >0NT</td></>42-03-15</tdTA>
+                                                                <tr>ARd>2012-03-15</td>N d>0.4<GAKBF RE SANT<tdIO.</td>AP><tr><td>2012-03-01</td><td>0.3</tdr>12-03-01</td><td>0.3</td>ENd>REVI<t OF PROPOD SH TO PROVIFED CORRWI OF NSH TO PROVIDF PROCTOd>R FORENSTLPROVIDF PROCTOd>R FORENSItrGAR RASSESS01CH REGARD><d></tr>
+                                                              <trANG REPOMOS.</td></tr>
+                                                          <tr>EVd>2012><2.9</td><</AMEOF>PEPAR5< FOR AMENDED COMP
+                                                          <INT;</RE>
+                                                          <tr><tOND COMP
+                                                            <INT;</RE>
+                                                            <tr><td/t>
+                                                                <tr><td>20ONd>Ftd<td>20ONd>FNNALIZE AND TIN<td>20ONd>FI<tAND TR<tUM OSSMId>ONd>FI<tAND TR<tUM OSSMIT5--03OGKBF</tLA>2012-03-NSMEMORANDUM ON</td><d>SMIT MEMORANDUM T18KBF</tLA>2012-03-d>S O07</td><EMALYSIS OF DRAFT FNGST AMEIVMPLAINT;RERAFT FNGST AMEIVMPLAINT;<d>d></trRE03-09</tdtdd>PEPARE MEd>td>2.0G td><td>PEPARE MEMDOANDUM -1ICAL STAEPRE MEMDOANDUM -1ICAL STAFS;><t>
+                                                                      AND MEd>>
+                                                                      <tr><td</><td>2.5</tF 012-03D 2</td><td>2.5</tdITtd>PEP12RE DISCUSATW A PON DRAANREVIEW AND REVISId>S OF FtdVISIONS SOREVISId>S OF FtdVISIONS OIOFIRST >0NT</td></>42-03-15</tdTA>
+                                                                          <tr>ARd>2012-03-15</td>N d>0.4<GAKBF RE Sd>5</td>N d>0.4<GAKBF RE SANT<tdIO.</td>AP><tr><td>E;<td>0.3</tdr>12-03-01</td><td>0.3</td>ENd>REVI<t OF PROPOD SH OCD CORRWI OF NSH TO PROVIDF PROCTOd>R FORENSTLPROVIDF PROCTOd>R FORENSI9.ASSESS01CH REGARD><d></tr>
+                                                                        <trANG REPOMOS.</td></tr>
+                                                                    <tr>EVd>2012><2.9</td>EL>
+                                                                    <tr>EVd>2012><2.9</td><</AMEOF>PEPAR5< FOR AMEN. /RE>
+                                                                    <tr><tOND COMP
+                                                                      <INT;</RE>
+                                                                      <tr><td/t>
+                                                                          <tr><td>20ONd>Ftd<td8.ALIZE AND TIN<td>20ONd>FI<tAND TR<tUM OSSMId>ONd>FI<tAND TR<tUM OSSMITIOKBF</tLA>2012-03-NSMEMORANDUM ON</td><d>SMIT MEMORANDUM T18KBF</tLA>2012-03/tNDUM T18KBF</tLA>2012-03-d>S O07</td><EMALYSIS OFEPEIVMPLAINT;RERAFT FNGST AMEIVMPLAINT;<d>d></trRE03-09</tdtdd>PVAtd>2.0G td><td>PEPARE MEMDOANDUM -1ICAL STAEPRE MEMDOANDUM -1ICAL STAFOMAND MEd>>
+                                                                              <tr><td</><td>2.5</tF 012-03D 2</td><td>2.5</tdITtd>PEP12RE DISCUSI.5</tdITtd>PEP12RE DISCUSATW A PON DRAANREVIEW ANMEFtdVISIONS SOREVISId>S OF FtdVISIONS OIOFIRST >0NT</td></>42-0d>>
+                                                                                  <tr>ARd>2012-03-15</td>N d>0.4<GAKBF RE Sd>5</td>N d>0.4<GAKBF RE SAUL.</td>AP><tr><td>E;<td>0.3</tdr>12-03-01</td><td>0.3</td>ENd>REVI<t OF PROP</3</td>ENd>REVI<t OF PROPOD SH OCD CORRWI OF NSH TDEOd>R FORENSTLPROVIDF PROCTOd>R FORENSI9.ASSESS01CH REGARD><d>< DG REPOMOS.</td></tr>
+                                                                            <tr>EVd>2012><2.9</td>EL>
+                                                                            <tr>EVd>2012><2.9</td><</>PEPAR5< FOR AMEN. /RE>
+                                                                            <tr><tOND COMP
+                                                                              <INT;</RE>
+                                                                              <tr><td/t>
+                                                                                  <tr><td>20ONd>OCtr><td/t>
+                                                                                        <tr><td>20ONd>Ftd<td8.ALIZE AND TIN<td>O/R<tUM OSSMId>ONd>FI<tAND TR<tUM OSSMITIOKBF</tLA>2012-03-NSMEMRA</td><d>SMIT MEMORANDUM T18KBF</tLA>2012-03/tNDUM T18KBF</tLA>2012-03-DO</td><EMALYSIS OFEPEIVMPLAINT;RERAFT FNGST AMEIVMPLAINT;<d>d></trRE03-09</ttdAINT;<d>d></trRE03-09</tdtdd>PVAtd>2.0G td><td>PEND -1ICAL STAEPRE MEMDOANDUM -1ICAL STAFOMAND MEd>>
+                                                                                            <tr><td</><tNT012-03D 2</td><td>2.5</tdITtd>PEP12RE DISCUSI.5</tdITtd>PEP12RE DISCUSd>ON DRAANREVIEW ANMEFtdVISIONS SOREVISId>S OF FtdVISIONS OIOFIRST >0NT</td><S.IONS OIOFIRST >0NT</td></>42-0d>>
+                                                                                              <tr>ARd>2012-03PO<GAKBF RE Sd>5</td>N d>0.4<GAKBF RE SAUL.</td>AP><tr><td>E;<td<t12-03-01</td><td>0.3</td>ENd>REVI<t OF PROP</3</td>ENd>REVI<t OF PROPOLED CORRWI OF NSH TDEOd>R FORENSTLPROVIDF PROCTOd>R FORENSI9.ASSESS01CH REGAR9.ORENSI9.ASSESS01CH REGARD><d>< DG REPOMOS.</td></NS2><2.9</td>EL>
+                                                                                          <tr>EVd>2012><2.9</td><</>PEPAR5< FOR AMEN. /RECOD COMP
+                                                                                          <INT;</RE>
+                                                                                          <tr><td/t>
+                                                                                              <tr><td>20ONd>OCtr><td/t>
+                                                                                                    <tr><td>20ONd>FtdALIZE AND TIN<td>O/R<tUM OSSMId>ONd>FI<tAND TR<tUM OSSMITIOKBF</tLA>2012-03NTOSSMITIOKBF</tLA>2012-03-NSMEMRA</td><d>SMIT MEMO>PtLA>2012-03/tNDUM T18KBF</tLA>2012-03-DO</td><EMALYSIS OFEPEIVBURAFT FNGST AMEIVMPLAINT;<d>d></trRE03-09</ttdAINT;<d>d></trRE03-09</td Ttd>2.0G td><td>PEND -1ICAL STAEPRE MEMDOANDUM -1ICAL STAFOMAND MEd>>
+                                                                                                      <tr><tANL STAFOMAND MEd>>
+                                                                                                        <tr><td</><tNT012-03D 2</td><tdUMP12RE DISCUSI.5</tdITtd>PEP12RE DISCUSd>ON DRAANREVIEW ANMEFtdCAREVISId>S OF FtdVISIONS OIOFIRST >0NT</td><S.IONS OIOFIRST >0NT</td><//t>
+                                                                                                        <tr>ARd>2012-03PO<GAKBF RE Sd>5</td>N d>0.4<GAKBF RE SAUL.</td>AP><tr><tdLL RE SAUL.</td>AP><tr><td>E;<td<t12-03-01</td><td>ONI<t OF PROP</3</td>ENd>REVI<t OF PROPOLED CORRWI OF NSH TDEOd>/tPROVIDF PROCTOd>R FORENSI9.ASSESS01CH REGAR9.ORENSI9.ASSESS01CH REGARDLEG REPOMOS.</td></NS2><2.9</td>EL>
+                                                                                                      <tr>EVd>2012><2.9</td><</>PEPAR5< FOR AME>
+                                                                                                    </td><</>PEPAR5< FOR AMEN. /RECOD COMP
+                                                                                                    <INT;</RE>N ONd>FI<tAND TR<tUM OSSMITIOKBF</tLA>2012-03NTOSSMITIOKBF</tLA>2012-03-NSMEMRA</td><d>SMIT MEMO>PtLA>2012-03/tNDUM T18KBF</tLA>2012-03-RE</td><d>SMIT MEMO>PtLA>2012-03/tNDUM T18KBF</tLA>2012-03-DO</td><EMALYSIS Otr12-03-DO</td><EMALYSIS OFEPEIVBURAFT FNGST AMEIVMORrRE03-09</ttdAINT;<d>d></trRE03-09</td Ttd>2.0G td><td>PEND -1EARE MEMDOANDUM -1ICAL STAFOMAND MEd>>
+                                                                                            <tr><tANL STAFOMAND MEd>>
+                                                                                              <tr><td T012-03D 2</td><tdUMP12RE DISCUSI.5</tdITtd>PEP12RE DISCUSd>ON DRAANREVIEW AONDISCUSd>ON DRAANREVIEW ANMEFtdCAREVISId>S OF FtdVRA >0NT</td><S.IONS OIOFIRST >0NT</td><//t>
+                                                                                              <tr>ARd>2012-03PO<GA/F5</td>N d>0.4<GAKBF RE SAUL.</td>AP><tr><tdLL RE SAUL.</td>AP><tr><td>R 12-03-01</td><td>ONI<t OF PROP</3</td>ENd>REVI<t OF PROPOLED CORRWI OF NSH >< PROPOLED CORRWI OF NSH TDEOd>/tPROVIDF PROCTOd>RALS01CH REGAR9.ORENSI9.ASSESS01CH REGARDLEG REPOMOS.</td></NS2><td>
+                                                                                              <tr>EVd>2012><2.9</td><</>PEPAR5< FOR AME>
+                                                                                            </td><</>PEPAR5< FOR AMENOND COMP
+                                                                                            <INT;</RE>N ONd>FI<tAND TR<tUM OSSMITIOKBF</tLA>2012-03NTOSSMITIOKBFd>tLA>2012-03NTOSSMITIOKBF</tLA>2012-03-NSMEMRA</tdARtLA>2012-03/tNDUM T18KBF</tLA>2012-03-RE</td><d>SMIT MEMO>PtLAFONDUM T18KBF</tLA>2012-03-DO</td><EMALYSIS Otr12-03-DO</td><EMALYSIS OF</RAFT FNGST AMEIVMORrRE03-09</ttdAINT;<d>d></trRE03-09</td Ttd>2.0G td><td>PNF09</td Ttd>2.0G td><td>PEND -1EARE MEMDOANDUM -1IEVEd>>
+                                                                                      <tr><tANL STAFOMAND MEd>>
+                                                                                        <tr><td T012-03D 2</td><tdUMP12>1.5</tdITtd>PEP12RE DISCUSd>ON DRAANREVIEW AONDISCUSd>ON DRAANREVIEW AN CREVISId>S OF FtdVRA >0NT</td><S.IONS OIOFIRST >0NT</td><//t>
+                                                                                        <tr>ARd>2012-0 F/td><//t>
+                                                                                          <tr>ARd>2012-03PO<GA/F5</td>N d>0.4<GAKNG>AP><tr><tdLL RE SAUL.</td>AP><tr><td>R 12-03-01</td><td>ONI<tPR3</td>ENd>REVI<t OF PROPOLED CORRWI OF NSH >< PROPOLED CORRWI OF NSH TAVPROVIDF PROCTOd>RALS01CH REGAR9.ORENSI9.ASSESS01CH REGARDLEG REPOMOS.</td>< EREGARDLEG REPOMOS.</td></NS2><td>
+                                                                                          <tr>EVd>2012><2/tR5< FOR AME>
+                                                                                          </td><</>PEPAR5< FOR AMENOND COMP
+                                                                                          <INT;</RE>N ONdKSR<tUM OSSMITIOKBF</tLA>2012-03NTOSSMITIOKBFd>tLA>2012-03NTOSSMITIOKBF<AT12-03-NSMEMRA</tdARtLA>2012-03/tNDUM T18KBF</tLA>2012-03-RE</td><d>SMIT MEM-112-03-RE</td><d>SMIT MEMO>PtLAFONDUM T18KBF</tLA>ST<EMALYSIS Otr12-03-DO</td><EMALYSIS OF</RAFT FNGST AMEIVMORrRE><AINT;<d>d></trRE03-09</td Ttd>2.0G td><td>PNF09</td Ttd>2.0G td><td>PE DRE MEMDOANDUM -1IEVEd>>
+                                                                                    <tr><tANL STAFOMAND MEd>>
+                                                                                      <tr><td T012-03D 2</td><tMAtr><td T012-03D 2</td><tdUMP12>1.5</tdITtd>PEP12RtrAANREVIEW AONDISCUSd>ON DRAANREVIEW AN CREVISId>S OF FtdVRA >0TTIONS OIOFIRST >0NT</td><//t>
+                                                                                      <tr>ARd>2012-0 F/td><//t>
+                                                                                        <tr>ARd>2012-03 M5</td>N d>0.4<GAKNG>AP><tr><tdLL RE SAUL.</td>AP><tr><td>R 12-03-01</td><tdEPr><td>R 12-03-01</td><td>ONI<tPR3</td>ENd>REVI<t HIRWI OF NSH >< PROPOLED CORRWI OF NSH TAVPROVIDF PROCTOd>RALS01EVORENSI9.ASSESS01CH REGARDLEG REPOMOS.</td>< EREGARDLEG REPOMOS.</td></ER>
+                                                                                      <tr>EVd>2012><2/tR5< FOR AME>
+                                                                                      </td><</>PEPAR5< FOR AMENOND COMP
+                                                                                      <INT;</RE
+                                                                                      <R AMENOND COMP
+                                                                                      <INT;</RE>N ONdKSR<tUM OSSMITIOKBF EOSSMITIOKBFd>tLA>2012-03NTOSSMITIOKBF<AT12-03-NSMEMRA</tdARtLA</NDUM T18KBF</tLA>2012-03-RE</td><d>SMIT MEM-112-03-RE</td><d>SMIT MEMOENNDUM T18KBF</tLA>ST<EMALYSIS Otr12-03-DO</td><EMALYSIS OF</RAFT FNGST AMEIV<tSIS OF</RAFT FNGST AMEIVMORrRE><AINT;<d>d></trRE0FO0G td><td>PNF09</td Ttd>2.0G td><td>PE DRE MEMDOANDUM -1IEVEd>TOL STAFOMAND MEd>>
+                                                                                  <tr><td T012-03D 2</td><tMAtr><td T012-03D 2</td><tdUA.5</tdITtd>PEP12RtrAANREVIEW AONDISCUSd>ON DRAANREVIEW AN CREVISId>S OF FtdtrIEW AN CREVISId>S OF FtdVRA >0TTIONS OIOFIRST >0NMA>ARd>2012-0 F/td><//t>
+                                                                                    <tr>ARd>2012-03 M5</td>N d>0.4<GAKNG>AP/t RE SAUL.</td>AP><tr><td>R 12-03-01</td><tdEPr><td>R 12-03-01</td><td>DR3</td>ENd>REVI<t HIRWI OF NSH >< PROPOLED CORRWI OF NSH TAVPROVIDF PROCTOd>tr NSH TAVPROVIDF PROCTOd>RALS01EVORENSI9.ASSESS01CVIOMOS.</td>< EREGARDLEG REPOMOS.</td></ER>
+                                                                                <tr>EVd>2012><2/tR5<tr</td><</>PEPAR5< FOR AMENOND COMP
+                                                                                  <INT;</RE
+                                                                                  <R AMENOND COMP
+                                                                                  <INT;</RE>CLR<tUM OSSMITIOKBF EOSSMITIOKBFd>tLA>2012-03NTOSSMITIOKBF<AT12-03-NSMEMRA</t-3IOKBF<AT12-03-NSMEMRA</tdARtLA</NDUM T18KBF</tLA>IO<d>SMIT MEM-112-03-RE</td><d>SMIT MEMOENNDUM T18KBF</tLA>ST<EMIN12-03-DO</td><EMALYSIS OF</RAFT FNGST AMEIV<tSIS OF</RAFT FNGST AMEIVMMEAINT;<d>d></trRE0FO0G td><td>PNF09</td Ttd>2.0G td><td>PE DRE MEMDOANDUM -10.<td>PE DRE MEMDOANDUM -1IEVEd>TOL STAFOMAND MEd>></3D 2</td><tMAtr><td T012-03D 2</td><tdUA.5</tdITtd>PEP12RtrAANFEDISCUSd>ON DRAANREVIEW AN CREVISId>S OF FtdtrIEW AN CREVISId>S OF FtdVERIONS OIOFIRST >0NMA>ARd>2012-0 F/td><//t>
+                                                                                <tr>ARd>2012-03 M5</td>N d>0.4<GA20012-03 M5</td>N d>0.4<GAKNG>AP/t RE SAUL.</td>AP>O -01</td><tdEPr><td>R 12-03-01</td><td>DR3</td>ENd>REVI<t HIRWI0< PROPOLED CORRWI OF NSH TAVPROVIDF PROCTOd>tr NSH TAVPROVIDF PROCTOd>R/tORENSI9.ASSESS01CVIOMOS.</td>< EREGARDLEG REPOMOS.</td></ER>
+                                                                      <tr>EVd>2012><B /td></ER>
+                                                                          <tr>EVd>2012><2/tR5<tr</td><</>PEPAR5< 1.P
+                                                                            <INT;</RE
+                                                                            <R AMENOND COMP
+                                                                            <INT;</RE>CLR<tUM OSSMITIOKBF EOSS/ttLA>2012-03NTOSSMITIOKBF<AT12-03-NSMEMRA</t-3IOKBF<AT12-03-NSMEMRA</td: NDUM T18KBF</tLA>IO<d>SMIT MEM-112-03-RE</td><d>SMIT MEMOENNDUM T18KBF</tLAGET MEMOENNDUM T18KBF</tLA>ST<EMIN12-03-DO</td><EMA</FNGST AMEIV<tSIS OF</RAFT FNGST AMEIVMMEAINT;<d>d></trRE0FO0G IT09</td Ttd>2.0G td><td>PE DRE MEMDOANDUM -10.<td>PE DRE MEMDOANDUM -1ItdL STAFOMAND MEd>></3D 2</td><tMAtr><td T012-03D 2</td><tdUA.5</tdITtd>PEP12><td><tdUA.5</tdITtd>PEP12RtrAANFEDISCUSd>ON DRAANR MId>S OF FtdtrIEW AN CREVISId>S OF FtdVERIONS OIOFIRST >0NMA>ARtd/td><//t>
+                                                                        <tr>ARd>2012-03 M5</td>N d>0.4<GA20012-03 M5</td>N d>0.4<GAKIS RE SAUL.</td>AP>O -01</td><tdEPr><td>R 12-03-01</td><td>DR3</td>ENd>REVI<tENd><td>DR3</td>ENd>REVI<t HIRWI0< PROPOLED CORRWI /tDF PROCTOd>tr NSH TAVPROVIDF PROCTOd>R/tORENSI9.ASSESS01CVIOMO WREGARDLEG REPOMOS.</td></ER>
+                                                                <tr>EVd>2012><B /td></ER>
+                                                                    <tr>EVd>2012><2td</td><</>PEPAR5< 1.P
+                                                                    <INT;</RE
+                                                                    <R AMENOND COMP
+                                                                    <INT;</RE>CLR<tUM OSSMITIOKBON;</RE>CLR<tUM OSSMITIOKBF EOSS/ttLA>2012-03NTOSSMd>-NSMEMRA</t-3IOKBF<AT12-03-NSMEMRA</td: NDUM T18KBF</tLA>IO<d>-112-03-RE</td><d>SMIT MEMOENNDUM T18KBF</tLAGET MEMOENNDUM T18KBF</tLA>EX12-03-DO</td><EMA</FNGST AMEIV<tSIS OF</RAFT FNGST AMEIVMMEAINT;<d>d></trRE AAMEIVMMEAINT;<d>d></trRE0FO0G IT09</td Ttd>2.0G tROMDOANDUM -10.<td>PE DRE MEMDOANDUM -1ItdL STAFOMAND MEd>></3D 3-tr><td T012-03D 2</td><tdUA.5</tdITtd>PEP12><td><tdUA.5</tdITtd>PEP12R EDISCUSd>ON DRAANR MId>S OF FtdtrIEW AN CREVISId>S OF FtdVERIONS OIOFIRST >0R F FtdVERIONS OIOFIRST >0NMA>ARtd/td><//t>
+                                                                <tr>ARd M>N d>0.4<GA20012-03 M5</td>N d>0.4<GAKIS RE SAUL.</td>AP>O -01><r><td>R 12-03-01</td><td>DR3</td>ENd>REVI<tENd><td>DR3</td>ENd>REVI<t VE PROPOLED CORRWI /tDF PROCTOd>tr NSH TAVPROVIDF PROCTOd>R/tORENSI9.ASSESS01DACTOd>R/tORENSI9.ASSESS01CVIOMO WREGARDLEG REPOMOS22>EVd>2012><B /td></ER>
+                                                                <tr>EVd>2012><2td</td><</>PEPAR5< 1.P
+                                                                <INR AMENOND COMP
+                                                                <INT;</RE>CLR<tUM OSSMITIOKBON;</RE>CLR<tUM OSSMITIOKBFNFtLA>2012-03NTOSSMd>-NSMEMRA</t-3IOKBF<AT12-03-NSMEMRA</td: NDUM T18KBF</tLA<tRA</td: NDUM T18KBF</tLA>IO<d>-112-03-RE</td><d>SG T18KBF</tLAGET MEMOENNDUM T18KBF</tLA>EX12-03-DO</td><EMA</FNGRESIS OF</RAFT FNGST AMEIVMMEAINT;<d>d></trRE AAMEIVMMEAINT;<d>d></trRE0</09</td Ttd>2.0G tROMDOANDUM -10.<td>PE DRE MEMDOANDUM -1ItdL STAFOMAND MEd>N dITtd>PEP12><td><tdUA.5</tdITtd>PEP12R EDISCUSd>ON DRAANR MId>S OF FtdtrIEW AN CREVISId>S OF FtdVERIONS OIOFIRST 22IEW AN CREVISId>S OF FtdVERIONS OIOFIRST >0R F FtdVERIONS OIOFIRST >0NN /td><//t>
+                                                          <tr>ARd M>N d>0.4<GA20012-03 M5</td>N d>0.4<GAKIS RE SAUL.</td>APSE.4<GAKIS RE SAUL.</td>AP>O -01><r><td>R 12-03-01<d>>ENd>REVI<tENd><td>DR3</td>ENd>REVI<t VE PROPOLED CORRWI /tDF .  NSH TAVPROVIDF PROCTOd>R/tORENSI9.ASSESS01DACTOd>R/tORENSI9.ASSESS01C01REGARDLEG REPOMOS22>EVd>2012><B /td></ER>
+                                                          <tr>EVd>2012><2td</td><</>PEPAR5<IS012><2td</td><</>PEPAR5< 1.P
+                                                        <INR AMENOND COMP
+                                                        <I-0 OSSMITIOKBON;</RE>CLR<tUM OSSMITIOKBFNFtLA>2012-03NTOSSMd>-NSd>IOKBF<AT12-03-NSMEMRA</td: NDUM T18KBF</tLA<tRA</td: NDUM T18KBF</tLA>R 12-03-RE</td><d>SG T18KBF</tLAGET MEMOENNDUM T18KBF</tLA>EX12-03-DO</td><EM A</tLA>EX12-03-DO</td><EMA</FNGRESIS OF</RAFT FNGS
+                                                  <<d>d></trRE AAMEIVMMEAINT;<d>d></trRE0</09</td Ttd>2.0G tROMDOAT<td>PE DRE MEMDOANDUM -1ItdL STAFOMAND MEd>N dITtd>PEP12><td><tdUA.5</</PEP12R EDISCUSd>ON DRAANR MId>S OF FtdtrIEW AN CREVISId>S OF FtdVERIONS OIONTISId>S OF FtdVERIONS OIOFIRST 22IEW AN CREVISId>SEAOIOFIRST >0R F FtdVERIONS OIOFIRST >0NN /td><//t>
+                                                    <tr>ARd M>N  A012-03 M5</td>N d>0.4<GAKIS RE SAUL.</td>APSE.4<GAKIS RE SAUL.</td>AP>NAr><td>R 12-03-01<d>>ENd>REVI<tENd><td>DR3</td>ENd>REVI<t VE PROPOLED CORRWIS EVI<t VE PROPOLED CORRWI /tDF .  NSH TAVPROVIDF P</I9.ASSESS01DACTOd>R/tORENSI9.ASSESS01C01REGARDLEG REPOMOS22>EVND/td></ER>
+                                                  <tr>EVd>2012><2td</td><</>PEPAR5<IS012><2td</td><</>PEPAR5< ITR AMENOND COMP
+                                                <I-0 OSSMITIOKBON;</RE>CLR<tUM OSSMITIOKBFNFtLA>2012-03NTOSSANTIOKBFNFtLA>2012-03NTOSSMd>-NSd>IOKBF<AT12-03-NSMS T18KBF</tLA<tRA</td: NDUM T18KBF</tLA>R 12-03-RE</td><d>SG T18r>T MEMOENNDUM T18KBF</tLA>EX12-03-DO</td><EM A</tLA>EX12-03-DO</td><EMAY SIS OF</RAFT FNGS
+                                            <<d>d></trRE AAMEIVMMEAINT;<d>d></trRE0</09</td Ttd>2.0G <//trRE0</09</td Ttd>2.0G tROMDOAT<td>PE DRE MEMDOAVEOF FtdtrIEW AN CREVISId>S OF FtdVERIONS OIONTISId>S OF FtdVERIONS OIOFIRST 22IEW AN CREVISId>SEAOIOFIRST >0R F FtdVERIONS OIOFIRST >0NPEIEW AN CREVISId>SEAOIOFIRST >0R F FtdVERIONS OIOFIRST >0NN /td><//t>
+                                          <tr>ARE-ST >0NN /td><//t>
+                                            <tr>ARd M>N  A012-03 M5</td>N d BAUL.</td>APSE.4<GAKIS RE SAUL.</td>AP>NAr><td>R 12-03-01<d>>EN<td><td>DR3</td>ENd>REVI<t VE PROPOLED CORRWIS EVI<t VE PROPOLED CORRWI DA NSH TAVPROVIDF P</I9.ASSESS01DACTOd>R/tORENSI9.ASSESS01C01REGARDLEG REPOMO</ESS01C01REGARDLEG REPOMOS22>EVND/td></ER>
+                                            <tr>EVdRE<</>PEPAR5<IS012><2td</td><</>PEPAR5< ITR AMENOND COMP
+                                            <I-0 OSON;</RE>CLR<tUM OSSMITIOKBFNFtLA>2012-03NTOSSANTIOKBFNFtLA>2012-03NTOSSMD IOKBF<AT12-03-NSMS T18KBF</tLA<tRA</td: NDUM T18KBF</tLA>R 12-03-RE</td><d>14</tLA>R 12-03-RE</td><d>SG T18r>T MEMOENNDUM T18KND-DO</td><EM A</tLA>EX12-03-DO</td><EMAY SIS OF</RAFT FNGS
+                                      <<d>XCAMEIVMMEAINT;<d>d></trRE0</09</td Ttd>2.0G <//trRE0</09</td Ttd>2.0G t<t<td>PE DRE MEMDOAVEOF FtdtrIEW AN CREVISId>S OF FtdVERIONS OIONTISId>S OF FSPVERIONS OIONTISId>S OF FtdVERIONS OIOFIRST 22IEW -0OIOFIRST >0R F FtdVERIONS OIOFIRST >0NPEIEW AN CREVISId>SEAOIO: F FtdVERIONS OIOFIRST >0NN /td><//t>
+                                    <tr>ARE-ST >0NN /td><//t>
+                                      <tr>ARd S012-03 M5</td>N d BAUL.</td>APSE.4<GAKIS RE SAUL.</td>AP>NAr><td>R 12-03-01STtd>AP>NAr><td>R 12-03-01<d>>EN<td><td>DR3</td>ENd GOLED CORRWIS EVI<t VE PROPOLED CORRWI DA NSH TAVPROVIDF P</I9.
+                                        <CTOd>R/tORENSI9.ASSESS01C01REGARDLEG REPOMO</ESS01C01REGARDLEG REPOMOS(D/td></ER>
+                                        <tr>EVdRE<</>PEPAR5<IS012><2td</td><</>PEPAR5< ITR AMENOND COMP
+                                        <-0PAR5< ITR AMENOND COMP
+                                        <I-0 OSON;</RE>CLR<tUM OSSON012-03NTOSSANTIOKBFNFtLA>2012-03NTOSSMD IOKBF<AT12-03-NSMS T18<tRA</td: NDUM T18KBF</tLA>R 12-03-RE</td><d>14</tLA>R 12-03-RE</td><d>SBFT MEMOENNDUM T18KND-DO</td><EM A</tLA>EX12-03-DO</td><EMAY SIS OF</RAFT FNG1<d><EMAY SIS OF</RAFT FNGS
+                                  <<d>XCAMEIVMMEAINT;<d>dTEd Ttd>2.0G <//trRE0</09</td Ttd>2.0G t<t<td>PE DRE MEMDOAVEOF IAN CREVISId>S OF FtdVERIONS OIONTISId>S OF FSPVERIONS OIONTISId>S OF Ft2-S OIOFIRST 22IEW -0OIOFIRST >0R F FtdVERIONS OIOFIRST >0NPEIEW AN CREVISId>OFST >0NPEIEW AN CREVISId>SEAOIO: F FtdVERIONS OIOF/t//t>
+                                  <tr>ARE-ST >0NN /td><//t>
+                                    <tr>ARd S012-03 M5</td>N d BAULLY.4<GAKIS RE SAUL.</td>AP>NAr><td>R 12-03-01STtd>AP>NAr><td>R 12-03-01</td><td>DR3</td>ENd GOLED CORRWIS EVI<t VE PROPOLED CORRWI DA NSH TAVPROVIDF RIORRWI DA NSH TAVPROVIDF P</I9.
+                                    <CTOd>R/tORENSI9.A DDLEG REPOMO</ESS01C01REGARDLEG REPOMOS(D/td></ER>
+                                    <tr>EVdRE<</>1012><2td</td><</>PEPAR5< ITR AMENOND COMP
+                                    <-0PAR5< ITR AMENOND COMP
+                                    <IS ;</RE>CLR<tUM OSSON012-03NTOSSANTIOKBFNFtLA>2012-03NTOSSMD IOKBF<AT12-03-NS><NTOSSMD IOKBF<AT12-03-NSMS T18<tRA</td: NDUM T18KAR-RE</td><d>14</tLA>R 12-03-RE</td><d>SBFT MEMOENNDUM T18KND-DOCD</tLA>EX12-03-DO</td><EMAY SIS OF</RAFT FNG1<d><EMAY SIS OF</RAFT FNGSANAMEIVMMEAINT;<d>dTEd Ttd>2.0G <//trRE0</09</td Ttd>2.0G t<t<td>PE DRE MEMDOSI2.0G t<t<td>PE DRE MEMDOAVEOF IAN CREVISId>S OF FGUISId>S OF FSPVERIONS OIONTISId>S OF Ft2-S OIOFIRST 22IEW -0OIOr>F FtdVERIONS OIOFIRST >0NPEIEW AN CREVISId>OFST >0NPEIEW AN CREVISId>SDIF FtdVERIONS OIOF/t//t>
+                              <tr>ARE-ST >0NN /td><//t>
+                                <tr>ARd S012-03 M5</td>N -2tr>ARd S012-03 M5</td>N d BAULLY.4<GAKIS RE SAUL.WA>R 12-03-01STtd>AP>NAr><td>R 12-03-01</td><td>DR3</td>ENd GOLENTEVI<t VE PROPOLED CORRWI DA NSH TAVPROVIDF RIORRWI DA NSH TAVPROVIDF Pd>CTOd>R/tORENSI9.A DDLEG REPOMO</ESS01C01REGARDLEG REPOMOS(D/td></ER>
+                              <tr>EVd>EPOMOS(D/td></ER>
+                                <tr>EVdRE<</>1012><2td</td><</>G NOND COMP
+                                <-0PAR5< ITR AMENOND COMP
+                                <IS ;</RE>CLR<tUM OSSON012ARTIOKBFNFtLA>2012-03NTOSSMD IOKBF<AT12-03-NS><NTOSSMD IOKBF<AT12-03-NSMTERA</td: NDUM T18KAR-RE</td><d>14</tLA>R 12-03-RE</td><d>SBFT MEMOENNDUM T18MAd><d>SBFT MEMOENNDUM T18KND-DOCD</tLA>EX12-03-DO<4-F</RAFT FNG1<d><EMAY SIS OF</RAFT FNGSANAMEIVMMEAINT;<d>dTEd TMA/trRE0</09</td Ttd>2.0G t<t<td>PE DRE MEMDOSI2.0G t<t<td>PE DRE MEMDOA0<N CREVISId>S OF FGUISId>S OF FSPVERIONS OIONTISId>S OF Ft2-S OIOFIRST 22IEWEP OF Ft2-S OIOFIRST 22IEW -0OIOr>F FtdVERIONS OIOFd>N CREVISId>OFST >0NPEIEW AN CREVISId>SDIF FtdVERIONS OIOF/t//tIMST >0NN /td><//t>
+                            <tr>ARd S012-03 M5</td>N -2tr>ARd S012-03 M5</td>N dRE.4<GAKIS RE SAUL.WA>R 12-03-01STtd>AP>NAr><td>R 12-03-01</td><td>DR3</td>ENtr03-01</td><td>DR3</td>ENd GOLENTEVI<t VE PROPOLED<sTAVPROVIDF RIORRWI DA NSH TAVPROVIDF Pd>CTOd>R/tORENSI9.A DDLEptESS01C01REGARDLEG REPOMOS(D/td></ER>
+                        <tr>EVd>EPOMOS(D/:w
+                          j))))))

@@ -1,6 +1,7 @@
 'use strict';
 /* global $ */
 /* global inject */
+
 $(function(){
 
   $.fn.ngBrowserTrigger = function(eventType) {
@@ -25,6 +26,7 @@ $(function(){
     }
 
   };
+
 
   $.fn.ngClickLink = $.fn.$click = function() {
 

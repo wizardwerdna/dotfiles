@@ -1,15 +1,26 @@
 'use strict';
-angular.module('app', []);
-angular.module('app').controller('ClickCtrl', function(){
-  var vm = this;
-
-  vm.count = 0;
-
-  vm.click = function(){
-    vm.count += 1;
-  };
-  
-  vm.reset = function(){
-    vm.count = 0;
-  };
-});
+describe('ViewModel ClickVM', function(){
+  var vm = {};
+  beforeEach(function(){
+    module('app');
+    inject(function($controller){
+      vm = $controller('ClickVM', {});
+    });
+  });
+  it('upon creation, clickCount should be 0', function(){
+    expect(vm.clickCount).toBe(0);
+  });
+  it('after 1 click, clickCount should be 1', function(){
+    vm.click();
+    expect(vm.clickCount).toBe(1);
+  });
+  it('after 2 clicks, clickCount should be 2', function(){
+    vm.click();
+    vm.click();
+    expect(vm.clickCount).toBe(2);
+  });
+  it('after reset, clickCount should be 0', function(){
+    vm.reset();
+    expect(vm.clickCount).toBe(0);
+  });
+})

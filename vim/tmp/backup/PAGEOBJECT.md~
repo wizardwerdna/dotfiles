@@ -1,0 +1,145 @@
+# TESTING BUNKAI: the Page Object Pattern
+
+When testing a web page, particularly in integration (end-to-end or midway),
+we find ourselves "loading" the page in some way, and verifying that it
+is suitably formed.  Regardless of the tools used, this involves detailed
+"scraping" of the text, usually through some means of parsing with selectors,
+and then converting that logic into the business domain to express a test.
+Even in the simplest case, such as the following:
+
+```javascript
+...
+expect(parseInt(page.find('.elaborate-selector p').text())).toBe(state.elab);
+...
+```
+
+is an opaque expression that has two serious difficulties when used in a
+test.
+
+1.  It is difficult to read, and does not articulate clearly the intent
+    of the expression.
+
+2.  It conflates the business domain meaning with the details for
+    gathering the information. When a designer, for example, changes
+    either the selector name or where in the selector the text can be
+    found, our tests will break.
+
+
+
+Thus, these complex expressions obscure the meaning of the test and
+render them fragile. A solution to this is to use the
+[Page Object Pattern](http://martinfowler.com/bliki/PageObject.html). 
+In essence, we create an independent object that holds the state of the
+page, and which can be queried for business domain information, while
+hiding the details of the page DOM/CSS design. Put simply, it translates
+an API that is about the HTML to an API that is about the application.
+The foregoing monstrosity in the earlier expression could be reduced to:
+
+```javascript
+...
+expect(page.elab).toBe(state.elab);
+...
+```
+
+which nicely exhibits the intent of the test: does the page hava an
+`elab` identical to the state's `elab`?
+
+While complex page object classes might be designed, the simplest POJO
+(Plain Old Javascript Objects) works just fine, particularly if you
+prefer to separate creation/fetching from use and querying. Imagine, for
+example, the following html fragment (taken from the Superheroic
+Wrapping kata):
+
+```html
+<input class="width" type="number">
+<textarea class="input"></textarea>
+<textarea class="wrapped" disabled></textarea>
+```
+
+Our tests will want to enter data into the first two fields, and confirm the 
+proper result comes out of the last field.  A page object for the following 
+schematically forms the foundation of our Page Object:
+
+```javascript
+page = {
+  element: null,
+  find: function(selector){return page.element.find(selector);},
+}
+```
+
+This could be done several ways, for example by building a Page class
+with a corresponding constructor, using `this` to facilitate reuse of
+the page object using `Object.create` or the `new` operator. When we
+find the support functions to be sophisticated and commonly reused, this
+will make sense. But for now, let's keep things simple.
+
+To use the page, in the context of the AngularJS midway test, we simply
+assign the result of our \$compile to page.element, and we are good to
+go. We can then use `find` and other element-specific tools to scrape
+the page. And then build domain specific getters, setters and functions
+on the object. For example, we can obtain the value of the wrapped
+textarea with the following:
+
+```javascript
+page = {
+  element: null,
+  find: function(selector){return page.element.find(selector);},
+  get wrapped(){return page.find('wrapped').val();}
+}
+```
+and now our tests can simply compare `page.wrapped` with the expected result.
+(Of course, this could also be expressly written as a function without the 
+using the getter.)
+
+```javascript
+...
+expect(page.wrapped).toBe('a\nb')
+...
+```
+Where the page object shines is when complex operations are needed to
+scrape. For example, it is difficult in practice to simulate keypresses
+in the browser. So the operation of typing text in an input field is
+often simulated by simply assigning the string to the value attribute of
+the input element, and then notifying the SUT by triggering an 'input'
+operation on the element.  This can be expressed in the page object nicely
+to simplify the development of the input and width fields.
+
+```javascript
+var page = {
+  element: null,
+  find: function(sel){return page.element.find(sel);},
+  type: function(sel, val){
+    return page.find(sel)
+      .val(val)
+      .trigger({type: 'input'})
+      .val();
+  },
+  get wrapped(){return page.find('textarea.wrapped').val();},
+  set width(v){page.type('.width', v);},
+  set input(v){page.type('.input', v);},
+};
+
+```
+
+The beauty of this approach is to see how effectively the intention of the 
+resulting tests can be displayed:
+
+```javascript
+it('width is 2 and input is "ab"', function(){
+  page.width = 2;
+  page.input = 'ab';
+  expect(page.wrap).toBe('ab');
+});
+```
+
+As an application becomes more complex, the use of a single "page"
+object may be too cumbersome. There is no reason that a single page
+might require several types of page objects, particularly for largely
+disparate content. In such a case, a more object-oriented solution would
+be indicated to adequately decompose a large monolithic page object into
+more agile components.
+
+Not only is the language of tests made clearer, written in the domain of
+the application, but further changes to the HTML and CSS can be modified
+in one place, the code of the page object. The Page Object Pattern,
+however implemented is indispensible for web page integration testing.

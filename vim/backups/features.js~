@@ -1,28 +1,191 @@
 'use strict';
-describe('A Clicking Application', function() {
-  var app = $(
-  );
+/* jshint newcap: false */
+/* jshint latedef: false */
+describe('Superheroic 2048', function() {
+  var state;
 
-  beforeEach(module('app', 'views/click.html'));
-  beforeEach(inject(function($compile, $rootScope){
-    app = $compile(
-      '<div>\
-        <div ng-include="\'views/click.html\'"></div>\
-      </div>'
-    )($rootScope);
-    $rootScope.$digest();
-  }));
-  it('features a click count', function(){
-    expect(app.find('.click-count-display').text()).toBe('0');
+  describe('FEATURE: display game state', function() {
+    it('SCENARIO: score display', function() {
+      state={score: 1, best: 2};
+      GIVEN_2048PageFor(state);
+      THEN_2048PageShouldDisplayScores(state);
+    });
 
-    app.find('.clicker').click();
-    expect(app.find('.click-count-display').text()).toBe('1');
-    
-    app.find('.clicker').click();
-    expect(app.find('.click-count-display').text()).toBe('2');
-    
-    app.find('.resetter').click();
-    expect(app.find('.click-count-display').text()).toBe('0');
+    it('SCENARIO: another score display', function(){
+      state={score: 3, best: 4};
+      GIVEN_2048PageFor(state);
+      THEN_2048PageShouldDisplayScores(state);
+    });
+
+    it('SCENARIO: display tiles', function() {
+      state = {tiles: [
+        {x: 0, y: 1, score: 2}
+      ]};
+      GIVEN_2048PageFor(state);
+      THEN_2048PageShouldDisplayTiles(state);
+    });
+
+    it('SCENARIO: display more tiles', function(){
+      state = {tiles: [
+        {x: 1, y: 2, score: 4},
+        {x: 2, y: 3, score: 8}
+      ]};
+      GIVEN_2048PageFor(state);
+      THEN_2048PageShouldDisplayTiles(state);
+    });
+
+    it('SCENARIO: display game over', function() {
+      state = {over: true, won: false};
+      GIVEN_2048PageFor(state);
+      THEN_2048PageShouldDisplayMessages(state);
+    });
+
+    it('SCENARIO: display game won', function() {
+      state = {over: true, won: true};
+      GIVEN_2048PageFor(state);
+      THEN_2048PageShouldDisplayMessages(state);
+    });
+
   });
-});	
 
+  describe('FEATURE: user clicks new game', function(){
+    it('SCENARIO: user clicks new game', function(){
+      GIVEN_2048PageFor({
+        score: null,
+        best: 1234,
+        tiles: [
+          {x:1, y:1, score:null}
+        ],
+        won: true,
+        over: true
+      });
+      WHEN_UserClicksNewGame();
+      THEN_2048PageShouldDisplay({
+        score:    0,
+        best:  1234,
+        tiles: [
+          {x:2, y:3, score: 2},
+          {x:3, y:3, score: 2}
+        ],
+        won: false,
+        over: false
+      });
+    });
+  });
+
+  describe('FEATURE: user takes turn', function(){
+    it('SCENARIO: user types a left arrow', function(){
+      GIVEN_2048PageFor({
+        score: 100,
+        best: 200,
+        tiles: tilesFor([
+          '    |    | 256|    ',
+          ' 512| 512|    |    ',
+          '    |    | 256| 256',
+          '    | 512|    |    '
+        ]),
+        won: false,
+        over: false
+      });
+      WHEN_UserPresses(37);
+      THEN_2048PageShouldDisplay({
+        score: 1636,
+        best:  1636,
+        tiles: tilesFor([
+          ' 256|    |    |    ',
+          '1024|    |    |    ',
+          ' 512|    |    |    ',
+          ' 512|    |    |   2'
+        ]),
+        won: false,
+        over: false
+      });
+    });
+  });
+
+  var page = {
+    element: $(),
+    find: function(sel){return page.element.find(sel);},
+    text: function(sel){return page.find(sel).text();},
+    number: function(sel){return parseInt(page.text(sel));},
+    score: function(){return page.number('.score-container');},
+    best: function(){return page.number('.best-container');},
+    tiles: function(){return page.find('.tile').get().map(page.tile);},
+    tile: function(elt){
+      var position = elt.className.match(/tile-position-([1-4])-([1-4])/);
+      var score = elt.className.match(/tile-([0-9]+)/);
+      expect($(elt).find('.tile-inner').text()).toBe(score[1]);
+      return {
+        x: parseInt(position[1]) - 1,
+        y: parseInt(position[2]) - 1,
+        score: parseInt(score[1])
+      };
+    },
+    gameMessage: function(){return page.find('.game-message');},
+    over: function(){return page.gameMessage().hasClass('game-over');},
+    won: function(){return page.gameMessage().hasClass('game-won');},
+    gameMessageText: function(){return page.text('.game-message p');},
+    clickNewGame: function(){return page.find('.restart-button').click();},
+    keydown: function(){page.element.trigger({type: 'keydown', which:'which'});},
+  };
+
+  function GIVEN_2048PageFor(state){
+    module('app', 'index.html', function($provide){
+      $provide.value('state', state);
+    });
+    inject(function($compile, $rootScope, $templateCache){
+      page.element = $compile($templateCache.get('index.html'))($rootScope);
+      $rootScope.$digest();
+    });
+  }
+
+  function WHEN_UserPresses(which){
+    page.keydown( {type: 'keydown', which: 37} );
+  }
+
+  function THEN_2048PageShouldDisplay(state){
+    THEN_2048PageShouldDisplayTiles(state);
+    THEN_2048PageShouldDisplayMessages(state);
+    THEN_2048PageShouldDisplayScores(state);
+  }
+
+  function THEN_2048PageShouldDisplayScores(state){
+    expect(page.score()).toBe(state.score);
+    expect(page.best()).toBe(state.best);
+  }
+
+  function THEN_2048PageShouldDisplayTiles(state){
+    expect(page.tiles()).toEqual(state.tiles);
+  }
+
+  function WHEN_UserClicksNewGame(){
+    page.clickNewGame();
+  }
+
+  function THEN_2048PageShouldDisplayMessages(state){
+    expect(page.over()).toBe(state.over && !state.won);
+    expect(page.won()).toBe(state.won);
+    if (state.won) {
+      expect(page.gameMessageText()).toBe('Game won!');
+    } else if (state.over) {
+      expect(page.gameMessageText()).toBe('Game over!');
+    } else {
+      expect(page.gameMessageText()).toBe('');
+    }
+  }
+
+  function tilesFor(specs){
+    return specs
+      .map(rowSpec)
+      .reduce(function(list, row){ return list.concat(row); }, []);
+
+    function rowSpec(col, rowIndex){
+      return col
+        .split('|')
+        .map(function(score, colIndex){
+          return{ x: colIndex, y: rowIndex, score: parseInt(score) };
+        })
+        .filter(function(tile){return !isNaN(tile.score);});
+    }
+  }
+});

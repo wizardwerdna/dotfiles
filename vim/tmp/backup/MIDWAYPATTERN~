@@ -1,0 +1,28 @@
+# BUNKAI: the Midway Integration Test Pattern
+
+When building out an AngularJS Application, it is often useful to begin outside-in
+with an integration test.  A number of excellent tools exist for end-to-end testing,
+notably Protractor and Selenium.  However, those tools are relatively slow, and
+in my view, somewhat cumbersome to use.  
+
+An intermediate mode of testing applications
+up to application boundaries is the Midway pattern, which is to create a dynamic
+DOM fragment in memory, load it up in Angular, and test its response to various
+stimuli. One advantage of the Midway pattern when used with Karama is that no server is actually
+necessary, just the browser itself.  This is facilitated by:
+
+*  Using the Angular template cache to read templates without a server, 
+   fed by Karma's html2js preprocessors.
+
+*  Using the Angular $compile and $rootScope services, injected by means of the
+   Angular mock library to create a dynamic DOM fragment.
+
+*  Simulating stimulus such as user typing and clicks by way of various trigger
+   operations.
+
+## The $templateCache.
+
+Karma can be programmed to preprocess all html files into angular modules, with 
+names corresponding to the filename.  By executing the `module('foo.html')` 
+command to load that module, the Angular $templateCache service is filled with 
+the corresponding text.  

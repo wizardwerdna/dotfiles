@@ -1,0 +1,12 @@
+#2048 Specification
+
+State Item         | CSS Selector
+-------------------|------------------------------------
+Game Score         | .score-container
+Best (High) Score  | .best-container
+Tiles              | .tile
+  score 2048       | .tile.tile-2048
+  score 2048       | .tile .tile-inner{2048}
+  position (2,3)   | .tile.tile-position-2-3
+Game Over          | .game-message.game-over{Game over!}
+Game Won           | .game-message.geme-won{You won!}

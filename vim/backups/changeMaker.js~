@@ -1,0 +1,50 @@
+'use strict';
+ddescribe('Factory changeMaker', function(){
+  var changeMaker;
+  beforeEach(function(){
+    module('app');
+    inject(function(_changeMaker_){
+      changeMaker = _changeMaker_;
+    });
+  });
+  function test(amount, coins, result){
+    if (typeof result === 'string')
+      expect(changeMaker(amount, coins).toString()).toBe('No Solution');
+    else
+      expect(changeMaker(amount, coins).sort()).toEqual(result.sort(), '<-', amount, coins);
+  }
+
+  it('should change zero amount', function(){
+    test(0, [1,2,3], []);
+  });
+
+  it('should not change non-zero amount with empty coins', function(){
+    test(1, [], "No Solution");
+  });
+
+  it('should change non-zero amount with coin equal to amount', function(){
+    test(1, [1], [1]);
+    test(2, [2], [2]);
+  });
+
+  it('should change non-zero amount with coin greather than amount', function(){
+    test(2, [1], [1, 1]);
+    test(4, [2], [2, 2]);
+    test(3, [2], "No Solution");
+  });
+
+  it('should change two coins less than or equal to amount', function(){
+    test(6, [1, 5], [1, 5]);
+    test(12, [2, 10], [2, 10]);
+    test(4, [2,3], [2, 2]);
+    test(4, [3,2], [2, 2]);
+  });
+
+  it('should reasonably handle larger cases', function(){
+    test(6, [1, 3, 5], [5, 1]);
+    var start = +new Date();
+    test(49, [25, 10, 5, 1], [25, 10, 10, 1, 1, 1, 1]);
+    expect(+new Date() - start).toBeLessThan(100, 'slow 49');
+    test(1000, [1, 500, 1], [500, 500]);
+  });
+});

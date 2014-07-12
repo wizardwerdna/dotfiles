@@ -1,0 +1,338 @@
+'use strict';
+ddescribe('game mechanics service', function(){
+  var game, selectTilesMock;
+
+  describe('direction constants', function(){
+    it('should expose constants representing each direction', function(){
+      expect(game.FIRST_DIRECTION).toBe(37);
+      expect(game.LEFT).toBe(37);
+      expect(game.UP).toBe(38);
+      expect(game.RIGHT).toBe(39);
+      expect(game.DOWN).toBe(40);
+      expect(game.LAST_DIRECTION).toBe(40);
+    });
+  });
+
+  describe('reset', function(){
+    it('maintains identity of the state parameter', function(){
+      var state = {mock: 'state'};
+      expect(game.reset(state)).toBe(state);
+    });
+    it('preserves prior value of best', function(){
+      expect(game.reset({best: {mock: 'best'}}).best)
+        .toEqual({mock: 'best'});
+    });
+    it('resets score, reset and over to default values', function(){
+      expect(game.reset({score: 123}).score).toBe(0);
+      expect(game.reset({won: null}).won).toBe(false);
+      expect(game.reset({over: null}).over).toBe(false);
+    });
+    it('resets tiles to two tiles provided by selectTile', function(){
+      selectTilesMock.returns = [{mock: 'tile1'}, {mock: 'tile2'}];
+      expect(game.reset({
+        tiles: [ {mock: 'tile before'} ]
+      }).tiles).toEqual([
+        {mock: 'tile1'},
+        {mock: 'tile2'}
+      ]);
+      expect(selectTilesMock.calledWith.map(function(e){return e.tiles;}))
+        .toEqual([[], [{mock: 'tile1'}]]);
+    });
+  });
+
+  describe('turn', function(){
+
+    beforeEach(function setNewTileMock(){
+      selectTilesMock.returns = [t(4,4,0), t(4,3,0), t(4,2,0), t(4,1,0)];
+    });
+    describe('moving and meging tiles', function(){
+      describe('moving tiles left', function(){
+
+        describe('top row only', function(){
+          it('places one tile properly', function(){
+            testMergeAndMove([ t(0,0,2) ], game.LEFT, [ t(0,0,2) ]);
+            testMergeAndMove([ t(3,0,4) ], game.LEFT, [ t(0,0,4) ]);
+          });
+          it('leaves the identity of state.tiles unchanged', function(){
+            var tiles = [t(0,0,2)];
+            var state = {tiles: tiles};
+            expect(game.turn(state, game.LEFT).tiles).toBe(tiles);
+          });
+          it('places two tiles properly', function(){
+            testMergeAndMove(
+              [ t(1,0,2), t(3,0,4) ], game.LEFT, [ t(0,0,2), t(1,0,4) ], 'first'
+            );
+            testMergeAndMove(
+              [ t(3,0,4), t(1,0,2) ], game.LEFT, [ t(0,0,2), t(1,0,4) ], 'second'
+            );
+          });
+          it('merges two tiles properly', function(){
+            testMergeAndMove(
+              [ t(1,0,2), t(3,0,2) ], game.LEFT, [ t(0,0,4) ], 'first');
+            testMergeAndMove(
+              [ t(3,0,4), t(1,0,4) ], game.LEFT, [ t(0,0,8) ] , 'second');
+          });
+          it('places three tiles properly', function(){
+            testMergeAndMove([
+              t(1,0,2), t(3,0,8), t(2,0,4)
+            ], game.LEFT, [
+              t(0,0,2), t(1,0,4), t(2,0,8)
+            ]);
+          });
+        });
+        describe('moves multiple rows left', function(){
+          it('top two rows, simple case', function(){
+            testMergeAndMove([
+              t(0,0,2), t(3,0,4), t(2,1,8)
+            ], game.LEFT, [
+              t(0,0,2), t(1,0,4), t(0,1,8)
+            ]);
+          });
+          it('complex case without merging', function(){
+            testMergeAndMove(tilesFor([
+              '   2|   4|   8|  16',
+              '    |  32|  64| 128',
+              '    |    | 256| 512',
+              '    |    |    |1024'
+            ]), game.LEFT, tilesFor([
+              '   2|   4|   8|  16',
+              '  32|  64| 128|    ',
+              ' 256| 512|    |    ',
+              '1024|    |    |    '
+            ]));
+          });
+          it('complex case with merging', function(){
+            testMergeAndMove(tilesFor([
+              '    |    | 256|    ',
+              ' 512| 512|    |    ',
+              '    |    | 256| 256',
+              '    | 512|    |    '
+            ]), game.LEFT, tilesFor([
+              ' 256|    |    |    ',
+              '1024|    |    |    ',
+              ' 512|    |    |    ',
+              ' 512|    |    |    '
+            ]));
+          });
+        });
+      });
+      it('moving tiles right', function(){
+        testMergeAndMove(tilesFor([
+          '    |    | 256|    ',
+          ' 512| 512|    |    ',
+          '    |    | 256| 256',
+          '    | 512|    |    '
+        ]), game.RIGHT, tilesFor([
+          '    |    |    | 256',
+          '    |    |    |1024',
+          '    |    |    | 512',
+          '    |    |    | 512'
+        ]));
+      });
+      it('moving tiles up', function(){
+        testMergeAndMove(tilesFor([
+          '    |    | 256|    ',
+          ' 512| 512|    |    ',
+          '    |    | 256| 256',
+          '    | 512|    |    '
+        ]), game.UP, tilesFor([
+          ' 512|1024| 512| 256',
+          '    |    |    |    ',
+          '    |    |    |    ',
+          '    |    |    |    '
+        ]));
+      });
+      it('moving tiles down', function(){
+        testMergeAndMove(tilesFor([
+          '    |    | 256|    ',
+          ' 512| 512|    |    ',
+          '    |    | 256| 256',
+          '    | 512|    |    '
+        ]), game.DOWN, tilesFor([
+          '    |    |    |    ',
+          '    |    |    |    ',
+          '    |    |    |    ',
+          ' 512|1024| 512| 256'
+        ]));
+      });
+    });
+    describe('scoring', function(){
+      var FIX={};
+      beforeEach(function(){
+        FIX.multipleMerges = tilesFor([
+          '    |    | 256|    ',
+          ' 512| 512|    |    ',
+          '    |    | 256| 256',
+          '    | 512|    |    '
+        ]);
+      });
+      describe('computes new score', function(){
+        it('score unchanged if no merges', function(){
+          expect(game.turn({
+            score: 100,
+            tiles: []
+          }, game.LEFT).score).toBe(100);
+        });
+        it('score increased with single merge', function(){
+          expect(game.turn({
+            score: 100,
+            tiles: [ t(0,0,128), t(1,0, 128) ]
+          }, game.LEFT).score).toBe(100+256);
+        });
+        it('score increased with multiple merges', function(){
+          expect(game.turn({
+            score: 100,
+            tiles: FIX.multipleMerges
+          }, game.LEFT).score).toBe(100+1024+512);
+        });
+      });
+      describe('computes new best', function(){
+        it('update when score is greater', function(){
+          expect(game.turn({
+            score: 100,
+            best:  400,
+            tiles: FIX.multipleMerges
+          }, game.LEFT).best).toBe(100+1024+512);
+        });
+        it('unchanged when score is less', function(){
+          expect(game.turn({
+            score: 100,
+            best:  +Infinity,
+            tiles: FIX.multipleMerges
+          }, game.LEFT).best).toBe(+Infinity);
+        });
+      });
+    });
+    describe('adding new tile', function(){
+      it('should add tile if a tile has changed', function(){
+        expect(game.turn({
+          tiles: [ t(3,0,2) ]
+        }, game.LEFT).tiles).toEqual([
+          t(0,0,2), t(4,4,0)
+        ]);
+      });
+      it('should not add tile unless a tile has changed', function(){
+        expect(game.turn({
+          tiles: [ t(0,0,2) ]
+        }, game.LEFT).tiles).toEqual([
+          t(0,0,2)
+        ]);
+      });
+    });
+    describe('game won', function(){
+      it('should not be won without a 2048 tile', function(){
+        expect(game.turn({
+          won: false,
+          tiles: [ ]
+        }, game.LEFT).won).toBe(false);
+      });
+      it('should not be re-won with an old 2048 tile', function(){
+        expect(game.turn({
+          won: false,
+          tiles: [ t(3,0,2048) ]
+        }, game.LEFT).won).toBe(false);
+      });
+      it('should be won on a 2048 merge', function(){
+        expect(game.turn({
+          score: 0,
+          won: false,
+          tiles: [ t(0,0,1024), t(2,0,1024) ]
+        }, game.LEFT).won).toBe(true);
+      });
+      it('should not change if won is null', function(){
+        expect(game.turn({
+          score: 0,
+          won: null,
+          tiles: [ t(0,0,1024), t(2,0,1024) ]
+        }, game.LEFT).won).toBe(null);
+      });
+    });
+    describe('game over', function(){
+      it('not over when there is a move', function(){
+        expect(game.turn({
+          tiles: tilesFor([
+            '   2|   4|   8|  16',
+            '  32|  64| 128| 256',
+            ' 512|1024|2048|4096',
+            '8192|   2|   4|    '
+          ])
+        }).over).toBeFalsy();
+      });
+      it('not over when there is a merge', function(){
+        expect(game.turn({
+          tiles: tilesFor([
+            '   2|   4|   8|  16',
+            '  32|  64| 128| 256',
+            ' 512|1024|2048|4096',
+            '8192|   2|   4|    '
+          ])
+        }).over).toBeFalsy('game over when there is a merge');
+      });
+      it('over if there is no move or merge', function(){
+        expect(game.turn({
+          tiles: tilesFor([
+            '   2|   4|   8|  16',
+            '  32|  64| 128| 256',
+            ' 512|1024|2048|4096',
+            '8192|   2|   4|   8'
+          ])
+        }).over).toBeTruthy('game over without merge or move');
+      });
+    });
+
+    function t(x, y, score){ return { x: x, y: y, score: score }; }
+
+    function tilesFor(specs){
+      return specs
+        .map(rowSpec)
+        .reduce(function(list, row){ return list.concat(row); }, []);
+
+      function rowSpec(col, rowIndex){
+        return col
+          .split('|')
+          .map(function(score, colIndex){
+            return{ x: colIndex, y: rowIndex, score: parseInt(score) };
+          })
+          .filter(function(tile){return !isNaN(tile.score);});
+      }
+    }
+
+    function rowMajorOrder(t1,t2){return (t1.y*4+t1.x)-(t2.y*4+t2.x);}
+
+    function testMergeAndMove(tilesIn, direction, tilesOut, message){
+      function notAnAddedTile(tile){
+        return tile.score !== 0;
+      }
+      message = message || 'failed testLeft';
+
+      expect(
+        game.turn({tiles: tilesIn}, direction).tiles
+          .filter(notAnAddedTile)
+          .sort(rowMajorOrder)
+      ).toEqual(tilesOut, message);
+    }
+
+  });
+
+  beforeEach(function loadGameAndMockSelectTile(){
+    selectTilesMock = new SelectTilesMock();
+    module('app', function ($provide){
+      $provide.value('selectTile', selectTilesMock.boundSpy());
+    });
+    inject(function(_game_){game = _game_;});
+  });
+
+  function SelectTilesMock(returns){ this.reset(returns); }
+  SelectTilesMock.prototype = {
+    reset: function(returns){
+      this.returns = returns || [];
+      this.calledWith = [];
+    },
+    spy: function(state){
+      this.calledWith.push(angular.copy(state));
+      return this.returns.shift();
+    },
+    boundSpy: function(){ return this.spy.bind(this); }
+  };
+
+});

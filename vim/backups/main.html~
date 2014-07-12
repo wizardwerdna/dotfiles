@@ -1,9 +1,39 @@
-<div class="hero-unit">
-  <h1>'SAllo, 'Allo!</h1>
-  <p>You now have</p>
-  <ul>
-      <li ng-repeat="thing in awesomeThings">{{thing}}</li>
-  </ul>
-  <p>installed.</p>
-  <h3>Enjoy coding! - Yeoman</h3>
+<h3>DEPOSITIONS AND EXHIBITS</h3>
+
+
+<div class="alert alert-error" ng-hide="Session.isAuthenticated()">
+  You must authenticate to use this application.
+</div>
+<div ng-show="Session.isAuthenticated()">
+  <input type="search" ng-model="search.q" class="search-query pull-right" placeholder="Search"></input> 
+  <br style="clear: both;"/>
+  <hr>
+  <div ng-show="search.q.length > 0">
+    <h3>Depositions</h3>
+    <LI depo-display ng-repeat="depo in depositions|filter:search.q"></LI>
+    <HR>
+    <h3>Exhibits</h3>
+    <LI exhibit-display ng-repeat="ex in exhibits|filter:search.q">{{ex.more}}</LI>
+  </div>
+
+  <pre ng-hide="search.q.length > 0">
+{{'i loveroonies you'}}
+  SUPERIOR COURT OF THE STATE OF CALIFORNIA
+  COUNTY OF NAPA
+
+  MELODY JO SAMUELSON,
+
+  Plaintiff,
+
+  v.
+
+  STATE OF CALIFORNIA; CALIFORNIA 
+  DEPARTMENT OF MENTAL HEALTH, a 
+  department of the State of California;
+  JAMES JONES, an individual; DEBORAH 
+  WHITE, an individual; and NAMI KIM, an 
+  individual,
+
+  Defendants.
+  </pre>
 </div>

@@ -1,1 +1,23 @@
-describe
+'use strict';
+
+
+function samerionies(){
+
+  principalProject();
+
+  function principalProject(){
+    preRotation();
+    jim the third
+    postRotation();
+
+    function preRotation(){
+      jim the first
+      jim the second
+    };
+    function postRotation(){
+      jim the fourth
+      jim the fifth
+    };
+  };
+
+}

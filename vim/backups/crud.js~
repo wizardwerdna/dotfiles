@@ -1,0 +1,128 @@
+'use strict';
+describe('Factory crud', function(){
+  var crud = {};
+  beforeEach(buildCrudService);
+
+  // CREATE
+  describe('create()', function(){ 
+    var threeItems;
+    var newItem = {fourth: 'fourth'};
+    beforeEach(function(){ 
+      crud.initialize([
+        {first: 'first'},
+        {second: 'second'},
+        {third: 'third'}
+      ]);
+      threeItems = angular.copy(crud.read());
+    });
+    it('should return a new item with an id', function(){
+      var result = crud.create(newItem);
+      expect('$_id' in result).toBeTruthy();
+      expect(newItem).to$Equal(result);
+    });
+    it('should return a different new item with an id', function(){
+      var newNewItem = {newFourth: 'new fourth'}
+      var result = crud.create(newNewItem);
+      expect(newNewItem).to$Equal(result);
+    });
+    it('should add the new annotated item to the collection', function(){
+      var result = crud.create(newItem);
+      expect(crud.read())
+      .toEqual(threeItems.concat(result)); 
+    });
+  });
+
+  // READ (and INITIALIZE)
+  describe('read() and initialize()', function(){
+    it('should initialize an empty array correctly', function(){
+      crud.initialize([]);
+      expect(crud.read()).toEqual([]);
+    });
+
+    it('should initialize a singleton array correctly', function(){
+      crud.initialize([{mock: 'one'}]);
+      var read = crud.read();
+      expect(read.length).toBe(1);
+      expectUniqueID(read);
+      expect({mock:'one'}).to$Equal(read[0]);
+
+      crud.initialize([{mock: 'two'}]);
+      read = crud.read();
+      expect(read[0]).to$Equal({mock: 'two'});
+    });
+
+    it('should initialize a doubleton array correctly', function(){
+      var start = [{mock: 'one'}, {mock: 'two'}]
+      crud.initialize(start)
+      var read = crud.read();
+      expect(read.length).toBe(start.length);
+      expect(read.every(function(each){return '$_id' in each})).toBeTruthy();
+      expect(read.every(function(each, index){
+        expectDataInEntry(start[index], each);
+      }));
+      expectUniqueID(read);
+    });
+  });
+
+  // UPDATE
+  describe('update()', function(){
+    var threeItems;
+    beforeEach(function(){ 
+      crud.initialize([
+        {first: 'first'},
+        {second: 'second'},
+        {third: 'third'}
+      ]);
+      threeItems = angular.copy(crud.read());
+    });
+    it('should update a changed entry', function(){
+      var newSecond = angular.extend({}, threeItems[1], {second: 'newSecond', new: 'new'});   
+      crud.update(newSecond);
+      expect(crud.read()).toEqual([].concat(threeItems[0], newSecond, threeItems[2]));
+    })
+  });
+
+  // DESTROY
+  describe('destroy()', function(){
+    var threeItems;
+    beforeEach(function(){ 
+      crud.initialize([
+        {first: 'first'},
+        {second: 'second'},
+        {third: 'third'}
+      ]);
+      threeItems = angular.copy(crud.read());
+    });
+    it('should destroy a given entry', function(){
+      crud.update(threeItems[1]);
+      expect(crud.read()).toEqual([].concat(threeItems[0], threeItems[2]));
+    }) ;
+  });
+
+  function expectDataInEntry(data, entry){
+    Object.keys(data).forEach(function(key){
+      expect(key in entry).toBeTruthy(key + ' in ', entry);
+      expect(data[key]).toEqual(entry[key]);
+    });
+  }
+
+  function expectUniqueID(arr){
+    expect(arr
+      .map(extractID)
+      .sort()
+      .reduce(nodups, [undefined, true])[1])
+    .toBeTruthy('non-unique $_ids in ', arr);
+    function extractID(each){
+      expect('$_id' in each).toBeTruthy('no $_id field in' +  each);
+      return each.$_id;
+    }
+    function nodups(last, each){
+      return [each, last[0]!==each && last[1]]
+    }
+  };
+
+  function buildCrudService(){
+    module('app');
+    inject(function(_crud_){ crud = _crud_; });
+  }
+});

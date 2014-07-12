@@ -1,0 +1,20 @@
+" To use, save this file and type ":so %"
+" Optional: First enter ":let g:rgb_fg=1" to highlight foreground only.
+" Restore normal highlighting by typing ":e"
+setlocal nohlsearch
+call search('^" BEGIN_COLOR_LIST', 'e')
+while search('\w\+') > 0
+  let w = expand('<cword>')
+  if w == 'END_COLOR_LIST'
+    break
+  endif
+  if exists('g:rgb_fg') && g:rgb_fg
+    execute 'hi col_'.w.' guifg='.w.' guibg=NONE'
+  else
+    execute 'hi col_'.w.' guifg=black guibg='.w
+  endif
+  execute 'syn keyword col_'.w.' '.w.' contained containedin=vimLineComment'
+endwhile
+call search('^" BEGIN_COLOR_LIST')
+normal 0jzt
+

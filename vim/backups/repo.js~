@@ -1,84 +1,29 @@
-/* SPIKE IN-MEMORY REPOSITORY */
 'use strict';
-angular.module('app').factory('InMemoryRepo', function($q){
-  var  dict = {},
-       nextGuid = 0,
-       idPrefix = 'id';
-
-  return {
-    query:  query,
-    get:    get,
-    create: create,
-    update: update,
-    remove: remove
-  };
-
-  function qpromise(resolver){
-    var df = $q.defer();
-    try {
-      resolver(
-        function(value){df.resolve(value);},
-        function(reason){df.reject(reason);}
-      );
-    } catch(e) {
-      df.reject(e);
-    } finally {
-      return df.promise;
-    }
-  }
-
-  function vals(o){
-    return Object.keys(o).sort().map(function(key){
-      return o[key];
+ddescribe('Factory repository', function(){
+  var repository;
+  beforeEach(function(){
+    module('app');
+    inject(function(_repository_){
+      repository = _repository_;
     });
+  });
+  describe('list, read() and init()', function(){
+    it('without initialization, list should be empty and identical to read()', function(){
+      expect(repository.list.length).toBe(0);
+      expect(repository.read()).toBe(repository.list);
+    });
+    it('with initialization, list should $equal input and identical to read()', function(){
+      var originalList = repository.list;
+      var initializer = [mock('one'), mock('two'), mock('three')];
+
+      repository.init(initializer);
+
+      expect(repository.list).to$Equal(initializer, 'are $equal');
+      expect(repository.read()).toBe(repository.list, 'read() and list identical');
+      expect(repository.list).toBe(originalList, 'list unchanged');;
+    });
+  });
+  function mock(text){
+    return {mock: text};
   }
-
-  function query(){
-    return qpromise(function(res, rej){
-      res(vals(dict));
-    }
-  };
-
-  function get(id){
-    return qpromise(function(res, rej){
-      if (dict[id]){
-        res(dict[id]);
-      } else {
-        rej('object not found');
-      };
-    })
-    var df = $q.defer();
-    return df.promise;
-  };
-
-  function create(obj){
-    var df = $q.defer();
-    if (obj['id']) {
-      obj['id'] = idPrefix+(++nextGuid).toString();
-      df.resolve(dict[obj['id']] = obj);
-    } else {
-      df.reject('object already exists');
-    }
-    return df.promise;
-  };
-
-  function update(obj){
-    var df = $q.defer;
-    if (dict[obj['id']]){
-      df.resolve(dict[obj['id']]=obj);
-    } else {
-      df.reject('object not found');
-    }
-    return df.promise;
-  };
-
-  function remove(obj){
-    var df = $q.defer;
-    if (dict[obj['id']]) {
-      df.resolve();
-    } else {
-      df.reject('object not found');
-    };
-  }
-
 });

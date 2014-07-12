@@ -1,99 +1,117 @@
 'use strict';
-angular.module('app').factory('scorer', function(){
-  return function(rolls){
-
-    function isStrike(here){
-      return rolls[here]===10;
+describe('Factory scorer', function(){
+  var scorer;
+  beforeEach(function(){
+    module('app');
+    inject(function(_scorer_){ scorer = _scorer_; });
+  });
+  describe('lineDisplay', function(){
+    function testDisplay(rolls, result){
+      expect(scorer(rolls).lineDisplay()).toBe(result, rolls);
     }
+    it('should correctly display partial frames', function(){
+      testDisplay([], '');
+      testDisplay([0], '-');
+      testDisplay([1], '1');
+      testDisplay([9], '9');
+    });
+    it('should correctly display one frame', function(){
+      testDisplay([0,0], '--');
+      testDisplay([9,0], '9-');
+      testDisplay([0,9], '-9');
+      testDisplay([0,10], '-/');
+      testDisplay([9,1], '9/');
+      testDisplay([10], ' X');
+    });
+    it('should correctly display two frames', function(){
+      testDisplay([0,1,2,3], '-123');
+      testDisplay([0,10,5,5], '-/5/');
+      testDisplay([10,10], ' X X');
+    });
+    it('should correctly display tenth frames', function(){
+      testDisplay([10,10,10,10,10,10,10,10,10,10,10,10],
+                 ' X X X X X X X X XXXX');
+    })
+  });
 
-    function isSpare(here){
-      return rolls[here]+rolls[here+1]===10;
+  describe('frameScores', function() {
+    function testScore(rolls, result){
+      expect(scorer(rolls).frameScores()).toEqual(result, rolls);
     }
+    it('should score an incomplete frame', function(){
+      testScore([], []);
+      testScore([0], []);
+      testScore([0,10], []);
+      testScore([10], []);
+      testScore([10,10], []);
+    });
+    it('should score one complete frame', function(){
+      testScore([0,0], [0]);
+      testScore([0,1], [1]);
+      testScore([1,0], [1]);
+      testScore([5,5,5], [15]);
+      testScore([5,5,10], [20]);
+      testScore([10,5,5], [20]);
+      testScore([10,10,5], [25]);
+      testScore([10,10,10], [30]);
+    });
+    it('should score two complete frames', function(){
+      testScore([0,0,1,2], [0,3]);
+      testScore([5,5,5,5,5], [15,30]);
+      testScore([10,10,10,10], [30,60]);
+    });
+    it('should score complete games', function(){
+      testScore([10,10,10,10,10,10,10,10,10,10,0,0]);
+    });
+  });
 
-    function next(here) {
-      if (isStrike(here)){
-        return here+1;
-      } else {
-        return here+2;
-      }
+  describe('isInvalid', function(){
+    function testIsInvalid(rolls, validRollList, invalidRollList, description){
+      description = description || '';
+      var theScorer = scorer(rolls);
+      validRollList.forEach(function(pins){
+        expect(theScorer.isInvalid(pins)).toBeFalsy(description+'('+pins.toString()+')');
+      });
+      invalidRollList.forEach(function(pins){
+        expect(theScorer.isInvalid(pins)).toBeTruthy(description+'('+pins.toString()+')');
+      });
     }
+    var
+      allPins = [0,1,2,3,4,5,6,7,8,9,10],
+      gutterGame = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      zerosAndASpareGame = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10],
+      spareGame = [5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5],
+      perfectGame = [10,10,10,10,10,10,10,10,10,10,10,10];
 
-    function frameScores(){
+    it('should validate all pins on creation', function(){
+      testIsInvalid([], allPins, [], 'on creation');
+    });
 
-      function isIncompleteFrame(here){
-        return rolls.length<here+2 ||
-          (rolls.length===here+2 && (isStrike(here) || isSpare(here)));
+    it('should invalidate all pins after game is over', function(){
+      testIsInvalid(gutterGame, [], allPins, 'gutterGame');
+      testIsInvalid(zerosAndASpareGame, allPins, [], 'gutterGame');
+      testIsInvalid(spareGame, [], allPins, 'spareGame');
+      testIsInvalid(perfectGame, [], allPins, 'perfectGame');
+    });
+
+    it('should validate all pins at beginning of frame', function(){
+      for(var frame=0; frame<10; frame++){
+        testIsInvalid(gutterGame.slice(0, frame*2), allPins, [],
+          'beginning frame '+(frame+1));
       }
+    });
 
-      function frameValue(here) {
-        if (isStrike(here)) {
-          return 10 + rolls[here+1] + rolls[here+2];
-        } else if (isSpare(here)) {
-          return 10 + rolls[here+2];
-        } else {
-          return rolls[here] + rolls[here+1];
-        }
-      }
+    it('should validate spare attempts, invalidate impossible spare attempts', function(){
+      testIsInvalid([5], [0,1,2,3,4,5], [6,7,8,9,10]);
+      testIsInvalid([3], [0,1,2,3,4,5,6,7], [8,9,10]);
+      testIsInvalid([1,2,3], [0,1,2,3,4,5,6,7], [8,9,10]);
+      testIsInvalid([10,3], [0,1,2,3,4,5,6,7], [8,9,10]);
+    });
 
-      function frameScoresFrom(here, lastFrameScore) {
-        if (isIncompleteFrame(here)){
-          return [];
-        } else {
-          var thisFrameScore = lastFrameScore + frameValue(here);
-          return [thisFrameScore].concat(
-            frameScoresFrom(next(here), thisFrameScore));
-        }
-      }
-
-      return frameScoresFrom(0,0);
-     
-    }
-
-    function lineDisplay(){
-
-      function displayOneRoll(pins){
-        return '-123456789'[pins] || '';
-      }
-
-      function spaceUnlessTenth(frame){
-        if (frame<10) {
-          return ' ';
-        } else {
-          return '';
-        }
-      }
-
-      function displayOneFrame(here, frame){
-        if (isStrike(here)) {
-          return spaceUnlessTenth(frame) + 'X';
-        } else if (isSpare(here)) {
-          return displayOneRoll(rolls[here]) + '/';
-        } else {
-          return displayOneRoll(rolls[here]) + displayOneRoll(rolls[here+1]);
-        }
-      }
-
-      function displayFramesFrom(here, frame){
-        if (rolls.length<=here+1 && !isStrike(here)) {
-          return displayOneRoll(rolls[here]);
-        } else {
-          return displayOneFrame(here, frame)+displayFramesFrom(next(here),frame+1);
-        }
-      }
-
-      if (rolls.length===13) {
-        return '-/ X X X X X X X XXXX';
-      } else {
-        return displayFramesFrom(0,1);
-      }
-      
-    }
-
-    return {
-      frameScores: frameScores(),
-
-      lineDisplay: lineDisplay()
-    };
-  };
+    it('should validate all pins after tenth frame strike', function(){
+      testIsInvalid([10,10,10,10,10,10,10,10,10,10], allPins, [], 'tenth frame strike');
+      testIsInvalid([10,10,10,10,10,10,10,10,10,10,4], [0,1,2,3,4,5,6], [7,8,9,10],
+        'tenth frame strike/miss') ;
+    });
+  });
 });
-

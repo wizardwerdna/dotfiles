@@ -1,19 +1,19 @@
-autocmd vimenter * if !argc() | NERDTree | endif
-map <leader>z :NERDTreeToggle<CR>
+" Vimscript file settings ---------------------- {{{
+augroup filetype_vim
+    autocmd!
+    autocmd FileType vim setlocal foldmethod=marker
+augroup END
+" }}}
 
-set nocompatible               " be iMproved
-filetype off                   " required!
-
+" Vundle settings -------------------------------- {{{
 set rtp+=~/.vim/bundle/vundle/
+filetype off                   " required!
 call vundle#rc()
-
-let g:syntastic_html_checkers = []
-let g:ackprg = 'ag --nogroup --nocolor --column'
-
-"let Vundle manage Vundle
-" required! 
 Bundle 'gmarik/vundle'
 
+" Bundle 'scrooloose/nerdtree'
+" Bundle 'vim-scripts/textutil.vim'
+Bundle 'airblade/vim-gitgutter'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'blockle.vim'
 Bundle 'christoomey/vim-tmux-navigator'
@@ -28,15 +28,17 @@ Bundle 'Jasmine-snippets-for-snipMate'
 Bundle 'jiangmiao/auto-pairs'
 Bundle 'jQuery'
 Bundle 'L9'
+Bundle 'lambdalisue/shareboard.vim'
 Bundle 'lfilho/cosco.vim'
 Bundle 'Lokaltog/vim-easymotion'
-Bundle 'Lokaltog/vim-easymotion'
+Bundle 'marijnh/tern_for_vim'
 Bundle 'mattn/emmet-vim'
+Bundle 'mattn/webapi-vim'
+Bundle 'pangloss/vim-javascript'
 Bundle 'peterhoeg/vim-tmux'
 Bundle 'rizzatti/dash.vim'
 Bundle 'rizzatti/funcoo.vim'
 Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
-Bundle 'scrooloose/nerdtree'
 Bundle 'Shougo/neocomplcache'
 Bundle 'Shougo/neosnippet'
 Bundle 'sickill/vim-pasta'
@@ -55,198 +57,221 @@ Bundle 'tpope/vim-ragtag'
 Bundle 'tpope/vim-rails.git'
 Bundle 'tpope/vim-repeat'
 Bundle 'tpope/vim-surround'
+Bundle 'tpope/vim-unimpaired'
+Bundle 'tpope/vim-vinegar'
 Bundle 'tsaleh/vim-matchit'
 Bundle 'vim-coffee-script'
 Bundle 'vim-fugitive'
-Bundle 'vim-javascript'
-Bundle 'vim-ruby/vim-ruby'
+Bundle 'vim-pandoc/vim-pandoc'
 Bundle 'vimux'
 Bundle 'vividchalk.vim'
-Bundle "yearofmoo/Vim-Darkmate"
-
-" Bundle 'marijnh/tern_for_vim'
-
+Bundle 'yearofmoo/Vim-Darkmate'
+"}}}
 
 syntax on
 filetype plugin indent on     " required!
 
-" CommandT hack
-set timeout timeoutlen=3000 ttimeoutlen=50
 
-au BufNewFile,BufRead *.ejs set filetype=js
-au BufNewFile,BufRead *.ejs set filetype=html
-au BufNewFile,BufRead *.js set filetype=javascript-jasmine.javascript 
-
-map <leader>k :CoffeeCompile vert watch<cr>
-
-nnoremap <leader>sv :source $MYVIMRC<cr>
-nnoremap <leader>ev :vsplit $MYVIMRC<cr>
-set splitright
+set autoread
+set backspace=indent,eol,start
+set backup              " keep a backup file
+set backupdir=~/.vim/backups
+set clipboard=unnamed
+set completeopt=menu,menuone,preview
+set expandtab
+set foldlevelstart=99
+set foldmethod=syntax
+set helpheight=1000
+set history=100         " keep 50 lines of command line history
+set hlsearch
+set incsearch           " do incremental searching
+set laststatus=2
+set listchars=tab:>-,trail:-
+set nocompatible
+set nopaste
+set number
+set printfont=Courier:h11
+set printoptions=paper:letter,left:10pc,right:5pc,top:5pc,bottom:5pc,header:2,syntax:y,duplex:off
+set ruler               " show the cursor position all the time
 set runtimepath^=~/.vim/bundle/ctrlp.vim
+set shiftwidth=2
+set splitright
+set statusline=
+set statusline+=%f\                    " file name
+set statusline+=%h%1*%m%r%w%0*         " flags
+set statusline+=%{fugitive#statusline()} "git status info"
 
-nmap <leader><leader> :w<cr>:!clear; rspec spec<cr>
-nmap <leader>] :w<cr>:call VimuxRunCommand('npm test')<cr>
-nmap <leader>} :w<cr>:call VimuxRunCommand('npm run-script browserTest')<cr>
-nmap <leader>[ :w<cr>:call VimuxRunCommand('coffee')<cr>
-nmap <leader>gq :VimuxCloseRunner<cr>
-nmap <leader>gw :VimuxInspectRunner<cr>
+set statusline+=%=                     " right align
+set statusline+=%-14.(%l,%c%V%)\ %<%P  " offset
+set tabstop=2
+set timeout timeoutlen=3000 ttimeoutlen=50 "Command-T hack" 
+set wildmode=longest,list:longest
+" Order of the following is significant.  Must set winheight to 5 first
+set winwidth=84
+set winheight=5
+set winminheight=5
+set winheight=999
+setlocal numberwidth=3
 
-" nocomplcache stuff
-let g:neocomplcache_enable_at_startup = 1
-imap <expr><TAB> neocomplcache#sources#snippets_complete#expandable() ? "\<Plug>(neocomplcache_snippets_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-let g:neocomplcache_enable_auto_select = 1
-let g:neocomplcache_auto_completion_start_length = 1
-let g:neocomplcache_enable_auto_select = 0
-
-let g:neosnippet#snippets_directory = "~/.vim/bundle/Jasmine-snippets-for-snipMate"
-map  <C-k> <Plug>(neosnippet_expand_or_jump)
-smap <C-k> <Plug>(neosnippet_expand_or_jump)
-xmap <C-k> <Plug>(neosnippet_expand_target)
-" SuperTab like snippets behavior.
-imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-\ "\<Plug>(neosnippet_expand_or_jump)"
-\: pumvisible() ? "\<C-n>" : "\<TAB>"
-smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-\ "\<Plug>(neosnippet_expand_or_jump)"
-\: "\<TAB>"
-
-" For snippet_complete marker.
+if version >= 703 
+   set conceallevel=0 
+   autocmd FileType * setlocal conceallevel=0 
+endif
 if has('conceal')
   set conceallevel=2 concealcursor=i
 endif
-
-set autoread
-
-let g:rails_menu=2
-let g:gist_clip_command = 'pbcopy'
-let g:gist_detect_filetype = 1
-let g:gist_open_browser_after_post = 1
-
-" Better surround
-let g:surround_40 = "(\r)"
-let g:surround_91 = "[\r]"
-let g:surround_60 = "<\r>"
-
-let g:acp_ignorecaseOption = 0
-
-let g:SuperTabLongestEnhanced = 1
-let g:SuperTabLongestHighlight = 1
-let g:SuperTabCrClosePreview = 1
-
-set backspace=indent,eol,start
-
-set backup              " keep a backup file
-set backupdir=~/.vim/backups
-set history=100         " keep 50 lines of command line history
-set number
-set ruler               " show the cursor position all the time
-set incsearch           " do incremental searching
-set expandtab
-set shiftwidth=2
-set tabstop=2
-set helpheight=1000
-
-set completeopt=menu,menuone,preview
-set wildmode=longest,list:longest
-
-setlocal numberwidth=3
-
-map gb <C-^>
-vmap gl :<C-U>!blame <C-R>=expand("%:p") <CR> <C-R>=line("'<") <CR> <C-R>=line("'>") <CR> <CR>
-vmap # :TComment<CR>
-map - :Tabularize hash
-map <C-l> :nohl
-map <leader>a :Tabularize /=>\?<cr>
-
-" Make j/k move to next visual line instead of physical line
-" http://yubinkim.com/?p=6
-nnoremap k gk
-nnoremap j gj
-nnoremap gk k
-nnoremap gj j
-
-set hlsearch
-set listchars=tab:>-,trail:-
-hi IncSearch term=reverse gui=underline guibg=Blue  guifg=Yellow
-hi    Search term=reverse gui=underline guibg=Black guifg=Yellow
-hi    Visual term=reverse cterm=reverse ctermbg=9 guibg=#555577 guifg=Black
-
-hi Pmenu      guifg=White guibg=Blue
-hi PmenuSel   gui=italic guifg=Yellow guibg=Blue
-hi PmenuSbar  ctermbg=Black guibg=Grey
-hi PmenuThumb guifg=Yellow guibg=Black
-
 if has("gui_running")
   set lines=80 
   set columns=120 
   set number
 endif
-
 if has("gui_macvim")
   " write on pretty much any event (including :q) 
   set autowriteall
   set tabpagemax=100
   set guifont=Monofur:h20
 endif
+" }}}
 
-" Nice statusbar
-set laststatus=2
-set statusline=
-set statusline+=%f\                    " file name
-set statusline+=%h%1*%m%r%w%0*         " flags
-set statusline+=%=                     " right align
-set statusline+=%-14.(%l,%c%V%)\ %<%P  " offset
+" Vim lettings --------------------------------- {{{
+let &colorcolumn=join(range(81,81),",")
 
-autocmd BufNewFile,BufRead *.css set fdm=marker fmr={,}
+let g:ackprg = 'ag --nogroup --nocolor --column'
 
-" Fuck tpope
-xmap s <Plug>VSurround
+let g:acp_ignorecaseOption = 0
 
-" from my old gvimrc"
-
-colorscheme vividchalk
-colorscheme darkmate
-" syntax enable
-" set background=dark
-" colorscheme solarized
-
-autocmd FileType javascript,css,YOUR_LANG nmap <silent> ,; :call cosco#commaOrSemiColon()<CR>
-autocmd FileType javascript,css,YOUR_LANG inoremap <silent> ,; <ESC>:call cosco#commaOrSemiColon()<CR>a
-autocmd FileType javascript,css,YOUR_LANG inoremap <silent> ;; <ESC>:call cosco#commaOrSemiColon()<CR>a
-
-nmap <leader>js O'use strict';<cr><esc>
-nmap <leader>ja O'use strict';<cr>angular.module('app').
-nmap <leader>jd O'use strict';<cr>describe('
-nmap <leader>d  Odescribe('
-nmap <leader>i  Oit('
-" CtrlP
-"
-map <leader>p :CtrlPMRU<cr>
-map <leader>gb :CtrlPBuffer<cr>
-map <leader>ga :CtrlP app<cr>
-map <leader>gt :CtrlP test/spec<cr>
-map <leader>gs :CtrlP app/scripts<cr>
-map <leader>gv :CtrlP app/views<cr>
-map <leader>gi :topleft :split app/index.html<cr>
-
-map <leader>gg :topleft 100 :split Gemfile<cr>
 let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git\|bower_components'
+let g:ctrlp_max_depth=40
+let g:ctrlp_max_files=0
 
-set winwidth=84
-" We have to have a winheight bigger than we want to set winminheight. But if
-" we set winheight to be huge before winminheight, the winminheight set will
-" fail.
-set winheight=5
-set winminheight=5
-set winheight=999
+let g:gist_clip_command = 'pbcopy'
+let g:gist_detect_filetype = 1
+let g:gist_open_browser_after_post = 1
 
-set winwidth=84
-" We have to have a winheight bigger than we want to set winminheight. But if
-" we set winheight to be huge before winminheight, the winminheight set will
-" fail.
-set winheight=5
-set winminheight=5
-set winheight=999
+let g:gitgutter_eager = 0
+let g:gitgutter_realtime = 0
 
-nmap <leader><leader> :w<cr>:!clear; rspec spec<cr>
+let g:instant_markdown_autostart = 0
+
+let g:neocomplcache_auto_completion_start_length = 1
+let g:neocomplcache_enable_at_startup = 1
+let g:neocomplcache_enable_auto_select = 0
+let g:neocomplcache_enable_auto_select = 1
+let g:neosnippet#snippets_directory = "~/.vim/bundle/Jasmine-snippets-for-snipMate"
+
+let g:rails_menu=2
+
+let g:shareboard_command = "pandoc --webtex -sS -t html --highlight-style=espresso -H foo.html"
+
+let g:SuperTabCrClosePreview = 1
+let g:SuperTabLongestEnhanced = 1
+let g:SuperTabLongestHighlight = 1
+
+let g:surround_40 = "(\r)"
+let g:surround_60 = "<\r>"
+let g:surround_91 = "[\r]"
+
+let g:syntastic_html_checkers = []
+let g:syntastic_sass_checkers = []
+let g:syntastic_scss_checkers = []
+let g:user_emmet_settings = webapi#json#decode(join(readfile(expand('~/.snippets_custom.json')), "\n"))
+" }}}
+
+" Vim mappings -------------------------------- {{{
+xnoremap s <Plug>VSurround
+noremap <leader>X c$_extracted_$();<cr>function $_extracted_$(){<cr><cr>};<esc>kVpgv>kV$%
+noremap <leader>x cfunction $_extracted_$(){<cr><cr>};<esc>o$_extracted_$();<esc>kkVpgv>kV$%
+noremap <leader>k :CoffeeCompile vert watch<cr>
+
+" For Tern <leader> t
+noremap <leader>td :TernDef<cr>
+noremap <leader>tn :TernRename<cr>
+noremap <leader>tr :TernRefs<cr>
+noremap <leader>t? :TernDoc<cr>
+noremap <leader>tb :TernDocBrowse<cr>
+
+" For profile leader sv, ev
+nnoremap <leader>sv :source $MYVIMRC<cr>
+nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+
+nnoremap <leader><leader> :w<cr>:!clear; rspec spec<cr>
+nnoremap <leader>] :w<cr>:call VimuxRunCommand('npm test')<cr> 
+nnoremap <leader>} :w<cr>:call VimuxRunCommand('grunt server')<cr>
+nnoremap <leader>[ :w<cr>:call VimuxRunCommand('coffee')<cr> 
+nnoremap <leader>gq :VimuxCloseRunner<cr>
+nnoremap <leader>gw :VimuxInspectRunner<cr>
+inoremap <expr><TAB> neocomplcache#sources#snippets_complete#expandable() ? "\<Plug>(neocomplcache_snippets_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+noremap  <C-k> <Plug>(neosnippet_expand_or_jump)
+snoremap <C-k> <Plug>(neosnippet_expand_or_jump)
+xnoremap <C-k> <Plug>(neosnippet_expand_target)
+" SuperTab like snippets behavior.
+inoremap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)"
+\: pumvisible() ? "\<C-n>" : "\<TAB>"
+snoremap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)"
+\: "\<TAB>"
+vnoremap gl :<C-U>!blame <C-R>=expand("%:p") <CR> <C-R>=line("'<") <CR> <C-R>=line("'>") <CR> <CR>
+vnoremap # :TComment<CR>
+nnoremap <C-m> :nohl<cr>
+
+" Make j/k move to next visual line instead of physical line
+" http://yubinkim.com/?p=6
+nnoremap k  gk
+nnoremap j  gj
+nnoremap gk k
+nnoremap gj j
+
+nnoremap <leader>js O'use strict';<esc>ji
+
+noremap <leader>pm :CtrlPMRU<cr>
+noremap <leader>pp :w<cr>:!pandoc % -o %:r.pdf -V geometry:margin=1in --highlight-style=espresso; open %:r.pdf<cr>
+
+noremap gb <C-^>
+noremap  <leader>gb :CtrlPBuffer<cr>
+noremap  <leader>ga :CtrlP app<cr>
+noremap  <leader>gi :topleft :split app/index.html<cr>
+noremap  <leader>gg :GitGutterToggle<cr> 
+nnoremap <leader><leader> :w<cr>:!clear; rspec spec<cr>
+" }}}
+
+
+" Autocommands -------------------------------- {{{
+au BufNewFile,BufRead *.css set fdm=marker fmr={,}
+au BufNewFile,BufRead *.ejs set filetype=js
+au BufNewFile,BufRead *.ejs set filetype=html
+au BufNewFile,BufRead *.js set filetype=javascript-jasmine.javascript 
+
+au BufEnter * set completeopt-=preview " disable tern preview buffer
+
+au BufNewFile,BufRead *.md setlocal spell
+
+au FileType javascript,css,YOUR_LANG nmap <silent> ,; :call cosco#commaOrSemiColon()<CR>
+au FileType javascript,css,YOUR_LANG inoremap <silent> ,; <ESC>:call cosco#commaOrSemiColon()<CR>a
+au FileType javascript,css,YOUR_LANG inoremap <silent> ;; <ESC>:call cosco#commaOrSemiColon()<CR>a
+" For local identifier replace
+au FileType javascript,css,YOUR_LANG nnoremap gr gd[{V%:s/<C-R>///gc<left><left><left>
+" For global identifier replace
+au FileType tocmdjavascript,css,YOUR_LANG nnoremap gR gD:%s/<C-R>///gc<left><left><left>
+"}}}
+
+" Colorschmes/Highlighting ---- {{{
+hi IncSearch term=reverse gui=underline guibg=Blue  guifg=Yellow
+hi Pmenu      guifg=White guibg=Blue
+hi PmenuSbar  ctermbg=Black guibg=Grey
+hi PmenuSel   gui=italic guifg=Yellow guibg=Blue
+hi PmenuThumb guifg=Yellow guibg=Black
+hi Visual term=reverse ctermbg=9 guibg=#555577 guifg=Black
+set background=dark
+syntax enable
+let g:solarized_termcolors=256
+" set background=light
+" colorscheme solarized
+colorscheme vividchalk
+"colorscheme darkmate
+" hi Search cterm=reverse ctermbg=240 ctermfg=green gui=underline guibg=Black guifg=Yellow
+hi Search cterm=underline ctermbg=DarkYellow gui=underline guibg=Black guifg=Yellow
+hi ColorColumn ctermbg=233
+hi SignColumn  ctermbg=235
+"}}}

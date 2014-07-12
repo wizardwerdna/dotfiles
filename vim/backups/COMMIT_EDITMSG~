@@ -2,39 +2,38 @@
 # Please enter the commit message for your changes. Lines starting
 # with '#' will be ignored, and an empty message aborts the commit.
 # On branch master
-#
-# Initial commit
-#
 # Changes to be committed:
-#   (use "git rm --cached <file>..." to unstage)
+#   (use "git reset HEAD <file>..." to unstage)
 #
-#	new file:   .bowerrc
-#	new file:   .editorconfig
-#	new file:   .gitattributes
-#	new file:   .gitignore
-#	new file:   .jshintrc
-#	new file:   .travis.yml
-#	new file:   Gruntfile.js
-#	new file:   app/.buildignore
-#	new file:   app/.htaccess
-#	new file:   app/404.html
-#	new file:   app/favicon.ico
-#	new file:   app/images/glyphicons-halflings-white.png
-#	new file:   app/images/glyphicons-halflings.png
-#	new file:   app/index.html
-#	new file:   app/robots.txt
-#	new file:   app/scripts/app.coffee
-#	new file:   app/scripts/controllers/main.coffee
-#	new file:   app/scripts/filters/frameScores.coffee
+#	modified:   README.md
+#	modified:   README.pdf
+#	modified:   app/app.js
+#	modified:   app/index.html
+#	renamed:    app/index.html -> app/oindex.html
+#	modified:   app/styles/app.scss
+#	new file:   app/styles/fonts/ClearSans-Bold-webfont.eot
+#	new file:   app/styles/fonts/ClearSans-Bold-webfont.svg
+#	new file:   app/styles/fonts/ClearSans-Bold-webfont.woff
+#	new file:   app/styles/fonts/ClearSans-Light-webfont.eot
+#	new file:   app/styles/fonts/ClearSans-Light-webfont.svg
+#	new file:   app/styles/fonts/ClearSans-Light-webfont.woff
+#	new file:   app/styles/fonts/ClearSans-Regular-webfont.eot
+#	new file:   app/styles/fonts/ClearSans-Regular-webfont.svg
+#	new file:   app/styles/fonts/ClearSans-Regular-webfont.woff
+#	new file:   app/styles/fonts/clear-sans.css
+#	new file:   app/styles/helpers.scss
+#	new file:   app/styles/main.css
 #	new file:   app/styles/main.scss
-#	new file:   app/views/main.html
-#	new file:   bower.json
-#	new file:   karma-e2e.conf.js
-#	new file:   karma.conf.js
-#	new file:   libpeerconnection.log
-#	new file:   package.json
-#	new file:   test/.jshintrc
-#	new file:   test/runner.html
-#	new file:   test/spec/controllers/main.coffee
-#	new file:   test/spec/filters/frameScores.coffee
+#	new file:   foo.html
+#	new file:   screenshot.png
+#	new file:   test/app.js
+#	modified:   test/features.js
 #
+# Untracked files:
+#   (use "git add <file>..." to include in what will be committed)
+#
+#	app/cindex.html
+#	foo.coffee
+#	foo.css
+#	html.templae
+#	html.template

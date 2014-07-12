@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Superheroic Timekeeping</title>
+  <link rel="stylesheet" type="text/css" href="styles/app.css" media="all">
+</head>
+<body>
+<div ng-app = "app" ng-controller="AppVM as vm" class="container">
+
+  <div class="jumbotron">
+    <h1>Superheroic Timekeeping</h1>
+    <p>an AngualrJS Kata</p>
+  </div>
+
+  <div class="well">
+    <div class="noentries" ng-if="vm.repository.list.length===0">There are no entries.</div>
+    <div class="entry row" ng-repeat="entry in vm.repository.read()">
+      <div class="repository-id ng-hide">{{entry.$id}}</div>
+      <div class="date col-xs-2">{{entry.date}}</div>
+      <div class="desc col-xs-8">{{entry.desc}}</div>
+      <div class="hour col-xs-1">{{entry.hour}}</div>
+      <div class="col-xs-1">
+        <div class="edit-entry{{entry.$id}} btn btn-xs btn-primary" 
+          ng-click="vm.resetEditEntry(entry)">
+          <span class="glyphicon glyphicon-save"></span>
+        </div>
+        <div class="destroy-entry{{entry.$id}} btn btn-xs btn-danger" 
+          ng-click="vm.destroyIfConfirmed(entry)">
+          <span class="glyphicon glyphicon-trash"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="well">
+
+    <form role="form" id="newEntryForm" ng-submit="vm.submitNewEntry()" class="row">
+      <input    class="date col-xs-2" type="date" ng-model="vm.newEntry.date">
+      <textarea class="desc col-xs-8" ng-model="vm.newEntry.desc"></textarea> 
+      <input    class="hour col-xs-1" type="number" step="0.1" ng-model="vm.newEntry.hour">
+      <div class="col-xs-1">
+        <button   class="btn btn-xs btn-success" type="submit">
+          <span class="glyphicon glyphicon-edit"></span>
+        </button>
+        <div class="btn btn-xs btn-success" type="submit">
+          <span class="glyphicon glyphicon-edit"></span>
+        </div>
+      </div>
+    </form>
+
+    <form role="form" id="editEntryForm" ng-submit="vm.submitEditEntry()" class="row">
+      <input    class="date col-xs-2" type="date" ng-model="vm.editEntry.date">
+      <textarea class="desc col-xs-8" ng-model="vm.editEntry.desc"></textarea> 
+      <input    class="hour col-xs-1" type="number" step="0.1" ng-model="vm.editEntry.hour">
+      <div class="col-xs-1">
+        <button   class="btn btn-xs btn-success" type="submit">
+          <span class="glyphicon glyphicon-edit"></span>
+        </button>
+        <div class="btn btn-xs btn-success" type="submit">
+          <span class="glyphicon glyphicon-edit"></span>
+        </div>
+      </div>
+    </form>
+  </div>
+
+</div>
+<script src="bower_components/angular/angular.min.js"></script>
+<script src="app.js"></script>
+<script type="javascript/text">
+  angular.module('app').run(function($rootScope, respository){
+    console.log('moo');
+    repository.init([
+      {date: '2001-01-01', desc: 'Description 1', hour: 1.1},
+      {date: '2001-01-02', desc: 'Description 2', hour: 1.2},
+      {date: '2001-01-03', desc: 'Description 3', hour: 1.3}
+    ]);
+  });
+</script>
+</body>
+</html>

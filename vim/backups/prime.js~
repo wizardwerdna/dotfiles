@@ -1,0 +1,30 @@
+'use strict';
+describe('ViewModel PrimesVM', function(){
+  var vm;
+  beforeEach(function(){
+    module('app');
+    inject(function($controller){
+      vm = $controller('PrimesVM', {});
+    });
+  });
+  function testPrimes(int, arr){
+    expect(vm.primes(int)).toEqual(arr);
+  }
+  it('when created, input and output should be "2", [2], respectively', function(){;
+     expect(vm.input).toBe('2');
+     expect(vm.output).toEqual([2]);
+  });
+
+  it('primes(2) should be [2]', function(){
+    testPrimes(1, []);
+    testPrimes(2, [2]);
+    testPrimes(3, [3]);
+    testPrimes(4, [2,2]);
+    testPrimes(5, [5]);
+    testPrimes(6, [2,3]);
+    testPrimes(7, [7]);
+    testPrimes(8, [2,2,2]);
+    testPrimes(9, [3,3]);
+    testPrimes(10, [2, 5]);
+  });
+});

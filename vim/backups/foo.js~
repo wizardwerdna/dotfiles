@@ -1,0 +1,10 @@
+'use strict';
+function shmoo(){
+  extractedFunction();
+}
+
+function extractedFunction(){
+  line(one);
+  line(two);
+  line(three);
+}

@@ -1,0 +1,965 @@
+Superheroic 2048: an AngularJS Kata
+===================================
+
+SECOND ITERATION: Game Mechanics
+--------------------------------
+
+In this iteration, we will build out `game`, the game mechanics service.
+Having isolated the game mechanics into a service, it is now
+time to complete that work.  The service is relatively simple in structure,
+having just two functions that update the game state.
+
+My name is Andrew Greenberg, and I would be grateful for your comments
+and suggestions as you work through these forms. You can find me by
+e-mail at wizardwerdna@gmail.com, or at @wizardwerdna on twitter. Now,
+let't get this kata started.
+
+##Overview
+
+As noted, `game` exposes two functions to the application:
+
+  1. `reset(state)` which resets the game to a fresh state.
+  2. `turn(state, direction)` which performs all the acts appropriate
+     when the user tries to move in the specified direction.  This
+     includes.
+     a.  Moving the tiles, with merges, in the specified direction.
+     b.  Updates the game score and best score, as appropriate.
+     c.  Determines if the game was won this turn.
+     d.  Determines if the game is over.
+
+We will first turn to reset, but note that it will require a service to
+randomly add two tiles to the tableau.  As we mentioned earlier, we will
+rely on an external service, `tileSelect(state)` that will determine the
+next tile to be introduced into the game.  This design feature now allows
+us to mock a deterministic service for testing, and separately developing
+the randomized tile service for production.  But first, we are building the
+Game Logic service, so we will require some sort of test double.
+
+##A tileSelect Service Spy
+
+Often, we can rely on frameworks, such as Jasmine for building our test doubles.
+Throughout this series, however, we have found it simpler or more effective
+at times to "roll our own."  That is the case for the tileSlect test double.
+
+A real tile selection service will depend upon the game state to determine 
+its next tile.  Because of this, the same object, but with different data
+at different times, will be passed in when a new tile is required.  However, the
+Jasmine spies store only the pointer to an object when determining its call
+stack, making it impossible to assure that the service is working correctly.
+
+We will instead use a "home grown" spy service, that will retain a deep-copy
+of the parameters in its call history.  The structure is quite simple:
+
+```javascript
+function SelectTilesMock(returns){ this.reset(returns); }
+SelectTilesMock.prototype = {
+  reset: function(returns){
+    this.returns = returns || [];
+    this.calledWith = [];
+  },
+  _spy: function(state){
+    this.calledWith.push(angular.copy(state));
+    return this.returns.shift();
+  },
+  spy: function(){ return this._spy.bind(this); }
+};
+```
+
+We will create an instance when loading the SUT, and use it throughout
+the tests to specify what results to return.  One particular issue is that
+after instantiating an instance, we cannot simply pass the `instance._spy`
+function to the external SUT, because it will be calling selectTiles in the
+context of the SUT, and not the test double instance.  We resolve this by
+binding the function to the test double, and provide the `spy` function
+for that purpose.
+
+##The game reset service
+
+We open a new test file for the service, and write a new test.
+
+
+```javascript
+describe('game mechanics service', function(){
+  describe('reset', function(){
+    it('resets tiles to two tiles provided by selectTile', function(){
+      selectTilesMock.returns = [{mock: 'tile1'}, {mock: 'tile2'}];
+      expect(game.reset({
+        tiles: [ {mock: 'tile before'} ]
+      }).tiles).toEqual([
+        {mock: 'tile1'},
+        {mock: 'tile2'}
+      ]);
+    });    
+  });
+});
+```
+Note the test uses the selectTilesMock instance to set up the returned service
+This leads us to build the SUT:
+
+```javascript
+var selectTilesMock
+...
+beforeEach(function loadGameAndMockSelectTile(){
+  selectTilesMock = new SelectTilesMock();
+  module('app', function ($provide){
+    $provide.value('selectTile', selectTilesMock.spy());
+  });
+  inject(function(_game_){game = _game_;});
+});
+```
+
+loading the `game` servie and injecting our test double into the gama SUT. This
+leads us to the following production code.
+
+```javascript
+.factory('game', function(selectTile){
+  var game = {
+    reset: reset,
+    turn: turn
+  };
+  return game;
+
+  function reset(state){
+    state.tiles.splice(0);
+    state.tiles.push(selectTile(state));
+    state.tiles.push(selectTile(state));
+    return state;
+  }
+```
+
+And we are green.  We complete the reset test in a straightforward way,
+
+```javascript
+describe('reset', function(){
+  it('maintains identity of the state parameter', function(){
+    var state = {mock: 'state'};
+    expect(game.reset(state)).toBe(state);
+  });
+  it('preserves prior value of best', function(){
+    expect(game.reset({best: {mock: 'best'}}).best)
+      .toEqual({mock: 'best'});
+  });
+  it('resets score, reset and over to default values', function(){
+    expect(game.reset({score: 123}).score).toBe(0);
+    expect(game.reset({won: null}).won).toBe(false);
+    expect(game.reset({over: null}).over).toBe(false);
+  });
+  it('resets tiles to two tiles provided by selectTile', function(){
+    selectTilesMock.returns = [{mock: 'tile1'}, {mock: 'tile2'}];
+    expect(game.reset({
+      tiles: [ {mock: 'tile before'} ]
+    }).tiles).toEqual([
+      {mock: 'tile1'},
+      {mock: 'tile2'}
+    ]);
+    expect(selectTilesMock.calledWith.map(function(e){return e.tiles;}))
+      .toEqual([[], [{mock: 'tile1'}]]);
+  });
+});
+```
+
+and generate the production code to complete this function:
+
+```javascript
+function reset(state){
+  state.score = 0;
+  state.won = state.over = false;
+  state.tiles = state.tiles || [];
+  state.tiles.splice(0);
+  state.tiles.push(selectTile(state));
+  state.tiles.push(selectTile(state));
+  return state;
+}
+```
+
+And we are done with "half" of the service.  Don't get cocky, there is
+lots more to come.
+
+##The Game Turn Function
+
+Sometimes, we have enough detail about a complex function that it is worth
+making a skeleton of the tests we know we must write.  Sometimes, we can do
+this with index cards, or a notepad.  I prefer to make a list of TODO's,
+for example:
+
+```javascript
+describe('turn', function(){
+  describe('TODO: moving and merging tiles', function(){});
+  describe('TODO: scoring', function(){});
+  describe('TODO: adding new tiles', function(){};
+  describe('TODO: game won', function(){});
+  describe('TODO: game over', function(){});
+})
+```
+We begin with the tile movement.  Back to straightforward, small steps TDD.
+We want to start with a degenerate case, limiting ourself to a few tiles on
+the top row and moving only to the left.  And then a single tile at that!
+
+##Its Just a Jump to the Left 
+
+```javascript
+
+describe('turn', function(){
+  beforeEach(function(){
+    selectTilesMock.returns = [{x:4,y:4,score:0}]
+  })
+  function notAnAddedTile(tile){ return tile.score !== 0; }
+  describe('TODO: moving and meging tiles', function(){
+    describe('moving tiles left', function(){
+      describe('top row only', function(){
+        it('places one tile properly', function(){
+          expect(game.turn({tiles: [
+            {x: 0, y:0, score: 2}
+          ]}, 37).tiles.filter(removeZeroes)).toBe({tiles: [
+            {x: 0, y:0, score: 2}
+          ]})
+        });
+      });
+    });
+  });
+});
+
+```
+Clearly this test is much more complex than the production code it requires,
+since a single tile at the top-left, moving left requires leaving the state
+alone.  We resolve this with an empty slime:
+
+```javascript
+
+function turn(state, direction){ return state; }
+```
+
+Until we have this code working, older tests that relied upon our slimes will
+fail, so we will turn those integration and other tests off termporarily to
+cut down on the noise while we build this unit test.
+
+We never saw this test green, so we make a change to the result to assure that
+the test is working, and undo the change.  Now, before we move to a more interesting
+test, lets do some refactoring.  First, lets write a utility function `t` to 
+permit us to compactly represent tiles, and isolate the details of the code to
+a test function:
+
+```javascript
+function t(x, y, score){ return { x: x, y: y, score: score }; }
+function testMergeAndMove(tilesIn, direction, tilesOut, message){
+  function notAnAddedTile(tile){
+    return tile.score !== 0;
+  }
+  message = message || 'failed testLeft';
+
+  expect(
+    game.turn({tiles: tilesIn}, direction).tiles
+      .filter(notAnAddedTile)
+      .sort(rowMajorOrder)
+  ).toEqual(tilesOut, message);
+}
+```
+
+Note the filter to remove added tiles (we aren't doing that yet, but we know
+we will, and don't want our tests to all need rewriting when we do).  Note also
+that we are sorting the tiles from the state in row major order, so that we can
+write our tests without imposing any particular ordering linitations on the code.
+
+We can now refactor the tests and add a new one to force us to unslime.
+
+```javascript
+beforeEach(function setNewTileMock(){
+  selectTilesMock.returns = [t(4,4,0), t(4,3,0), t(4,2,0), t(4,1,0)];
+});
+...
+describe('top row only', function(){
+  it('places one tile properly', function(){
+    testMergeAndMove([ t(0,0,2) ], game.LEFT, [ t(0,0,2) ]);
+    testMergeAndMove([ t(3,0,4) ], game.LEFT, [ t(0,0,4) ]);
+  });
+});
+```
+
+and go green with:
+
+```javascript
+
+function turn(state, direction){
+  state.tiles[0].x = 0;
+}
+
+```
+We add:
+
+```javascript
+it('places two tiles properly', function(){
+  testMergeAndMove(
+    [ t(1,0,2), t(3,0,4) ], game.LEFT, [ t(0,0,2), t(1,0,4) ], 'first'
+  );
+});
+```
+
+and go green with:
+
+
+```javascript
+
+function turn(state, direction){
+  state.tiles[0].x = 0;
+  if (state.tiles.length > 0) state.tiles[1].x = 1 
+}
+
+```
+
+then:
+
+```javascript
+it('places three tiles properly', function(){
+  testMergeAndMove([
+    t(1,0,2), t(3,0,8), t(2,0,4)
+  ], game.LEFT, [
+    t(0,0,2), t(1,0,4), t(2,0,8)
+  ]);
+});
+```
+
+```javascript
+function turn(state, direction){
+  state.tiles[0].x = 0;
+  if (state.tiles.length > 1) state.tiles[1].x = 1 
+  if (state.tiles.length > 2) state.tiles[2].x = 2
+}
+```
+
+But clearly some generalization is calld for.  We start by assuming the tiles
+are all in order, and write:
+
+```javascript
+function turn(state, direction){
+  var last = {x:-1};
+  state.tiles.forEach(function(tile){
+    tile.x = last.x+1
+    last = tile;
+  });
+}
+```
+
+There is an assumption in our production code that the tiles are coming in
+left to right order.  We disabuse by adding another example to the two-tile
+scenario to force another generalization.
+
+```javascript
+it('places two tiles properly', function(){
+  testMergeAndMove(
+    [ t(1,0,2), t(3,0,4) ], game.LEFT, [ t(0,0,2), t(1,0,4) ], 'first'
+  );
+  testMergeAndMove(
+    [ t(3,0,4), t(1,0,2) ], game.LEFT, [ t(0,0,2), t(1,0,4) ], 'second'
+  );
+});
+```
+
+Forcing us to sort the tiles, and yielding a complete solution for a row. We
+also recast the forEach loop as a reduce.
+
+
+```javascript
+function turn(state, direction){
+  state.tiles
+    .sort(function(t1,t2){t1.x - t2.x})
+    .reduce(function(last, tile){
+      tile.x = last.x+1
+      last = tile;
+    }, {x:-1});
+}
+```
+
+Generalizing the left move to multiple columns is straightforward, if only we
+had a test forcing us to do so.  We do:
+
+```javascript
+
+describe('moves multiple rows left', function(){
+  it('top two rows, simple case', function(){
+    testMergeAndMove([
+      t(0,0,2), t(3,0,4), t(2,1,8)
+    ], game.LEFT, [
+      t(0,0,2), t(1,0,4), t(0,1,8)
+    ]);
+  });
+});
+
+```
+This fails at first, because the row two tile is sorted between the two
+tiles on the top row.  We fix this by sorting in row major order, changing
+the sort function using the rowMajor sort from the test file.  The test still
+fails because we need to reset last at the top of the row.  We think the test
+will pass now, and it does.  Our code now reads, with a bit of reactoring.
+
+```javascript
+state.tiles
+  .sort(rowMajorOrder)
+  .reduce(function(last, tile){
+    if (lastTile.y!=tile.y) lastTile = { x: -1};
+    tile.x = last.x + 1;
+    return tile;
+  }, {});
+return state;
+
+```
+
+Beginning with the simple assumpion of a left move in row major order has
+led us to a very simple solution so far.  We can now move to add merging or
+to generalize to other directions.  We'll stay with the former.
+
+##Merging Tiles (still going left)
+
+Everythhing will fallout from a simple test:
+
+```javascript
+it('merges two tiles properly', function(){
+  testMergeAndMove(
+    [ t(1,0,2), t(3,0,2) ], game.LEFT, [ t(0,0,4) ], 'first');
+  testMergeAndMove(
+    [ t(3,0,4), t(1,0,4) ], game.LEFT, [ t(0,0,8) ] , 'second');
+});
+```
+
+When the current tile has the same score as the last one, we want
+to merge the tiles instead of simply moving it next door.  For these
+purposes, we will put them on the same spot, and double the scores of
+each.  We don't want two tiles for the same result, so we will mark the
+second one with a negative value, and remove them in a later pass.
+
+```javascript
+
+state.tiles
+  .sort(rowMajorOrder)
+  .reduce(function(last, tile){
+    if (lastTile.y!=tile.y) lastTile = { x: -1};
+    if (lastTile.score===tile.score){
+      lastTile.score *= 2;
+      tile.score *= -2;
+      tile.x = last.x;
+    } else {
+      tile.x = last.x + 1;
+    }
+    return tile;
+  }, {});
+
+// remove merged tiles
+for(var i=state.tiles.length-1; i>0; --i){
+  if (state.tiles[i].score<0) {
+    state.tiles.splice(i, 1);
+  }
+}
+
+return state;
+```
+
+Of course, this eyesore requires refactoring, which we do to complete moving
+tnd merging to the left :
+
+```javascript
+
+state.tiles
+  .sort(rowMajorOrder)
+  .reduce(moveLeftOrMegeWithLastTile, {});
+removeMergedTiles();
+
+function removeMergedTiles(){
+  for(var i=state.tiles.length-1; i>0; --i){
+    if (state.tiles[i].score<0) {
+      state.tiles.splice(i, 1);
+    }
+  }
+}
+
+function moveLeftOrMergeWithLastTile(last, tile){
+  lastTile = checkForNewRow()
+  if (isMergeTile(lastTile, tile)){
+    mergeTileWithLast(lastTile, tile)
+  } else {
+    moveTileNextToLast(lastTile, tile);
+  }
+  return tile;
+
+  function checkForNewRow(){
+    if (tile.y!==lastTile.y) { return {x: -1} }
+    return lastTile
+  }    
+  function isMergeTile(lastTile, tile){
+    return tile.score===lastTile.score;
+  }
+  function moveTileNextToLast(){
+    tile.x = lastTile.x + 1
+  }
+  funcion mergeTileWithLast(){
+    lastTile.score *= 2;
+    tile.score *= -2;
+    tile.x = last.x;
+  }
+}
+
+
+return state;
+```
+
+##And then a Step to the Right
+
+So, its time to use that direction parameter, and allow users to move in other
+directions.  Staring at the code for awhile, I concluded that the code could be
+generalized to handle four different directions, but not without sacrificing a 
+great deal of clarity.  I took a different route, chosing to use moveLeft as
+a black box by rotating the table, moving left, and then "derotating" the table.
+For example, lets say we wanted to move right instead of left.  This would be
+the same as reversing every row (replacing x with 3-x), moving left, and then
+reversing again.  
+
+But we cannot write a line of code until we first have a
+failing test.  Lets start simply, also requiring some direction
+constants to be exposd on game:
+
+```javascript
+describe('direction constants', function(){
+  it('should expose constants representing each direction', function(){
+    expect(game.LEFT).toBe(37);
+    expect(game.RIGHT).toBe(39);
+  });
+});
+...
+describe('TODO: moving and merging tiles', function(){
+...
+  it('moving and merging tiles right', function(){
+    testMergeAndMove(tilesFor([
+      '    |    | 256|    ',
+      ' 512| 512|    |    ',
+      '    |    | 256| 256',
+      '    | 512|    |    '
+    ]), game.RIGHT, tilesFor([
+      '    |    |    | 256',
+      '    |    |    |1024',
+      '    |    |    | 512',
+      '    |    |    | 512'
+    ]));
+  });
+...
+});
+```
+
+This test uses a helper function `tilesFor` that takes a list of row strings and
+returns an array of corresponding tile objects.  Utilities like `t` and `tilesFor`
+can be particularly helpful to make tests easier to read an understand.  The
+code for tilesFor can be found in the repository.  We extract two functions
+`moveOrMergeTilesLeft()` and `removeMergedTiles()`  and then that transforms the
+tiles before and after moving left when the direction is `game.RIGHT`. 
+
+```javascript
+
+var game = {
+  ...
+  LEFT: 37,
+  RIGHT: 39,
+  ...
+}
+
+function turn(state, direction){
+  if (direction === game.RIGHT) { state.tiles.forEach(rotate180); }
+  moveOrergeTilesLeft()
+  if (direction === game.RIGHT) { state.tiles.forEach(rotate180); }
+
+  function rotate180(tile){
+    // reverse rows AND columns
+    x = 3 - x;
+    y = 3 - y;
+  }
+
+  function moveOrMergeTilesLeft(){
+    ... extracted code from last round ..
+  }
+
+  function removeMergedTiles(){
+    ... extracte code from last round ...
+  }
+}
+```
+
+And we are green!  No muss, no fuss, no rewriting the carefully crafted
+TDD code, but rather extending it by pre- and post-rotation.  Can we do
+that for other directions as well?  Of course.  It turns out that a 90
+degree rotation left can be accomplished simply by transposinging the array
+and then reversing the columns.  A 90 degree rotation right, does the
+same thing but reverses the rows.  Try it out on paper, its cool!
+
+>Transposition is simply the process of reversing rows and columns, that 
+is by rotating the table around a diagonal.  All you need to do is swap x and y.
+
+But, once again, we can't write a line of production code without a failing test.
+This yields:
+
+```javascript
+it('moving tiles up', function(){
+  testMergeAndMove(tilesFor([
+    '    |    | 256|    ',
+    ' 512| 512|    |    ',
+    '    |    | 256| 256',
+    '    | 512|    |    '
+  ]), game.UP, tilesFor([
+    ' 512|1024| 512| 256',
+    '    |    |    |    ',
+    '    |    |    |    ',
+    '    |    |    |    '
+  ]));
+});
+it('moving tiles down', function(){
+  testMergeAndMove(tilesFor([
+    '    |    | 256|    ',
+    ' 512| 512|    |    ',
+    '    |    | 256| 256',
+    '    | 512|    |    '
+  ]), game.DOWN, tilesFor([
+    '    |    |    |    ',
+    '    |    |    |    ',
+    '    |    |    |    ',
+    ' 512|1024| 512| 256'
+  ]));
+});
+```
+
+and after going green and  a bit of refactoring, we have:
+
+```javascript
+if (direction === game.UP){    rotate(rotateLeft);  }
+if (direction === game.DOWN){  rotate(rotateRight); }
+if (direction === game.RIGHT){ rotate(rotate180);   }
+moveAndMergeTilesLeft(state);
+if (direction === game.UP){    rotate(rotateRight); }
+if (direction === game.DOWN){  rotate(rotateLeft);  }
+if (direction === game.RIGHT){ rotate(rotate180);   }
+removeMergedTiles();
+return state;
+
+function rotateLeft(tile){
+  var t = tile.x;
+  tile.x = tile.y;
+  tile.y = 3 - t;
+}
+function rotateRight(tile){
+  var t = tile.y;
+  tile.y = tile.x;
+  tile.x = 3 - t;
+}
+function rotate180(tile){
+  tile.x = 3 - tile.x;
+  tile.y = 3 - tile.y;
+}
+function rotate(rotation){
+  state.tiles.forEach(rotation);
+}
+
+
+```
+And now we are green, and in fact done with the move and merge portion of this work.
+
+> DISCIPLINE ALERT: An alert reader may note that I did not slime to make these
+tests pass, but rather wrote some high-falutin' linear alegebra stuff instead.
+Aren't I supposed to slime and then write more tests to triangulate?  Perhaps,
+but in my view, the slime is actualy more ugly and complex than the solution,
+and the second test forcing a generalization just to get here does not give
+much insight.  Where a complex slime is more trouble to write than the code
+itself, you can introduce more general code.  Still, be on the alet for
+stuff such as this. 
+
+##Scoring.
+
+It turns out that the cruft of those tiles with negative score will be useful
+in doing our scoring, because they memorialize all the merges that took place.
+Let's write some tests.
+
+```javascript
+describe('scoring', function(){
+  var FIX={};
+  beforeEach(function(){
+    FIX = {
+      multiplemerges1: multiplemerges1 = tilesfor([
+      '    |    | 256|    ',
+      ' 512| 512|    |    ',
+      '    |    | 256| 256',
+      '    | 512|    |    '
+      ]),
+      multiplemerges2: multiplemerges1 = tilesfor([
+      '    |    | 128|    ',
+      ' 512| 512|    |    ',
+      '    |    | 128| 256',
+      '    | 512|    |    '
+      ])
+    }
+  });
+  describe('computes new score', function(){
+    it('score increased with single merge', function(){
+      expect(game.turn({
+        score: 100,
+        tiles: [ t(0,0,128), t(1,0, 128) ]
+      }, game.LEFT).score).toBe(100+256);
+      expect(game.turn({
+        score: 100,
+        tiles: [ t(0,0,256), t(1,0, 256) ]
+      }, game.LEFT).score).toBe(100+256);
+    });
+  });
+```
+
+Resolving with a slime, and then with the second test in the section, we obtain;
+
+```javascript
+score += tiles[1];
+```
+
+Which we force to generalize with:
+
+```javascript
+it('score increased with multiple merges', function(){
+  expect(game.turn({
+    score: 100,
+    tiles:  tilesFor([
+    '    |    | 256|    ',
+    ' 512| 512|    |    ',
+    '    |    | 256| 256',
+    '    | 512|    |    '
+    ])
+  }, game.LEFT).score).toBe(100+1024+512);
+});
+```
+and obtain
+
+```javascript
+score+= state.tiles.reduce(function(sum, tile){
+  if (tile.score<0) { sum -= score; }
+  return sum;
+}, 0)
+```
+And then we add a test for computing a new best score when needed, and triangulate
+to handle the case where it is unchanged if not.  The example in the previous
+test was extracted to a global object for the suite, named `FIX`, 
+for "fixture," and tagged with a descriptive name.
+
+```javascript
+describe('computes new best', function(){
+  it('update when score is greater', function(){
+    expect(game.turn({
+      score: 100,
+      best:  400,
+      tiles: FIX.multipleMerges
+    }, game.LEFT).best).toBe(100+1024+512);
+  });
+  it('unchanged when score is less', function(){
+    expect(game.turn({
+      score: 100,
+      best:  +Infinity,
+      tiles: FIX.multipleMerges
+    }, game.LEFT).best).toBe(+Infinity);
+  });
+});
+```
+
+going green with:
+
+```javascript
+if (state.best<state.score) { state.best = state.score; }
+```
+And we have finished scoring.  Moving on:
+
+##Tile addition
+
+We want to add a new tile when the player has made a move.  The tile will be 
+selected using the selectTile service. 
+
+```javascript
+describe('adding new tile', function(){
+  it('should add after a move', function(){ 
+    expect(game.turn({
+      tiles: [ t(3,0,2) ]
+    }, game.LEFT).tiles).toEqual([
+      t(0,0,2), t(4,4,0)
+    ]);
+  });
+});
+```
+
+We code up a trivial slime, and are forced to generalize with a second
+expectation that we use the result from selectTile.
+
+```javascript
+describe('adding new tile', function(){
+  it('should add after a move', function(){ 
+    expect(game.turn({
+      tiles: [ t(3,0,2) ]
+    }, game.LEFT).tiles).toEqual([
+      t(0,0,2), t(4,4,0)
+    ]);
+    expect(game.turn({
+      tiles: [ t(3,0,2) ]
+    }, game.left).tiles).toequal([
+      t(0,0,2), t(3,4,0)
+    ]);
+  });
+});
+```
+
+Now we go green with `state.tiles.push(selectTile(state));`.  The issue with this
+feature is that it should only add a tile when the move actually changed the
+game state.  We add this limitation with:
+
+```javascript
+
+it('should not add tile unless a tile has changed', function(){
+  expect(game.turn({
+    tiles: [ t(0,0,2) ]
+  }, game.LEFT).tiles).toEqual([
+    t(0,0,2)
+  ]);
+});
+```
+
+This will require some more work.  We will take a quick-and-direty approach,
+Setting a global variable, and changing it when the moveTile function actually
+changes a tile state.  We are now green, so sweeter design must await refactoring.
+
+```javascript
+var wasMovedOrMeged = false;
+...
+if (wasMovedOrMerged){
+  state.tiles.push(selectTile(state));
+}
+...
+```
+
+And then updating `wasMovedOrMerged` in the `MoveLeft` code.
+
+```javascript
+function moveTileNextToLast(){
+  wasMovedOrMerged = wasMovedOrMerged || (tile.x===lastTile.x+1);
+  tile.x = lastTile.x + 1
+}
+funcion mergeTileWithLast(){
+  wasMovedOrMerged = true;
+  lastTile.score *= 2;
+  tile.score *= -2;
+  tile.x = last.x;
+}
+```
+
+##Victory detection
+
+Victory detection is simply detecting when a tile merges to 2048 for the first
+time.
+
+```javascript
+describe('game won', function(){
+  it('should be won on a 2048 merge', function(){
+    expect(game.turn({
+      score: 0,
+      won: false,
+      tiles: [ t(0,0,1024), t(2,0,1024) ]
+    }, game.LEFT).won).toBe(true);
+  });
+});
+```
+
+Which is trivially implemented by having the code executing a merge performing a
+check and updating a global variable.  
+
+```javascript
+
+function turn
+  var had2048Merge = false;
+  ...
+  function moveAndMergeTiles(state, direction){
+    ...
+    function moveAndMergeTilesLeft(state){
+      ...
+      function moveLeftOrMergeWithLastTile(lastTile, tile){
+        ...
+        function mergeTileWithLast(lastTile, tile){
+          lastTile.score *=2;
+          tile.score *=-2;
+          tile.x = lastTile.x;
+          wasMovedOrMerged = true;
+          had2048Merge  = had2048Merge || lastTile.score === 2048;
+        }
+      }
+    }
+  }
+}
+```
+
+##End of game detection
+
+The game is over when the player cannot move a tile (fewer than 16 tiles) and
+there are no merges or moves available. Our tests:
+
+```javascript
+
+describe('game over', function(){
+  it('over if there is no move or merge', function(){
+    expect(game.turn({
+      tiles: tilesFor([
+        '   2|   4|   8|  16',
+        '  32|  64| 128| 256',
+        ' 512|1024|2048|4096',
+        '8192|   2|   4|   8'
+      ])
+    }).over).toBeTruthy('game over without merge or move');
+  });
+});
+
+```
+Which we resolve with a slime, `state.over = true`. We force more without
+
+```java
+
+it('not over when there is a move', function(){
+  expect(game.turn({
+    tiles: tilesFor([
+      '   2|   4|   8|  16',
+      '  32|  64| 128| 256',
+      ' 512|1024|2048|4096',
+      '8192|   2|   4|    '
+    ])
+  }).over).toBeFalsy();
+});
+
+```
+And this, too is straightforward, simply resliming with `state.over = 
+state.tiles.length<16`.  So we go to the hard stuff:
+
+```javacript
+it('not over when there is a horizontal merge', function(){
+  expect(game.turn({
+    tiles: tilesFor([
+      '   2|   4|   8|  16',
+      '  32|  64| 128| 256',
+      ' 512|1024|2048|4096',
+      '8192|   2|   4|   4'
+    ])
+  }).over).toBeFalsy('game over when there is a merge');
+});
+```
+This can be done by extracting the merge or move code into a subroutine that
+works on a parameter state and direction, resetting wasMovedOrMerged, 
+and running a move LEFT.  A corresponding test for a vertical merge with 
+16 tiles can be satisfied with a merge UP.
+
+Considerable refactoring can reduce the mainline for turn to look like:
+
+```javascript
+function turn(state, direction){
+  var wasMovedOrMerged = false,
+      wasMergedTo2048 = false;
+
+  moveAndMergeTiles(state, direction);
+  addNewTile();
+  updateScores();
+  updateGameWon();
+  removeMergedTiles();
+  updateGameOver();
+  return state;
+  ...
+}
+```
+A straightforward and clear reading implementation of the 2048 game mechanics.

@@ -1,0 +1,51 @@
+'use strict';
+ddescribe('ViewModel ChangeVM', function(){
+  var vm;
+  beforeEach(function(){
+    module('app');
+    inject(function($controller){
+      vm = $controller('ChangeVM');
+    });
+  });
+
+  describe('upon creation', function(){
+    it('upon creation, set denominations', function(){
+      expect(vm.denominations).toEqual([1,5,10,25,100]);
+    });
+    it('upon creation, set amount', function(){
+      expect(vm.amount).toBe(0);
+    });
+  });
+
+  describe('change()', function(){
+    function testChange(amount, denominations, result){
+      expect(vm.change(amount, denominations))
+        .toEqual(result, {amount: amount, denominations: denominations});
+    }
+    it('should always change 0', function(){
+      testChange(0, [], {});
+    });
+    it('should never change non-zero with empty denominations', function(){
+      testChange(1, [], vm.noChange);
+    });
+    describe('singleton denominations d', function(){
+      it('should change a multiple of d', function(){
+        testChange(10, [2], {2: 5});
+        testChange( 9, [3], {3: 3});
+      });
+      it('should not change a non-multiple of d', function(){
+        testChange(10, [4], vm.noChange);
+      });
+    });
+    it('doubleton denominations d1 and d2', function(){
+      testChange( 9, [2, 3],{3: 3});
+      testChange( 6, [2, 3],{3: 2});
+      testChange(18, [2, 9],{9: 2});
+      testChange(1, [2, 3], {undefined: Infinity});
+      testChange(2, [2, 3], {2:1});
+      testChange(4, [2, 3], {2:2});
+      testChange(5, [2, 3], {3:1, 2:1});
+      testChange(8, [2, 3], {3:2, 2:1});
+    });
+  });
+});

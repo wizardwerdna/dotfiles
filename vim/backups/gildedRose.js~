@@ -1,0 +1,84 @@
+'use strict';
+var gr, OriginalItemCodeString, OriginalItemsAsJSON, OriginalUpdateQualityOutput;
+
+describe('Factory gildedRose', function(){
+
+  beforeEach(function(){
+    module('app');
+    inject(function(gildedRose){ gr = gildedRose; });
+  });
+
+  describe('characterization of legacy code', function(){
+
+    it('should not change the text of Item', function(){
+      expect(gr.Item.toString()).toBe(OriginalItemCodeString);
+    });
+
+    it('should expose classical, non-conjured items', function(){
+      expect(JSON.stringify(gr.items.slice(0,5))).toBe(OriginalItemsAsJSON);
+    });
+
+    it('should update per legacy code for non-conjured items, 30 steps', function(){
+      for (var i=0; i<30; i++){
+        expect(JSON.stringify(gr.items.slice(0,5))).toBe(OriginalUpdateQualityOutput[i]);
+        gr.update();
+      }
+    });
+
+  });
+
+  describe('conjured items', function(){
+    it('should degrade at twice the default rate before expiry', function(){
+      var item;
+      gr.items.push(item = new gr.Item('Conjured Mana Cake', 3, 6));
+      gr.update();
+      expect(item.quality).toBe(4);
+    });
+
+    it('should degrade at twice the default rate after expiry', function(){
+      var item;
+      gr.items.push(item = new gr.Item('Conjured Mana Cake', 0, 6));
+      gr.update();
+      expect(item.quality).toBe(2);
+    });
+  });
+
+});
+
+ 
+OriginalItemCodeString = 'function Item(name, sell_in, quality) {\n    this.name = name;\n    this.sell_in = sell_in;\n    this.quality = quality;\n  }';
+
+OriginalItemsAsJSON = '[{"name":"+5 Dexterity Vest","sell_in":10,"quality":20},{"name":"Aged Brie","sell_in":2,"quality":0},{"name":"Elixir of the Mongoose","sell_in":5,"quality":7},{"name":"Sulfuras, Hand of Ragnaros","sell_in":0,"quality":80},{"name":"Backstage passes to a TAFKAL80ETC concert","sell_in":15,"quality":20}]';
+
+OriginalUpdateQualityOutput = [
+  '[{"name":"+5 Dexterity Vest","sell_in":10,"quality":20},{"name":"Aged Brie","sell_in":2,"quality":0},{"name":"Elixir of the Mongoose","sell_in":5,"quality":7},{"name":"Sulfuras, Hand of Ragnaros","sell_in":0,"quality":80},{"name":"Backstage passes to a TAFKAL80ETC concert","sell_in":15,"quality":20}]',
+  '[{"name":"+5 Dexterity Vest","sell_in":9,"quality":19},{"name":"Aged Brie","sell_in":1,"quality":1},{"name":"Elixir of the Mongoose","sell_in":4,"quality":6},{"name":"Sulfuras, Hand of Ragnaros","sell_in":0,"quality":80},{"name":"Backstage passes to a TAFKAL80ETC concert","sell_in":14,"quality":21}]',
+  '[{"name":"+5 Dexterity Vest","sell_in":8,"quality":18},{"name":"Aged Brie","sell_in":0,"quality":2},{"name":"Elixir of the Mongoose","sell_in":3,"quality":5},{"name":"Sulfuras, Hand of Ragnaros","sell_in":0,"quality":80},{"name":"Backstage passes to a TAFKAL80ETC concert","sell_in":13,"quality":22}]',
+  '[{"name":"+5 Dexterity Vest","sell_in":7,"quality":17},{"name":"Aged Brie","sell_in":-1,"quality":4},{"name":"Elixir of the Mongoose","sell_in":2,"quality":4},{"name":"Sulfuras, Hand of Ragnaros","sell_in":0,"quality":80},{"name":"Backstage passes to a TAFKAL80ETC concert","sell_in":12,"quality":23}]',
+  '[{"name":"+5 Dexterity Vest","sell_in":6,"quality":16},{"name":"Aged Brie","sell_in":-2,"quality":6},{"name":"Elixir of the Mongoose","sell_in":1,"quality":3},{"name":"Sulfuras, Hand of Ragnaros","sell_in":0,"quality":80},{"name":"Backstage passes to a TAFKAL80ETC concert","sell_in":11,"quality":24}]',
+  '[{"name":"+5 Dexterity Vest","sell_in":5,"quality":15},{"name":"Aged Brie","sell_in":-3,"quality":8},{"name":"Elixir of the Mongoose","sell_in":0,"quality":2},{"name":"Sulfuras, Hand of Ragnaros","sell_in":0,"quality":80},{"name":"Backstage passes to a TAFKAL80ETC concert","sell_in":10,"quality":25}]',
+  '[{"name":"+5 Dexterity Vest","sell_in":4,"quality":14},{"name":"Aged Brie","sell_in":-4,"quality":10},{"name":"Elixir of the Mongoose","sell_in":-1,"quality":0},{"name":"Sulfuras, Hand of Ragnaros","sell_in":0,"quality":80},{"name":"Backstage passes to a TAFKAL80ETC concert","sell_in":9,"quality":27}]',
+  '[{"name":"+5 Dexterity Vest","sell_in":3,"quality":13},{"name":"Aged Brie","sell_in":-5,"quality":12},{"name":"Elixir of the Mongoose","sell_in":-2,"quality":0},{"name":"Sulfuras, Hand of Ragnaros","sell_in":0,"quality":80},{"name":"Backstage passes to a TAFKAL80ETC concert","sell_in":8,"quality":29}]',
+  '[{"name":"+5 Dexterity Vest","sell_in":2,"quality":12},{"name":"Aged Brie","sell_in":-6,"quality":14},{"name":"Elixir of the Mongoose","sell_in":-3,"quality":0},{"name":"Sulfuras, Hand of Ragnaros","sell_in":0,"quality":80},{"name":"Backstage passes to a TAFKAL80ETC concert","sell_in":7,"quality":31}]',
+  '[{"name":"+5 Dexterity Vest","sell_in":1,"quality":11},{"name":"Aged Brie","sell_in":-7,"quality":16},{"name":"Elixir of the Mongoose","sell_in":-4,"quality":0},{"name":"Sulfuras, Hand of Ragnaros","sell_in":0,"quality":80},{"name":"Backstage passes to a TAFKAL80ETC concert","sell_in":6,"quality":33}]',
+  '[{"name":"+5 Dexterity Vest","sell_in":0,"quality":10},{"name":"Aged Brie","sell_in":-8,"quality":18},{"name":"Elixir of the Mongoose","sell_in":-5,"quality":0},{"name":"Sulfuras, Hand of Ragnaros","sell_in":0,"quality":80},{"name":"Backstage passes to a TAFKAL80ETC concert","sell_in":5,"quality":35}]',
+  '[{"name":"+5 Dexterity Vest","sell_in":-1,"quality":8},{"name":"Aged Brie","sell_in":-9,"quality":20},{"name":"Elixir of the Mongoose","sell_in":-6,"quality":0},{"name":"Sulfuras, Hand of Ragnaros","sell_in":0,"quality":80},{"name":"Backstage passes to a TAFKAL80ETC concert","sell_in":4,"quality":38}]',
+  '[{"name":"+5 Dexterity Vest","sell_in":-2,"quality":6},{"name":"Aged Brie","sell_in":-10,"quality":22},{"name":"Elixir of the Mongoose","sell_in":-7,"quality":0},{"name":"Sulfuras, Hand of Ragnaros","sell_in":0,"quality":80},{"name":"Backstage passes to a TAFKAL80ETC concert","sell_in":3,"quality":41}]',
+  '[{"name":"+5 Dexterity Vest","sell_in":-3,"quality":4},{"name":"Aged Brie","sell_in":-11,"quality":24},{"name":"Elixir of the Mongoose","sell_in":-8,"quality":0},{"name":"Sulfuras, Hand of Ragnaros","sell_in":0,"quality":80},{"name":"Backstage passes to a TAFKAL80ETC concert","sell_in":2,"quality":44}]',
+  '[{"name":"+5 Dexterity Vest","sell_in":-4,"quality":2},{"name":"Aged Brie","sell_in":-12,"quality":26},{"name":"Elixir of the Mongoose","sell_in":-9,"quality":0},{"name":"Sulfuras, Hand of Ragnaros","sell_in":0,"quality":80},{"name":"Backstage passes to a TAFKAL80ETC concert","sell_in":1,"quality":47}]',
+  '[{"name":"+5 Dexterity Vest","sell_in":-5,"quality":0},{"name":"Aged Brie","sell_in":-13,"quality":28},{"name":"Elixir of the Mongoose","sell_in":-10,"quality":0},{"name":"Sulfuras, Hand of Ragnaros","sell_in":0,"quality":80},{"name":"Backstage passes to a TAFKAL80ETC concert","sell_in":0,"quality":50}]',
+  '[{"name":"+5 Dexterity Vest","sell_in":-6,"quality":0},{"name":"Aged Brie","sell_in":-14,"quality":30},{"name":"Elixir of the Mongoose","sell_in":-11,"quality":0},{"name":"Sulfuras, Hand of Ragnaros","sell_in":0,"quality":80},{"name":"Backstage passes to a TAFKAL80ETC concert","sell_in":-1,"quality":0}]',
+  '[{"name":"+5 Dexterity Vest","sell_in":-7,"quality":0},{"name":"Aged Brie","sell_in":-15,"quality":32},{"name":"Elixir of the Mongoose","sell_in":-12,"quality":0},{"name":"Sulfuras, Hand of Ragnaros","sell_in":0,"quality":80},{"name":"Backstage passes to a TAFKAL80ETC concert","sell_in":-2,"quality":0}]',
+  '[{"name":"+5 Dexterity Vest","sell_in":-8,"quality":0},{"name":"Aged Brie","sell_in":-16,"quality":34},{"name":"Elixir of the Mongoose","sell_in":-13,"quality":0},{"name":"Sulfuras, Hand of Ragnaros","sell_in":0,"quality":80},{"name":"Backstage passes to a TAFKAL80ETC concert","sell_in":-3,"quality":0}]',
+  '[{"name":"+5 Dexterity Vest","sell_in":-9,"quality":0},{"name":"Aged Brie","sell_in":-17,"quality":36},{"name":"Elixir of the Mongoose","sell_in":-14,"quality":0},{"name":"Sulfuras, Hand of Ragnaros","sell_in":0,"quality":80},{"name":"Backstage passes to a TAFKAL80ETC concert","sell_in":-4,"quality":0}]',
+  '[{"name":"+5 Dexterity Vest","sell_in":-10,"quality":0},{"name":"Aged Brie","sell_in":-18,"quality":38},{"name":"Elixir of the Mongoose","sell_in":-15,"quality":0},{"name":"Sulfuras, Hand of Ragnaros","sell_in":0,"quality":80},{"name":"Backstage passes to a TAFKAL80ETC concert","sell_in":-5,"quality":0}]',
+  '[{"name":"+5 Dexterity Vest","sell_in":-11,"quality":0},{"name":"Aged Brie","sell_in":-19,"quality":40},{"name":"Elixir of the Mongoose","sell_in":-16,"quality":0},{"name":"Sulfuras, Hand of Ragnaros","sell_in":0,"quality":80},{"name":"Backstage passes to a TAFKAL80ETC concert","sell_in":-6,"quality":0}]',
+  '[{"name":"+5 Dexterity Vest","sell_in":-12,"quality":0},{"name":"Aged Brie","sell_in":-20,"quality":42},{"name":"Elixir of the Mongoose","sell_in":-17,"quality":0},{"name":"Sulfuras, Hand of Ragnaros","sell_in":0,"quality":80},{"name":"Backstage passes to a TAFKAL80ETC concert","sell_in":-7,"quality":0}]',
+  '[{"name":"+5 Dexterity Vest","sell_in":-13,"quality":0},{"name":"Aged Brie","sell_in":-21,"quality":44},{"name":"Elixir of the Mongoose","sell_in":-18,"quality":0},{"name":"Sulfuras, Hand of Ragnaros","sell_in":0,"quality":80},{"name":"Backstage passes to a TAFKAL80ETC concert","sell_in":-8,"quality":0}]',
+  '[{"name":"+5 Dexterity Vest","sell_in":-14,"quality":0},{"name":"Aged Brie","sell_in":-22,"quality":46},{"name":"Elixir of the Mongoose","sell_in":-19,"quality":0},{"name":"Sulfuras, Hand of Ragnaros","sell_in":0,"quality":80},{"name":"Backstage passes to a TAFKAL80ETC concert","sell_in":-9,"quality":0}]',
+  '[{"name":"+5 Dexterity Vest","sell_in":-15,"quality":0},{"name":"Aged Brie","sell_in":-23,"quality":48},{"name":"Elixir of the Mongoose","sell_in":-20,"quality":0},{"name":"Sulfuras, Hand of Ragnaros","sell_in":0,"quality":80},{"name":"Backstage passes to a TAFKAL80ETC concert","sell_in":-10,"quality":0}]',
+  '[{"name":"+5 Dexterity Vest","sell_in":-16,"quality":0},{"name":"Aged Brie","sell_in":-24,"quality":50},{"name":"Elixir of the Mongoose","sell_in":-21,"quality":0},{"name":"Sulfuras, Hand of Ragnaros","sell_in":0,"quality":80},{"name":"Backstage passes to a TAFKAL80ETC concert","sell_in":-11,"quality":0}]',
+  '[{"name":"+5 Dexterity Vest","sell_in":-17,"quality":0},{"name":"Aged Brie","sell_in":-25,"quality":50},{"name":"Elixir of the Mongoose","sell_in":-22,"quality":0},{"name":"Sulfuras, Hand of Ragnaros","sell_in":0,"quality":80},{"name":"Backstage passes to a TAFKAL80ETC concert","sell_in":-12,"quality":0}]',
+  '[{"name":"+5 Dexterity Vest","sell_in":-18,"quality":0},{"name":"Aged Brie","sell_in":-26,"quality":50},{"name":"Elixir of the Mongoose","sell_in":-23,"quality":0},{"name":"Sulfuras, Hand of Ragnaros","sell_in":0,"quality":80},{"name":"Backstage passes to a TAFKAL80ETC concert","sell_in":-13,"quality":0}]',
+  '[{"name":"+5 Dexterity Vest","sell_in":-19,"quality":0},{"name":"Aged Brie","sell_in":-27,"quality":50},{"name":"Elixir of the Mongoose","sell_in":-24,"quality":0},{"name":"Sulfuras, Hand of Ragnaros","sell_in":0,"quality":80},{"name":"Backstage passes to a TAFKAL80ETC concert","sell_in":-14,"quality":0}]'
+];

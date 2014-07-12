@@ -1,0 +1,9 @@
+{
+  "html": {
+    "abbreviations": {
+      "moo" : "moooooooo",
+      "angdoc" : "html>(head>meta[charset=UTF-8]+title{${1:Document}})+body",
+      "html:ang" : "!!!+angdoc[lang=${lang}]"
+    }
+  }
+}

@@ -1,0 +1,179 @@
+'use strict';
+// xdescribe('game service', function(){
+//   var game = {};
+//   beforeEach(function(){
+//     module('app'); inject(function(_game_){
+//       game = _game_;
+//     });
+//   });
+// 
+//   function test(board, key, result, message){
+//     function order(a,b){return  (5*(a.x+1)+a.y)-(5*(b.x+1)+b.y); }
+//     var output = game.move(board, key);
+//     expect(output).toBe(board, 'board must retain identity');
+//     output = angular.copy(output).sort(order);
+//     result = angular.copy(result).sort(order);
+//     expect(output).toEqual(result, message);
+//     if (output.length === result.length)
+//       output.forEach(function(out, index){
+//         expect(out).toEqual(result[index]);
+//       });
+//   }
+// 
+//   function toBoard(str){
+//     return str
+//       .split('|')
+//       .map(function(each, index){return [index, parseInt(each.trim())]})
+//       .filter(function(each){return !isNaN(each[1])})
+//       .map(function(each){
+//         return {
+//           x: each[0]%4,
+//           y: Math.floor(each[0]/4),
+//           score: each[1]
+//         };
+//       });
+//   }
+// 
+//   describe('move()', function(){
+// 
+//     it('with empty board, regardless of key', function(){
+//       test([], 37, []);
+//       test([], 38, []);
+//       test([], 39, []);
+//       test([], 40, []);
+//     });
+// 
+//     describe('move(board, 40) -- down', function(){
+//       it('with singleton tile on left', function(){
+//         for (var y = 0; y<4; y++){
+//           test([
+//             {x: 0, y: 0, score: 2}
+//           ], 40,[
+//             {x: 0, y: 3, score: 2}
+//           ], 'single tile at 0, '+y);
+//         }
+//       });
+// 
+//       it('with two tiles, on left, different scores', function(){
+//         for( var ybot = 1; ybot < 4; ybot++ ) {
+//           for( var ytop = 0; ytop < ybot; ytop++){
+//             test([
+//               {x: 0, y: ytop, score: 2},
+//               {x: 0, y: ybot, score: 4}
+//             ], 40, [
+//               {x: 0, y: 2, score: 2},
+//               {x: 0, y: 3, score: 4}
+//             ], 'two tiles, (0,'+ytop+') and (0,'+ybot+')');
+//           }
+//         }
+//       });
+// 
+//       it('with three tiles, on left, different scores', function(){
+//         for( var ybot = 2; ybot<4; ybot++ ){
+//           for ( var ymid = 1; ymid < ybot; ymid++ ){
+//             for ( var ytop = 0; ytop < ymid; ytop++ ){
+//               test([
+//                 {x: 0, y: ytop, score: 2},
+//                 {x: 0, y: ymid, score: 4},
+//                 {x: 0, y: ybot, score: 8}
+//               ], 40, [
+//                 {x: 0, y: 1, score: 2},
+//                 {x: 0, y: 2, score: 4},
+//                 {x: 0, y: 3, score: 8}
+//               ], 'two tiles, (0,'+ytop+') and (0,'+ybot+')');
+//             }
+//           }
+//         }
+//       });
+//       it('with three tiles, on left, different scores', function(){
+//         test([
+//           {x: 0, y: 0, score: 2},
+//           {x: 0, y: 1, score: 4},
+//           {x: 0, y: 2, score: 8},
+//           {x: 0, y: 3, score:16}
+//         ], 40, [
+//           {x: 0, y: 0, score: 2},
+//           {x: 0, y: 1, score: 4},
+//           {x: 0, y: 2, score: 8},
+//           {x: 0, y: 3, score:16}
+//         ], 'four tiles, different scores');
+//       });
+//     });
+// 
+//     describe('move() -- all directions without merges', function(){
+// 
+//       it('down, with different score tiles on each column', function(){
+//         test(toBoard('\
+//             2|   2|   2|   2|\
+//              |   4|   4|   4|\
+//              |    |   8|   8|\
+//              |    |    |  16|\
+//         '), 40, toBoard('\
+//              |    |    |   2|\
+//              |    |   2|   4|\
+//              |   2|   4|   8|\
+//             2|   4|   8|  16|\
+//         '));
+//       });
+//       it('right, with different score tiles on each column', function(){
+//         test(toBoard('\
+//             2|   4|   8|  16|\
+//             2|   4|   8|    |\
+//             2|   4|    |    |\
+//             2|    |    |    |\
+//         '), 39, toBoard('\
+//             2|   4|   8|  16|\
+//              |   2|   4|   8|\
+//              |    |   2|   4|\
+//              |    |    |   2|\
+//         '));
+//       });
+//       it('up, with different score tiles on each column', function(){
+//         test(toBoard('\
+//              |    |    |  16|\
+//              |    |   8|   8|\
+//              |   4|   4|   4|\
+//             2|   2|   2|   2|\
+//         '), 38, toBoard('\
+//             2|   4|   8|  16|\
+//              |   2|   4|   8|\
+//              |    |   2|   4|\
+//              |    |    |   2|\
+//         '));
+//       });
+//       it('left, with different score tiles on each column', function(){
+//         test(toBoard('\
+//              |    |    |   2|\
+//              |    |   2|   4|\
+//              |   2|   4|   8|\
+//             2|   4|   8|  16|\
+//         '), 37, toBoard('\
+//             2|    |    |    |\
+//             2|   4|    |    |\
+//             2|   4|   8|    |\
+//             2|   4|   8|  16|\
+//         '));
+//       });
+//     });
+// 
+//     xit('with two tiles, on left, single merge', function(){
+//       // for( var ybot = 1; ybot < 4; ybot++ ) {
+//       //   for( var ytop = 0; ytop < ybot; ytop++){
+//       //     test([
+//       //       {x: 0, y: ytop, score: 2},
+//       //       {x: 0, y: ybot, score: 2}
+//       //     ], 40, [
+//       //       {x: 0, y: 3, score: 4}
+//       //     ], 'two tiles, (0,'+ytop+') and (0,'+ybot+')');
+//       //   }
+//       // }
+//       test([
+//         {x: 0, y: 0, score: 2},
+//         {x: 0, y: 1, score: 2}
+//       ], 40, [
+//         {x: 0, y: 3, score: 4}
+//       ], 'two tiles merge')
+//     });
+// 
+//   });
+// });

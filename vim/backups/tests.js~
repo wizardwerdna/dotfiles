@@ -1,0 +1,148 @@
+'use strict';
+
+//jshint indent:false
+function price(arr){
+  var priceCache = {}, bundles = [];
+
+  function initializePriceCacheAndBundles(numBooks){
+
+    function int2bundle(int,width){
+      var binstr = '0000000000' + int.toString(2);
+      return binstr
+        .slice(binstr.length-width)
+        .split('')
+        .map(function(x){return parseInt(x);});
+    }
+
+    function bundleSize(bundle){
+      function sum(x,y){return x+y;}
+      return bundle.reduce(sum, 0);
+    }
+
+    function bundlePrice(size){
+      switch(size){
+        case 0: return 0;
+        case 1: return 8;
+        case 2: return 8 * 2 * 0.95;
+        case 3: return 8 * 3 * 0.90;
+        case 4: return 8 * 4 * 0.80;
+        case 5: return 8 * 5 * 0.75;
+      }
+    }
+
+    for (var i=0; i<=Math.pow(2, numBooks)-1; i++){
+      var bundle = int2bundle(i, numBooks);
+      if (i>0) { bundles.push(bundle); }
+      priceCache[bundle] = bundlePrice(bundleSize(bundle));
+    }
+  }
+
+  function computeAndCacheBasketPrice(basket){
+    function basketContainsBundle(bundle){
+      function basketHasEnoughOfEachBook(each, index){
+        return basket[index]>=each;
+      }
+      return bundle.every(basketHasEnoughOfEachBook);
+    }
+
+    function bestPriceUsingBundle(bundle){
+      function basketAfterRemovingBundle(){
+        return basket.map(function(basketNum, index){
+          return basketNum - bundle[index];
+        });
+      }
+      function basketPriceAfterRemovingBundle(){
+        return basketPrice(basketAfterRemovingBundle());
+      }
+      return priceCache[bundle] + basketPriceAfterRemovingBundle();
+    }
+
+    function minimum(a,b){ return Math.min(a,b); }
+
+    priceCache[basket] = bundles
+      .filter(basketContainsBundle)
+      .map(bestPriceUsingBundle)
+      .reduce(minimum);
+
+    return priceCache[basket];
+  }
+
+  function basketPrice(basket){
+    var lookup = priceCache[basket];
+    if (lookup!==undefined) {
+      return lookup;
+    } else {
+      return computeAndCacheBasketPrice(basket);
+    }
+  }
+
+  function arr2basket(arr){
+    return arr.reduce(function(m,b){
+      m[b]++;
+      return m;
+    }, [0,0,0,0,0]);
+  }
+
+  initializePriceCacheAndBundles(5);
+  return basketPrice(arr2basket(arr));
+
+}
+
+describe('A potter application', function(){
+
+  function test(books, result){
+    expect(price(books)).toBeCloseTo(result, 5, books);
+  }
+
+  it('should price empty', function(){
+    test([], 0);
+  });
+
+  it('should price a singleton', function(){
+    test([0], 8);
+    test([1], 8);
+    test([2], 8);
+    test([3], 8);
+    test([4], 8);
+  });
+
+  it('should price a doubleton', function(){
+    test([0,0], 16);
+    test([1,1], 16);
+    test([2,2], 16);
+    test([3,3], 16);
+  });
+
+  it('should price two singletons', function(){
+    test([0,1], 8 * 2 * 0.95);
+    test([1,2], 8 * 2 * 0.95);
+    test([2,3], 8 * 2 * 0.95);
+  });
+
+  it('should price three singletons', function(){
+    test([0,1,2], 8 * 3 * 0.90);
+    test([1,2,3], 8 * 3 * 0.90);
+  });
+
+  it('should price four singletons', function(){
+    test([0,1,2,3], 8 * 4 * 0.80);
+  });
+
+  it('should price five singletons', function(){
+    test([0,1,2,3,4], 8 * 5 * 0.75);
+  });
+
+  it('should price more complex stuff', function(){
+    test([0,0,0,1,1,2], 8*3*0.90 + 8*2*0.95 + 8);
+    test([0,0,0,0,1,1,1,2,2,3], 8*4*0.80 + 8*3*0.90 + 8*2*0.95 + 8*1);
+    test([0,0,0,0,0,1,1,1,1,2,2,2,3,3,4], 8*12*0.80 + 8*2*0.95 + 8*1);
+    test([0, 0, 1, 1, 2, 2, 3, 4], 2 * (8 * 4 * 0.8));
+    test([
+      0, 0, 0, 0, 0,
+      1, 1, 1, 1, 1,
+      2, 2, 2, 2,
+      3, 3, 3, 3, 3,
+      4, 4, 4, 4
+    ], 3 * (8 * 5 * 0.75) + 2 * (8 * 4 * 0.8));
+  });
+});

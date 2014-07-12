@@ -1,0 +1,4 @@
+for i in $*
+do
+  vi -c "hardcopy %; q!" $i 
+done

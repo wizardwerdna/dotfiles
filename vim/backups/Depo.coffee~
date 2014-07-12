@@ -177,11 +177,17 @@ angular.module('depositionsApp')
     date: '2013-09-04'
     time: '13:33'
   ,
-    dpid: 'DW'
-    code: 'white'
-    name: 'Deborah White, Ph. D.'
+    dpid: 'W1'
+    code: 'white.vol1'
+    name: 'Deborah White, Ph. D. (vol I)'
     date: '2013-07-30'
     time: '09:37'
+  ,
+    dpid: 'W2'
+    code: 'white.vol2'
+    name: 'Deborah White, Ph. D. (vol II)'
+    date: '2013-10-13'
+    time: '09:45'
   ,
     dpid: 'JW'
     code: 'winn'

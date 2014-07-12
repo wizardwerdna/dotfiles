@@ -1,3 +1,12 @@
+# HereDOC
+
+snippet HEREDOC
+  HEREDOC(function(){/*
+  
+  ${1}
+
+  */})
+
 # After Each
 snippet aft
 	afterEach(function() { 
@@ -18,7 +27,7 @@ snippet bef
 snippet des
 	describe('${1:description}', function() {
 		${2}
-	});${3}	
+	});
 
 # Expect not to be defined
 snippet notd
@@ -54,7 +63,7 @@ snippet notx
 
 # Expect to be
 snippet eb
-  expect(${1:target})).toBe(${2});${3}
+  expect(${1:target}).toBe(${2});${3}
 
 # Expect to be defined
 snippet ed
@@ -108,7 +117,7 @@ snippet ex
 snippet it
 	it('${1:description}', function() {
 		${2}
-	});${3}
+	});
 
 # Runs
 snippet ru
@@ -139,3 +148,9 @@ snippet s
 # Waits
 snippet wa
 	waits(${1});${2}
+
+# Inject
+snippet inj
+  inject(function(${1:dependencies}){
+    ${2}
+  });

@@ -1,0 +1,74 @@
+'use strict';
+function comb(list){
+  function comb1(k){
+    if (!combCache[k]) {
+      var rest = comb1(k-1);
+      combCache[k] = list.map(function(c){
+        if (rest.length===0) return [[c]];
+        return rest.map(function(e){
+          return [c].concat(e);
+        });
+      }).reduce(function(m, a){
+        a.forEach(function(e){m.push(e);});
+        return m;
+      },[]);
+    }
+    return combCache[k];
+  }
+
+  if (list.length===0) return [];
+  var combCache = [[]];
+  return comb1(list.length);
+}
+
+function comb(list, k){
+  var result = [];
+  if (k===1) return list.
+    map(function(c){
+      return [c];
+    });
+  if (k===2) return list
+    .reduce(function(m, e){
+      return m.concat(list.map(function(c){
+        console.log(e);
+        e.push(c);
+        return e;
+      }));
+    }, []);
+
+}
+
+describe('comb()', function(){
+  function test(list, result){
+    expect(comb(list, list.length)).toEqual(result, '<-', list);
+  }
+  it('no combinations of empty list', function(){
+    test([], []);
+  });
+  it('1 combination of singleton list', function(){
+    test(['a'], [['a']]);
+    test(['b'], [['b']]);
+  });
+  it('combinations of doubleton list', function(){
+    test(['a', 'b'], [['a', 'a'], ['a', 'b'], ['b', 'a'], ['b', 'b']]);
+    test(['x', 'y'], [['x', 'x'], ['x', 'y'], ['y', 'x'], ['y', 'y']]);
+  });
+  it('combinations of tripleton list', function(){
+    test(['a','b','c'],
+        [
+          ['a', 'a', 'a'], ['a', 'a', 'b'], ['a', 'a', 'c'],
+          ['a', 'b', 'a'], ['a', 'b', 'b'], ['a', 'b', 'c'],
+          ['a', 'c', 'a'], ['a', 'c', 'b'], ['a', 'c', 'c'],
+          ['b', 'a', 'a'], ['b', 'a', 'b'], ['b', 'a', 'c'],
+          ['b', 'b', 'a'], ['b', 'b', 'b'], ['b', 'b', 'c'],
+          ['b', 'c', 'a'], ['b', 'c', 'b'], ['b', 'c', 'c'],
+          ['c', 'a', 'a'], ['c', 'a', 'b'], ['c', 'a', 'c'],
+          ['c', 'b', 'a'], ['c', 'b', 'b'], ['c', 'b', 'c'],
+          ['c', 'c', 'a'], ['c', 'c', 'b'], ['c', 'c', 'c'],
+        ]);
+  });
+  it('big', function(){
+    console.log('foo');
+    test([1, 2, 3, 4, 5, 6, 7], []);
+  });
+});

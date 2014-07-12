@@ -3,4 +3,6 @@ git clone http://github.com/wizardwerdna/my-angular-seed.git $1 &&
 cd $1 &&
 npm install &&
 bower install &&
+echo 'updating angular-mocks.js to my pull request' &&
+cp ~/angular.js/build/angular-mocks.js app/bower_components/angular-mocks/angular-mocks.js &&
 karma start

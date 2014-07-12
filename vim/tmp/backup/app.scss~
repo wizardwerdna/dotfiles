@@ -1,0 +1,14 @@
+$icon-font-path: "/bower_components/bootstrap-sass/fonts/";
+
+@import "../bower_components/bootstrap-sass/lib/bootstrap";
+
+/* Put your CSS here */
+html, body {
+  margin: 20px;
+}
+
+body {
+    background: #fafafa;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #333;
+}

@@ -1,42 +1,34 @@
 'use strict';
-describe('A Clicking App', function(){
+describe('A Clicking Application', function() {
   var app;
 
-  it('features click counting', function(){
-    expectClicksDisplayToBe('0');
+  it('should feature resettable click counting', function(){
+    displayShouldBe('0');
 
-    click(1);
-    expectClicksDisplayToBe('1');
+    for(var i=0; i<10; i++) { click(); }
+    displayShouldBe('10');
 
-    click(11119);
-    expectClicksDisplayToBe('10');
-
-    reset();
-    expectClicksDisplayToBe('0');
+    app.find('.reset').click();
+    displayShouldBe('0');
   });
 
-  beforeEach(module('app', 'views/click.html'));
-  beforeEach(inject(function($compile,$rootScope){
+
+  beforeEach(module('app', views/click.html'));
+  beforeEach(inject(function($compile, $rootScope){
     app = $compile(
-      '<div ng-controller="ClickCtrl">'+
-        '<div ng-include="\'views/click.html\'"'+
-      '</div>'
+      '<div>\
+        <div ng-include="\'views/click.html\'"\
+          ng-controller="ClickVM as vm"></div>\
+      </div>'
     )($rootScope);
     $rootScope.$digest();
   }));
- 
-  function expectClicksDisplayToBe(str){
-    expect( app.find('.clicks-display').text()).toBe(str);
+
+  function click(){
+    app.find('.clicker').click();
   }
 
-  function click(times){
-    for(var i=0; i<times; i++) {
-      app.find('.clicker').click();
-    }
+  function displayShouldBe(str) {
+    expect(app.find('.click-count-display').text()).toBe(str);
   }
-
-  function reset(){
-    app.find('.reset').click();
-  }
-
 });

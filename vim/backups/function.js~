@@ -1,0 +1,67 @@
+'use strict';
+
+function charsIn(s){
+  return Object.keys(
+    s.split('').reduce(function(m,c){m[c]=1; return m}, {})
+  ).length
+}
+
+function squares(d){
+  if (d.length===0 || d[0].length===1) return d.map(function(w){return [w]});
+  if (d.length===1){
+    if (charsIn(d[0])===1)
+      return [d[0].split('').map(function(e){return d[0]})];
+    return [];
+  }
+  d.map(function(w1){
+    d.map(function(w2){
+      return w2;
+    });
+  });
+  for(var i=0; i<d[0].length; i++)
+    for (var j=0; j<d[0].length; j++)
+      list[i] = j;
+  if (d.length===2)
+    return [[d[0], d[1]]].filter(function(e){
+      return d[0] === d[1].split('').reverse().join('');
+    });
+}
+
+function test(d, result){
+  expect(squares(d)).toEqual(result, '<- [' + d + ']');
+}
+
+describe('squares(d)', function(){
+  it('should find no squares in an empty dictionary', function(){
+    test([], []);
+  });
+
+  it('should find one square with a directory of unichar strings', function(){
+    test(['a'], [['a']]);
+    test(['b'], [['b']]);
+    test(['aa'], [['aa', 'aa']]);
+    test(['bb'], [['bb', 'bb']]);
+    test(['aaa'], [['aaa', 'aaa', 'aaa']]);
+    test(['aaaa'], [['aaaa', 'aaaa', 'aaaa', 'aaaa']]);
+  });
+
+  it('should find no squares width a directory of non-unichar strings', function(){
+    test(['ab'], []);
+  });
+
+  it('should find n squares, with a dirctory of n 1-chars', function(){
+    test(['a', 'b'], [['a'], ['b']]);
+    test(['x', 'y'], [['x'], ['y']]);
+    test(['x', 'y', 'z'], [['x'], ['y'], ['z']]);
+  });
+
+  describe('with a directory of 2 d-char strings, s and t', function(){
+    it('should find no squares unless s == t.reverse()', function(){
+      test(['ab', 'ba'], [['ab', 'ba']]);
+      test(['xy', 'yx'], [['xy', 'yx']]);
+      test(['ab', 'xy'], []);
+      test(['aba', 'bab'], [['aba', 'bab', 'aba'], ['bab', 'aba', 'bab']]);
+    });
+  });
+
+});

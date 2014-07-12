@@ -2,12 +2,10 @@
 
 angular.module('depositionsApp')
 .service 'Session', class Session
-  @$inject: ['sessionData', '$cookies', 'Exhibit', 'Depo']
-  constructor: (@sessionData, @cookies, @Exhibit, @Depo)->
+  @$inject: ['sessionData', '$cookies']
+  constructor: (@sessionData, @cookies)->
   login: (password)->
-    if password is @sessionData.password
+    if CryptoJS.SHA1(password).toString() is @sessionData.password
       @cookies.sessionStatus = @sessionData.verification
   logout: -> @cookies.sessionStatus = undefined
   isAuthenticated: -> @cookies.sessionStatus is @sessionData.verification
-  depositions: -> @Depo.query()
-  exhibits: -> @Exhibit.query()

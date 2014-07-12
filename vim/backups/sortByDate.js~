@@ -1,0 +1,14 @@
+'use strict';
+describe('Filter sortByDate', function(){
+  var repo, sortByDateFilter;
+  beforeEach(function(){
+    module('app');
+    inject(function(_repo_, sortByDateFilter){
+      repo = _repo_;
+      sortByDateFilter = _sortByDateFilter_;
+    });
+  });
+  it('should return an array', function(){
+    expect(angular.isArray(sortByDateFilter(repo.read()))).toBeTruthy();
+  });
+});

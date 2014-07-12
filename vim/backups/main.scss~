@@ -2,8 +2,6 @@ $icon-font-path: "/bower_components/bootstrap-sass/fonts/";
 
 @import "../bower_components/bootstrap-sass/lib/bootstrap";
 
-
-
 /* Put your CSS here */
 html, body {
   margin: 20px;
@@ -15,6 +13,41 @@ body {
     color: #333;
 }
 
-pre {
-  background: black;
+.frames{
+  @include clearfix();
+  margin-bottom: 10px;
+  .frame{
+    height: 50px;
+    width: 50px;
+    float:left;
+    border: 1pt solid black;
+    border-right: none;
+    
+    &.tenth{
+      width: 70px;
+      border-right: 1pt solid black;
+    }
+
+    .line-displays{
+      float: right;
+    }
+
+    .line-display{
+      text-align: center;
+      height: 20px;
+      width: 19px;
+      float: left;
+      border-left: 1pt solid black;
+      border-bottom: 1pt solid black;
+
+      &:first-child {
+        width: 20px;
+        border: none;
+      }
+    }
+
+    .frame-scores-display{
+      text-align: right;
+    }
+  }
 }

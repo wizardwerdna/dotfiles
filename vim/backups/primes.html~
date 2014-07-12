@@ -1,0 +1,9 @@
+<div class="jumbotron">
+  <h1>Superheroic Primes</h1>
+  <p>an AngularJS Kata</p>
+</div>
+
+<div class="well">
+  <input class="input" type="text" value="2" ng-model="vm.input">
+  <div class="output">{{vm.primes(vm.input-0)}}</div>
+</div>

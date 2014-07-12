@@ -1,7 +1,8 @@
-pick 34956a9 modified package.json to add script to run test suite under karma in Chrome, Firefox and Safar on Mac
-pick 519ed4e modify karma.conf.js
+r b5fa0af fix(angular.mock) don't attempt to modify error object
+s 3e883f1 repair error; implement ErrorWithDeclarationLocationStack that works with Chrome, ChromeCanary, PhantomJS, Firefox, and Safari.
+s c857523 restore karam-shared.conf.js to pre-testing status
 
-# Rebase eddcf6d..519ed4e onto eddcf6d
+# Rebase 751f058..c857523 onto 751f058
 #
 # Commands:
 #  p, pick = use commit

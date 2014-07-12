@@ -1,0 +1,30 @@
+describe 'BowlVM', ->
+  vm = undefined 
+  mock = { scorer: -> }
+
+  returner = (property, description='')->
+    obj = {}
+    mock = {mock: property + description }
+    obj[property]= -> mock
+    obj
+
+  firstReturner = returner('rollsDisplay')
+  lastReturner = returner('rollDisplay', ' (last)')
+
+  beforeEach ->
+    module 'app'
+    spyOn(mock, 'scorer').andReturn firstReturner
+    inject ($controller)-> vm = $controller 'BowlVM', mock
+
+  describe 'when created', ->
+    it 'obtains a scorer on []', ->
+      expect(mock.scorer).toHaveBeenCalledWith []
+    it 'updates vm from scorer', ->
+      expect(vm.rollsDisplay).toBe firstReturner.rollsDisplay()
+
+  describe 'after gutter ball', ->
+    beforeEach -> vm.addRoll(0)
+    it 'obtains a scorer on [0]', ->
+      expect(mock.scorer).toHaveBeenCalledWith [0]
+    it 'updates vm from scorer', ->
+      expect(vm.rollsDisplay).toBe firstReturner.rollsDisplay()

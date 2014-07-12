@@ -1,133 +1,86 @@
-# my-angular-seed
+Superheroic 2048: an AngularJS Kata
+===================================
 
-My-angular-seed is a project, derived from the [Yeoman angular project build](https://github.com/yeoman/generator-angular).  This seed is "good to go," for my TDD/bdd development and set up for easy Heroku deployment.  It 
+In this multi-part kata, we will build out and implement a full-featured
+implementation of Garbiele Cirulli's 2048 using AngularJS. Using
+Test-First disciplines, we will build applications built from scratch,
+starting with an empty file. From the simplest examples to full-scale
+AngularJS and backend systems, I hope these katas may inspire you to
+adopt these terrific agile practices to change the world with your own
+examples and craftsmanship.
 
-* has 1.2.x AngularJS build; 
-* has a specially configured grunt server for use with single page applications;
-* assumes you are building the application from scratch, there is no initial application scaffold apart from a very thin `index.html` and a trivial `app.js`.  
-You can still use the yeoman scaffolding commands, but its not my practice.
-* has karma installed and configured to use ngRoute, and angular-test-scaffold.
+I will perform each kata for you in a screencast and in written materials
+summarizing the development. Then it is your turn.
+Correct performance has nothing to do with mimicking what I show you,
+but by finding your own chops and improving on the craft.\
+We repeat katas to better comprehend the practices and to build mental
+muscle memory so that skills flow quickly from your mind, as though you
+were touch typing the ideas themselves. They should take your breath
+away, as can a Mozart aria.
 
-## Installation
+My name is Andrew Greenberg, and I would be grateful for your comments
+and suggestions as you work through these forms. You can find me by
+e-mail at wizardwerdna@gmail.com, or at @wizardwerdna on twitter. Now,
+let's get this kata started.
 
-Assuming you have installed node, and globally installed generator-angular, you can start cooking with:
+The Plan
+--------
 
-```bash
-git clone https://github.com/wizardwerdna/my-angular-seed.git <your-directory-here>
-cd <your-directory-here>
-npm install && bower install
-```
+This kata will incorporate many of the Bunkai we have learned
+earlier, to build a complex computer game.  It will feature many
+of the testing techniques we have used to date, and introduce a few
+new ones: The Page Object Pattern, Testing With Randomness and a special
+purpose "roll-your own" spy test double.
 
-Proceed at your own pace and style.  I tend to fire up tmux, run 'grunt server', and in a new page begin editing an integration test, usually
-named something like `test/spec/integrations/integration.js` or the like.  I will blog on my style for developing angularjs apps shortly.
+There won't be any big design up front, but we have a modest plan.
+Our [first iteration]() will focus on building out the game display
+mechanics and integrating them with the javascript.  We will construct
+a truly deployable walking skeleton, and move to the second stage.
 
-## Single Page Application Development Server
+The [next iteration]() will focus on game logic which will probably be
+built in a separate service.  We will conclude the iteration by 
+assuring our integration tests are working, and take a look at our
+work through a browser.
 
-The default server configured with generator-angular fires up a browser, runs the application, and monitors the app directory for changes, with liveupdates upon change.
-However, when your SPA application attempts to reload an internal route, such as //foo/first/second/third, the server does not recognize this as a static file, and
-returns a 404.  Thus, when you are testing an internal page and the browser liveupdates, you end up getting a 404, and must restart your app from scratch.  The server
-configured with my-angular-seed passes the 404 to the SPA, so that it can route and respond as you see fit.
+The [third iteration]() will be the cleanup and polish, wiring the last
+inches of the user interface and game mechanics.
 
-## Heroku Deployment
+Designer's Specification
+------------------------
 
-A basic node webserver and procfile are provided to facilitate deployment of the app to heroku.  You might find deployment straightforward with the following strategy:
+While we are building the game logic, a designer will be working on
+SASS/CSS code to display the game to the user. (We don't really have a
+designer, but will be using the CSS and HTML from the original program.
+We are grateful to Mr. Cirulli for licensing this code under the MIT
+license for our use.)
 
-1.  Install the heroku toolkit, if you haven't already done so.
-1.  Create and initialize your new application on Heroku.
+Since one depends on the other, we will do some specification of that
+work up front the code integrates well. He will incorporate our code in
+his HTML when we finish the first iteration. We are given specifications
+of classes and related details, which are summarized in the following:
 
-```bash
-heroku create <your-app-name>
-```
+| Description | CSS Selectors |
+| --- | --- |
+| Game HTML Container  | .container               |
+| Restart Game Button  | .restart-button          |
+| Current Game Score   | .score-container         |
+| Best Game Score      | .best-container          |
+| Game tile            | .tile                    |
+|   -  tile position   | .tile.tile-position-1-3  | 
+|   -  tile number     | .tile.score-2048         |
+|                      | .tile>.tile-inner{2048}  |
+| Game Won             | .game-message.game-won   |
+| Game Over            | .game-message.game-over  |
+| Message for Game     | .game-message>p{Message} |
 
-1.  Each time you are ready to deploy:
+Table: Designer Specification
 
-```bash
-grunt build
-git add -A
-git commit -m "<your message identifying the new build>"
-git push heroku master
-```
+**Notes:**
 
-1.  After deployment, run the application wth
+  - Game tile positions are 1-based
+  - Both forms of tile score information must be present
+  - Only one of .game-won / .game-over should be present, .game-won takes precedence in any case.
+  - The message should be one of "", "Game over!" or "Game won!" 
 
-```bash
-heroku open
+Let's get this kata started, with the first iteration.
 
-# if that fails, try
-heroku ps:scale web=1
-heroku open
-```
-
-## TDD AngularJS Cheat Sheet
-
-*  [**angular.mock.module**](http://docs.angularjs.org/api/angular.mock.module)
-*  [**angular.mock.inject**](http://docs.angularjs.org/api/angular.mock.inject)
-*  [**$rootScope**](http://docs.angularjs.org/api/ng.$rootScope.Scope)
-*  [**$compile**](http://docs.angularjs.org/api/ng.$compile)
-
-These can be used to construct a dynamic DOM fragment running angular, ideal for integration and directive testing:
-
-```javascript
-var app;
-beforeEach( module ( 'app' ) );
-beforeEach( inject( function($compile, $rootScope) {
-  $compile(
-    '<h1>Great HTML Definition for the Fragment</h1>'
-  )($rootScope.$new);
-  $rootScope.$digest();
-});
-```
-
-*  [**$controller**](http://docs.angularjs.org/api/ng.$controller);
-
-This can be used to construct a controller unit test
-
-```javascript
-var $scope;
-
-beforeEach( module ( 'app' ) );
-beforeEach( inject( function($controller, $rootScope) {
-  $scope = $rootScope.$new();
-  $controller( 'CtrlCtrl', {
-    $scope: $scope,
-    dittyService: mockDittyService
-    ...
-  }
-});
-```
-
-*  [**$injector.get**](http://docs.angularjs.org/api/AUTO.$injector)
-
-This is helpful for obtaining arbitrary objects, its really a matter of style whether to do:
-
-```javascript
-var cerveza;
-beforeEach( module( 'app' ) );
-beforeEach( inject( function(_cerveza_) {
-  cerveza = _cerveza_;
-}));
-```
-
-or:
-
-```javascript
-var cerveza;
-beforeEach( module( 'app' ) );
-beforeEach( inject( function($injector) {
-  cerveza = injector.get('cerveza');
-}));
-```
-
-* **$provide**(http://docs.angularjs.org/api/AUTO.$provide)
-
-This is helpful for initializing, overriding or setting dependencies relied upon in the application, an excellent vehicle to store test doubles.
-
-```javascript
-beforeEach ( module( 'app', function($provide) {
-  $provide.value( 'valeu', function() {} );
-}));
-```
-
-For test purposes, this sets `valeu` to the defined function for the purpose of running tests in a module.
-
-Enjoy. 

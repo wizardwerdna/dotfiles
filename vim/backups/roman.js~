@@ -1,0 +1,82 @@
+'use strict';
+describe('ViewModel RomanVM', function(){
+  var vm;
+  beforeEach(function(){
+    module('app');
+    inject(function($controller){
+      vm = $controller('RomanVM', {});
+    });
+  });
+  function test(int, result){
+    expect(vm.romanize(int)).toBe(result, 'romanize('+int+')');
+  }
+  it('should romanize 0', function(){
+    test(0, '');
+  });
+  it('should romanize 1-3', function(){
+    test(1, 'I');
+    test(2, 'II');
+    test(3, 'III');
+  });
+  it('should romanize 4', function(){
+    test(4, 'IV');
+  });
+  it('should romanize 5', function(){
+    test(5, 'V');
+  });
+  it('should romanize 6-8', function(){
+    test(6, 'VI');
+    test(8, 'VIII');
+  });
+  it('should romanize 9', function(){
+    test(9, 'IX');
+  });
+  it('should romanize 10-19', function(){
+    test(10, 'X');
+    test(11, 'XI');
+    test(14, 'XIV');
+    test(15, 'XV');
+    test(16, 'XVI');
+    test(19, 'XIX');
+  });
+  it('should romanize 20-39', function(){
+    test(20, 'XX');
+    test(21, 'XXI');
+    test(25, 'XXV');
+    test(30, 'XXX');
+    test(39, 'XXXIX');
+  });
+  it('should romanize 40-49', function(){
+    test(40, 'XL');
+    test(41, 'XLI');
+    test(49, 'XLIX');
+  });
+  it('should romanize 50-89', function(){
+    test(50, 'L');
+    test(89, 'LXXXIX');
+  });
+  it('should romanize 90-99', function(){
+    test(90, 'XC');
+    test(99, 'XCIX');
+  });
+  it('should romanize 100 to 399', function(){
+    test(100, 'C');
+    test(399, 'CCCXCIX');
+  });
+  it('should romanize 400 to 499', function(){
+    test(400, 'CD');
+    test(499, 'CDXCIX');
+  });
+  it('should romanize 500 to 899', function(){
+    test(500, 'D');
+    test(899, 'DCCCXCIX');
+  });
+  it('should romanize 900 to 999', function(){
+    test(900, 'CM');
+    test(999, 'CMXCIX')
+  });
+  it('should romanize 1000-3999', function(){
+    test(1000, 'M');
+    test(3999, 'MMMCMXCIX');
+  });
+});

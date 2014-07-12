@@ -1,2 +1,168 @@
 'use strict';
-angular.module('app', []);
+/* jshint latedef:false */
+angular.module('app', [])
+
+.controller('AppVM', function(state, game){
+  this.state = state;
+
+  this.keydown = function(event){
+    game.turn(state, event.which);
+  };
+
+  this.reset = function(){ game.reset(state); };
+})
+
+.value('state', {})
+
+.value('selectTile', angular.noop)
+
+.factory('game', function(selectTile){
+  var game = {
+    FIRST_DIRECTION: 37,
+    LEFT: 37,
+    UP: 38,
+    RIGHT: 39,
+    DOWN: 40,
+    LAST_DIRECTION: 40,
+
+    reset: reset,
+    turn: turn
+  };
+  return game;
+
+  function reset(state){
+    state.score = 0;
+    state.won = state.over = false;
+    state.tiles = state.tiles || [];
+    state.tiles.splice(0);
+    state.tiles.push(selectTile(state));
+    state.tiles.push(selectTile(state));
+    return state;
+  }
+
+  function turn(state, direction){
+    var wasMovedOrMerged = false,
+        wasMergedTo2048 = false;
+
+    moveAndMergeTiles(state, direction);
+    addNewTile();
+    updateScores();
+    updateGameWon();
+    removeMergedTiles();
+    updateGameOver();
+    return state;
+
+
+    function moveAndMergeTiles(state, direction){
+      if (direction === game.UP){    rotate(rotateLeft);  }
+      if (direction === game.DOWN){  rotate(rotateRight); }
+      if (direction === game.RIGHT){ rotate(rotate180);   }
+      moveAndMergeTilesLeft(state);
+      if (direction === game.UP){    rotate(rotateRight); }
+      if (direction === game.DOWN){  rotate(rotateLeft);  }
+      if (direction === game.RIGHT){ rotate(rotate180);   }
+
+      function rotateLeft(tile){
+        var t = tile.x;
+        tile.x = tile.y;
+        tile.y = 3 - t;
+      }
+      function rotateRight(tile){
+        var t = tile.y;
+        tile.y = tile.x;
+        tile.x = 3 - t;
+      }
+      function rotate180(tile){
+        tile.x = 3 - tile.x;
+        tile.y = 3 - tile.y;
+      }
+      function rotate(rotation){
+        state.tiles.forEach(rotation);
+      }
+      function moveAndMergeTilesLeft(state){
+        state.tiles
+          .sort(rowMajorOrder)
+          .reduce(moveLeftOrMergeWithLastTile, {});
+        return state;
+
+        function moveLeftOrMergeWithLastTile(lastTile, tile){
+          lastTile = lastForNewRow(lastTile, tile);
+          if (isMergeTile(lastTile, tile)){
+            mergeTileWithLast(lastTile, tile);
+          } else {
+            moveTileNextToLast(lastTile, tile);
+          }
+          return tile;
+          
+          function lastForNewRow(lastTile, tile){
+            if (tile.y!==lastTile.y){ return {x:-1}; }
+            return lastTile;
+          }
+          
+          function isMergeTile(lastTile, tile){
+            return tile.score===lastTile.score;
+          }
+          function moveTileNextToLast(lastTile, tile){
+            wasMovedOrMerged = wasMovedOrMerged || tile.x !== lastTile.x+1;
+            tile.x = lastTile.x + 1;
+          }
+          function mergeTileWithLast(lastTile, tile){
+            lastTile.score *=2;
+            tile.score *=-2;
+            tile.x = lastTile.x;
+            wasMovedOrMerged = true;
+            wasMergedTo2048 = wasMergedTo2048 || lastTile.score === 2048;
+          }
+        }
+      }
+    }
+
+    function addNewTile(){
+      if (wasMovedOrMerged){
+        state.tiles.push(selectTile(state));
+      }
+    }
+
+    function updateScores(){
+      state.tiles.forEach(function(tile){
+        if (tile.score<0){
+          state.score -= tile.score;
+          if (state.best<state.score) { state.best = state.score; }
+        }
+      });
+    }
+
+    function updateGameWon(){
+      if (state.won !== null){
+        state.won = wasMergedTo2048;
+      }
+    }
+
+    function removeMergedTiles(){
+      for(var i=state.tiles.length-1; i>0; --i){
+        if (state.tiles[i].score<0) {
+          state.tiles.splice(i, 1);
+        }
+      }
+    }
+
+
+    function updateGameOver(){
+      state.over = state.tiles.length===16 && noMergeAvailable();
+
+      function noMergeAvailable(){
+        return noMerge(game.LEFT) && noMerge(game.UP);
+
+        function noMerge(direction){
+          wasMovedOrMerged = false;
+          moveAndMergeTiles({tiles: angular.copy(state.tiles)}, direction);
+          return !wasMovedOrMerged;
+        }
+      }
+    }
+
+    function rowMajorOrder(t1,t2){return (t1.y*4+t1.x)-(t2.y*4+t2.x);}
+
+  }
+})
+;

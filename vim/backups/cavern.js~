@@ -1,0 +1,51 @@
+'use strict';
+describe('Factory cavern', function(){
+  var cavern;
+  beforeEach(function(){
+    module('app');
+    inject(function(_cavern_){
+      cavern = _cavern_;
+    });
+  });
+  it('should expose an initial room', function(){
+    expect(typeof cavern.startingRoom).toBe('number');
+  });
+
+  it('should expose wumpus, bat and pit values', function(){
+    expect(cavern.wumpus).not.toBe(cavern.bats);
+    expect(cavern.bats).not.toBe(cavern.pit);
+    expect(cavern.pit).not.toBe(cavern.wumpus);
+  });
+
+  describe('rooms', function(){
+    it('should expoase an array of rooms', function(){
+      expect(Array.isArray(cavern.rooms)).toBeTruthy();
+    });
+    it('each room should have a unique room number', function(){
+      cavern.rooms.forEach(function(room, index){
+        if (index>0) expect(room.roomNumber).toBe(index)
+      })
+    });
+    it('each room should have a list of hazards', function(){
+      cavern.rooms.forEach(function(room, index){
+        if (index>0) expect(Array.isArray(room.hazards)).toBeTruthy();
+      });
+    });
+    it('each room should have list of bidirectional links to adjacent rooms', function(){
+      cavern.rooms.forEach(function(room){
+        room && room.adjacentRooms.forEach(function(adjIndex){
+          var adjRoom = cavern.rooms[adjIndex];
+          expect(adjRoom.adjacentRooms.lastIndexOf(room.roomNumber))
+            .toBeGreaterThan(-1, room, adjRoom);
+        });
+      });
+    });
+  });
+
+  describe ('hazards', function(){
+    it('should')
+  });
+
+
+
+});

@@ -1,5 +1,9 @@
-<div ng-controller="ClickCtrl as vm">
-  <div class="click-count-display">{{vm.count}}</div>\
-  <div class="clicker" ng-click="vm.click()"></div>\
-  <div class="resetter" ng-click="count=0"></div>\
+<div class="jumbotron">
+  <h1>Superheroic Clicking</h1>
+  <p>an AngularJS Kata</p>
+</div>
+<div class="well">
+  <div class="click-count-display">{{vm.clickCount}}</div>
+  <div class="clicker" ng-click="vm.click()">foo</div>
+  <div class="reset" ng-click="vm.reset()">foo</div>
 </div>

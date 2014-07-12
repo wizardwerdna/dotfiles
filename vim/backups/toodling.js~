@@ -1,0 +1,28 @@
+'use strict';
+describe('ooga', function(){
+  var app;
+  beforeEach(buildPage);
+
+  it('should moodle', function(){
+    expect(app.find('.tonka').text()).toBe('3');
+  });
+
+  function buildPage(){
+    var fileName = 'views/tonka.html';
+    module('app', fileName);
+    inject(function($templateCache){
+      app = liveElement($templateCache.get(fileName));
+    });
+  }
+
+  function liveElement(textOrElement){
+    var element;
+    inject(function($compile, $rootScope){
+      element = $compile(
+        textOrElement
+      )($rootScope);
+      $rootScope.$digest();
+    });
+    return element;
+  }
+});

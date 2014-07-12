@@ -1,0 +1,17 @@
+<span>
+  --{{entry}}--
+  <span class="id" ng-hide="true">{{entry.$id}}</span>
+  <span class="col-xs-2 date">{{entry.date}}</span>
+  <span class="col-xs-8 desc">{{entry.desc}}</span>
+  <span class="col-xs-1 time">{{entry.time}}</span>
+  <span class="col-xs-1">
+    <button class="editEntry{{entry.$id}} btn btn-xs btn-primary" 
+      ng-click="vm.editForm.reset(entry)">
+      <span class="glyphicon glyphicon-edit"></span>
+    </button>
+    <button class="destroyEntry{{entry.$id}} btn btn-xs btn-danger" 
+      ng-click="vm.destroyEntry(entry)">
+      <span class="glyphicon glyphicon-trash"></span>
+    </button>
+  </span>
+</span>

@@ -1,0 +1,3 @@
+<div class="tally-count">{{vm.count}}</div>\
+<div class="tally" ng-click="vm.tally()">+</div>\
+<div class="reset" ng-click="vm.reset()">Reset</div>\

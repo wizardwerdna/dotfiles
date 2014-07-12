@@ -1,1 +1,10 @@
-console.log "moo"
+'use strict';
+describe('now we are very haapy', function() {
+  This
+  is 
+  Kewler 
+  Yet
+
+});
+
+

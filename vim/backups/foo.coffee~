@@ -1,1 +1,44 @@
-Oath = (require './oath').Oath
+class BinaryTree
+  constructor: () ->
+
+class BinaryTreeNode extends BinaryTree
+  constructor: (@value, @left, @right) -> Object.freeze(@)
+  isEmpty: () -> false
+  depth: () -> 1 + Math.max(@left.depth(), @right.depth())
+  count: () -> 1 + @left.count() + @right.count
+
+  inorder: (fn) ->
+    @left.inorder(fn)
+    fn(@value)
+    @right.inorder(fn)
+  preorder: (fn) ->
+    fn(@value)
+    @left.preorder(fn)
+    @right.preorder(fn)
+  postorder: (fn) ->
+    @left.postorder(fn)
+    @right.postorder(fn)
+    fn(@value)
+    
+  contains: (x) ->
+    if x<value
+      @left.contains(x)
+    else if x>value
+      @right.contains(x)
+    else
+      true
+      
+  insert: (x) -> # implement me
+  remove: (x) -> # implement me
+  
+class EmptyBinaryTree extends BinaryTree
+  constructor: () -> Object.freeze(@)
+  isEmpty: () -> true
+  depth: () -> 0
+  count: () -> 0
+  inorder: (fn) ->
+  preorder: (fn) ->
+  postorder: (fn) ->
+  contains: (x) -> false
+  insert: (x) -> new BinaryTreeNode(x, new EmptyBinaryTree(), new EmptyBinaryTree())
+  remove: (x) -> this 

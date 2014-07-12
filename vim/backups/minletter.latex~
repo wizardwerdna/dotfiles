@@ -1,0 +1,17 @@
+\documentclass[11pt]{letter}
+
+\address{John Q. Public \\ 1234 Main St. \\ Smalltown, CA 91234}
+\signature{John Q. Public}
+
+\begin{document}
+$if(addressee)$
+\begin{letter}{$addressee$}
+$else$
+\begin{letter}{\mbox{}\\\mbox{}}
+$endif$
+
+$body$
+
+\closing{Sincerely,}
+\end{letter}
+\end{document}

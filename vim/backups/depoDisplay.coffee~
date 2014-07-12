@@ -3,14 +3,11 @@
 angular.module('depositionsApp')
   .directive 'depoDisplay', () ->
     template: '''
-    <div class="well well-small">
+    <div class="well well-small" style="margin:0">
       {{depo.date}} {{depo.time}} 
       <b>Deposition of {{depo.name}}</b>
       <a ng-href="{{depoPrefix}}{{depo.code}}.pdf" target="_blank">
         [Deposition]
-      </a>
-      <a ng-href="{{summaryPrefix}}{{depo.code}}.summary.docx" target="_blank">
-        [Summary]
       </a>
     </div>
     '''

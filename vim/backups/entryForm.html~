@@ -1,0 +1,14 @@
+<form role="form" class="{{form.formName}}" ng-submit="form.submit()">
+  <input class="date col-xs-2" type="date" ng-model="form.entry.date">
+  <textarea class="desc col-xs-8" ng-model="form.entry.desc"></textarea>
+  <input class="time col-xs-1" type="number" step="0.1" ng-model="form.entry.time">
+  <span class="col-xs-1">
+    <button type="submit" class="btn btn-xs btn-success">
+      <span class="glyphicon glyphicon-save"></span>
+    </button>
+    <span type="" class="btn btn-xs btn-warning" ng-click="form.reset()">
+      <span class="glyphicon glyphicon-ban-circle"></span>
+    </span>
+  </span>
+  <br>
+</form>

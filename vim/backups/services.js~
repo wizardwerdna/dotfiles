@@ -1,0 +1,10 @@
+'use strict';
+angular.module('app').factory('scorer', function(){
+  return function(rolls){ 
+    return {
+      rollsDisplay: function(){
+        return null;
+      }
+    };
+  };
+});
