@@ -1,0 +1,18 @@
+'use strict';
+describe("SUPERHEROIC FACTORING\
+  As a user, I want to display the factors of an input integer",
+function() {
+  var ng;
+  beforeEach(function(){
+    module('index.html', 'app');
+    ng = ngFrom('index.html');
+  });
+  it('should factor a prime number', function(){
+    ng.find('input').val(2).trigger('input');
+    expect(ng.find('.display').text()).toBe('[2]');
+  });
+  it('should factor a composite number', function(){
+    ng.find('input').val(6).trigger('input');
+    expect(ng.find('.display').text()).toBe('[2,3]');
+  });
+});

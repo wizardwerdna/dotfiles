@@ -5,73 +5,76 @@ augroup filetype_vim
 augroup END
 " }}}
 
-" Vundle settings -------------------------------- {{{
-set rtp+=~/.vim/bundle/Vundle.vim/
-filetype off                   " required!
-call vundle#begin()
-Plugin 'gmarik/vundle.vim'
+" " Vundle settings -------------------------------- {{{
+" set rtp+=~/.vim/bundle/Vundle.vim/
+" filetype off                   " required!
+" call vundle#begin()
+" Plugin 'gmarik/vundle.vim'
 
 " Plugin 'scrooloose/nerdtree'
 " Plugin 'vim-scripts/textutil.vim'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'blockle.vim'
-Plugin 'christoomey/vim-tmux-navigator'
-Plugin 'ctrlp.vim'
-Plugin 'EasyMotion'
-Plugin 'FuzzyFinder'
-Plugin 'Gist.vim'
-Plugin 'godlygeek/tabular'
-Plugin 'IndexedSearch'
-Plugin 'Jasmine-snippets-for-snipMate'
-Plugin 'jiangmiao/auto-pairs'
-Plugin 'jQuery'
-Plugin 'L9'
-Plugin 'lambdalisue/shareboard.vim'
-Plugin 'lfilho/cosco.vim'
-Plugin 'Lokaltog/vim-easymotion'
-Plugin 'marijnh/tern_for_vim'
-Plugin 'mattn/emmet-vim'
-Plugin 'mattn/webapi-vim'
-Plugin 'othree/html5-syntax.vim'
-Plugin 'pangloss/vim-javascript'
-Plugin 'peterhoeg/vim-tmux'
-Plugin 'rizzatti/dash.vim'
-Plugin 'rizzatti/funcoo.vim'
-" Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
-Plugin 'Shougo/neocomplcache'
-Plugin 'Shougo/neosnippet'
-Plugin 'sickill/vim-pasta'
-Plugin 'skalnik/vim-vroom'
-"Plugin 'suan/vim-instant-markdown'
-Plugin 'Syntastic'
-Plugin 'timcharper/textile.vim'
-Plugin 'tomtom/tcomment_vim'
-Plugin 'tpope/vim-characterize'
-Plugin 'tpope/vim-cucumber'
-Plugin 'tpope/vim-endwise'
-Plugin 'tpope/vim-fugitive', {'name': 'fugitive'}
-Plugin 'tpope/vim-git'
-Plugin 'tpope/vim-haml'
-Plugin 'tpope/vim-markdown'
-Plugin 'tpope/vim-ragtag'
-Plugin 'tpope/vim-rails.git'
-Plugin 'tpope/vim-repeat'
-Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-unimpaired'
-Plugin 'tpope/vim-vinegar'
-Plugin 'tsaleh/vim-matchit'
-Plugin 'vim-coffee-script'
-Plugin 'vim-fugitive'
-Plugin 'vim-pandoc/vim-pandoc'
-Plugin 'vimux'
-Plugin 'vim-scripts/vimwiki'
-Plugin 'vividchalk.vim'
-Plugin 'yearofmoo/Vim-Darkmate'
-Plugin 'zirrostig/vim-schlepp'
+call plug#begin('~/.vim/plugged')
 
-call vundle#end()            " required
-filetype plugin indent on    " required
+Plug 'airblade/vim-gitgutter'
+Plug 'altercation/vim-colors-solarized'
+Plug 'blockle.vim'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'ctrlp.vim'
+Plug 'EasyMotion'
+Plug 'FuzzyFinder'
+Plug 'Gist.vim'
+Plug 'godlygeek/tabular'
+Plug 'IndexedSearch'
+Plug 'Jasmine-snippets-for-snipMate'
+Plug 'jiangmiao/auto-pairs'
+Plug 'jQuery'
+Plug 'L9'
+Plug 'lambdalisue/shareboard.vim'
+Plug 'lfilho/cosco.vim'
+Plug 'Lokaltog/vim-easymotion'
+Plug 'marijnh/tern_for_vim', { 'do': 'npm install' }
+Plug 'mattn/emmet-vim'
+Plug 'mattn/webapi-vim'
+Plug 'othree/html5-syntax.vim'
+Plug 'pangloss/vim-javascript'
+Plug 'peterhoeg/vim-tmux'
+Plug 'rizzatti/dash.vim'
+Plug 'rizzatti/funcoo.vim'
+" Plug 'rstacruz/sparkup', {'rtp': 'vim/'}
+Plug 'rking/ag.vim'
+Plug 'Shougo/neocomplcache'
+Plug 'Shougo/neosnippet'
+Plug 'sickill/vim-pasta'
+Plug 'skalnik/vim-vroom'
+"Plug 'suan/vim-instant-markdown'
+Plug 'Syntastic'
+Plug 'timcharper/textile.vim'
+Plug 'tomtom/tcomment_vim'
+Plug 'tpope/vim-characterize'
+Plug 'tpope/vim-cucumber'
+Plug 'tpope/vim-endwise'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-git'
+Plug 'tpope/vim-haml'
+Plug 'tpope/vim-markdown'
+Plug 'tpope/vim-ragtag'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-tbone'
+Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-vinegar'
+Plug 'vim-coffee-script'
+Plug 'vim-ruby/vim-ruby'
+Plug 'vim-pandoc/vim-pandoc'
+Plug 'vimux'
+Plug 'vim-scripts/vimwiki'
+Plug 'vividchalk.vim'
+Plug 'yearofmoo/Vim-Darkmate'
+Plug 'zirrostig/vim-schlepp'
+
+call plug#end()
+" call vundle#end()            " required
+" filetype plugin indent on    " required
 
 "}}}
 
@@ -256,7 +259,7 @@ inoremap <expr><TAB> neocomplcache#sources#snippets_complete#expandable() ? "\<P
 inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 
 " let g:neosnippet#snippets_directory = "~/.vim/bundle/Jasmine-snippets-for-snipMate"
-let g:neosnippet#snippets_directory = "~/.vim/snippets/,~/.vim/bundle/Jasmine-snippets-for-snipMate"
+let g:neosnippet#snippets_directory = "~/.vim/snippets/,~/.vim/plugged/Jasmine-snippets-for-snipMate"
 " Plugin key-mappings.
 imap <C-k>     <Plug>(neosnippet_expand_or_jump)
 smap <C-k>     <Plug>(neosnippet_expand_or_jump)

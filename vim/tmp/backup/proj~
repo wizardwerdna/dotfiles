@@ -1,2 +1,0 @@
-#!/bin/env sh
-cd $(find ~/ ~/dev ~/dev/node maxdepth 1 -type d | selecta)

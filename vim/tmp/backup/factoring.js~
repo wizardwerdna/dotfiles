@@ -1,0 +1,25 @@
+'use strict';
+describe("ViewModel AppVM", function() {
+  describe("factors(number)", function() {
+    function test(number, result){
+      (function(number, result){
+        it("should factor " + number, function(){
+          module('app');
+          var vm;
+          inject(function($controller){
+            vm = $controller('AppVM');
+          });
+          expect(vm.factors(number)).toEqual(result);
+        });
+      })(number, result);
+    };
+
+    test(null, []);
+    test(2, [2]);
+    test(3, [3]);
+    test(4, [2,2]);
+    test(8, [2,2,2]);
+    test(9, [3,3]);
+
+  });	
+});	

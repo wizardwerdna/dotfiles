@@ -1,0 +1,19 @@
+'use strict';
+
+function ngFromHtml(html, vm){
+  var page;
+  inject(function($compile, $rootScope){
+    $rootScope.vm = vm;
+    page = $compile(html)($rootScope);
+    $rootScope.$digest();
+  });
+  return page;
+}
+
+function ngFrom(templateName, vm){
+  var html;
+  inject(function($templateCache){
+    html = $templateCache.get(templateName);
+  });
+  return ngFromHtml(html, vm);
+}

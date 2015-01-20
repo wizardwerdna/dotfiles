@@ -1,0 +1,46 @@
+'use strict';
+describe("ViewModel AppVM", function() {
+  var vm;
+
+  var spies = {
+    bowlSpy: function moo(rolls){
+      return {
+        score: function(){return 'score('+rolls+')';}
+      }
+    }
+  }
+
+  beforeEach(function(){
+    module('app');
+
+    inject(function($controller){
+      spyOn(spies,'bowlSpy');
+      vm = $controller('AppVM', {bowl: spies.bowlSpy});
+    });
+  });
+
+
+  describe("addRoll(pins)", function() {
+    it("should initialize display, score and leastDisabledButton", function(){
+      expect(vm.display).toBe('');
+      expect(vm.score).toEqual([]);
+      expect(vm.leastDisabledButton).toBe(11);
+    });
+    
+    it("should update display after one roll", function() {
+      var displayResult, scoreResult, leastDisabledButtonResult;
+      spies.bowlSpy.andReturn({
+        score:    function(){return scoreResult = {score:'result'};},
+        display:  function(){return displayResult = {display:'result'};},
+        leastDisabledButton: function(){
+          return leastDisabledButtonResult = {leastDisabledButton:'result'};}
+      });
+      vm.addRoll(100);
+      expect(spies.bowlSpy).toHaveBeenCalledWith([100]);
+      expect(vm.score).toBe(scoreResult);
+      expect(vm.display).toBe(displayResult);
+      expect(vm.leastDisabledButton).toBe(leastDisabledButtonResult);
+    });
+  });
+
+});

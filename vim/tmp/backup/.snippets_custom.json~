@@ -1,0 +1,12 @@
+{
+  "html": {
+    "filters": "html",
+    "profile": "html",
+    "snippets": {
+      "foo": "begin ${child}| end",
+      "foo2": "begin ${foo}| end",
+      "html:ang":
+        "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n <meta charset=\"UTF-8\">\n <title></title>\n <!-- build:css css/combined.css -->\n <link rel=\"stylesheet\" href=\"styles/app.css\" media=\"all\">\n <!-- endbuild -->\n </head>\n <body ng-app>\n \n\t${child}|\n \n <!-- build:js scripts/combined.js -->\n <!-- bower:js -->\n <!-- endbower -->\n <script src=\"app.js\"></script>\n <!-- endbuild -->\n </body>\n </html>\n"
+    }
+  }
+}

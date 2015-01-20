@@ -1,0 +1,12 @@
+#! /usr/bin/env sh
+git clone http://github.com/wizardwerdna/wz-development-environment.git $1 &&
+cd $1 &&
+npm install &&
+bower install &&
+<<<<<<< HEAD
+rm test/*.js app/*.js app/index.html app/styles/app.css &&
+karma start
+=======
+karma start &&
+rm test/*.js app/*.js app/index.html
+>>>>>>> a01cd41a2c9b27902f5046f0dce6c7b2469e84da

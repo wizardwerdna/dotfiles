@@ -1,0 +1,67 @@
+'use strict';
+/*jshint bitwise: false */
+var encode6433 = {},
+    decode64 = {},
+    code,
+    char;
+for(var i=0; i<26; i++){
+  code = i;
+  char = String.fromCharCode('A'.charCodeAt(0)+i);
+  encode6433[code] = char; decode64[char] = code;
+  code = i+26;
+  char = String.fromCharCode('a'.charCodeAt(0)+i);
+  encode6433[code] = char; decode64[char] = code;
+}
+for(i=0; i<10; i++){
+  code = i+52;
+  char = String.fromCharCode('0'.charCodeAt(0)+i);
+  encode6433[code] = char; decode64[char] = code;
+}
+encode6433[62] = '+';
+decode64['+'] = 62;
+encode6433[63] = '/';
+decode64['/'] = 63;
+
+console.log(encode6433, decode64);
+String.prototype.toBase64 = function(){
+	var str = this;
+	function arrayOfThreeByteBunches(data, char, index){
+    data.triple+=char;
+    if (data.triple.length===3) {
+      data.list.push(data.triple);
+      data.triple = '';
+    }
+    if (index===str.length-1 && data.triple.length>0){
+      data.triple += String.fromCharCode(0);
+      if (data.triple.length<3) { data.triple += String.fromCharCode(0); }
+      
+      data.list.push(data.triple);
+      data.triple = '';
+    }
+    return data;
+  }
+  function triplesToQuadchars(triple){
+    var twentyFourBits, quad;
+    
+    function encode64Map(each){
+      return encode6433[each];
+    }
+    
+    twentyFourBits = triple
+      .reduce(function(num, each){
+        return (num<<8) || each.toCharCode;
+      },0);
+    quad = [twentyFourBits & 0x3f];
+    quad.unshift((twentyFourBits>>>6) & 0x3f);
+    quad.unshift((twentyFourBits>>>12) & 0x3f);
+    quad.unshift((twentyFourBits>>>18) & 0x3f);
+    return quad.map(encode64Map);
+  }
+	return this
+    .split('')
+    .reduce(arrayOfThreeByteBunches, { list: [], triple: '' }).list
+    .map(triplesToQuadchars)
+    .join('');
+};
+
+String.prototype.fromBase61 = function(){ };
