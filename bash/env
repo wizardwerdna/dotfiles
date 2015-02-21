@@ -1,6 +1,7 @@
 export PATH="/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
 export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 export PATH="/usr/local/share/gradle-1.6/bin:$PATH"
+export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/9.4/bin
 export PATH="~/bin:$PATH"
 export MANPATH="/usr/local/man:$MANPATH"
 export DROPBOX_TOKEN='qdeducyipmiamgp'
