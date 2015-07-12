@@ -15,9 +15,11 @@ augroup END
 " Plugin 'vim-scripts/textutil.vim'
 call plug#begin('~/.vim/plugged')
 
+Plug '2072/PHP-Indenting-for-VIm'
 Plug 'airblade/vim-gitgutter'
 Plug 'altercation/vim-colors-solarized'
 Plug 'blockle.vim'
+Plug 'chrisbra/SudoEdit.vim'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'ctrlp.vim'
 Plug 'EasyMotion'
@@ -42,14 +44,17 @@ Plug 'rizzatti/dash.vim'
 Plug 'rizzatti/funcoo.vim'
 " Plug 'rstacruz/sparkup', {'rtp': 'vim/'}
 Plug 'rking/ag.vim'
+Plug 'StanAngeloff/php.vim'
 Plug 'Shougo/neocomplcache'
 Plug 'Shougo/neosnippet'
 Plug 'sickill/vim-pasta'
 Plug 'skalnik/vim-vroom'
 "Plug 'suan/vim-instant-markdown'
-Plug 'Syntastic'
+Plug 'scrooloose/syntastic'
+"Plug 'Syntastic'
 Plug 'timcharper/textile.vim'
 Plug 'tomtom/tcomment_vim'
+Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-characterize'
 Plug 'tpope/vim-cucumber'
 Plug 'tpope/vim-endwise'
@@ -199,7 +204,9 @@ let g:surround_40 = "(\r)"
 let g:surround_60 = "<\r>"
 let g:surround_91 = "[\r]"
 
-let g:syntastic_html_checkers = []
+let g:syntastic_php_checkers = ['php', 'phpmd']
+let g:syntastic_html_checkers = [] 
+"['tidy', 'w3']"
 let g:syntastic_sass_checkers = []
 let g:syntastic_scss_checkers = []
 let g:user_emmet_settings = webapi#json#decode(join(readfile(expand('~/.snippets_custom.json')), "\n"))

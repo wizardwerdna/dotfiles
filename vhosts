@@ -1,0 +1,126 @@
+# Virtual Hosts
+#
+# Required modules: mod_log_config
+
+# If you want to maintain multiple domains/hostnames on your
+# machine you can setup VirtualHost containers for them. Most configurations
+# use only name-based virtual hosts so the server doesn't need to worry about
+# IP addresses. This is indicated by the asterisks in the directives below.
+#
+# Please see the documentation at 
+# <URL:http://httpd.apache.org/docs/2.4/vhosts/>
+# for further details before you try to setup virtual hosts.
+#
+# You may use the command line option '-S' to verify your virtual host
+# configuration.
+
+#
+# VirtualHost example:
+# Almost any Apache directive may go into a VirtualHost container.
+# The first VirtualHost section is used for all requests that do not
+# match a ServerName or ServerAlias in any <VirtualHost> block.
+#
+# <VirtualHost *:80>
+#     ServerAdmin webmaster@dummy-host.example.com
+#     DocumentRoot "/usr/docs/dummy-host.example.com"
+#     ServerName dummy-host.example.com
+#     ServerAlias www.dummy-host.example.com
+#     ErrorLog "/private/var/log/apache2/dummy-host.example.com-error_log"
+#     CustomLog "/private/var/log/apache2/dummy-host.example.com-access_log" common
+# </VirtualHost>
+
+<VirtualHost *:80>
+    ServerAdmin andrew@digivino.com
+    DocumentRoot "/Users/werdna/elden.dev/ftp.learnjet.net/"
+    ServerName "elden.dev"
+</VirtualHost>
+
+<Directory "/Users/werdna/elden.dev/ftp.learnjet.net/">
+  Order allow,deny
+  Allow from all
+  Require all granted
+</Directory>
+
+<VirtualHost *:80>
+    ServerAdmin andrew@digivino.com
+    DocumentRoot "/Users/werdna/madavier.dev/ftp.learnjet.net/"
+    ServerName "madavier.dev"
+</VirtualHost>
+
+<Directory "/Users/werdna/madavier.dev/ftp.learnjet.net/">
+  Order allow,deny
+  Allow from all
+  Require all granted
+</Directory>
+
+<VirtualHost *:80>
+    ServerAdmin andrew@digivino.com
+    DocumentRoot "/Users/werdna/layers.dev/web"
+    ServerName "layers.dev"
+</VirtualHost>
+
+<Directory "/Users/werdna/layers.dev/web/">
+  Order allow,deny
+  Allow from all
+  Require all granted
+</Directory>
+
+<VirtualHost *:80>
+    ServerAdmin andrew@digivino.com
+    DocumentRoot "/Users/werdna/digidash.dev/www/"
+    ServerName "digidash.dev"
+</VirtualHost>
+
+<Directory "/Users/werdna/digidash.dev/www/">
+  Order allow,deny
+  Allow from all
+  Require all granted
+</Directory>
+
+<VirtualHost *:80>
+    ServerAdmin andrew@digivino.com
+    DocumentRoot "/Users/werdna/digivinositeUpgrade/"
+    ServerName "digivinositeupgrade.dev"
+</VirtualHost>
+
+<Directory "/Users/werdna/digivinositeUpgrade/">
+  Order allow,deny
+  Allow from all
+  Require all granted
+</Directory>
+
+<VirtualHost *:80>
+    ServerAdmin andrew@digivino.com
+    DocumentRoot "/Users/werdna/Sites/server.keenanwinery.com/keenanwinery.dev/"
+    ServerName "keenanwinery.dev"
+</VirtualHost>
+
+<Directory "/Users/werdna/Sites/server.keenanwinery.com/keenanwinery.dev/">
+  Order allow,deny
+  Allow from all
+  Require all granted
+</Directory>
+
+<VirtualHost *:80>
+    ServerAdmin andrew@digivino.com
+    DocumentRoot "/Users/werdna/digivino/web/"
+    ServerName "digivino.dev"
+</VirtualHost>
+
+<Directory "/Users/werdna/digivino/web/">
+  Order allow,deny
+  Allow from all
+  Require all granted
+</Directory>
+
+<VirtualHost *:80>
+    ServerAdmin andrew@digivino.com
+    DocumentRoot "/Users/werdna/digivinosite/"
+    ServerName "digivinosite.dev"
+</VirtualHost>
+
+<Directory "/Users/werdna/digivinosite/">
+  Order allow,deny
+  Allow from all
+  Require all granted
+</Directory>
