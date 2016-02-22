@@ -1,11 +1,20 @@
 " Vimscript file settings ---------------------- {{{
+
+augroup PrevimSettings
+  autocmd!
+  autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+augroup END
+
 augroup filetype_vim
     autocmd!
     autocmd FileType vim setlocal foldmethod=marker
 augroup END
 " }}}
 
-" " Vundle settings -------------------------------- {{{
+filetype plugin on
+au BufRead,BufNewFile *.ts setlocal filetype=typescript
+set rtp+=/usr/local/lib/node_modules/typescript-tools/ftplugin/typescript_tss.vim
+" Vundle settings -------------------------------- {{{
 " set rtp+=~/.vim/bundle/Vundle.vim/
 " filetype off                   " required!
 " call vundle#begin()
@@ -15,6 +24,9 @@ augroup END
 " Plugin 'vim-scripts/textutil.vim'
 call plug#begin('~/.vim/plugged')
 
+Plug 'kannokanno/previm'
+Plug 'icholy/typescript-tools'
+Plug 'leafgarland/typescript-vim'
 Plug '2072/PHP-Indenting-for-VIm'
 Plug 'airblade/vim-gitgutter'
 Plug 'altercation/vim-colors-solarized'
@@ -37,6 +49,7 @@ Plug 'Lokaltog/vim-easymotion'
 Plug 'marijnh/tern_for_vim', { 'do': 'npm install' }
 Plug 'mattn/emmet-vim'
 Plug 'mattn/webapi-vim'
+Plug 'Valloric/YouCompleteMe'
 Plug 'othree/html5-syntax.vim'
 Plug 'pangloss/vim-javascript'
 Plug 'peterhoeg/vim-tmux'
@@ -45,13 +58,15 @@ Plug 'rizzatti/funcoo.vim'
 " Plug 'rstacruz/sparkup', {'rtp': 'vim/'}
 Plug 'rking/ag.vim'
 Plug 'StanAngeloff/php.vim'
-Plug 'Shougo/neocomplcache'
+Plug 'Quramy/tsuquyomi'
+"  Plug 'Shougo/neocomplcache'
 Plug 'Shougo/neosnippet'
 Plug 'sickill/vim-pasta'
 Plug 'skalnik/vim-vroom'
 "Plug 'suan/vim-instant-markdown'
 Plug 'scrooloose/syntastic'
 "Plug 'Syntastic'
+Plug 'Shougo/vimproc.vim'
 Plug 'timcharper/textile.vim'
 Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-abolish'
@@ -70,7 +85,6 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-vinegar'
 Plug 'vim-coffee-script'
 Plug 'vim-ruby/vim-ruby'
-Plug 'vim-pandoc/vim-pandoc'
 Plug 'vimux'
 Plug 'vim-scripts/vimwiki'
 Plug 'vividchalk.vim'
@@ -169,6 +183,11 @@ endif
 
 " Vim lettings --------------------------------- {{{
 let &colorcolumn=join(range(81,81),",")
+
+let g:previm_open_cmd = "say foomio; open -a 'Google Chrome'"
+let g:previm_show_header = 0
+
+let g:typescript_compiler_options = '-sourcemap'
 
 let g:ackprg = 'ag --nogroup --nocolor --column'
 

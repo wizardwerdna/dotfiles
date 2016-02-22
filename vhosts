@@ -43,11 +43,11 @@
 
 <VirtualHost *:80>
     ServerAdmin andrew@digivino.com
-    DocumentRoot "/Users/werdna/madavier.dev/ftp.learnjet.net/"
-    ServerName "madavier.dev"
+    DocumentRoot "/Users/werdna/bloom.dev/www/"
+    ServerName "bloom.dev"
 </VirtualHost>
 
-<Directory "/Users/werdna/madavier.dev/ftp.learnjet.net/">
+<Directory "/Users/werdna/bloom.dev/www/">
   Order allow,deny
   Allow from all
   Require all granted
@@ -55,11 +55,83 @@
 
 <VirtualHost *:80>
     ServerAdmin andrew@digivino.com
-    DocumentRoot "/Users/werdna/layers.dev/web"
-    ServerName "layers.dev"
+    DocumentRoot "/Users/werdna/casa.dev/www/"
+    ServerName "casa.dev"
 </VirtualHost>
 
-<Directory "/Users/werdna/layers.dev/web/">
+<Directory "/Users/werdna/casa.dev/www/">
+  Order allow,deny
+  Allow from all
+  Require all granted
+</Directory>
+
+<VirtualHost *:80>
+    ServerAdmin andrew@digivino.com
+    DocumentRoot "/Users/werdna/napafoster.dev/www/"
+    ServerName "napafoster.dev"
+</VirtualHost>
+
+<Directory "/Users/werdna/napafoster.dev/www/">
+  Order allow,deny
+  Allow from all
+  Require all granted
+</Directory>
+
+<VirtualHost *:80>
+    ServerAdmin andrew@digivino.com
+    DocumentRoot "/Users/werdna/valleysgi.dev/www/"
+    ServerName "valleysgi.dev"
+</VirtualHost>
+
+<Directory "/Users/werdna/valleysgi.dev/www/">
+  Order allow,deny
+  Allow from all
+  Require all granted
+</Directory>
+
+<VirtualHost *:80>
+    ServerAdmin andrew@digivino.com
+    DocumentRoot "/Users/werdna/beach.dev/www/"
+    ServerName "beach.dev"
+</VirtualHost>
+
+<Directory "/Users/werdna/beach.dev/www/">
+  Order allow,deny
+  Allow from all
+  Require all granted
+</Directory>
+
+<VirtualHost *:80>
+    ServerAdmin andrew@digivino.com
+    DocumentRoot "/Users/werdna/go.dev/www/"
+    ServerName "go.dev"
+</VirtualHost>
+
+<Directory "/Users/werdna/go.dev/www/">
+  Order allow,deny
+  Allow from all
+  Require all granted
+</Directory>
+
+<VirtualHost *:80>
+    ServerAdmin andrew@digivino.com
+    DocumentRoot "/Users/werdna/nmadavier.dev/ftp.learnjet.net/"
+    ServerName "nmadavier.dev"
+</VirtualHost>
+
+<Directory "/Users/werdna/nmadavier.dev/ftp.learnjet.net/">
+  Order allow,deny
+  Allow from all
+  Require all granted
+</Directory>
+
+<VirtualHost *:80>
+    ServerAdmin andrew@digivino.com
+    DocumentRoot "/Users/werdna/madavier.dev/ftp.learnjet.net/"
+    ServerName "madavier.dev"
+</VirtualHost>
+
+<Directory "/Users/werdna/madavier.dev/ftp.learnjet.net/">
   Order allow,deny
   Allow from all
   Require all granted
